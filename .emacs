@@ -90,5 +90,8 @@
 (define-key evil-normal-state-map (kbd "s") 'elscreen-next)
 (define-key evil-normal-state-map (kbd "a") 'elscreen-previous)
 
+;; disable backup files
+(seq make-backup-files nil)
+
 ;; start elscreen
 (elscreen-start)
