@@ -70,9 +70,6 @@
          ("\\.markdown\\'" . gfm-mode))
   :init (setq markdown-command "pandoc"))
 
-;; disable toolbar
-(tool-bar-mode -1)
-
 ;; install neotree
 (package-install 'neotree)
 (global-set-key (kbd "<f8>") 'neotree-toggle) ;; use f8 to toggle neotree
@@ -89,8 +86,17 @@
 (define-key evil-normal-state-map (kbd "s") 'elscreen-next)
 (define-key evil-normal-state-map (kbd "a") 'elscreen-previous)
 
+;; disable toolbar
+(tool-bar-mode -1)
+
+;; disable scrollbars
+(scroll-bar-mode -1)
+
 ;; disable backup files
 (setq make-backup-files nil)
+
+;; disable startup screen
+(setq inhibit-startup-screen t)
 
 ;; start elscreen
 (elscreen-start)
