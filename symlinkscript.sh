@@ -8,6 +8,6 @@ do
 		ln -f $trimmed_file ~/$trimmed_file
 	else
 		#make a directory for the directory structure
-		mkdir ~/$trimmed_file
+		mkdir -p ~/$trimmed_file
 	fi
 done

@@ -50,9 +50,8 @@
 ;; install buffer-move package
 (package-install 'buffer-move)
 
-;; install ace-window package
-(package-install 'ace-window)
-(global-set-key (kbd "<f6>") 'ace-window) ;; use f6 to toggle between windows
+;; use f6 to move to the next window
+(global-set-key (kbd "<f6>") 'other-window) 
 
 ;; install maggit
 (package-install 'magit)
