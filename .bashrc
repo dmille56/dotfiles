@@ -59,10 +59,21 @@ if [ -n "$force_color_prompt" ]; then
     fi
 fi
 
+get-git-branch() {
+	tmp=$(git branch 2> /dev/null | grep "^*" | cut -c 3-)
+	if [ -n "$tmp" ]; then
+		echo " ($tmp)"
+	fi
+}
+
 if [ "$color_prompt" = yes ]; then
-    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+    green="\[\033[01;34m\]"
+    blue="\[\033[01;32m\]"
+    yellow="\[\e[33m\]"
+    normal="\[\033[00m\]"
+    PS1="$blue\u@\h $green\w$yellow\$(get-git-branch)$normal \$ "
 else
-    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
+    PS1="\u@\h \w\$(get-git-branch) \$ "
 fi
 unset color_prompt force_color_prompt
 
