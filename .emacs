@@ -86,6 +86,11 @@
 (define-key evil-normal-state-map (kbd "s") 'elscreen-next)
 (define-key evil-normal-state-map (kbd "a") 'elscreen-previous)
 
+;; remap ; to : in evil
+(with-eval-after-load 'evil-maps
+   (define-key evil-motion-state-map (kbd ":") 'evil-repeat-find-char)
+     (define-key evil-motion-state-map (kbd ";") 'evil-ex))
+
 ;; disable toolbar
 (tool-bar-mode -1)
 

@@ -58,6 +58,12 @@ map - :Texplore <Return>
 map a :tabprev <Return>
 map s :tabnext <Return>
 
+"remap ; to : to save a keystroke
+nnoremap : ;
+nnoremap ; :
+vnoremap : ;
+vnoremap ; :
+
 "load pathogen
 execute pathogen#infect()
 
