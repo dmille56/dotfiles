@@ -1,4 +1,5 @@
-XTerm*faceName: Bitstream Vera Serif Mono
+#powerline fonts need to be gotten from github.com/powerline/fonts
+XTerm*faceName: DejaVu Sans Mono for Powerline
 xterm*faceSize: 12
 xterm*vt100*geometry: 80x60
 xterm*saveLines: 16384
