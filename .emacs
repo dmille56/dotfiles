@@ -104,4 +104,4 @@
 (setq inhibit-startup-screen t)
 
 ;; start elscreen
-(elscreen-start)
+;; (elscreen-start)
