@@ -97,6 +97,9 @@
 ;; disable scrollbars
 (scroll-bar-mode -1)
 
+;; disable menubar
+(menu-bar-mode -1)
+
 ;; disable backup files
 (setq make-backup-files nil)
 
