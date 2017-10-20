@@ -1,3 +1,11 @@
+;; disable toolbar
+(tool-bar-mode -1)
+
+;; disable scrollbars
+(scroll-bar-mode -1)
+
+;; disable menubar
+(menu-bar-mode -1)
 
 ; add evil
 (add-to-list 'load-path "~/.emacs.d/evil")
@@ -82,6 +90,9 @@
 	    (define-key evil-normal-state-local-map (kbd "q") 'neotree-hide)
 	    (define-key evil-normal-state-local-map (kbd "RET") 'neotree-enter)))
 
+;; install helm
+(package-install 'helm)
+
 ;; set keybindings for elscreen
 (define-key evil-normal-state-map (kbd "s") 'elscreen-next)
 (define-key evil-normal-state-map (kbd "a") 'elscreen-previous)
@@ -90,15 +101,6 @@
 (with-eval-after-load 'evil-maps
    (define-key evil-motion-state-map (kbd ":") 'evil-repeat-find-char)
      (define-key evil-motion-state-map (kbd ";") 'evil-ex))
-
-;; disable toolbar
-(tool-bar-mode -1)
-
-;; disable scrollbars
-(scroll-bar-mode -1)
-
-;; disable menubar
-(menu-bar-mode -1)
 
 ;; disable backup files
 (setq make-backup-files nil)
