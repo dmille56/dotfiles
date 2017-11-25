@@ -40,7 +40,9 @@
 
 ;; install themes
 (package-install 'sublime-themes)
-(load-theme 'odersky t)
+
+(if (display-graphic-p) 
+    (load-theme 'odersky t) )
 
 ;; install markdown-mode and set it to use pandoc
 ;; make sure you have pandoc installed!
