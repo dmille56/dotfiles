@@ -74,6 +74,13 @@
 (package-install 'flycheck-elm)
 (add-hook 'flycheck-mode-hook 'flycheck-elm-setup)
 
+(add-hook 'elm-mode-hook
+          (lambda ()
+            (setq company-backends '(company-elm))))
+
+;; install nix-mode
+(package-install 'nix-mode)
+
 ;; set keybindings for elscreen
 (define-key evil-normal-state-map (kbd "s") 'elscreen-next)
 (define-key evil-normal-state-map (kbd "a") 'elscreen-previous)
