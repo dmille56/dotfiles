@@ -69,6 +69,9 @@
 ;; install helm
 (package-install 'helm)
 
+;; use f7 to run helm-find-files
+(global-set-key (kbd "<f7>") 'helm-find-files) 
+
 ;; install elm-mode
 (package-install 'elm-mode)
 
@@ -82,6 +85,9 @@
 
 ;; install nix-mode
 (package-install 'nix-mode)
+
+;; install yaml-mode
+(package-install 'yaml-mode)
 
 ;; set keybindings for elscreen
 (define-key evil-normal-state-map (kbd "s") 'elscreen-next)
