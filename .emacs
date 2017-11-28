@@ -70,7 +70,10 @@
 (package-install 'helm)
 
 ;; use f7 to run helm-find-files
-(global-set-key (kbd "<f7>") 'helm-find-files) 
+(global-set-key (kbd "<f7>") 'helm-find-files)
+
+;; rebind buffer switching to use helm instead
+(global-set-key (kbd "C-x b") 'helm-buffers-list)
 
 ;; install elm-mode
 (package-install 'elm-mode)
