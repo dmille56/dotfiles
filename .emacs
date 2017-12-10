@@ -92,6 +92,11 @@
 ;; install yaml-mode
 (package-install 'yaml-mode)
 
+;; install rust-mode
+(package-install 'rust-mode)
+(package-install 'cargo)
+(add-hook 'rust-mode-hook 'cargo-minor-mode)
+
 ;; set keybindings for elscreen
 (define-key evil-normal-state-map (kbd "s") 'elscreen-next)
 (define-key evil-normal-state-map (kbd "a") 'elscreen-previous)
