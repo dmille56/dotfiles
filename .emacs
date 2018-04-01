@@ -1,10 +1,13 @@
-;; disable toolbar
+;;; package --- Summary
+
+;;; Commentary:
+;;; Emacs config file
+
+;;; Code:
+
+;; disable toolbar, scrollbars, & menubar
 (tool-bar-mode -1)
-
-;; disable scrollbars
 (scroll-bar-mode -1)
-
-;; disable menubar
 (menu-bar-mode -1)
 
 ; add evil
@@ -33,7 +36,7 @@
 (add-hook 'haskell-mode-hook 'intero-mode)
 
 ;; use f6 to move to the next window
-(global-set-key (kbd "<f6>") 'other-window) 
+(global-set-key (kbd "<f6>") 'other-window)
 
 ;; install maggit
 (package-install 'magit)
@@ -41,7 +44,7 @@
 ;; install themes
 (package-install 'sublime-themes)
 
-(if (display-graphic-p) 
+(if (display-graphic-p)
     (load-theme 'odersky t) )
 
 ;; install markdown-mode and set it to use pandoc
@@ -97,17 +100,59 @@
 (package-install 'cargo)
 (add-hook 'rust-mode-hook 'cargo-minor-mode)
 
-;; set keybindings for elscreen
-(define-key evil-normal-state-map (kbd "s") 'elscreen-next)
-(define-key evil-normal-state-map (kbd "a") 'elscreen-previous)
+;; install clojure-mode
+(unless (package-installed-p 'clojure-mode)
+  (package-install 'clojure-mode))
+
+;; install inf-clojure (clojure repl)
+(unless (package-installed-p 'inf-clojure)
+  (package-refresh-contents)
+  (package-install 'inf-clojure))
+
+(add-hook 'clojure-mode-hook #'inf-clojure-minor-mode)
+
+;; install/setup elfeed
+(package-install 'elfeed)
+(evil-set-initial-state 'elfeed-search-mode 'emacs)
+
+(setq elfeed-feeds
+      '(("https://news.ycombinator.com/rss" hn hacker-news)
+        ("https://www.reddit.com/r/denvernuggets.rss" nba nuggets)
+	("https://www.reddit.com/r/nba.rss" nba)))
+
+(setq-default elfeed-search-filter "@1-week-ago +unread ")
+(global-set-key (kbd "C-x w") 'elfeed)
+
+(add-hook 'elfeed-search-mode-hook
+          (lambda () (local-set-key (kbd "j") #'next-line)))
+(add-hook 'elfeed-search-mode-hook
+          (lambda () (local-set-key (kbd "k") #'previous-line)))
+
+;; install/setup emms
+(package-install 'emms)
+(require 'emms-setup)
+(emms-all)
+(emms-default-players)
+
+(add-hook 'emms-playlist-mode-hook
+          (lambda () (local-set-key (kbd "j") #'next-line)))
+(add-hook 'emms-playlist-mode-hook
+          (lambda () (local-set-key (kbd "k") #'previous-line)))
 
 ;; remap ; to : in evil
 (with-eval-after-load 'evil-maps
    (define-key evil-motion-state-map (kbd ":") 'evil-repeat-find-char)
-     (define-key evil-motion-state-map (kbd ";") 'evil-ex))
+   (define-key evil-motion-state-map (kbd ";") 'evil-ex))
+
+;; unmap q in evil (because it is a pain in the ass and I never use macros in vim)
+(eval-after-load "evil-maps"
+  (define-key evil-motion-state-map "q" nil))
 
 ;; disable backup files
 (setq make-backup-files nil)
 
 ;; disable startup screen
 (setq inhibit-startup-screen t)
+
+(provide '.emacs)
+;;; .emacs ends here
