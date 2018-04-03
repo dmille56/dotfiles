@@ -10,11 +10,6 @@
 (scroll-bar-mode -1)
 (menu-bar-mode -1)
 
-; add evil
-(add-to-list 'load-path "~/.emacs.d/evil")
-(require 'evil)
-(evil-mode 1)
-
 ;; If you don't have MELPA in your package archives:
 (require 'package)
 (add-to-list
@@ -22,6 +17,20 @@
  '("melpa" . "http://melpa.org/packages/") t)
 (package-initialize)
 (package-refresh-contents)
+
+;; add evil
+(package-install 'evil)
+(require 'evil)
+(evil-mode 1)
+
+;; remap ; to : in evil
+(with-eval-after-load 'evil-maps
+   (define-key evil-motion-state-map (kbd ":") 'evil-repeat-find-char)
+   (define-key evil-motion-state-map (kbd ";") 'evil-ex))
+
+;; unmap q in evil (because it is a pain in the ass and I never use macros in vim)
+(eval-after-load "evil-maps"
+  (define-key evil-motion-state-map "q" nil))
 
 ;; install use-package
 (package-install 'use-package)
@@ -128,25 +137,37 @@
 (add-hook 'elfeed-search-mode-hook
           (lambda () (local-set-key (kbd "k") #'previous-line)))
 
+;; TODO: implement this
+(defun elfeed-opencomments ()
+   (interactive)
+   (let ((entry (elfeed-search-selected :single)))
+     (message (elfeed-entry-title entry))))
+ 
+(add-hook 'elfeed-search-mode-hook
+          (lambda () (local-set-key (kbd "x") #'elfeed-opencomments)))
+
 ;; install/setup emms
 (package-install 'emms)
 (require 'emms-setup)
 (emms-all)
 (emms-default-players)
+(require 'emms-streams)
+
+(global-set-key (kbd "C-x e") 'emms)
 
 (add-hook 'emms-playlist-mode-hook
           (lambda () (local-set-key (kbd "j") #'next-line)))
 (add-hook 'emms-playlist-mode-hook
           (lambda () (local-set-key (kbd "k") #'previous-line)))
 
-;; remap ; to : in evil
-(with-eval-after-load 'evil-maps
-   (define-key evil-motion-state-map (kbd ":") 'evil-repeat-find-char)
-   (define-key evil-motion-state-map (kbd ";") 'evil-ex))
+(evil-set-initial-state 'emms-stream-mode 'emacs)
+(setq emms-stream-default-action "play")
 
-;; unmap q in evil (because it is a pain in the ass and I never use macros in vim)
-(eval-after-load "evil-maps"
-  (define-key evil-motion-state-map "q" nil))
+;; install ripgrep
+(package-install 'ripgrep)
+
+;; install powershell
+(package-install 'powershell)
 
 ;; disable backup files
 (setq make-backup-files nil)
