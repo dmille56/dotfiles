@@ -123,10 +123,12 @@
 ;; install/setup elfeed
 (package-install 'elfeed)
 (evil-set-initial-state 'elfeed-search-mode 'emacs)
+(evil-set-initial-state 'elfeed-show-mode 'emacs)
 
 (setq elfeed-feeds
       '(("https://news.ycombinator.com/rss" hn hacker-news)
         ("https://www.reddit.com/r/denvernuggets.rss" nba nuggets)
+        ("https://www.youtube.com/feeds/videos.xml?playlist_id=PLlVlyGVtvuVlBMorPS3sGR4CM6lQ2F5dq" nba starters youtube)
 	("https://www.reddit.com/r/nba.rss" nba)))
 
 (setq-default elfeed-search-filter "@1-week-ago +unread ")
@@ -137,14 +139,47 @@
 (add-hook 'elfeed-search-mode-hook
           (lambda () (local-set-key (kbd "k") #'previous-line)))
 
-;; TODO: implement this
-(defun elfeed-opencomments ()
+(defun elfeed-browsecomments ()
+  "Open the comments link from a feed with 'browse-url'."
    (interactive)
-   (let ((entry (elfeed-search-selected :single)))
-     (message (elfeed-entry-title entry))))
+   (let* (
+	 (entry (elfeed-search-selected :single))
+	 (content (elfeed-deref (elfeed-entry-content entry)))
+	 (root (with-temp-buffer
+		 (insert content)
+		 (libxml-parse-html-region (point-min) (point-max))))
+	 (commentNode (elfeed-getcommentnode root))
+	 )
+      (if commentNode (browse-url (dom-attr commentNode 'href)) (message "Unable to load comments"))))
  
 (add-hook 'elfeed-search-mode-hook
-          (lambda () (local-set-key (kbd "x") #'elfeed-opencomments)))
+          (lambda () (local-set-key (kbd "c") #'elfeed-browsecomments)))
+
+(defun elfeed-iscomment (node)
+  "Check if a NODE is a comment link."
+  (if (listp node)
+      (let (
+	    (nodeName (dom-tag node))
+	    (nodeText (dom-text node))
+	    (nodeLink (dom-attr node 'href))
+	    )
+	    (if
+		(and
+		 (string= nodeName "a")
+		 nodeLink
+		 (string-match "comments" nodeText)) node nil))
+    nil))
+
+(defun elfeed-getcommentnode (node)
+  "Get a comment link from the root NODE."
+  (cond
+   ((listp node)
+    (if (elfeed-iscomment node) node
+      (let* (
+	     (results (mapcar 'walk (xml-node-children node)))
+	     (filtered (remove nil results))
+	     (result (car filtered)))
+	result)))))
 
 ;; install/setup emms
 (package-install 'emms)
