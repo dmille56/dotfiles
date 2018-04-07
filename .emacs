@@ -139,21 +139,34 @@
 (add-hook 'elfeed-search-mode-hook
           (lambda () (local-set-key (kbd "k") #'previous-line)))
 
-(defun elfeed-browsecomments ()
-  "Open the comments link from a feed with 'browse-url'."
-   (interactive)
+(defun elfeed-browsecomments-search ()
+  (interactive)
+  (elfeed-browsecomments (elfeed-search-selected :single)))
+
+(defun elfeed-browsecomments-show ()
+  (interactive)
+  (elfeed-browsecomments 'elfeed-show-entry))
+
+(defun elfeed-browsecomments (entry)
+  "Open the comments link from a feed ENTRY with 'browse-url'."
    (let* (
-	 (entry (elfeed-search-selected :single))
 	 (content (elfeed-deref (elfeed-entry-content entry)))
 	 (root (with-temp-buffer
 		 (insert content)
 		 (libxml-parse-html-region (point-min) (point-max))))
 	 (commentNode (elfeed-getcommentnode root))
 	 )
-      (if commentNode (browse-url (dom-attr commentNode 'href)) (message "Unable to load comments"))))
+     (if commentNode (progn
+		       (browse-url (dom-attr commentNode 'href))
+		       (elfeed-untag entry 'unread)
+		       (elfeed-search-update-entry entry))
+       (message "Unable to load comments"))))
  
 (add-hook 'elfeed-search-mode-hook
-          (lambda () (local-set-key (kbd "c") #'elfeed-browsecomments)))
+          (lambda () (local-set-key (kbd "c") #'elfeed-browsecomments-search)))
+
+(add-hook 'elfeed-show-mode-hook
+          (lambda () (local-set-key (kbd "c") #'elfeed-browsecomments-show)))
 
 (defun elfeed-iscomment (node)
   "Check if a NODE is a comment link."
@@ -176,7 +189,7 @@
    ((listp node)
     (if (elfeed-iscomment node) node
       (let* (
-	     (results (mapcar 'walk (xml-node-children node)))
+	     (results (mapcar 'elfeed-getcommentnode (xml-node-children node)))
 	     (filtered (remove nil results))
 	     (result (car filtered)))
 	result)))))
