@@ -129,7 +129,11 @@
       '(("https://news.ycombinator.com/rss" hn hacker-news)
         ("https://www.reddit.com/r/denvernuggets.rss" nba nuggets)
         ("https://www.youtube.com/feeds/videos.xml?playlist_id=PLlVlyGVtvuVlBMorPS3sGR4CM6lQ2F5dq" nba starters youtube)
-	("https://www.reddit.com/r/nba.rss" nba)))
+	("https://www.reddit.com/r/nba.rss" nba)
+	("https://www.reddit.com/r/programming.rss" programming)
+	("https://www.reddit.com/r/haskell.rss" programming haskell)
+	("https://www.reddit.com/r/nixos.rss" programming nixos)
+	))
 
 (setq-default elfeed-search-filter "@1-week-ago +unread ")
 (global-set-key (kbd "C-x w") 'elfeed)
@@ -216,6 +220,8 @@
 
 ;; install powershell
 (package-install 'powershell)
+
+(package-install 'erc)
 
 ;; disable backup files
 (setq make-backup-files nil)
