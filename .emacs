@@ -18,8 +18,13 @@
 (package-initialize)
 (package-refresh-contents)
 
+;; install use-package
+(package-install 'use-package)
+(require 'use-package)
+(setq use-package-always-ensure t)
+
 ;; add evil
-(package-install 'evil)
+(use-package evil)
 (require 'evil)
 (evil-mode 1)
 
@@ -32,26 +37,23 @@
 (eval-after-load "evil-maps"
   (define-key evil-motion-state-map "q" nil))
 
-;; install use-package
-(package-install 'use-package)
-
 ;; install flycheck
 (use-package flycheck
    :ensure t
      :init (global-flycheck-mode))
 
 ;; Install Intero
-(package-install 'intero)
+(use-package intero)
 (add-hook 'haskell-mode-hook 'intero-mode)
 
 ;; use f6 to move to the next window
 (global-set-key (kbd "<f6>") 'other-window)
 
 ;; install maggit
-(package-install 'magit)
+(use-package magit)
 
 ;; install themes
-(package-install 'sublime-themes)
+(use-package sublime-themes)
 
 (if (display-graphic-p)
     (load-theme 'odersky t) )
@@ -67,7 +69,7 @@
   :init (setq markdown-command "pandoc"))
 
 ;; install neotree
-(package-install 'neotree)
+(use-package neotree)
 (global-set-key (kbd "<f8>") 'neotree-toggle) ;; use f8 to toggle neotree
 
 ;; add hooks for neotree in evil
@@ -79,7 +81,7 @@
 	    (define-key evil-normal-state-local-map (kbd "RET") 'neotree-enter)))
 
 ;; install helm
-(package-install 'helm)
+(use-package helm)
 
 ;; use f7 to run helm-find-files
 (global-set-key (kbd "<f7>") 'helm-find-files)
@@ -88,10 +90,10 @@
 (helm-mode 1)
 
 ;; install elm-mode
-(package-install 'elm-mode)
+(use-package elm-mode)
 
 ;; install flycheck-elm
-(package-install 'flycheck-elm)
+(use-package flycheck-elm)
 (add-hook 'flycheck-mode-hook 'flycheck-elm-setup)
 
 (add-hook 'elm-mode-hook
@@ -99,26 +101,21 @@
             (setq company-backends '(company-elm))))
 
 ;; install nix-mode
-(package-install 'nix-mode)
+(use-package nix-mode)
 
 ;; install yaml-mode
-(package-install 'yaml-mode)
+(use-package yaml-mode)
 
 ;; install rust-mode
-(package-install 'rust-mode)
-(package-install 'cargo)
-(add-hook 'rust-mode-hook 'cargo-minor-mode)
+(use-package rust-mode
+  :hook cargo-minor-mode)
+(use-package cargo)
 
 ;; install clojure-mode
-(unless (package-installed-p 'clojure-mode)
-  (package-install 'clojure-mode))
+(use-package clojure-mode
+  :hook info-clojure-minor-mode)
 
-;; install inf-clojure (clojure repl)
-(unless (package-installed-p 'inf-clojure)
-  (package-refresh-contents)
-  (package-install 'inf-clojure))
-
-(add-hook 'clojure-mode-hook #'inf-clojure-minor-mode)
+(use-package inf-clojure)
 
 ;; install/setup elfeed
 (package-install 'elfeed)
@@ -149,7 +146,7 @@
 
 (defun elfeed-browsecomments-show ()
   (interactive)
-  (elfeed-browsecomments 'elfeed-show-entry))
+  (elfeed-browsecomments (elfeed-show-get-entry)))
 
 (defun elfeed-browsecomments (entry)
   "Open the comments link from a feed ENTRY with 'browse-url'."
@@ -215,13 +212,21 @@
 (evil-set-initial-state 'emms-stream-mode 'emacs)
 (setq emms-stream-default-action "play")
 
-;; install ripgrep
-(package-install 'ripgrep)
+(use-package ripgrep)
 
-;; install powershell
-(package-install 'powershell)
+(use-package powershell)
 
-(package-install 'erc)
+(use-package erc)
+
+(use-package md4rd
+  :bind (
+	 :map md4rd-mode-map
+	  ("q" . kill-this-buffer)
+	  ("j" . next-line)
+	  ("k" . previous-line))
+  :init
+  (evil-set-initial-state 'md4rd-mode 'emacs)
+  (setq md4rd-subs-active '(haskell emacs programming)))
 
 ;; disable backup files
 (setq make-backup-files nil)
