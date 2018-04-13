@@ -24,23 +24,19 @@
 (setq use-package-always-ensure t)
 
 ;; add evil
-(use-package evil)
-(require 'evil)
-(evil-mode 1)
+(use-package evil
+  :init
+  (evil-mode 1))
 
-;; remap ; to : in evil
+;; remap ; to : in evil and unmap q (because it's a pain in the ass and i don't use macros)
 (with-eval-after-load 'evil-maps
    (define-key evil-motion-state-map (kbd ":") 'evil-repeat-find-char)
-   (define-key evil-motion-state-map (kbd ";") 'evil-ex))
-
-;; unmap q in evil (because it is a pain in the ass and I never use macros in vim)
-(eval-after-load "evil-maps"
-  (define-key evil-motion-state-map "q" nil))
+   (define-key evil-motion-state-map (kbd ";") 'evil-ex)
+   (define-key evil-motion-state-map (kbd "q") nil))
 
 ;; install flycheck
 (use-package flycheck
-   :ensure t
-     :init (global-flycheck-mode))
+  :init (global-flycheck-mode))
 
 ;; Install Intero
 (use-package intero)
@@ -69,36 +65,30 @@
   :init (setq markdown-command "pandoc"))
 
 ;; install neotree
-(use-package neotree)
-(global-set-key (kbd "<f8>") 'neotree-toggle) ;; use f8 to toggle neotree
-
-;; add hooks for neotree in evil
-(add-hook 'neotree-mode-hook
-	(lambda ()
-	    (define-key evil-normal-state-local-map (kbd "TAB") 'neotree-enter)
-	    (define-key evil-normal-state-local-map (kbd "SPC") 'neotree-quick-look)
-	    (define-key evil-normal-state-local-map (kbd "q") 'neotree-hide)
-	    (define-key evil-normal-state-local-map (kbd "RET") 'neotree-enter)))
+(use-package neotree
+  :bind
+  ("<f8>" . neotree-toggle)
+  (:map neotree-mode-map
+  	("j" . neotree-next-line)
+  	("k" . neotree-previous-line))
+  :init
+  (evil-set-initial-state 'neotree-mode 'emacs))
 
 ;; install helm
-(use-package helm)
-
-;; use f7 to run helm-find-files
-(global-set-key (kbd "<f7>") 'helm-find-files)
-
-;; set helm-mode on
-(helm-mode 1)
+(use-package helm
+  :bind
+  ("<f7>" . helm-find-files)
+  :init
+  (helm-mode 1))
 
 ;; install elm-mode
-(use-package elm-mode)
+(use-package elm-mode
+  :init
+  (setq company-backends '(company-elm)))
 
 ;; install flycheck-elm
-(use-package flycheck-elm)
-(add-hook 'flycheck-mode-hook 'flycheck-elm-setup)
-
-(add-hook 'elm-mode-hook
-          (lambda ()
-            (setq company-backends '(company-elm))))
+(use-package flycheck-elm
+  :hook flycheck-elm-setup)
 
 ;; install nix-mode
 (use-package nix-mode)
@@ -118,27 +108,30 @@
 (use-package inf-clojure)
 
 ;; install/setup elfeed
-(package-install 'elfeed)
-(evil-set-initial-state 'elfeed-search-mode 'emacs)
-(evil-set-initial-state 'elfeed-show-mode 'emacs)
-
-(setq elfeed-feeds
-      '(("https://news.ycombinator.com/rss" hn hacker-news)
-        ("https://www.reddit.com/r/denvernuggets.rss" nba nuggets)
-        ("https://www.youtube.com/feeds/videos.xml?playlist_id=PLlVlyGVtvuVlBMorPS3sGR4CM6lQ2F5dq" nba starters youtube)
-	("https://www.reddit.com/r/nba.rss" nba)
-	("https://www.reddit.com/r/programming.rss" programming)
-	("https://www.reddit.com/r/haskell.rss" programming haskell)
-	("https://www.reddit.com/r/nixos.rss" programming nixos)
-	))
-
-(setq-default elfeed-search-filter "@1-week-ago +unread ")
-(global-set-key (kbd "C-x w") 'elfeed)
-
-(add-hook 'elfeed-search-mode-hook
-          (lambda () (local-set-key (kbd "j") #'next-line)))
-(add-hook 'elfeed-search-mode-hook
-          (lambda () (local-set-key (kbd "k") #'previous-line)))
+(use-package elfeed
+  :bind
+  ("C-x w" . elfeed)
+  (:map elfeed-search-mode-map
+	("j" . next-line)
+	("k" . previous-line)
+	("c" . elfeed-browsecomments-search))
+  (:map elfeed-show-mode-map
+	("j" . next-line)
+	("k" . previous-line)
+	("c" . elfeed-browsecomments-show))
+  :init
+  (setq elfeed-feeds
+   '(("https://news.ycombinator.com/rss" hn hacker-news)
+     ("https://www.reddit.com/r/denvernuggets.rss" nba nuggets)
+     ("https://www.youtube.com/feeds/videos.xml?playlist_id=PLlVlyGVtvuVlBMorPS3sGR4CM6lQ2F5dq" nba starters youtube)
+     ("https://www.reddit.com/r/nba.rss" nba)
+     ("https://www.reddit.com/r/programming.rss" programming)
+     ("https://www.reddit.com/r/haskell.rss" programming haskell)
+     ("https://www.reddit.com/r/nixos.rss" programming nixos)
+      ))
+  (setq-default elfeed-search-filter "@1-week-ago +unread ")
+  (evil-set-initial-state 'elfeed-search-mode 'emacs)
+  (evil-set-initial-state 'elfeed-show-mode 'emacs))
 
 (defun elfeed-browsecomments-search ()
   (interactive)
@@ -162,12 +155,6 @@
 		       (elfeed-untag entry 'unread)
 		       (elfeed-search-update-entry entry))
        (message "Unable to load comments"))))
- 
-(add-hook 'elfeed-search-mode-hook
-          (lambda () (local-set-key (kbd "c") #'elfeed-browsecomments-search)))
-
-(add-hook 'elfeed-show-mode-hook
-          (lambda () (local-set-key (kbd "c") #'elfeed-browsecomments-show)))
 
 (defun elfeed-iscomment (node)
   "Check if a NODE is a comment link."
@@ -196,21 +183,19 @@
 	result)))))
 
 ;; install/setup emms
-(package-install 'emms)
-(require 'emms-setup)
-(emms-all)
-(emms-default-players)
-(require 'emms-streams)
-
-(global-set-key (kbd "C-x e") 'emms)
-
-(add-hook 'emms-playlist-mode-hook
-          (lambda () (local-set-key (kbd "j") #'next-line)))
-(add-hook 'emms-playlist-mode-hook
-          (lambda () (local-set-key (kbd "k") #'previous-line)))
-
-(evil-set-initial-state 'emms-stream-mode 'emacs)
-(setq emms-stream-default-action "play")
+(use-package emms
+  :bind
+  ("C-x e" . emms)
+  ("C-x s" . emms-streams)
+  (:map emms-playlist-mode-map
+   ("j" . next-line)
+   ("k" . previous-line))
+  :init
+  (evil-set-initial-state 'emms-stream-mode 'emacs)
+  (emms-all)
+  (emms-default-players)
+  (setq emms-stream-default-action "play")
+  )
 
 (use-package ripgrep)
 
