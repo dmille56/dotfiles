@@ -77,6 +77,7 @@
 ;; install helm
 (use-package helm
   :bind
+  ("<f4>" . helm-occur)
   ("<f7>" . helm-find-files)
   :init
   (helm-mode 1))
@@ -128,7 +129,7 @@
      ("https://www.reddit.com/r/programming.rss" programming)
      ("https://www.reddit.com/r/haskell.rss" programming haskell)
      ("https://www.reddit.com/r/nixos.rss" programming nixos)
-      ))
+     ("http://feeds.megaphone.fm/PPY4159411087" nba nuggets podcast)))
   (setq-default elfeed-search-filter "@1-week-ago +unread ")
   (evil-set-initial-state 'elfeed-search-mode 'emacs)
   (evil-set-initial-state 'elfeed-show-mode 'emacs))

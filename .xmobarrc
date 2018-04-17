@@ -1,0 +1,16 @@
+Config { font = "-*-Fixed-Bold-R-Normal-*-13-*-*-*-*-*-*-*"
+        , borderColor = "#282828"
+        , border = TopB
+        , bgColor = "#282828"
+        , fgColor = "#ebdbb2"
+        , position = BottomW L 100
+        , commands = [ Run Cpu ["-L","25","-H","75","--normal","#689d6a","--high","red"] 10
+                        , Run Memory ["-t","Mem: <usedratio>%"] 10
+                        , Run Swap [] 10
+                        , Run Date "%a %b %d %Y %H:%M" "date" 10
+                        , Run StdinReader
+                        ]
+        , sepChar = "%"
+        , alignSep = "}{"
+        , template = "%StdinReader% }{ %cpu% | %memory% * %swap% | %date%"
+        }
