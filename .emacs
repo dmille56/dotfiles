@@ -115,7 +115,8 @@
   (:map elfeed-search-mode-map
 	("j" . next-line)
 	("k" . previous-line)
-	("c" . elfeed-browsecomments-search))
+	("c" . elfeed-browsecomments-search)
+	("y" . elfeed-download-yt))
   (:map elfeed-show-mode-map
 	("j" . next-line)
 	("k" . previous-line)
@@ -132,7 +133,26 @@
      ("http://feeds.megaphone.fm/PPY4159411087" nba nuggets podcast)))
   (setq-default elfeed-search-filter "@1-week-ago +unread ")
   (evil-set-initial-state 'elfeed-search-mode 'emacs)
-  (evil-set-initial-state 'elfeed-show-mode 'emacs))
+(evil-set-initial-state 'elfeed-show-mode 'emacs))
+
+(defun elfeed-download-yt ()
+  (interactive)
+  (elfeed-download-ytlink (elfeed-entry-link (elfeed-search-selected :single))))
+
+(defun elfeed-download-ytlink (link)
+  "Downloads a LINK to a youtube video via youtube-dl."
+  (let (
+	(buffer-name (get-buffer-create "youtube-dl")))
+    (switch-to-buffer buffer-name)
+    (setq-local default-directory "~/Videos/youtube")
+    (insert (concat "Downloading video to directory: " default-directory))
+    (insert "\n")
+    (make-process
+     :name "youtube-dl"
+     :buffer buffer-name
+     :command (list "youtube-dl" "-f" "18" link)
+     :stderr buffer-name
+     )))
 
 (defun elfeed-browsecomments-search ()
   (interactive)
@@ -213,6 +233,24 @@
   :init
   (evil-set-initial-state 'md4rd-mode 'emacs)
   (setq md4rd-subs-active '(haskell emacs programming)))
+
+(defun stream-launch ()
+  "Launches a twitch stream via streamlink."
+  (interactive)
+  (let (
+	(url "twitch.tv/")
+	(user "")
+	(buffer-name (get-buffer-create "streamlink"))
+	)
+    (setq user (read-string "Enter stream name: "))
+    (setq url (concat url user))
+    (switch-to-buffer buffer-name)
+    (make-process
+     :name "streamlink"
+     :buffer buffer-name
+     :command (list "streamlink" url "360p")
+     :stderr buffer-name
+     )))
 
 ;; disable backup files
 (setq make-backup-files nil)
