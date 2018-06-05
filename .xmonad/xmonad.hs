@@ -10,7 +10,44 @@ import System.IO
 -- Bind Mod to the left alt key
 myModMask = mod1Mask
 
-myLayout = smartBorders tiled ||| noBorders Full ||| smartBorders simpleTabbed
+--    activeColor :: String
+--    Color of the active window
+--    inactiveColor :: String
+--    Color of the inactive window
+--    urgentColor :: String
+--    Color of the urgent window
+--    activeBorderColor :: String
+--    Color of the border of the active window
+--    inactiveBorderColor :: String
+--    Color of the border of the inactive window
+--    urgentBorderColor :: String
+--    Color of the border of the urgent window
+--    activeTextColor :: String
+--    Color of the text of the active window
+--    inactiveTextColor :: String
+--    Color of the text of the inactive window
+--    urgentTextColor :: String
+--    Color of the text of the urgent window
+--    fontName :: String
+--    Font name
+--    decoWidth :: Dimension
+--    Maximum width of the decorations (if supported by the DecorationStyle)
+--    decoHeight :: Dimension
+--    Height of the decorations
+--    windowTitleAddons :: [(String, Align)]
+--    Extra text to appear in a window's title bar. Refer to for a use XMonad.Layout.ImageButtonDecoration
+--    windowTitleIcons :: [([[Bool]], Placement)]
+--    Extra icons to appear in a window's title bar. Inner [Bool] is a row in a icon bitmap.
+
+myTabConfig = def { inactiveBorderColor = "#928374"
+		    , inactiveColor = "#282828"
+	            , activeTextColor = "#689d6a"
+		    , activeBorderColor = "#689d6a"
+		    , activeColor = "#282828"
+	            , urgentTextColor = "red"
+	            , decoHeight = 20 }
+
+myLayout = smartBorders tiled ||| noBorders Full ||| smartBorders (tabbed shrinkText myTabConfig)
   where 
     tiled = Tall nmaster delta ratio
     nmaster = 1
