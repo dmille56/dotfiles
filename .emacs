@@ -28,6 +28,8 @@
   :init
   (evil-mode 1))
 
+(evil-set-initial-state 'dired-mode 'emacs)
+
 ;; remap ; to : in evil and unmap q (because it's a pain in the ass and i don't use macros)
 (with-eval-after-load 'evil-maps
    (define-key evil-motion-state-map (kbd ":") 'evil-repeat-find-char)
@@ -147,10 +149,27 @@
     (setq-local default-directory "~/Videos/youtube")
     (insert (concat "Downloading video to directory: " default-directory))
     (insert "\n")
+    (setq-local buffer-read-only t)
     (make-process
      :name "youtube-dl"
      :buffer buffer-name
      :command (list "youtube-dl" "-f" "18" link)
+     :stderr buffer-name
+     )))
+
+(defun elfeed-download-ytaudiolink (link)
+  "Downloads the audio to a LINK to a youtube video via youtube-dl."
+  (let (
+	(buffer-name (get-buffer-create "youtube-dl-audio")))
+    (switch-to-buffer buffer-name)
+    (setq-local default-directory "~/Music/youtube")
+    (insert (concat "Downloading mp3 to directory: " default-directory))
+    (insert "\n")
+    (setq-local buffer-read-only t)
+    (make-process
+     :name "youtube-dl"
+     :buffer buffer-name
+     :command (list "youtube-dl" "--extract-audio" "--audio-format" "mp3" link)
      :stderr buffer-name
      )))
 
@@ -245,12 +264,20 @@
     (setq user (read-string "Enter stream name: "))
     (setq url (concat url user))
     (switch-to-buffer buffer-name)
+    (setq-local buffer-read-only t)
     (make-process
      :name "streamlink"
      :buffer buffer-name
      :command (list "streamlink" url "360p")
      :stderr buffer-name
      )))
+
+(defun youtube-dl-audio ()
+  "Download the audio of a youtube video via youtube-dl."
+  (interactive)
+  (let ((link ""))
+    (setq link (read-string "Enter youtube link: "))
+    (elfeed-download-ytaudiolink link)))
 
 ;; disable backup files
 (setq make-backup-files nil)
