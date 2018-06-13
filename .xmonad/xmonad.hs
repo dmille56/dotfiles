@@ -5,6 +5,7 @@ import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageDocks
 import XMonad.Util.Run(spawnPipe)
 import XMonad.Util.EZConfig(additionalKeys)
+import XMonad.Hooks.ManageHelpers
 import System.IO
 
 -- Bind Mod to the left alt key
@@ -54,11 +55,17 @@ myLayout = smartBorders tiled ||| noBorders Full ||| smartBorders (tabbed shrink
     ratio = 1/2
     delta = 3/100
 
+myManageHook = composeAll [
+	manageDocks,
+	isFullscreen --> doFullFloat,
+	manageHook defaultConfig
+	]
+
 main = do
     xmproc <- spawnPipe "xmobar"
 
     xmonad $ defaultConfig
-        { manageHook = manageDocks <+> manageHook defaultConfig
+        { manageHook = myManageHook
 	, layoutHook = avoidStruts myLayout
         , logHook = dynamicLogWithPP xmobarPP
                         { ppOutput = hPutStrLn xmproc

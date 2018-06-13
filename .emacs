@@ -131,14 +131,14 @@
      ("https://www.reddit.com/r/nba.rss" nba)
      ("https://www.reddit.com/r/programming.rss" programming)
      ("https://www.reddit.com/r/haskell.rss" programming haskell)
-     ("https://www.reddit.com/r/nixos.rss" programming nixos)
+     ("http://feeds.feedburner.com/freakonomicsradio" freakonomics podcast)
      ("http://feeds.megaphone.fm/PPY4159411087" nba nuggets podcast)))
   (setq-default elfeed-search-filter "@1-week-ago +unread ")
   (evil-set-initial-state 'elfeed-search-mode 'emacs)
 (evil-set-initial-state 'elfeed-show-mode 'emacs))
 
 (defun elfeed-download-yt ()
-  (interactive)
+  "Downloads the selected elfeed entry."
   (elfeed-download-ytlink (elfeed-entry-link (elfeed-search-selected :single))))
 
 (defun elfeed-download-ytlink (link)
@@ -174,10 +174,12 @@
      )))
 
 (defun elfeed-browsecomments-search ()
+  "Open the comments link from the currently selected elfeed entry."
   (interactive)
   (elfeed-browsecomments (elfeed-search-selected :single)))
 
 (defun elfeed-browsecomments-show ()
+  "Open the comments link from the currently selected elfeed entry."
   (interactive)
   (elfeed-browsecomments (elfeed-show-get-entry)))
 
@@ -278,6 +280,18 @@
   (let ((link ""))
     (setq link (read-string "Enter youtube link: "))
     (elfeed-download-ytaudiolink link)))
+
+(defun youtube-dl-video ()
+  "Download the audio of a youtube video via youtube-dl."
+  (interactive)
+  (let ((link ""))
+    (setq link (read-string "Enter youtube link: "))
+    (elfeed-download-ytlink link)))
+
+(use-package spaceline
+  :init
+  (require 'spaceline-config)
+  (spaceline-spacemacs-theme))
 
 ;; disable backup files
 (setq make-backup-files nil)
