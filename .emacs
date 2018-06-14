@@ -301,8 +301,6 @@
   (spaceline-spacemacs-theme))
 
 (use-package evil-org
-  :bind
-  ("C-x a" . org-agenda)
   :ensure t
   :after org
   :config
@@ -312,6 +310,8 @@
               (evil-org-set-key-theme)))
   (require 'evil-org-agenda)
   (evil-org-agenda-set-keys))
+
+(global-set-key "\C-xa" 'org-agenda)
 
 ;; disable backup files
 (setq make-backup-files nil)
