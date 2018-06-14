@@ -48,7 +48,14 @@
 (global-set-key (kbd "<f6>") 'other-window)
 
 ;; install maggit
-(use-package magit)
+(use-package magit
+  :init
+  (evil-set-initial-state 'magit-mode 'normal)
+  (evil-set-initial-state 'magit-status-mode 'normal)
+  (evil-set-initial-state 'magit-diff-mode 'normal)
+  (evil-set-initial-state 'magit-log-mode 'normal))
+
+(use-package evil-magit)
 
 ;; install themes
 (use-package sublime-themes)
@@ -292,6 +299,19 @@
   :init
   (require 'spaceline-config)
   (spaceline-spacemacs-theme))
+
+(use-package evil-org
+  :bind
+  ("C-x a" . org-agenda)
+  :ensure t
+  :after org
+  :config
+  (add-hook 'org-mode-hook 'evil-org-mode)
+  (add-hook 'evil-org-mode-hook
+            (lambda ()
+              (evil-org-set-key-theme)))
+  (require 'evil-org-agenda)
+  (evil-org-agenda-set-keys))
 
 ;; disable backup files
 (setq make-backup-files nil)
