@@ -9,4 +9,7 @@ function Prompt
     return " "
 }
 
+Set-PSReadLineKeyHandler -Chord 'Shift+Insert' -Function Paste
+
 Import-Module PSColor
+Import-Module Posh-Git
