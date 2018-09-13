@@ -9,6 +9,34 @@ function Prompt
     return " "
 }
 
+function Install-PSColorModule
+{
+    $uri = 'https://github.com/Davlind/PSColor/raw/master/release/PSColor.zip'
+    $hash = '6E2F25DCA53E1C9F28557FB9DEC97D50E968D3E83D3BE59A4B6F9954DA826EBB'
+
+    #TODO: get the module path so that it works
+    $modulePath = $env:PSModulePath
+    $moduleLocation = $modulePath.Split(':')[0]
+    $outputLocation = $moduleLocation + '/PSColor'
+
+    $tempPath = Get-Location | ForEach-Object Path
+    $tempZip = $tempPath + '/PSColor.zip'
+    $tempOutput = $tempPath = '/PSColor'
+
+    Invoke-WebRequest $uri -OutFile $tempZip
+
+    $tempHash = Get-FileHash $tempZip -Algorithm SHA256 | ForEach-Object Hash
+    if ($hash -eq $tempHash) {
+        Expand-Archive $tempZip
+        Copy-Item -Recurse $tempOutput $outputLocation
+        Remove-Item -Recurse -Force $tempOutput
+    } else {
+        Write-Error "Couldn't install PSColor: File hash did not match the expected hash!"
+    }
+
+    Remove-Item -Force $tempZip
+}
+
 function Get-Weather
 {
 	Param (
