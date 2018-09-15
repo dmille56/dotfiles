@@ -55,12 +55,17 @@ Set-PSReadLineKeyHandler -Chord Shift+Insert -Function Paste
 Set-PSReadLineKeyHandler -Chord Control+w -Function SelectAll
 Set-PSReadLineKeyHandler -Chord Control+d -Function MenuComplete
 
-# Remove if you don't have fzf
-Remove-PSReadLineKeyHandler -Chord Control+r
-Import-Module PSFzf
+if (Get-Command fzf -ErrorAction SilentlyContinue)
+{
+    Remove-PSReadLineKeyHandler -Chord Control+r
+    Import-Module PSFzf
+}
 
 # need to have this installed: Import-Module PowerShellCookbook
 Import-Module PSColor
 Import-Module Posh-Git
 
-Set-Alias ls gci
+if ($IsLinux -or $IsMacOS)
+{
+    Set-Alias ls gci
+}
