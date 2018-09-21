@@ -48,12 +48,37 @@ function Get-Weather
 	(Invoke-WebRequest http://wttr.in/$Location -UserAgent curl).Content
 }
 
+function Copy-WorkingDirectoryToClipboard
+{
+    Get-Location | ForEach-Object Path | clip
+}
+
+Register-ArgumentCompleter -Native -CommandName stack -ScriptBlock {
+    param($wordToComplete, $commandAst, $cursortPosition)
+
+    $list = 'new', 'build'
+    if ($commandAst -match '^stack new') {
+        $list = '--abc', '--def'
+    }
+
+    $list |
+    Where-Object { $_ -like "$wordToComplete*" } |
+    Sort-Object |
+    ForEach-Object {
+        [System.Management.Automation.CompletionResult]::new($_, $_, 'ParameterValue', $_)
+    }
+}
+
 Set-Alias weath Get-Weather
+Set-Alias cwd Copy-WorkingDirectoryToClipboard
 
 Set-PSReadLineOption -EditMode Windows
 Set-PSReadLineKeyHandler -Chord Shift+Insert -Function Paste
 Set-PSReadLineKeyHandler -Chord Control+w -Function SelectAll
 Set-PSReadLineKeyHandler -Chord Control+d -Function MenuComplete
+
+# Turn off the bell because it's annoying
+Set-PSReadLineOption -BellStyle None
 
 if (Get-Command fzf -ErrorAction SilentlyContinue)
 {
@@ -61,9 +86,12 @@ if (Get-Command fzf -ErrorAction SilentlyContinue)
     Import-Module PSFzf
 }
 
-# need to have this installed: Import-Module PowerShellCookbook
+# need to have this installed on powershell core (for PSColor): Import-Module PowerShellCookbook
 Import-Module PSColor
 Import-Module Posh-Git
+
+$global:PSColor.File.Code.Pattern = '\.(java|c|cpp|cs|js|css|html|hs|fs|fsi)$'
+$global:PSColor.File.Text.Pattern = '\.(txt|cfg|conf|ini|csv|log|config|xml|yml|md|markdown|yaml|cabal)$'
 
 if ($IsLinux -or $IsMacOS)
 {
