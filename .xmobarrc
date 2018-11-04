@@ -9,8 +9,10 @@ Config { font = "-*-Fixed-Bold-R-Normal-*-13-*-*-*-*-*-*-*"
                         , Run Swap [] 10
                         , Run Date "%a %b %d %Y %H:%M" "date" 10
                         , Run StdinReader
+                        , Run BatteryP ["BAT0"]
+			["-t", "Bat: <left>% (chg: <acstatus>)"] 60
                         ]
         , sepChar = "%"
         , alignSep = "}{"
-        , template = "%StdinReader% }{ %cpu% | %memory% * %swap% | %date%"
+        , template = "%StdinReader% }{ %battery% | %cpu% | %memory% * %swap% | %date%"
         }
