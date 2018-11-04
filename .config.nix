@@ -22,6 +22,10 @@
   boot.loader.grub.device = "/dev/sda"; # or "nodev" for efi only
   boot.loader.grub.useOSProber = true;
 
+  swapDevices = [
+    { device = "/dev/sda6"; }
+  ];
+
   networking.hostName = "nixos"; # Define your hostname.
   networking.networkmanager.enable = true;
 
@@ -42,7 +46,7 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    wget vim curl git emacs firefox zsh networkmanager xterm
+    wget vim curl git emacs firefox zsh networkmanager xterm gparted
 
     powershell
     tmux
@@ -56,14 +60,17 @@
     mplayer
     mpv
     cmus
+    pavucontrol
 
-    rofi dmenu
+    rofi dmenu conky
 
-    haskellPackages.xmobar xscreensaver
+    haskellPackages.xmobar xscreensaver feh
 
     gnome3.gnome-system-monitor
 
     powerline-fonts
+
+    rtv ddgr w3m
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -106,6 +113,11 @@
   services.xserver.windowManager.xmonad.enable = true;
   services.xserver.windowManager.xmonad.enableContribAndExtras = true;
   services.xserver.desktopManager.xterm.enable = false;
+
+  environment.variables = {
+    EDITOR = "vim";
+    BROWSER = "firefox";
+  };
 
   programs.zsh.enable = true;
   users.defaultUserShell = pkgs.zsh;
