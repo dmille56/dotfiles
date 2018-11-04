@@ -72,6 +72,7 @@ main = do
                         , ppTitle = xmobarColor "#ebdbb2" "" . shorten 50
                         , ppCurrent = xmobarColor "#689d6a" ""
                         }
+        , handleEventHook = handleEventHook defaultConfig <+> docksEventHook
         , modMask = myModMask
         , borderWidth = 2
         , normalBorderColor = "#928374"
