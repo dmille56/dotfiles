@@ -53,22 +53,6 @@ function Copy-WorkingDirectoryToClipboard
     Get-Location | ForEach-Object Path | clip
 }
 
-Register-ArgumentCompleter -Native -CommandName stack -ScriptBlock {
-    param($wordToComplete, $commandAst, $cursortPosition)
-
-    $list = 'new', 'build'
-    if ($commandAst -match '^stack new') {
-        $list = '--abc', '--def'
-    }
-
-    $list |
-    Where-Object { $_ -like "$wordToComplete*" } |
-    Sort-Object |
-    ForEach-Object {
-        [System.Management.Automation.CompletionResult]::new($_, $_, 'ParameterValue', $_)
-    }
-}
-
 Set-Alias weath Get-Weather
 Set-Alias cwd Copy-WorkingDirectoryToClipboard
 

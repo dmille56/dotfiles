@@ -12,6 +12,9 @@
 
   nixpkgs.config.allowUnfree = true;
 
+  # nixpkgs.config.allowBroken = true;
+  nixpkgs.config.chromium.enablePepperFlash = true;
+
   # Use the GRUB 2 boot loader.
   boot.loader.grub.enable = true;
   boot.loader.grub.version = 2;
@@ -59,6 +62,7 @@
 
     mplayer
     mpv
+    vlc
     cmus
     pavucontrol
 
@@ -67,10 +71,12 @@
     haskellPackages.xmobar xscreensaver feh
 
     gnome3.gnome-system-monitor
+    xfce.thunar
+    xclip
 
     powerline-fonts
 
-    rtv ddgr w3m
+    rtv ddgr w3m youtube-dl streamlink
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
