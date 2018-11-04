@@ -12,9 +12,6 @@
 
   nixpkgs.config.allowUnfree = true;
 
-  # nixpkgs.config.allowBroken = true;
-  nixpkgs.config.chromium.enablePepperFlash = true;
-
   # Use the GRUB 2 boot loader.
   boot.loader.grub.enable = true;
   boot.loader.grub.version = 2;
@@ -55,8 +52,11 @@
     tmux
     ranger
     fzf
+    ripgrep
+    tig
 
     chromium
+    google-chrome
 
     stack
 
@@ -69,6 +69,7 @@
     rofi dmenu conky
 
     haskellPackages.xmobar xscreensaver feh
+    pandoc
 
     gnome3.gnome-system-monitor
     xfce.thunar
@@ -126,6 +127,9 @@
   };
 
   programs.zsh.enable = true;
+  programs.zsh.ohMyZsh.enable = true;
+  programs.zsh.ohMyZsh.theme = "agnoster";
+  programs.zsh.syntaxHighlighting.enable = true;
   users.defaultUserShell = pkgs.zsh;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
