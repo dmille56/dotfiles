@@ -7,38 +7,11 @@ import XMonad.Util.Run(spawnPipe)
 import XMonad.Util.EZConfig(additionalKeys)
 import XMonad.Hooks.ManageHelpers
 import System.IO
+import Data.Default(def)
+import XMonad.Hooks.EwmhDesktops
 
 -- Bind Mod to the left alt key
 myModMask = mod1Mask
-
---    activeColor :: String
---    Color of the active window
---    inactiveColor :: String
---    Color of the inactive window
---    urgentColor :: String
---    Color of the urgent window
---    activeBorderColor :: String
---    Color of the border of the active window
---    inactiveBorderColor :: String
---    Color of the border of the inactive window
---    urgentBorderColor :: String
---    Color of the border of the urgent window
---    activeTextColor :: String
---    Color of the text of the active window
---    inactiveTextColor :: String
---    Color of the text of the inactive window
---    urgentTextColor :: String
---    Color of the text of the urgent window
---    fontName :: String
---    Font name
---    decoWidth :: Dimension
---    Maximum width of the decorations (if supported by the DecorationStyle)
---    decoHeight :: Dimension
---    Height of the decorations
---    windowTitleAddons :: [(String, Align)]
---    Extra text to appear in a window's title bar. Refer to for a use XMonad.Layout.ImageButtonDecoration
---    windowTitleIcons :: [([[Bool]], Placement)]
---    Extra icons to appear in a window's title bar. Inner [Bool] is a row in a icon bitmap.
 
 myTabConfig = def { inactiveBorderColor = "#928374"
 		    , inactiveColor = "#282828"
@@ -48,7 +21,7 @@ myTabConfig = def { inactiveBorderColor = "#928374"
 	            , urgentTextColor = "red"
 	            , decoHeight = 20 }
 
-myLayout = smartBorders tiled ||| noBorders Full ||| smartBorders (tabbed shrinkText myTabConfig)
+myLayout = tiled ||| Full ||| (tabbed shrinkText myTabConfig)
   where 
     tiled = Tall nmaster delta ratio
     nmaster = 1
@@ -57,22 +30,22 @@ myLayout = smartBorders tiled ||| noBorders Full ||| smartBorders (tabbed shrink
 
 myManageHook = composeAll [
 	manageDocks,
-	isFullscreen --> doFullFloat,
-	manageHook defaultConfig
+	(isFullscreen --> doFullFloat),
+	manageHook def
 	]
 
 main = do
     xmproc <- spawnPipe "xmobar"
 
-    xmonad $ defaultConfig
+    xmonad $ def
         { manageHook = myManageHook
-	, layoutHook = avoidStruts myLayout
+	, layoutHook = (smartBorders . avoidStruts) myLayout
         , logHook = dynamicLogWithPP xmobarPP
                         { ppOutput = hPutStrLn xmproc
                         , ppTitle = xmobarColor "#ebdbb2" "" . shorten 50
                         , ppCurrent = xmobarColor "#689d6a" ""
                         }
-        , handleEventHook = handleEventHook defaultConfig <+> docksEventHook
+        , handleEventHook = handleEventHook def <+> XMonad.Hooks.EwmhDesktops.fullscreenEventHook <+> docksEventHook
         , modMask = myModMask
         , borderWidth = 2
         , normalBorderColor = "#928374"
