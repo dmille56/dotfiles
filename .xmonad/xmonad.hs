@@ -21,7 +21,7 @@ myTabConfig = def { inactiveBorderColor = "#928374"
 	            , urgentTextColor = "red"
 	            , decoHeight = 20 }
 
-myLayout = tiled ||| Full ||| (tabbed shrinkText myTabConfig)
+myLayout = (tabbed shrinkText myTabConfig) ||| tiled ||| Full
   where 
     tiled = Tall nmaster delta ratio
     nmaster = 1
