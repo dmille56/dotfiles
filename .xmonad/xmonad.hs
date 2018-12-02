@@ -30,6 +30,8 @@ myLayout = (tabbed shrinkText myTabConfig) ||| tiled ||| Full
     delta = 3/100
 
 myManageHook = composeAll [
+        className =? "Spotify" --> doShift "3:music",
+        className =? "pavucontrol" --> doShift "3:music",
 	manageDocks,
 	(isFullscreen --> doFullFloat),
 	manageHook def
@@ -51,12 +53,18 @@ main = do
         , borderWidth = 2
         , normalBorderColor = "#928374"
         , focusedBorderColor = "#689d6a"
+	, workspaces = ["1:dev","2:web","3:music","4:steam","5","6","7","8","9"]
         } `additionalKeys`
         [ ((myModMask .|. shiftMask, xK_z), spawn "xscreensaver-command -lock; xset dpms force off")
         , ((myModMask , xK_p), spawn "rofi -show run")
         , ((0, xF86XK_AudioPlay), spawn "dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause")
+        , ((myModMask, xK_F12), spawn "dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause")
         , ((0, xF86XK_AudioPrev), spawn "dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Previous")
+        , ((myModMask, xK_F10), spawn "dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Previous")
         , ((0, xF86XK_AudioNext), spawn "dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Next")
+        , ((myModMask, xK_F11), spawn "dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Next")
         , ((0, xF86XK_AudioLowerVolume), spawn "amixer -D pulse sset Master 5%-; notify-send -i audio-volume-medium -t 1000 'Volume: '$(amixer -D pulse sget Master | grep 'Left:' | awk -F'[][]' '{ print $2 } ')")
+        , ((myModMask, xK_Down), spawn "amixer -D pulse sset Master 5%-; notify-send -i audio-volume-medium -t 1000 'Volume: '$(amixer -D pulse sget Master | grep 'Left:' | awk -F'[][]' '{ print $2 } ')")
         , ((0, xF86XK_AudioRaiseVolume), spawn "amixer -D pulse sset Master 5%+; notify-send -i audio-volume-medium -t 1000 'Volume: '$(amixer -D pulse sget Master | grep 'Left:' | awk -F'[][]' '{ print $2 } ')")
+        , ((myModMask, xK_Up), spawn "amixer -D pulse sset Master 5%+; notify-send -i audio-volume-medium -t 1000 'Volume: '$(amixer -D pulse sget Master | grep 'Left:' | awk -F'[][]' '{ print $2 } ')")
         ]

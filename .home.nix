@@ -46,6 +46,7 @@
 
     dolphinEmu
     mupen64plus
+    keepassx
   ];
 
   programs.fzf = {
