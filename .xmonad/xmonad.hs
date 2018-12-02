@@ -9,9 +9,10 @@ import XMonad.Hooks.ManageHelpers
 import System.IO
 import Data.Default(def)
 import XMonad.Hooks.EwmhDesktops
+import Graphics.X11.ExtraTypes.XF86
 
--- Bind Mod to the left alt key
-myModMask = mod1Mask
+myModMask = mod1Mask -- Bind Mod to the left alt key
+-- myModMask = mod4Mask -- Bind Mod to the windows key
 
 myTabConfig = def { inactiveBorderColor = "#928374"
 		    , inactiveColor = "#282828"
@@ -53,4 +54,9 @@ main = do
         } `additionalKeys`
         [ ((myModMask .|. shiftMask, xK_z), spawn "xscreensaver-command -lock; xset dpms force off")
         , ((myModMask , xK_p), spawn "rofi -show run")
+        , ((0, xF86XK_AudioPlay), spawn "dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause")
+        , ((0, xF86XK_AudioPrev), spawn "dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Previous")
+        , ((0, xF86XK_AudioNext), spawn "dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Next")
+        , ((0, xF86XK_AudioLowerVolume), spawn "amixer -D pulse sset Master 5%-; notify-send -i audio-volume-medium -t 1000 'Volume: '$(amixer -D pulse sget Master | grep 'Left:' | awk -F'[][]' '{ print $2 } ')")
+        , ((0, xF86XK_AudioRaiseVolume), spawn "amixer -D pulse sset Master 5%+; notify-send -i audio-volume-medium -t 1000 'Volume: '$(amixer -D pulse sget Master | grep 'Left:' | awk -F'[][]' '{ print $2 } ')")
         ]

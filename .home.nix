@@ -2,6 +2,7 @@
 
 {
   nixpkgs.config.allowUnfree = true;
+  nixpkgs.config.pulseaudio = true;
 
   home.packages = with pkgs; [
     wget vim curl git emacs firefox zsh networkmanager xterm gparted
@@ -12,6 +13,9 @@
     fzf
     ripgrep
     tig
+    lazygit
+
+    bat exa fd
 
     chromium
     google-chrome
@@ -38,8 +42,26 @@
     rtv ddgr w3m youtube-dl streamlink
 
     youtube-viewer
+    urlview
 
     dolphinEmu
     mupen64plus
   ];
+
+  programs.fzf = {
+    enable = true;
+    enableZshIntegration = true;
+  };
+
+  programs.zsh = {
+    enable = true;
+    enableAutosuggestions = true;
+    initExtra = "if [ -e ~/.nix-profile/etc/profile.d/nix.sh ]; then . ~/.nix-profile/etc/profile.d/nix.sh; fi";
+
+    oh-my-zsh = {
+      enable = true;
+      theme = "agnoster";
+      plugins = [ "git" ];
+    };
+  };
 }
