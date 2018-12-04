@@ -5,7 +5,10 @@
   nixpkgs.config.pulseaudio = true;
 
   home.packages = with pkgs; [
-    wget vim curl git emacs firefox zsh networkmanager xterm gparted
+
+    #terminal
+
+    wget vim curl git emacs zsh networkmanager
 
     powershell
     tmux
@@ -15,8 +18,24 @@
     tig
     lazygit
 
+    stack
+
     bat exa fd
 
+    cmus
+    pandoc
+
+    xclip
+    powerline-fonts
+
+    rtv ddgr w3m youtube-dl
+
+    youtube-viewer
+    urlview
+
+    #graphical
+
+    firefox xterm gparted
     chromium
     google-chrome
 
@@ -25,24 +44,16 @@
     mplayer
     mpv
     vlc
-    cmus
     pavucontrol
 
     rofi dmenu conky
 
     xscreensaver feh
-    pandoc
 
     gnome3.gnome-system-monitor
     xfce.thunar
-    xclip
 
-    powerline-fonts
-
-    rtv ddgr w3m youtube-dl streamlink
-
-    youtube-viewer
-    urlview
+    streamlink
 
     dolphinEmu
     mupen64plus

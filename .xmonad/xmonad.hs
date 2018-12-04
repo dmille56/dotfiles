@@ -30,10 +30,11 @@ myLayout = (tabbed shrinkText myTabConfig) ||| tiled ||| Full
     delta = 3/100
 
 myManageHook = composeAll [
-        className =? "Spotify" --> doShift "3:music",
+        className =? "spotify" --> doShift "3:music",
         className =? "pavucontrol" --> doShift "3:music",
-	manageDocks,
+        className =? "steam" --> doShift "4:games",
 	(isFullscreen --> doFullFloat),
+	manageDocks,
 	manageHook def
 	]
 
@@ -53,7 +54,7 @@ main = do
         , borderWidth = 2
         , normalBorderColor = "#928374"
         , focusedBorderColor = "#689d6a"
-	, workspaces = ["1:dev","2:web","3:music","4:steam","5","6","7","8","9"]
+	, workspaces = ["1:dev","2:web","3:music","4:games","5","6","7","8","9"]
         } `additionalKeys`
         [ ((myModMask .|. shiftMask, xK_z), spawn "xscreensaver-command -lock; xset dpms force off")
         , ((myModMask , xK_p), spawn "rofi -show run")
