@@ -1,5 +1,8 @@
 { pkgs, ... }:
 
+let
+  my-dotfile-dir = "/home/$USER/dotfiles";
+in
 {
   nixpkgs.config.allowUnfree = true;
   nixpkgs.config.pulseaudio = true;
@@ -67,6 +70,7 @@
   programs.zsh = {
     enable = true;
     enableAutosuggestions = true;
+    enableSyntaxHighlighting = true; #remove this line if not compile
     initExtra = "if [ -e ~/.nix-profile/etc/profile.d/nix.sh ]; then . ~/.nix-profile/etc/profile.d/nix.sh; fi";
 
     oh-my-zsh = {
@@ -79,4 +83,6 @@
   programs.home-manager = {
     enable = true;
   };
+
+  home.file.".tmux.conf".source = "${my-dotfile-dir}/tmux.conf";
 }
