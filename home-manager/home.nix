@@ -39,12 +39,11 @@
     chromium
     google-chrome
 
-    stack
-
     mplayer
     mpv
     vlc
     pavucontrol
+    pasystray
 
     rofi dmenu conky
 
@@ -75,5 +74,9 @@
       theme = "agnoster";
       plugins = [ "git" ];
     };
+  };
+
+  programs.home-manager = {
+    enable = true;
   };
 }
