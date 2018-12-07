@@ -1,7 +1,7 @@
 { pkgs, ... }:
 
 let
-  my-dotfile-dir = "/home/$USER/dotfiles";
+  my-dotfile-dir = "/home/dono/dotfiles";
 in
 {
   nixpkgs.config.allowUnfree = true;
@@ -87,4 +87,6 @@ in
   home.file.".tmux.conf".source = "${my-dotfile-dir}/tmux.conf";
   home.file.".vimrc".source = "${my-dotfile-dir}/vimrc";
   home.file.".Xresources".source = "${my-dotfile-dir}/Xresources";
+  home.file.".xmobarrc".source = "${my-dotfile-dir}/xmobarrc";
+  home.file.".xmonad/xmonad.hs".source = "${my-dotfile-dir}/.xmonad/xmonad.hs";
 }
