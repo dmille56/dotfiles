@@ -85,4 +85,5 @@ in
   };
 
   home.file.".tmux.conf".source = "${my-dotfile-dir}/tmux.conf";
+  home.file.".vimrc".source = "${my-dotfile-dir}/vimrc";
 }
