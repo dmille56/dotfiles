@@ -36,7 +36,11 @@ in
     youtube-viewer
     urlview
 
+    nix-prefetch-git
+
     #graphical
+
+    kdeconnect
 
     firefox xterm gparted
     chromium
@@ -52,6 +56,7 @@ in
 
     xscreensaver feh
 
+    gnome3.gedit
     gnome3.gnome-system-monitor
     xfce.thunar
 
@@ -60,6 +65,8 @@ in
     dolphinEmu
     mupen64plus
     keepassx
+
+    redshift
   ];
 
   programs.fzf = {

@@ -11,8 +11,8 @@ import Data.Default(def)
 import XMonad.Hooks.EwmhDesktops
 import Graphics.X11.ExtraTypes.XF86
 
-myModMask = mod1Mask -- Bind Mod to the left alt key
--- myModMask = mod4Mask -- Bind Mod to the windows key
+-- myModMask = mod1Mask -- Bind Mod to the left alt key
+myModMask = mod4Mask -- Bind Mod to the windows key
 
 greyColor = "#928374"
 greyColor2 = "#282828"
