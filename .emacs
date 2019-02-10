@@ -313,6 +313,10 @@
 
 (global-set-key "\C-xa" 'org-agenda)
 
+(use-package ranger
+  :bind
+  ("C-x t" . ranger))
+
 ;; disable backup files
 (setq make-backup-files nil)
 
