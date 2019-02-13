@@ -40,13 +40,13 @@ in
 
     #graphical
 
-    kdeconnect
+    #kdeconnect
 
     firefox xterm gparted
     chromium
     google-chrome
 
-    mplayer
+    mplayer alsaLib
     mpv
     vlc
     pavucontrol
@@ -58,6 +58,7 @@ in
 
     gnome3.gedit
     gnome3.gnome-system-monitor
+    gnome3.meld
     xfce.thunar
 
     streamlink
@@ -66,7 +67,7 @@ in
     mupen64plus
     keepassx
 
-    redshift
+    # redshift
   ];
 
   programs.fzf = {

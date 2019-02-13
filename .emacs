@@ -60,7 +60,7 @@
 ;; install themes
 (use-package sublime-themes)
 
-(if (display-graphic-p)
+(if (or (display-graphic-p) (daemonp))
     (load-theme 'odersky t) )
 
 ;; install markdown-mode and set it to use pandoc
@@ -243,6 +243,8 @@
   (evil-set-initial-state 'emms-stream-mode 'emacs)
   (emms-all)
   (emms-default-players)
+  ;; (setq emms-player-list '(emms-player-mpv))
+  (setq emms-source-file-default-directory "~/Music/")
   (setq emms-stream-default-action "play")
   )
 
@@ -313,9 +315,18 @@
 
 (global-set-key "\C-xa" 'org-agenda)
 
+(use-package image-dired)
+
 (use-package ranger
   :bind
-  ("C-x t" . ranger))
+  ("C-x t" . ranger)
+  :config
+  (setq ranger-cleanup-on-disable t)
+  (setq ranger-cleanup-eagerly t))
+
+(use-package nyan-mode
+  :init
+  (nyan-mode))
 
 ;; disable backup files
 (setq make-backup-files nil)

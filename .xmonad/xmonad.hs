@@ -51,6 +51,7 @@ audioRaiseVolumeCommand = "amixer -D pulse sset Master 5%+; notify-send -i audio
 
 main = do
     xmproc <- spawnPipe "xmobar"
+    emacsdaemon <- spawnPipe "emacs --daemon"
 
     xmonad $ def
         { manageHook = myManageHook
