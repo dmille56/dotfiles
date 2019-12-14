@@ -42,7 +42,24 @@
 
 ;; Install Intero
 (use-package intero)
-(add-hook 'haskell-mode-hook 'intero-mode)
+;; (add-hook 'haskell-mode-hook 'intero-mode)
+
+;; Install Dante
+(use-package dante
+  :ensure t
+  :after haskell-mode
+  :commands 'dante-mode
+  :init
+  (add-hook 'haskell-mode-hook 'flycheck-mode)
+  ;; OR:
+  ;; (add-hook 'haskell-mode-hook 'flymake-mode)
+  (add-hook 'haskell-mode-hook 'dante-mode)
+  )
+
+;; Add Haskell linting on-the-fly to dante
+(add-hook 'dante-mode-hook
+   '(lambda () (flycheck-add-next-checker 'haskell-dante
+                '(warning . haskell-hlint))))
 
 ;; use f6 to move to the next window
 (global-set-key (kbd "<f6>") 'other-window)
@@ -72,16 +89,6 @@
          ("\\.md\\'" . gfm-mode)
          ("\\.markdown\\'" . gfm-mode))
   :init (setq markdown-command "pandoc"))
-
-;; install neotree
-(use-package neotree
-  :bind
-  ("<f8>" . neotree-toggle)
-  (:map neotree-mode-map
-  	("j" . neotree-next-line)
-  	("k" . neotree-previous-line))
-  :init
-  (evil-set-initial-state 'neotree-mode 'emacs))
 
 ;; install helm
 (use-package helm
@@ -139,6 +146,7 @@
      ("https://www.reddit.com/r/programming.rss" programming)
      ("https://www.reddit.com/r/haskell.rss" programming haskell)
      ("http://feeds.feedburner.com/freakonomicsradio" freakonomics podcast)
+     ("https://www.thestranger.com/seattle/Rss.xml" stranger)
      ("http://feeds.megaphone.fm/PPY4159411087" nba nuggets podcast)))
   (setq-default elfeed-search-filter "@1-week-ago +unread ")
   (evil-set-initial-state 'elfeed-search-mode 'emacs)
@@ -242,8 +250,8 @@
   :init
   (evil-set-initial-state 'emms-stream-mode 'emacs)
   (emms-all)
-  (emms-default-players)
-  ;; (setq emms-player-list '(emms-player-mpv))
+  ;; (emms-default-players)
+  (setq emms-player-list '(emms-player-mpv))
   (setq emms-source-file-default-directory "~/Music/")
   (setq emms-stream-default-action "play")
   )
@@ -314,12 +322,16 @@
   (evil-org-agenda-set-keys))
 
 (global-set-key "\C-xa" 'org-agenda)
+(global-set-key "\M-x" 'evil-ex)
 
 (use-package image-dired)
 
 (use-package ranger
   :bind
   ("C-x t" . ranger)
+  ("<f8>" . ranger)
+  (:map ranger-mode-map
+	("C-<tab>" . ranger-next-tab))
   :config
   (setq ranger-cleanup-on-disable t)
   (setq ranger-cleanup-eagerly t))
@@ -333,6 +345,13 @@
 
 ;; disable startup screen
 (setq inhibit-startup-screen t)
+
+;; load not much config if it exists
+(if (file-exists-p "~/.notmuch-emacsconfig")
+    (load-file "~/.notmuch-emacsconfig"))
+
+(add-to-list 'load-path "/nix/store/f3b194s4kf1bfb28g67j96xlh9a5224v-notmuch-0.28.1/bin")
+(autoload 'notmuch "notmuch" "notmuch mail" t)
 
 (provide '.emacs)
 ;;; .emacs ends here
