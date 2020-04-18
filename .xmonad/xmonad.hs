@@ -43,9 +43,13 @@ myManageHook = composeAll [
         manageHook def
         ]
 
-audioPlayPauseCommand = "dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause"
-audioPreviousCommand = "dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Previous"
-audioNextCommand = "dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Next"
+-- audioPlayPauseCommand = "dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause"
+-- audioPreviousCommand = "dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Previous"
+-- audioNextCommand = "dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Next"
+audioPlayPauseCommand = "playerctl play-pause -p spotifyd,spotify,chromium,firefox"
+audioPreviousCommand = "playerctl previous -p spotifyd,spotify,chromium,firefox"
+audioNextCommand = "playerctl next -p spotifyd,spotify,chromium,firefox"
+audioQueryTrackInfoCommand = "notify-send -i audio-volume-medium -t 1000 '$(playerctl metadata artist) - $(playerctl metadata title)'"
 audioLowerVolumeCommand = "amixer -D pulse sset Master 5%-; notify-send -i audio-volume-medium -t 1000 'Volume: '$(amixer -D pulse sget Master | grep 'Left:' | awk -F'[][]' '{ print $2 } ')"
 audioRaiseVolumeCommand = "amixer -D pulse sset Master 5%+; notify-send -i audio-volume-medium -t 1000 'Volume: '$(amixer -D pulse sget Master | grep 'Left:' | awk -F'[][]' '{ print $2 } ')"
 
@@ -53,7 +57,7 @@ main = do
     xmproc <- spawnPipe "xmobar"
     emacsdaemon <- spawnPipe "emacs --daemon"
 
-    xmonad $ def
+    xmonad $ ewmh $ def
         { manageHook = myManageHook
         , layoutHook = (smartBorders . avoidStruts) myLayout
         , logHook = dynamicLogWithPP xmobarPP
@@ -70,6 +74,8 @@ main = do
         } `additionalKeys`
         [ ((myModMask .|. shiftMask, xK_z), spawn "xscreensaver-command -lock; xset dpms force off")
         , ((myModMask , xK_p), spawn "rofi -show run")
+        , ((myModMask , xK_o), spawn "twitchy-rofi-script")
+        , ((myModMask, xK_F9), spawn audioQueryTrackInfoCommand)
         , ((0, xF86XK_AudioPlay), spawn audioPlayPauseCommand)
         , ((myModMask, xK_F12), spawn audioPlayPauseCommand)
         , ((0, xF86XK_AudioPrev), spawn audioPreviousCommand)

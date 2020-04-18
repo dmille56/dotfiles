@@ -10,6 +10,9 @@
 (scroll-bar-mode -1)
 (menu-bar-mode -1)
 
+;; enable reloading buffers on file changes
+(global-auto-revert-mode t)
+
 ;; If you don't have MELPA in your package archives:
 (require 'package)
 (add-to-list
@@ -29,8 +32,9 @@
   (evil-mode 1))
 
 (evil-set-initial-state 'dired-mode 'emacs)
+(semantic-mode 1) ;; use semantic
 
-;; remap ; to : in evil and unmap q (because it's a pain in the ass and i don't use macros)
+;; remap ; to : in evil (for efficiency) and unmap q (because it's a pain in the ass and i don't use macros)
 (with-eval-after-load 'evil-maps
    (define-key evil-motion-state-map (kbd ":") 'evil-repeat-find-char)
    (define-key evil-motion-state-map (kbd ";") 'evil-ex)
@@ -38,28 +42,59 @@
 
 ;; install flycheck
 (use-package flycheck
-  :init (global-flycheck-mode))
-
-;; Install Intero
-(use-package intero)
-;; (add-hook 'haskell-mode-hook 'intero-mode)
+  :init
+  (global-flycheck-mode)
+  (evil-set-initial-state 'flycheck-error-list-mode 'emacs)
+  )
 
 ;; Install Dante
 (use-package dante
   :ensure t
   :after haskell-mode
   :commands 'dante-mode
+  :bind
+  (:map dante-mode-map
+	("M->" . xref-find-definitions)
+	("M-?" . xref-find-references))
   :init
   (add-hook 'haskell-mode-hook 'flycheck-mode)
-  ;; OR:
-  ;; (add-hook 'haskell-mode-hook 'flymake-mode)
+  (add-hook 'haskell-mode-hook 'company-mode)
   (add-hook 'haskell-mode-hook 'dante-mode)
   )
 
 ;; Add Haskell linting on-the-fly to dante
 (add-hook 'dante-mode-hook
    '(lambda () (flycheck-add-next-checker 'haskell-dante
-                '(warning . haskell-hlint))))
+					  '(warning . haskell-hlint))))
+
+;; add attrap - for Dante mode
+(use-package attrap
+  :ensure t
+  :bind (("C-x /" . attrap-attrap)))
+
+(use-package reformatter) ;; needed for ormolu
+
+;; Add auto formatting for Haskell code via Ormolu (requires ormolu exe to be installed)
+(use-package ormolu
+ :hook (haskell-mode . ormolu-format-on-save-mode)
+ :bind
+ (:map haskell-mode-map
+       ("C-c r" . ormolu-format-buffer)))
+
+;; install lsp-mode
+;; set prefix for lsp-command-keymap (few alternatives - "s-l", "C-l", "C-c l")
+(setq lsp-keymap-prefix "C-l")
+
+(use-package lsp-mode
+  :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
+         (python-mode . lsp))
+  :commands lsp)
+
+;; optionally
+(use-package lsp-ui :commands lsp-ui-mode)
+(use-package company-lsp :commands company-lsp)
+;; if you are helm user
+(use-package helm-lsp :commands helm-lsp-workspace-symbol)
 
 ;; use f6 to move to the next window
 (global-set-key (kbd "<f6>") 'other-window)
@@ -95,6 +130,7 @@
   :bind
   ("<f4>" . helm-occur)
   ("<f7>" . helm-find-files)
+  ("C-x c i" . helm-semantic-or-imenu)
   :init
   (helm-mode 1))
 
@@ -108,7 +144,12 @@
   :hook flycheck-elm-setup)
 
 ;; install nix-mode
-(use-package nix-mode)
+(use-package nix-mode
+  :mode "\\.nix\\'")
+
+;; for nix formatting
+(use-package format-all
+  :init (add-hook 'nix-mode-hook 'format-all-mode))
 
 ;; install yaml-mode
 (use-package yaml-mode)
@@ -141,12 +182,12 @@
   (setq elfeed-feeds
    '(("https://news.ycombinator.com/rss" hn hacker-news)
      ("https://www.reddit.com/r/denvernuggets.rss" nba nuggets)
-     ("https://www.youtube.com/feeds/videos.xml?playlist_id=PLlVlyGVtvuVlBMorPS3sGR4CM6lQ2F5dq" nba starters youtube)
      ("https://www.reddit.com/r/nba.rss" nba)
      ("https://www.reddit.com/r/programming.rss" programming)
      ("https://www.reddit.com/r/haskell.rss" programming haskell)
      ("http://feeds.feedburner.com/freakonomicsradio" freakonomics podcast)
-     ("https://www.thestranger.com/seattle/Rss.xml" stranger)
+     ("http://jockopodcast.libsyn.com/rss" jocko podcast)
+     ("http://www.joeroganexp.joerogan.libsynpro.com/rss" rogan podcast)
      ("http://feeds.megaphone.fm/PPY4159411087" nba nuggets podcast)))
   (setq-default elfeed-search-filter "@1-week-ago +unread ")
   (evil-set-initial-state 'elfeed-search-mode 'emacs)
@@ -291,6 +332,15 @@
      :stderr buffer-name
      )))
 
+(defun ddg ()
+  "Search duck duck go."
+  (interactive)
+  (let (
+	(terms (read-string "Enter duckduckgo search terms: ")))
+    (browse-url (concat "https://duckduckgo.com/?q=" terms))))
+
+(global-set-key (kbd "<f9>") 'ddg)
+
 (defun youtube-dl-audio ()
   "Download the audio of a youtube video via youtube-dl."
   (interactive)
@@ -324,6 +374,10 @@
 (global-set-key "\C-xa" 'org-agenda)
 (global-set-key "\M-x" 'evil-ex)
 
+(setq org-agenda-files (list "~/Dropbox/org/todo.org"
+                             "~/Dropbox/org/stuff.org"
+                             "~/Dropbox/org/notes.org"))
+
 (use-package image-dired)
 
 (use-package ranger
@@ -345,13 +399,6 @@
 
 ;; disable startup screen
 (setq inhibit-startup-screen t)
-
-;; load not much config if it exists
-(if (file-exists-p "~/.notmuch-emacsconfig")
-    (load-file "~/.notmuch-emacsconfig"))
-
-(add-to-list 'load-path "/nix/store/f3b194s4kf1bfb28g67j96xlh9a5224v-notmuch-0.28.1/bin")
-(autoload 'notmuch "notmuch" "notmuch mail" t)
 
 (provide '.emacs)
 ;;; .emacs ends here
