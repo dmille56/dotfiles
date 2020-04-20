@@ -40,6 +40,12 @@
    (define-key evil-motion-state-map (kbd ";") 'evil-ex)
    (define-key evil-motion-state-map (kbd "q") nil))
 
+;; install evil-surround
+(use-package evil-surround
+  :ensure t
+  :config
+  (global-evil-surround-mode 1))
+
 ;; install flycheck
 (use-package flycheck
   :init
@@ -393,6 +399,17 @@
 (use-package nyan-mode
   :init
   (nyan-mode))
+
+(use-package projectile
+  :bind
+  (:map projectile-mode-map
+	("C-c p" . projectile-command-map))
+  :init
+  (projectile-mode +1))
+
+(use-package helm-projectile
+  :init
+  (helm-projectile-on))
 
 ;; disable backup files
 (setq make-backup-files nil)
