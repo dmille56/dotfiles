@@ -34,11 +34,16 @@
 (evil-set-initial-state 'dired-mode 'emacs)
 (semantic-mode 1) ;; use semantic
 
+;; ask y/n instead of yes/no
+(fset 'yes-or-no-p 'y-or-n-p)
+
+(define-key dired-mode-map (kbd "/") 'dired-narrow-fuzzy)
+
 ;; remap ; to : in evil (for efficiency) and unmap q (because it's a pain in the ass and i don't use macros)
 (with-eval-after-load 'evil-maps
    (define-key evil-motion-state-map (kbd ":") 'evil-repeat-find-char)
    (define-key evil-motion-state-map (kbd ";") 'evil-ex)
-   (define-key evil-motion-state-map (kbd "q") nil))
+   (define-key evil-motion-state-map (kbd "q") 'evil-ex))
 
 ;; install evil-surround
 (use-package evil-surround
@@ -62,10 +67,10 @@
   (:map dante-mode-map
 	("M->" . xref-find-definitions)
 	("M-?" . xref-find-references))
-  :init
-  (add-hook 'haskell-mode-hook 'flycheck-mode)
-  (add-hook 'haskell-mode-hook 'company-mode)
-  (add-hook 'haskell-mode-hook 'dante-mode)
+  ;; :init
+  ;; (add-hook 'haskell-mode-hook 'flycheck-mode)
+  ;; (add-hook 'haskell-mode-hook 'company-mode)
+  ;; (add-hook 'haskell-mode-hook 'dante-mode)
   )
 
 ;; Add Haskell linting on-the-fly to dante
@@ -93,14 +98,45 @@
 
 (use-package lsp-mode
   :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
-         (python-mode . lsp))
+         (haskell-mode . lsp)
+	 (lsp-mode . lsp-enable-which-key-integration)
+	 )
   :commands lsp)
+;; lsp-ui-doc-glance
 
-;; optionally
-(use-package lsp-ui :commands lsp-ui-mode)
+(use-package lsp-haskell
+ :ensure t
+ :config
+ (setq lsp-haskell-process-path-hie "~/.local/bin/ghcide")
+ (setq lsp-haskell-process-args-hie '())
+ ;; Comment/uncomment this line to see interactions between lsp client/server.
+ (setq lsp-log-io t)
+ (message "Loaded lsp-haskell")
+)
+
+;; lsp-mode optional add ons
+(use-package lsp-ui
+  :commands lsp-ui-mode
+  :bind
+  (:map lsp-mode-map
+	("C-c ." . lsp-ui-doc-glance))
+  :config
+  (lsp-ui-doc-enable 'nil))
+
 (use-package company-lsp :commands company-lsp)
-;; if you are helm user
 (use-package helm-lsp :commands helm-lsp-workspace-symbol)
+(use-package lsp-treemacs :commands lsp-treemacs-errors-list)
+(use-package yasnippet)
+
+;; elglot
+(use-package eglot
+  :ensure t
+  :config
+  (add-to-list 'eglot-server-programs '(haskell-mode . ("ghcide" "--lsp"))))
+
+(use-package which-key
+  :config
+  (which-key-mode))
 
 ;; use f6 to move to the next window
 (global-set-key (kbd "<f6>") 'other-window)
@@ -134,20 +170,12 @@
 ;; install helm
 (use-package helm
   :bind
+  ("<f3>" . helm-bookmarks)
   ("<f4>" . helm-occur)
   ("<f7>" . helm-find-files)
   ("C-x c i" . helm-semantic-or-imenu)
   :init
   (helm-mode 1))
-
-;; install elm-mode
-(use-package elm-mode
-  :init
-  (setq company-backends '(company-elm)))
-
-;; install flycheck-elm
-(use-package flycheck-elm
-  :hook flycheck-elm-setup)
 
 ;; install nix-mode
 (use-package nix-mode
@@ -159,17 +187,6 @@
 
 ;; install yaml-mode
 (use-package yaml-mode)
-
-;; install rust-mode
-(use-package rust-mode
-  :hook cargo-minor-mode)
-(use-package cargo)
-
-;; install clojure-mode
-(use-package clojure-mode
-  :hook info-clojure-minor-mode)
-
-(use-package inf-clojure)
 
 ;; install/setup elfeed
 (use-package elfeed
@@ -187,9 +204,6 @@
   :init
   (setq elfeed-feeds
    '(("https://news.ycombinator.com/rss" hn hacker-news)
-     ("https://www.reddit.com/r/denvernuggets.rss" nba nuggets)
-     ("https://www.reddit.com/r/nba.rss" nba)
-     ("https://www.reddit.com/r/programming.rss" programming)
      ("https://www.reddit.com/r/haskell.rss" programming haskell)
      ("http://feeds.feedburner.com/freakonomicsradio" freakonomics podcast)
      ("http://jockopodcast.libsyn.com/rss" jocko podcast)
@@ -303,7 +317,10 @@
   (setq emms-stream-default-action "play")
   )
 
-(use-package ripgrep)
+(use-package rg
+  :init
+  (rg-enable-default-bindings))
+(use-package helm-rg)
 
 (use-package powershell)
 
@@ -325,7 +342,7 @@
   (let (
 	(url "twitch.tv/")
 	(user "")
-	(buffer-name (get-buffer-create "streamlink"))
+	(buffer-name (get-buffer-create "*streamlink*"))
 	)
     (setq user (read-string "Enter stream name: "))
     (setq url (concat url user))
@@ -363,8 +380,12 @@
 
 (use-package spaceline
   :init
-  (require 'spaceline-config)
-  (spaceline-spacemacs-theme))
+  (require 'spaceline-config))
+  ;;(spaceline-spacemacs-theme))
+
+(use-package spaceline-all-the-icons
+  :after spaceline
+  :config (spaceline-all-the-icons-theme))
 
 (use-package evil-org
   :ensure t
@@ -411,11 +432,26 @@
   :init
   (helm-projectile-on))
 
+;; (use-package vterm
+;;   :ensure t)
+
+(use-package cheat-sh
+  :ensure t
+  :bind (("C-c ?" . cheat-sh)))
+
+(use-package rainbow-delimiters
+  :ensure t
+  :hook (prog-mode . rainbow-delimiters-mode))
+
+(use-package restart-emacs)
+
 ;; disable backup files
 (setq make-backup-files nil)
 
 ;; disable startup screen
 (setq inhibit-startup-screen t)
+
+(load "~/dotfiles/twitchy")
 
 (provide '.emacs)
 ;;; .emacs ends here

@@ -1,14 +1,23 @@
 { pkgs, ... }:
 
-let my-dotfile-dir = "/home/dono/dotfiles";
+let
+  my-dotfile-dir = "/home/dono/dotfiles";
+  my-home-dir = "/home/dono";
 in {
   nixpkgs.config.allowUnfree = true;
   nixpkgs.config.pulseaudio = true;
 
-  nixpkgs.config.permittedInsecurePackages = [ "openssl-1.0.2u" ];
+  nixpkgs.config.permittedInsecurePackages = [ "openssl-1.0.2u" "p7zip-16.02" ];
 
   home.sessionVariables.LOCALES_ARCHIVE =
     "${pkgs.glibcLocales}/lib/locale/locale-archive";
+
+  nixpkgs.overlays = [
+    (import (builtins.fetchGit {
+      url = "git://github.com/nix-community/emacs-overlay.git";
+      rev = "2ea88f6b13673e66b061fc62bca8f3b89d878561";
+    }))
+  ];
 
   home.packages = with pkgs; [
 
@@ -18,9 +27,12 @@ in {
     vim
     curl
     git
-    emacs
+    # emacs
+    emacsGit
+    emacs-all-the-icons-fonts
     zsh
     networkmanager
+    cachix
 
     powershell
     tmux
@@ -64,18 +76,26 @@ in {
     dropbox
     (import ../nix/twitchy.nix)
     (import ../nix/twitchy-rofi-script.nix)
+    (import ../nix/search-ddg-script.nix)
 
     cmatrix
     ormolu
-    haskellPackages.brittany
     nixfmt
-    surfraw
+    closurecompiler
+    nodejs
+    cmake
+    libvterm
+    libtool
+
+    awscli
+
+    (haskellPackages.greenclip)
 
     #graphical
 
     #kdeconnect
 
-    firefox
+    firefox-bin
     xterm
     gparted
     chromium
@@ -137,6 +157,7 @@ in {
     };
 
     shellAliases = { cls = "clear"; };
+    sessionVariables = { RIPGREP_CONFIG_PATH = "${my-home-dir}/.ripgreprc"; };
   };
 
   programs.home-manager = { enable = true; };
@@ -146,4 +167,6 @@ in {
   home.file.".Xresources".source = "${my-dotfile-dir}/Xresources";
   home.file.".xmobarrc".source = "${my-dotfile-dir}/xmobarrc";
   home.file.".xmonad/xmonad.hs".source = "${my-dotfile-dir}/.xmonad/xmonad.hs";
+  home.file.".ghci".source = "${my-dotfile-dir}/.ghci";
+  home.file.".ripgreprc".source = "${my-dotfile-dir}/.ripgreprc";
 }
