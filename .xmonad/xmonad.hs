@@ -3,6 +3,7 @@ import Graphics.X11.ExtraTypes.XF86
 import System.IO
 import XMonad
 import XMonad.Hooks.DynamicLog
+import XMonad.Hooks.DynamicProperty
 import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.ManageHelpers
@@ -42,9 +43,10 @@ myLayout = (tabbed shrinkText myTabConfig) ||| tiled ||| Full
 
 myManageHook =
   composeAll
-    [ className =? "spotify" --> doShift "3:music",
-      className =? "pavucontrol" --> doShift "3:music",
-      className =? "steam" --> doShift "4:games",
+    [ className =? "Spotify" --> doShift "3:music",
+      className =? "Pavucontrol" --> doShift "3:music",
+      className =? "Steam" --> doShift "4:games",
+      className =? "mpv" --> doShift "2:media",
       (isFullscreen --> doFullFloat),
       manageDocks,
       manageHook def
@@ -59,7 +61,7 @@ audioPreviousCommand = "playerctl previous -p spotifyd,spotify,chromium,firefox"
 
 audioNextCommand = "playerctl next -p spotifyd,spotify,chromium,firefox"
 
-audioQueryTrackInfoCommand = "notify-send -i audio-volume-medium -t 1000 '$(playerctl metadata artist) - $(playerctl metadata title)'"
+audioQueryTrackInfoCommand = "notify-send -i media-optical -t 1000 \"$(playerctl metadata artist) - $(playerctl metadata title)\""
 
 audioLowerVolumeCommand = "amixer -D pulse sset Master 5%-; notify-send -i audio-volume-medium -t 1000 'Volume: '$(amixer -D pulse sget Master | grep 'Left:' | awk -F'[][]' '{ print $2 } ')"
 
@@ -80,12 +82,12 @@ main = do
                 ppTitle = xmobarColor yellowColor "" . shorten 50,
                 ppCurrent = xmobarColor greenColor ""
               },
-        handleEventHook = handleEventHook def <+> XMonad.Hooks.EwmhDesktops.fullscreenEventHook <+> docksEventHook,
+        handleEventHook = handleEventHook def <+> XMonad.Hooks.EwmhDesktops.fullscreenEventHook <+> dynamicPropertyChange "WM_CLASS" myManageHook <+> docksEventHook,
         modMask = myModMask,
         borderWidth = 2,
         normalBorderColor = greyColor,
         focusedBorderColor = greenColor,
-        workspaces = ["1:dev", "2:web", "3:music", "4:games", "5", "6", "7", "8", "9"]
+        workspaces = ["1:dev", "2:media", "3:music", "4:games", "5", "6", "7", "8", "9"]
       }
       `additionalKeys` [ ((myModMask .|. shiftMask, xK_z), spawn "xscreensaver-command -lock; xset dpms force off"),
                          ((myModMask, xK_p), spawn "rofi -show run"),

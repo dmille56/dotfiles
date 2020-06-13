@@ -1,5 +1,14 @@
 { pkgs, ... }:
 
+# How to upgrade nix pkgs:
+# 1. nix-channel --update
+# 2. nix-env --upgrade
+# 3. home-manager switch
+
+# Upgrade ubuntu:
+# 1. sudo apt-get update
+# 2. sudo apt-get upgrade
+
 let
   my-dotfile-dir = "/home/dono/dotfiles";
   my-home-dir = "/home/dono";
@@ -27,8 +36,8 @@ in {
     vim
     curl
     git
-    # emacs
-    emacsGit
+    ((emacsPackagesNgGen emacsGit).emacsWithPackages
+      (epkgs: [ epkgs.emacs-libvterm epkgs.w3m ]))
     emacs-all-the-icons-fonts
     zsh
     networkmanager

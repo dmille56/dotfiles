@@ -432,8 +432,8 @@
   :init
   (helm-projectile-on))
 
-;; (use-package vterm
-;;   :ensure t)
+(use-package vterm
+  :ensure t)
 
 (use-package cheat-sh
   :ensure t
@@ -444,6 +444,8 @@
   :hook (prog-mode . rainbow-delimiters-mode))
 
 (use-package restart-emacs)
+
+(use-package w3m)
 
 ;; disable backup files
 (setq make-backup-files nil)
