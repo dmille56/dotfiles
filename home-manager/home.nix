@@ -37,7 +37,7 @@ in {
     curl
     git
     ((emacsPackagesNgGen emacsGit).emacsWithPackages
-      (epkgs: [ epkgs.emacs-libvterm epkgs.w3m ]))
+      (epkgs: [ epkgs.vterm epkgs.w3m ]))
     emacs-all-the-icons-fonts
     zsh
     networkmanager
@@ -86,6 +86,7 @@ in {
     (import ../nix/twitchy.nix)
     (import ../nix/twitchy-rofi-script.nix)
     (import ../nix/search-ddg-script.nix)
+    (import ../nix/twitchy-play-emacs.nix)
 
     cmatrix
     ormolu

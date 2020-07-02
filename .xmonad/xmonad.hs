@@ -44,9 +44,11 @@ myLayout = (tabbed shrinkText myTabConfig) ||| tiled ||| Full
 myManageHook =
   composeAll
     [ className =? "Spotify" --> doShift "3:music",
-      className =? "Pavucontrol" --> doShift "3:music",
+      className =? "Pavucontrol" --> doShift "8:vol",
       className =? "Steam" --> doShift "4:games",
       className =? "mpv" --> doShift "2:media",
+      className =? "Gnome-system-monitor" --> doShift "9:mon",
+      className =? "Chromium-browser" --> doShift "2:media",
       (isFullscreen --> doFullFloat),
       manageDocks,
       manageHook def
@@ -87,11 +89,11 @@ main = do
         borderWidth = 2,
         normalBorderColor = greyColor,
         focusedBorderColor = greenColor,
-        workspaces = ["1:dev", "2:media", "3:music", "4:games", "5", "6", "7", "8", "9"]
+        workspaces = ["1:dev", "2:media", "3:music", "4:games", "5", "6", "7", "8:vol", "9:mon"]
       }
       `additionalKeys` [ ((myModMask .|. shiftMask, xK_z), spawn "xscreensaver-command -lock; xset dpms force off"),
                          ((myModMask, xK_p), spawn "rofi -show run"),
-                         ((myModMask, xK_o), spawn "twitchy-rofi-script"),
+                         ((myModMask, xK_o), spawn "twitchy-emacs-play-script"),
                          ((myModMask, xK_s), spawn "search-ddg-script"),
                          ((myModMask, xK_c), spawn "rofi -modi 'clipboard:greenclip print' -show clipboard -run-command '{cmd}'"),
                          ((myModMask, xK_F9), spawn audioQueryTrackInfoCommand),

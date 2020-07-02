@@ -102,7 +102,6 @@
 	 (lsp-mode . lsp-enable-which-key-integration)
 	 )
   :commands lsp)
-;; lsp-ui-doc-glance
 
 (use-package lsp-haskell
  :ensure t
@@ -121,7 +120,7 @@
   (:map lsp-mode-map
 	("C-c ." . lsp-ui-doc-glance))
   :config
-  (lsp-ui-doc-enable 'nil))
+  (setq lsp-ui-doc-enable nil))
 
 (use-package company-lsp :commands company-lsp)
 (use-package helm-lsp :commands helm-lsp-workspace-symbol)
