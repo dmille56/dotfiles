@@ -99,7 +99,7 @@
 	  (cons stream-name (make-process
 	   :name "streamlink"
 	   :buffer buffer-name
-	   :command (list "streamlink" "--player=mpv --fs" url "360p")
+	   :command (list "streamlink" "--player=mpv --fs --profile=gpu-hq --scale=ewa_lanczossharp" url "360p")
 	   :stderr buffer-name
 	   :sentinel #'twitchy-play-sentinel
 	   ))

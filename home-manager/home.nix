@@ -9,6 +9,9 @@
 # 1. sudo apt-get update
 # 2. sudo apt-get upgrade
 
+# Garbage collect nix:
+# nix-collect-garbage -d
+
 let
   my-dotfile-dir = "/home/dono/dotfiles";
   my-home-dir = "/home/dono";
@@ -24,7 +27,7 @@ in {
   nixpkgs.overlays = [
     (import (builtins.fetchGit {
       url = "git://github.com/nix-community/emacs-overlay.git";
-      rev = "2ea88f6b13673e66b061fc62bca8f3b89d878561";
+      rev = "853e4e31a95ca9a6fd5f08c7a94238ddf19ecb4e";
     }))
   ];
 

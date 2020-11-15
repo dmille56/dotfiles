@@ -113,6 +113,15 @@
  (message "Loaded lsp-haskell")
 )
 
+;; (use-package lsp-haskell
+;;  :ensure t
+;;  :config
+;;  (setq lsp-haskell-process-path-hie "haskell-language-server-wrapper")
+;;  ;; Comment/uncomment this line to see interactions between lsp client/server.
+;;  (setq lsp-log-io t)
+;;  (message "Loaded lsp-haskell")
+;; )
+
 ;; lsp-mode optional add ons
 (use-package lsp-ui
   :commands lsp-ui-mode
@@ -445,6 +454,16 @@
 (use-package restart-emacs)
 
 (use-package w3m)
+
+(if (eq system-type 'gnu/linux)
+  (setq browse-url-browser-function 'browse-url-generic)
+  (setq browse-url-generic-program "sensible-browser")
+  )
+
+;; lsp-mode performance settings
+(setq gc-cons-threshold 100000000)
+(setq read-process-output-max (* 1024 1024)) ;; 1mb
+(setq lsp-completion-provider :capf)
 
 ;; disable backup files
 (setq make-backup-files nil)
