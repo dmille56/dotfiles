@@ -106,21 +106,11 @@
 (use-package lsp-haskell
  :ensure t
  :config
- (setq lsp-haskell-process-path-hie "~/.local/bin/ghcide")
- (setq lsp-haskell-process-args-hie '())
+ (setq lsp-haskell-process-path-hie "haskell-language-server-wrapper")
  ;; Comment/uncomment this line to see interactions between lsp client/server.
  (setq lsp-log-io t)
  (message "Loaded lsp-haskell")
 )
-
-;; (use-package lsp-haskell
-;;  :ensure t
-;;  :config
-;;  (setq lsp-haskell-process-path-hie "haskell-language-server-wrapper")
-;;  ;; Comment/uncomment this line to see interactions between lsp client/server.
-;;  (setq lsp-log-io t)
-;;  (message "Loaded lsp-haskell")
-;; )
 
 ;; lsp-mode optional add ons
 (use-package lsp-ui
@@ -135,12 +125,6 @@
 (use-package helm-lsp :commands helm-lsp-workspace-symbol)
 (use-package lsp-treemacs :commands lsp-treemacs-errors-list)
 (use-package yasnippet)
-
-;; elglot
-(use-package eglot
-  :ensure t
-  :config
-  (add-to-list 'eglot-server-programs '(haskell-mode . ("ghcide" "--lsp"))))
 
 (use-package which-key
   :config
@@ -409,10 +393,6 @@
 (global-set-key "\C-xa" 'org-agenda)
 (global-set-key "\M-x" 'evil-ex)
 
-(setq org-agenda-files (list "~/Dropbox/org/todo.org"
-                             "~/Dropbox/org/stuff.org"
-                             "~/Dropbox/org/notes.org"))
-
 (use-package image-dired)
 
 (use-package ranger
@@ -440,9 +420,6 @@
   :init
   (helm-projectile-on))
 
-(use-package vterm
-  :ensure t)
-
 (use-package cheat-sh
   :ensure t
   :bind (("C-c ?" . cheat-sh)))
@@ -453,12 +430,8 @@
 
 (use-package restart-emacs)
 
-(use-package w3m)
-
 (if (eq system-type 'gnu/linux)
-  (setq browse-url-browser-function 'browse-url-generic)
-  (setq browse-url-generic-program "sensible-browser")
-  )
+    (load "linux-specific.el"))
 
 ;; lsp-mode performance settings
 (setq gc-cons-threshold 100000000)
@@ -471,7 +444,6 @@
 ;; disable startup screen
 (setq inhibit-startup-screen t)
 
-(load "~/dotfiles/twitchy")
+(load "twitchy.el")
 
-(provide '.emacs)
-;;; .emacs ends here
+(provide 'main)
