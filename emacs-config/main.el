@@ -430,9 +430,6 @@
 
 (use-package restart-emacs)
 
-(if (eq system-type 'gnu/linux)
-    (load "linux-specific.el"))
-
 ;; lsp-mode performance settings
 (setq gc-cons-threshold 100000000)
 (setq read-process-output-max (* 1024 1024)) ;; 1mb
@@ -444,6 +441,13 @@
 ;; disable startup screen
 (setq inhibit-startup-screen t)
 
-(load "twitchy.el")
+(setq-local main-dir "~/dotfiles/emacs-config/")
+
+(load-file
+ (concat main-dir "twitchy.el"))
+
+(if (eq system-type 'gnu/linux)
+    (load-file
+     (concat main-dir "linux-specific.el")))
 
 (provide 'main)
