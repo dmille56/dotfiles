@@ -430,6 +430,17 @@
 
 (use-package restart-emacs)
 
+(use-package avy
+  :init
+  (global-set-key (kbd "C-;") 'avy-goto-char))
+
+(use-package diff-hl
+  :init
+  (global-diff-hl-mode))
+
+(use-package company-box
+  :hook (company-mode . company-box-mode))
+
 ;; lsp-mode performance settings
 (setq gc-cons-threshold 100000000)
 (setq read-process-output-max (* 1024 1024)) ;; 1mb
