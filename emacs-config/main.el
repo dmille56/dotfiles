@@ -227,12 +227,8 @@
 
 (use-package spaceline
   :init
-  (require 'spaceline-config))
-  ;;(spaceline-spacemacs-theme))
-
-(use-package spaceline-all-the-icons
-  :after spaceline
-  :config (spaceline-all-the-icons-theme))
+  (require 'spaceline-config)
+  (spaceline-emacs-theme))
 
 (use-package evil-org
   :ensure t
