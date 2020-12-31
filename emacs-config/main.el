@@ -26,6 +26,12 @@
 (require 'use-package)
 (setq use-package-always-ensure t)
 
+(use-package auto-package-update
+  :config
+  (setq auto-package-update-delete-old-versions t)
+  (setq auto-package-update-hide-results t)
+  (auto-package-update-maybe))
+
 ;; add evil
 (use-package evil
   :init
@@ -307,6 +313,13 @@
 
 (load-file
  (concat main-dir "twitchy.el"))
+
+(global-set-key (kbd "M-p") 'twitchy-play-stream)
+
+(load-file
+ (concat main-dir "youtube.el"))
+
+(global-set-key (kbd "M-y") 'youtube)
 
 (load-file
  (concat main-dir "elfeed-config.el"))
