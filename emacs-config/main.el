@@ -38,6 +38,7 @@
   (evil-mode 1))
 
 (evil-set-initial-state 'dired-mode 'emacs)
+(evil-set-initial-state 'help-mode 'emacs)
 (semantic-mode 1) ;; use semantic
 
 ;; ask y/n instead of yes/no

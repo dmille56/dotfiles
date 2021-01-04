@@ -65,8 +65,7 @@ too long).")
      :name "streamlink"
      :buffer buffer-name
      :command (list "streamlink" "-p" "mpv" url "360p")
-     :stderr buffer-name
-     :sentinel #'youtube-play-sentinel)
+     :stderr buffer-name)
     ))
 
 (defun youtube--format-author (name)
@@ -175,15 +174,33 @@ too long).")
   (interactive)
   (let* (
 	 (search-term (read-string "Search Youtube: " 'nil 'nil 'nil))
+	 )
+    (youtube--search-internal 1 search-term)))
+
+(defun youtube--search-internal (pagenum term)
+  "Search youtube internal."
+  (let* (
 	 (search-params '())
 	 )
-    (add-to-list 'search-params (cons 'q search-term))
-    (setq youtube-search-term search-term)
+    (add-to-list 'search-params (cons 'q term))
+    (add-to-list 'search-params (cons 'page pagenum))
+    (setq youtube-search-term term)
+    (setq youtube-current-page pagenum)
     (request
       (concat youtube-api-url "/api/v1/search")
       :params search-params
       :parser 'json-read
       :success 'youtube--do-it)))
+
+(defun youtube-search-next-page ()
+  "Go to next page of search results."
+  (interactive)
+  (youtube--search-internal (+ youtube-current-page 1) youtube-search-term))
+
+(defun youtube-search-previous-page ()
+  "Go to previous page of search results."
+  (interactive)
+  (youtube--search-internal (- youtube-current-page 1) youtube-search-term))
 
 (defun youtube-get-current-video ()
  "Get the currently selected video."
@@ -215,8 +232,9 @@ too long).")
     (define-key map "k" #'previous-line)
     (define-key map "s" #'youtube-search)
     (define-key map "p" #'youtube-play-current-video)
-    ;; (define-key map ">" #'youtube-search-next-page)
-    ;; (define-key map "<" #'youtube-search-previous-page)
+    (define-key map (kbd "<return>") #'youtube-play-current-video)
+    (define-key map ">" #'youtube-search-next-page)
+    (define-key map "<" #'youtube-search-previous-page)
     map)
   "Keymap for `youtube-mode'.")
 
