@@ -148,6 +148,25 @@ too long).")
   (views     0  :read-only t)
   (published 0 :read-only t))
 
+(cl-defstruct (youtube-channel (:constructor youtube-channel--create)
+			  (:copier nil))
+  "Information about a Youtube channel."
+  (author      "" :read-only t)
+  (authorUrl   "" :read-only t)
+  (subCount    0 :read-only t)
+  (views       0  :read-only t)
+  (description ""  :read-only t)
+  (published   0 :read-only t))
+
+(cl-defstruct (youtube-playlist (:constructor youtube-playlist--create)
+			  (:copier nil))
+  "Information about a Youtube playlist."
+  (title "" :read-only t)
+  (author   "" :read-only t)
+  (videoCount "" :read-only t)
+  (playlistId 0 :read-only t))
+
+
 (cl-defun youtube--do-it (&key (data nil) &allow-other-keys)
   "Draw the buffer with youtube DATA results."
   (let*
