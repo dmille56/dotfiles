@@ -70,6 +70,7 @@ myManageHook =
     [ className =? "Spotify" --> doShift "3:music",
       className =? "Steam" --> doShift "4:games",
       className =? "mpv" --> doShift "2:media",
+      className =? "vlc" --> doShift "2:media",
       className =? "Gnome-system-monitor" --> doShift "9:mon",
       className =? "Pavucontrol" --> doShift "9:mon",
       className =? "Chromium-browser" --> doShift "2:media",
@@ -100,60 +101,61 @@ main = do
   spawn "gnome-system-monitor"
   emacsDaemon <- spawnPipe "emacs --daemon"
   greenclipDaemon <- spawnPipe "greenclip daemon"
-  xmonad $ ewmh $
-    def
-      { manageHook = myManageHook,
-        layoutHook = myLayoutHook,
-        logHook =
-          dynamicLogWithPP
-            xmobarPP
-              { ppOutput = hPutStrLn xmproc,
-                ppTitle = xmobarColor yellowColor "" . shorten 50,
-                ppCurrent = xmobarColor greenColor ""
-              },
-        handleEventHook = handleEventHook def <+> XMonad.Hooks.EwmhDesktops.fullscreenEventHook <+> dynamicPropertyChange "WM_CLASS" myManageHook <+> docksEventHook,
-        modMask = myModMask,
-        borderWidth = 2,
-        normalBorderColor = greyColor,
-        focusedBorderColor = greenColor,
-        workspaces = ["1:dev", "2:media", "3:music", "4:games", "5", "6", "7", "8", "9:mon"]
-      }
-      `additionalKeys` [ ((myModMask .|. shiftMask, xK_z), spawn "xscreensaver-command -lock; xset dpms force off"),
-                         ((myModMask, xK_p), spawn "rofi -show run"),
-                         ((myModMask, xK_o), spawn "twitchy-emacs-play-script"),
-                         ((myModMask, xK_s), promptSearch myXPConfig duckduckgo),
-                         ((myModMask .|. shiftMask, xK_s), selectSearch duckduckgo),
-                         ((myModMask, xK_v), shellPrompt myXPConfig),
-                         ((myModMask .|. shiftMask, xK_v), prompt ("xterm" ++ " -e") myXPConfig),
-                         ((myModMask, xK_g), windowPrompt myXPConfig Goto allWindows),
-                         ((myModMask .|. shiftMask, xK_g), windowPrompt myXPConfig Bring allWindows),
-                         ((myModMask, xK_c), spawn "rofi -modi 'clipboard:greenclip print' -show clipboard -run-command '{cmd}'"),
-                         ((myModMask, xK_F9), spawn audioQueryTrackInfoCommand),
-                         ((0, xF86XK_AudioPlay), spawn audioPlayPauseCommand),
-                         ((myModMask, xK_F12), spawn audioPlayPauseCommand),
-                         ((0, xF86XK_AudioPrev), spawn audioPreviousCommand),
-                         ((myModMask, xK_F10), spawn audioPreviousCommand),
-                         ((0, xF86XK_AudioNext), spawn audioNextCommand),
-                         ((myModMask, xK_F11), spawn audioNextCommand),
-                         ((0, xF86XK_AudioLowerVolume), spawn audioLowerVolumeCommand),
-                         ((myModMask, xK_Down), spawn audioLowerVolumeCommand),
-                         ((0, xF86XK_AudioRaiseVolume), spawn audioRaiseVolumeCommand),
-                         ((myModMask, xK_Up), spawn audioRaiseVolumeCommand),
-                         ( (myModMask, xK_semicolon),
-                           (submap . M.fromList) $
-                             [ ((0, xK_f), notifySpawn "sensible-browser"),
-                               ((0, xK_c), notifySpawn "chromium"),
-                               ((0, xK_s), notifySpawn "spotify"),
-                               ((0, xK_a), notifySpawn "steam"),
-                               ((0, xK_p), notifySpawn "pavucontrol"),
-                               ((0, xK_m), notifySpawn "gnome-system-monitor"),
-                               ((0, xK_r), notifySpawn "xterm -e ranger"),
-                               ((0, xK_t), notifySpawn "thunar"),
-                               ((0, xK_d), notifySpawn "xterm -e dropbox"),
-                               ((0, xK_e), notifySpawn "emacsclient -n -c")
-                             ]
-                         )
-                       ]
+  xmonad $
+    ewmh $
+      def
+        { manageHook = myManageHook,
+          layoutHook = myLayoutHook,
+          logHook =
+            dynamicLogWithPP
+              xmobarPP
+                { ppOutput = hPutStrLn xmproc,
+                  ppTitle = xmobarColor yellowColor "" . shorten 50,
+                  ppCurrent = xmobarColor greenColor ""
+                },
+          handleEventHook = handleEventHook def <+> XMonad.Hooks.EwmhDesktops.fullscreenEventHook <+> dynamicPropertyChange "WM_CLASS" myManageHook <+> docksEventHook,
+          modMask = myModMask,
+          borderWidth = 2,
+          normalBorderColor = greyColor,
+          focusedBorderColor = greenColor,
+          workspaces = ["1:dev", "2:media", "3:music", "4:games", "5", "6", "7", "8", "9:mon"]
+        }
+        `additionalKeys` [ ((myModMask .|. shiftMask, xK_z), spawn "xscreensaver-command -lock; xset dpms force off"),
+                           ((myModMask, xK_p), spawn "rofi -show run"),
+                           ((myModMask, xK_o), spawn "twitchy-emacs-play-script"),
+                           ((myModMask, xK_s), promptSearch myXPConfig duckduckgo),
+                           ((myModMask .|. shiftMask, xK_s), selectSearch duckduckgo),
+                           ((myModMask, xK_v), shellPrompt myXPConfig),
+                           ((myModMask .|. shiftMask, xK_v), prompt ("xterm" ++ " -e") myXPConfig),
+                           ((myModMask, xK_g), windowPrompt myXPConfig Goto allWindows),
+                           ((myModMask .|. shiftMask, xK_g), windowPrompt myXPConfig Bring allWindows),
+                           ((myModMask, xK_c), spawn "rofi -modi 'clipboard:greenclip print' -show clipboard -run-command '{cmd}'"),
+                           ((myModMask, xK_F9), spawn audioQueryTrackInfoCommand),
+                           ((0, xF86XK_AudioPlay), spawn audioPlayPauseCommand),
+                           ((myModMask, xK_F12), spawn audioPlayPauseCommand),
+                           ((0, xF86XK_AudioPrev), spawn audioPreviousCommand),
+                           ((myModMask, xK_F10), spawn audioPreviousCommand),
+                           ((0, xF86XK_AudioNext), spawn audioNextCommand),
+                           ((myModMask, xK_F11), spawn audioNextCommand),
+                           ((0, xF86XK_AudioLowerVolume), spawn audioLowerVolumeCommand),
+                           ((myModMask, xK_Down), spawn audioLowerVolumeCommand),
+                           ((0, xF86XK_AudioRaiseVolume), spawn audioRaiseVolumeCommand),
+                           ((myModMask, xK_Up), spawn audioRaiseVolumeCommand),
+                           ( (myModMask, xK_semicolon),
+                             (submap . M.fromList) $
+                               [ ((0, xK_f), notifySpawn "sensible-browser"),
+                                 ((0, xK_c), notifySpawn "chromium"),
+                                 ((0, xK_s), notifySpawn "spotify"),
+                                 ((0, xK_a), notifySpawn "steam"),
+                                 ((0, xK_p), notifySpawn "pavucontrol"),
+                                 ((0, xK_m), notifySpawn "gnome-system-monitor"),
+                                 ((0, xK_r), notifySpawn "xterm -e ranger"),
+                                 ((0, xK_t), notifySpawn "thunar"),
+                                 ((0, xK_d), notifySpawn "xterm -e dropbox"),
+                                 ((0, xK_e), notifySpawn "emacsclient -n -c")
+                               ]
+                           )
+                         ]
 
 notifySpawn s = do
   spawn ("notify-send -t 3000 'Launching " ++ s ++ "'")

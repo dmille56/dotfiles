@@ -112,7 +112,9 @@ too long).")
 
 (defun youtube--insert-video (video)
   "Insert `VIDEO' in the current buffer."
-  (insert (youtube--format-video-published (youtube-video-published video))
+  (insert
+   "V "
+   (youtube--format-video-published (youtube-video-published video))
 	  " "
 	  (youtube--format-author (youtube-video-author video))
 	  " "
@@ -135,6 +137,23 @@ too long).")
 	      (youtube--insert-video v)
 	      (insert "\n"))
 	    videos)
+    (goto-char (point-min))))
+
+(defun youtube--draw-buffer-2 (page)
+  "Draws the youtube buffer i.e. clear everything and display PAGE in the buffer."
+  (let ((inhibit-read-only t)
+	(current-line      (line-number-at-pos)))
+    (erase-buffer)
+    (setf header-line-format (youtube-page-title page))
+    (seq-do (lambda (v)
+	      (if (youtube-video-p v)
+		  (youtube--insert-video v)
+		(if (youtube-playlist-p v)
+		    (insert "Playlist found.")
+		  (if (youtube-channel-p v)
+		      (insert "Channel found."))))
+	      (insert "\n"))
+	    (youtube-page-data page))
     (goto-char (point-min))))
 
 (cl-defstruct (youtube-video (:constructor youtube-video--create)
@@ -166,26 +185,56 @@ too long).")
   (videoCount "" :read-only t)
   (playlistId 0 :read-only t))
 
+(cl-defstruct (youtube-page (:constructor youtube-page--create)
+			  (:copier nil))
+  "Information about a Youtube page."
+  (type "" :read-only t)
+  (data nil :read-only t)
+  (api-url "" :read-only t)
+  (api-params nil :read-only t)
+  (page 0 :read-only t)
+  (title "" :read-only t))
 
 (cl-defun youtube--do-it (&key (data nil) &allow-other-keys)
   "Draw the buffer with youtube DATA results."
   (let*
       (
       (videos (-map (lambda (i)
-		      (youtube-video--create
-		       :title     (assoc-default 'title i)
-		       :author    (assoc-default 'author i)
-		       :authorId  (assoc-default 'authorId i)
-		       :length    (assoc-default 'lengthSeconds i)
-		       :id        (assoc-default 'videoId i)
-		       :views     (assoc-default 'viewCount i)
-		       :published (assoc-default 'published i)))
+		      (if (string= (assoc-default 'type i) "video")
+			  (youtube-video--create
+			    :title     (assoc-default 'title i)
+			    :author    (assoc-default 'author i)
+			    :authorId  (assoc-default 'authorId i)
+			    :length    (assoc-default 'lengthSeconds i)
+			    :id        (assoc-default 'videoId i)
+			    :views     (assoc-default 'viewCount i)
+			    :published (assoc-default 'published i))
+			(if (string= (assoc-default 'type i) "playlist")
+			    (youtube-playlist--create
+			     :title (assoc-default 'title i)
+			     :author (assoc-default 'author i)
+			     :videoCount (assoc-default 'videoCount i)
+			     :playlistId (assoc-default 'playlistId i))
+			  (if (string= (assoc-default 'type i) "channel")
+			      (youtube-channel--create
+			       :author (assoc-default 'author i)
+			       :authorUrl (assoc-default 'authorUrl i)
+			       :subCount (assoc-default 'subCount i)
+			       :description (assoc-default 'description i))
+			    (error (concat "Unrecognized type: " type))))))
 		    data))
+      (page (youtube-page--create
+	     :type 'search-list
+	     :data videos
+	     :api-url (concat youtube-api-url "/api/v1/search")
+	     :api-params 'nil
+	     :page 0
+	     :title (concat "Search results for: " youtube-search-term)))
       )
   (setq youtube-videos videos)
   (with-current-buffer (get-buffer-create "youtube")
     (pop-to-buffer (current-buffer))
-    (youtube--draw-buffer videos)
+    (youtube--draw-buffer-2 page)
     )))
 
 (defun youtube-search ()
@@ -197,12 +246,13 @@ too long).")
     (youtube--search-internal 1 search-term)))
 
 (defun youtube--search-internal (pagenum term)
-  "Search youtube internal."
+  "Search youtube internal.  PAGENUM = pagenumber, TERM = term to search for."
   (let* (
 	 (search-params '())
 	 )
     (add-to-list 'search-params (cons 'q term))
     (add-to-list 'search-params (cons 'page pagenum))
+    (add-to-list 'search-params (cons 'type "all"))
     (setq youtube-search-term term)
     (setq youtube-current-page pagenum)
     (request
@@ -254,6 +304,7 @@ too long).")
     (define-key map (kbd "<return>") #'youtube-play-current-video)
     (define-key map ">" #'youtube-search-next-page)
     (define-key map "<" #'youtube-search-previous-page)
+    (define-key map ";" #'evil-ex)
     map)
   "Keymap for `youtube-mode'.")
 
@@ -262,6 +313,7 @@ too long).")
   (setq buffer-read-only t)
   (buffer-disable-undo)
   (evil-set-initial-state 'youtube-mode 'emacs)
+  (hl-line-mode)
   (make-local-variable 'youtube-videos))
 
 (defun youtube-buffer ()

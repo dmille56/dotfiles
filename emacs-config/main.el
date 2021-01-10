@@ -150,12 +150,6 @@
 
 (use-package evil-magit)
 
-;; install themes
-(use-package sublime-themes)
-
-(if (or (display-graphic-p) (daemonp))
-    (load-theme 'odersky t) )
-
 ;; install markdown-mode and set it to use pandoc
 ;; make sure you have pandoc installed!
 (use-package markdown-mode
@@ -175,6 +169,15 @@
   ("C-x c i" . helm-semantic-or-imenu)
   :init
   (helm-mode 1))
+
+;; install themes
+(use-package sublime-themes)
+(use-package spacemacs-theme)
+
+(if (or (display-graphic-p) (daemonp))
+    ;; (load-theme 'odersky t)
+    (load-theme 'spacemacs-dark t)
+  )
 
 ;; install nix-mode
 (use-package nix-mode
@@ -330,3 +333,4 @@
      (concat main-dir "linux-specific.el")))
 
 (provide 'main)
+;;; main.el ends here
