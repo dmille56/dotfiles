@@ -4,6 +4,7 @@
 
 ;;; modified from https://github.com/gRastello/youtube
 
+(require 'all-the-icons)
 (require 'cl-lib)
 (require 'request)
 (require 'json)
@@ -103,7 +104,7 @@ too long).")
 
 (defun youtube--format-video-views (views)
   "Format video VIEWS to be inserted in the *youtube* buffer."
-  (propertize (concat "[views:" (number-to-string views) "]") 'face 'youtube-video-view-face))
+  (propertize (number-to-string views) 'face 'youtube-video-view-face))
 
 (defun youtube--format-video-published (published)
   "Format video PUBLISHED date to be inserted in the *youtube* buffer."
@@ -113,7 +114,8 @@ too long).")
 (defun youtube--insert-video (video)
   "Insert `VIDEO' in the current buffer."
   (insert
-   "V "
+   (all-the-icons-faicon "film" :face 'youtube-video-length-face)
+   " "
    (youtube--format-video-published (youtube-video-published video))
 	  " "
 	  (youtube--format-author (youtube-video-author video))
@@ -122,7 +124,29 @@ too long).")
 	  " "
 	  (youtube--format-title (youtube-video-title video))
 	  " "
-	  (youtube--format-video-views (youtube-video-views video))))
+	  (youtube--format-video-views (youtube-video-views video))
+	  " "
+	  (all-the-icons-faicon "eye" :face 'youtube-video-view-face)))
+
+(defun youtube--insert-playlist (playlist)
+  "Insert `PLAYLIST' in the current buffer."
+  (insert
+   (all-the-icons-faicon "list" :face 'youtube-video-length-face)
+   (make-string 12 32) ;; insert spaces... 32=space
+   (youtube--format-author (youtube-playlist-author playlist))
+   (make-string 10 32)
+   (youtube--format-title (youtube-playlist-title playlist))
+   ))
+
+(defun youtube--insert-channel (channel)
+  "Insert `CHANNEL' in the current buffer."
+  (insert
+   (all-the-icons-faicon "user" :face 'youtube-video-length-face)
+   (make-string 12 32)
+   (youtube--format-author (youtube-channel-author channel))
+   (make-string 10 32)
+   (youtube--format-title (youtube-channel-description channel))
+  ))
 
 (defun youtube--draw-buffer (videos)
   "Draws the youtube buffer i.e. clear everything and write down all VIDEOS in `youtube-videos'."
@@ -149,9 +173,9 @@ too long).")
 	      (if (youtube-video-p v)
 		  (youtube--insert-video v)
 		(if (youtube-playlist-p v)
-		    (insert "Playlist found.")
+		    (youtube--insert-playlist v)
 		  (if (youtube-channel-p v)
-		      (insert "Channel found."))))
+		      (youtube--insert-channel v))))
 	      (insert "\n"))
 	    (youtube-page-data page))
     (goto-char (point-min))))

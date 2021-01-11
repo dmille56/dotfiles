@@ -254,7 +254,8 @@
 (global-set-key "\C-xa" 'org-agenda)
 (global-set-key "\M-x" 'evil-ex)
 
-(use-package image-dired)
+(use-package all-the-icons-dired
+  :hook (dired-mode . all-the-icons-dired-mode))
 
 (use-package ranger
   :bind
@@ -293,6 +294,7 @@
 
 (use-package avy
   :init
+  (global-set-key (kbd "C-:") 'avy-goto-line)
   (global-set-key (kbd "C-;") 'avy-goto-char))
 
 (use-package diff-hl
