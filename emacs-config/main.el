@@ -35,10 +35,15 @@
 ;; add evil
 (use-package evil
   :init
+  (setq evil-want-integration t) ;; This is optional since it's already set to t by default.
+  (setq evil-want-keybinding nil)
+  :config
   (evil-mode 1))
 
-(evil-set-initial-state 'dired-mode 'emacs)
-(evil-set-initial-state 'help-mode 'emacs)
+(use-package evil-collection
+  :config
+  (evil-collection-init))
+
 (semantic-mode 1) ;; use semantic
 
 ;; ask y/n instead of yes/no
@@ -48,9 +53,9 @@
 
 ;; remap ; to : in evil (for efficiency) and unmap q (because it's a pain in the ass and i don't use macros)
 (with-eval-after-load 'evil-maps
-   (define-key evil-motion-state-map (kbd ":") 'evil-repeat-find-char)
-   (define-key evil-motion-state-map (kbd ";") 'evil-ex)
-   (define-key evil-motion-state-map (kbd "q") 'evil-ex))
+   (define-key evil-normal-state-map (kbd ":") 'evil-repeat-find-char)
+   (define-key evil-normal-state-map (kbd ";") 'evil-ex)
+   (define-key evil-normal-state-map (kbd "q") 'quit-window))
 
 ;; install evil-surround
 (use-package evil-surround
@@ -61,9 +66,7 @@
 ;; install flycheck
 (use-package flycheck
   :init
-  (global-flycheck-mode)
-  (evil-set-initial-state 'flycheck-error-list-mode 'emacs)
-  )
+  (global-flycheck-mode))
 
 ;; Install Dante
 (use-package dante
@@ -106,6 +109,7 @@
 (use-package lsp-mode
   :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
          (haskell-mode . lsp)
+         (powershell-mode . lsp)
 	 (lsp-mode . lsp-enable-which-key-integration)
 	 )
   :commands lsp)
@@ -141,14 +145,7 @@
 (global-set-key (kbd "<f6>") 'other-window)
 
 ;; install maggit
-(use-package magit
-  :init
-  (evil-set-initial-state 'magit-mode 'normal)
-  (evil-set-initial-state 'magit-status-mode 'normal)
-  (evil-set-initial-state 'magit-diff-mode 'normal)
-  (evil-set-initial-state 'magit-log-mode 'normal))
-
-(use-package evil-magit)
+(use-package magit)
 
 ;; install markdown-mode and set it to use pandoc
 ;; make sure you have pandoc installed!
@@ -176,8 +173,7 @@
 
 (if (or (display-graphic-p) (daemonp))
     ;; (load-theme 'odersky t)
-    (load-theme 'spacemacs-dark t)
-  )
+    (load-theme 'spacemacs-dark t))
 
 ;; install nix-mode
 (use-package nix-mode
@@ -199,7 +195,6 @@
    ("j" . next-line)
    ("k" . previous-line))
   :init
-  (evil-set-initial-state 'emms-stream-mode 'emacs)
   (emms-all)
   ;; (emms-default-players)
   (setq emms-player-list '(emms-player-mpv))
@@ -303,6 +298,8 @@
 
 (use-package company-box
   :hook (company-mode . company-box-mode))
+
+(use-package read-aloud)
 
 ;; lsp-mode performance settings
 (setq gc-cons-threshold 100000000)

@@ -12,6 +12,11 @@
 # Garbage collect nix:
 # nix-collect-garbage -d
 
+# Theme help:
+#   - install qt5ct & kvantum for KDE themes
+#   - xfsettingsd #has to be run at startup for xfce theme setting to work
+#   - export QT_QPA_PLATFORMTHEME=qt5ct # for KDE themes to work
+
 let
   my-dotfile-dir = "/home/dono/dotfiles";
   my-home-dir = "/home/dono";
@@ -27,7 +32,7 @@ in {
   nixpkgs.overlays = [
     (import (builtins.fetchGit {
       url = "git://github.com/nix-community/emacs-overlay.git";
-      rev = "853e4e31a95ca9a6fd5f08c7a94238ddf19ecb4e";
+      rev = "f0e9e4870ca015f402594cf4b55310ba5284fbbe";
     }))
   ];
 
@@ -103,10 +108,12 @@ in {
     awscli
 
     (haskellPackages.greenclip)
+    bluez
+    bluez-tools
 
     #graphical
 
-    #kdeconnect
+    # kdeconnect
 
     firefox-bin
     xterm
@@ -147,6 +154,8 @@ in {
 
     vscode
     protontricks
+
+    blueman
 
     # redshift
   ];

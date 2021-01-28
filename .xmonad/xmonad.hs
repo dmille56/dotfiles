@@ -96,11 +96,12 @@ audioRaiseVolumeCommand = "amixer -D pulse sset Master 5%+; notify-send -i audio
 
 main = do
   xmproc <- spawnPipe "xmobar"
+  spawn "xfsettingsd"
   spawn "start-pulseaudio-x11"
-  spawn "pavucontrol"
-  spawn "gnome-system-monitor"
   emacsDaemon <- spawnPipe "emacs --daemon"
   greenclipDaemon <- spawnPipe "greenclip daemon"
+  spawn "pavucontrol"
+  spawn "gnome-system-monitor"
   xmonad $
     ewmh $
       def
@@ -145,6 +146,7 @@ main = do
                              (submap . M.fromList) $
                                [ ((0, xK_f), notifySpawn "sensible-browser"),
                                  ((0, xK_c), notifySpawn "chromium"),
+                                 ((0, xK_b), notifySpawn "xterm -e bluetoothctl"),
                                  ((0, xK_s), notifySpawn "spotify"),
                                  ((0, xK_a), notifySpawn "steam"),
                                  ((0, xK_p), notifySpawn "pavucontrol"),

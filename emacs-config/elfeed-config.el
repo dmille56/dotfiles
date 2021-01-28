@@ -2,26 +2,21 @@
 (use-package elfeed
   :bind
   ("C-x w" . elfeed)
-  (:map elfeed-search-mode-map
-	("j" . next-line)
-	("k" . previous-line)
-	("c" . elfeed-browsecomments-search)
-	("y" . elfeed-download-yt))
-  (:map elfeed-show-mode-map
-	("j" . next-line)
-	("k" . previous-line)
-	("c" . elfeed-browsecomments-show))
   :init
+  (evil-define-key 'normal elfeed-search-mode-map
+    (kbd "g c") 'elfeed-browsecomments-search
+    (kbd "g y") 'elfeed-download-yt)
+  (evil-define-key 'normal elfeed-show-mode-map
+    (kbd "g c") 'elfeed-browsecomments-search)
   (setq elfeed-feeds
    '(("https://news.ycombinator.com/rss" hn hacker-news)
      ("https://www.reddit.com/r/haskell.rss" programming haskell)
      ("http://feeds.feedburner.com/freakonomicsradio" freakonomics podcast)
      ("http://jockopodcast.libsyn.com/rss" jocko podcast)
      ("http://www.joeroganexp.joerogan.libsynpro.com/rss" rogan podcast)
+     ("https://stratechery.com/feed" tech)
      ("http://feeds.megaphone.fm/PPY4159411087" nba nuggets podcast)))
-  (setq-default elfeed-search-filter "@1-week-ago +unread ")
-  (evil-set-initial-state 'elfeed-search-mode 'emacs)
-(evil-set-initial-state 'elfeed-show-mode 'emacs))
+  (setq-default elfeed-search-filter "@1-week-ago +unread "))
 
 (defun elfeed-download-yt ()
   "Downloads the selected elfeed entry."
