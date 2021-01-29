@@ -12,7 +12,12 @@
 
 ;;; Code:
 
-(defvar youtube-api-url "https://invidious.xyz"
+;; https://invidious.zapashcanon.fr/
+;; https://invidious.fdn.fr/
+;; https://tube.connect.cafe/
+;; https://invidious.site/
+;; https://vid.mint.lgbt/
+(defvar youtube-api-url "https://invidious.site"
   "Url to an Invidious instance.")
 
 (defvar youtube-videos '()
@@ -65,7 +70,7 @@ too long).")
     (make-process
      :name "streamlink"
      :buffer buffer-name
-     :command (list "streamlink" "-p" "mpv" url "360p")
+     :command (list "streamlink" url "360p")
      :stderr buffer-name)
     ))
 
@@ -114,7 +119,7 @@ too long).")
 (defun youtube--insert-video (video)
   "Insert `VIDEO' in the current buffer."
   (insert
-   (all-the-icons-faicon "film" :face 'youtube-video-length-face)
+   (all-the-icons-octicon "device-camera-video" :face 'youtube-video-length-face)
    " "
    (youtube--format-video-published (youtube-video-published video))
 	  " "
@@ -124,14 +129,15 @@ too long).")
 	  " "
 	  (youtube--format-title (youtube-video-title video))
 	  " "
+	  (all-the-icons-octicon "eye" :face 'youtube-video-view-face)
+          " "
 	  (youtube--format-video-views (youtube-video-views video))
-	  " "
-	  (all-the-icons-faicon "eye" :face 'youtube-video-view-face)))
+	  ))
 
 (defun youtube--insert-playlist (playlist)
   "Insert `PLAYLIST' in the current buffer."
   (insert
-   (all-the-icons-faicon "list" :face 'youtube-video-length-face)
+   (all-the-icons-octicon "list-unordered" :face 'youtube-video-length-face)
    (make-string 12 32) ;; insert spaces... 32=space
    (youtube--format-author (youtube-playlist-author playlist))
    (make-string 10 32)
@@ -141,8 +147,8 @@ too long).")
 (defun youtube--insert-channel (channel)
   "Insert `CHANNEL' in the current buffer."
   (insert
-   (all-the-icons-faicon "user" :face 'youtube-video-length-face)
-   (make-string 12 32)
+   (all-the-icons-octicon "person" :face 'youtube-video-length-face)
+   (make-string 13 32)
    (youtube--format-author (youtube-channel-author channel))
    (make-string 10 32)
    (youtube--format-title (youtube-channel-description channel))
@@ -195,6 +201,7 @@ too long).")
 			  (:copier nil))
   "Information about a Youtube channel."
   (author      "" :read-only t)
+  (authorId    "" :read-only t)
   (authorUrl   "" :read-only t)
   (subCount    0 :read-only t)
   (views       0  :read-only t)
@@ -207,7 +214,30 @@ too long).")
   (title "" :read-only t)
   (author   "" :read-only t)
   (videoCount "" :read-only t)
+  (videos nil :read-only t)
   (playlistId 0 :read-only t))
+
+(cl-defstruct (youtube-playlist-video  (:constructor youtube-playlist-video--create)
+				       (:copier nil))
+  (title "" :read-only t)
+  (id 0 :read-only t)
+  (seconds 0 :read-only t))
+
+;;    videos: [
+;;      {
+;;        title: String,
+;;        videoId: String,
+;;        lengthSeconds: Int32,
+;;        videoThumbnails: [
+;;          {
+;;            quality: String,
+;;            url: String,
+;;            width: Int32,
+;;            height: Int32
+;;          }
+;;        ]
+;;      }
+;;    ]
 
 (cl-defstruct (youtube-page (:constructor youtube-page--create)
 			  (:copier nil))
@@ -238,10 +268,13 @@ too long).")
 			     :title (assoc-default 'title i)
 			     :author (assoc-default 'author i)
 			     :videoCount (assoc-default 'videoCount i)
-			     :playlistId (assoc-default 'playlistId i))
+			     :playlistId (assoc-default 'playlistId i)
+			     :videos nil
+			     )
 			  (if (string= (assoc-default 'type i) "channel")
 			      (youtube-channel--create
 			       :author (assoc-default 'author i)
+			       :authorId (assoc-default 'authorId i)
 			       :authorUrl (assoc-default 'authorUrl i)
 			       :subCount (assoc-default 'subCount i)
 			       :description (assoc-default 'description i))
@@ -295,26 +328,45 @@ too long).")
   (interactive)
   (youtube--search-internal (- youtube-current-page 1) youtube-search-term))
 
-(defun youtube-get-current-video ()
- "Get the currently selected video."
+(defun youtube-get-current-item ()
+ "Get the currently selected item."
  (nth (1- (line-number-at-pos)) youtube-videos))
 
-(defun youtube-play-current-video ()
-  "Play currently selected youtube video."
+(defun youtube-interact-current-item ()
   (interactive)
-  "Plays the currently selected video."
+  "Visit the currently selected item."
   (let*
       (
-       (video (youtube-get-current-video))
-       (url (concat "https://www.youtube.com/watch?v=" (youtube-video-id video)))
+       (item (youtube-get-current-item))
        )
-    (youtube-play url)
-    ))
+    (if (youtube-video-p item)
+	(youtube-play (concat "https://www.youtube.com/watch?v=" (youtube-video-id item)))
+      (if (youtube-playlist-p item)
+	  (youtube-play (concat "https://www.youtube.com/watch?list=" (youtube-playlist-id item))) ;; https://www.youtube.com/watch?v=CRuOOxF-ENQ&list=PLjzeyhEA84sS6ogo2mXWdcTrL2HRfJUv8
+	(if (youtube-channel-p item)
+	    (youtube--fetch-channel (youtube-channel-authorId item)))))
+  ))
+
+(defun youtube--fetch-channel (channel-id)
+  ;; /api/v1/channels/:ucid
+  (request
+    (concat youtube-api-url "/api/v1/channels/videos/" channel-id)
+    :parser 'json-read
+    :success 'youtube--display-channel))
+
+(cl-defun youtube--display-channel (&key (data nil) &allow-other-keys)
+  (with-current-buffer (get-buffer-create "youtube")
+    (pop-to-buffer (current-buffer))
+    (erase-buffer)
+    (setf header-line-format "Displaying a channel!!!")
+    )
+  )
 
 (defun youtube-quit ()
   "Quit youtube buffer."
   (interactive)
-  (quit-window))
+  (quit-window)
+  )
 
 (defvar youtube-mode-map
   (let ((map (make-sparse-keymap)))
@@ -324,8 +376,8 @@ too long).")
     (define-key map "j" #'next-line)
     (define-key map "k" #'previous-line)
     (define-key map "s" #'youtube-search)
-    (define-key map "p" #'youtube-play-current-video)
-    (define-key map (kbd "<return>") #'youtube-play-current-video)
+    (define-key map "p" #'youtube-interact-current-item)
+    (define-key map (kbd "<return>") #'youtube-interact-current-item)
     (define-key map ">" #'youtube-search-next-page)
     (define-key map "<" #'youtube-search-previous-page)
     (define-key map ";" #'evil-ex)

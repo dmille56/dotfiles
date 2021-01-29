@@ -13,9 +13,15 @@
 # nix-collect-garbage -d
 
 # Theme help:
-#   - install qt5ct & kvantum for KDE themes
+#   - install qt5ct & kvantum for KDE themes with ubuntu
 #   - xfsettingsd #has to be run at startup for xfce theme setting to work
-#   - export QT_QPA_PLATFORMTHEME=qt5ct # for KDE themes to work
+#   - export QT_QPA_PLATFORMTHEME=qt5ct # for KDE themes to work... in .profile
+
+# Non nix:
+# - install spotify
+# - install steam
+# - install nix
+# - install kdeconnect
 
 let
   my-dotfile-dir = "/home/dono/dotfiles";

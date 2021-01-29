@@ -10,6 +10,9 @@
 (scroll-bar-mode -1)
 (menu-bar-mode -1)
 
+;; insert space instead of tabs
+(setq-default indent-tabs-mode nil)
+
 ;; enable reloading buffers on file changes
 (global-auto-revert-mode t)
 
@@ -33,23 +36,18 @@
   (auto-package-update-maybe))
 
 ;; add evil
+;; note: "c-z" to toggle to/from emacs state
 (use-package evil
   :init
   (setq evil-want-integration t) ;; This is optional since it's already set to t by default.
   (setq evil-want-keybinding nil)
+  (setq evil-search-module 'evil-search)
   :config
   (evil-mode 1))
 
 (use-package evil-collection
   :config
   (evil-collection-init))
-
-(semantic-mode 1) ;; use semantic
-
-;; ask y/n instead of yes/no
-(fset 'yes-or-no-p 'y-or-n-p)
-
-(define-key dired-mode-map (kbd "/") 'dired-narrow-fuzzy)
 
 ;; remap ; to : in evil (for efficiency) and unmap q (because it's a pain in the ass and i don't use macros)
 (with-eval-after-load 'evil-maps
@@ -62,6 +60,13 @@
   :ensure t
   :config
   (global-evil-surround-mode 1))
+
+(semantic-mode 1) ;; use semantic
+
+;; ask y/n instead of yes/no
+(fset 'yes-or-no-p 'y-or-n-p)
+
+(define-key dired-mode-map (kbd "/") 'dired-narrow-fuzzy)
 
 ;; install flycheck
 (use-package flycheck
@@ -129,6 +134,9 @@
   :bind
   (:map lsp-mode-map
 	("C-c ." . lsp-ui-doc-glance))
+  :init
+  (evil-define-key 'normal lsp-mode-map
+    (kbd "C-c .") 'lsp-ui-doc-glance)
   :config
   (setq lsp-ui-doc-enable nil))
 
