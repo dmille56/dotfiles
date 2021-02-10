@@ -204,8 +204,9 @@
    ("k" . previous-line))
   :init
   (emms-all)
-  ;; (emms-default-players)
-  (setq emms-player-list '(emms-player-mpv))
+  (if (eq system-type 'gnu/linux)
+      (setq emms-player-list '(emms-player-mpv))
+    (emms-default-players))
   (setq emms-source-file-default-directory "~/Music/")
   (setq emms-stream-default-action "play")
   )
@@ -338,6 +339,10 @@
 (if (eq system-type 'gnu/linux)
     (load-file
      (concat main-dir "linux-specific.el")))
+
+(if (eq system-type 'windows-nt)
+    (load-file
+     (concat main-dir "windows-specific.el")))
 
 (provide 'main)
 ;;; main.el ends here
