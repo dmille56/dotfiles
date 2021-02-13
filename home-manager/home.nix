@@ -22,6 +22,10 @@
 # - install steam
 # - install nix
 # - install kdeconnect
+#
+# add to .profile to fix locale issue:
+# export LOCALE_ARCHIVE=$(nix-build '<nixpkgs>' -A glibcLocales)/lib/locale/locale-archive
+
 
 let
   my-dotfile-dir = "/home/dono/dotfiles";
@@ -29,11 +33,6 @@ let
 in {
   nixpkgs.config.allowUnfree = true;
   nixpkgs.config.pulseaudio = true;
-
-  nixpkgs.config.permittedInsecurePackages = [ "openssl-1.0.2u" "p7zip-16.02" ];
-
-  home.sessionVariables.LOCALES_ARCHIVE =
-    "${pkgs.glibcLocales}/lib/locale/locale-archive";
 
   nixpkgs.overlays = [
     (import (builtins.fetchGit {

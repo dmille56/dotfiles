@@ -73,6 +73,13 @@
   :init
   (global-flycheck-mode))
 
+(use-package treemacs
+  :bind
+  ("C-x y" . treemacs))
+
+(use-package treemacs-projectile)
+(use-package treemacs-evil)
+
 ;; Install Dante
 (use-package dante
   :ensure t

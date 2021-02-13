@@ -14,8 +14,10 @@
      ("http://feeds.feedburner.com/freakonomicsradio" freakonomics podcast)
      ("http://jockopodcast.libsyn.com/rss" jocko podcast)
      ("http://www.joeroganexp.joerogan.libsynpro.com/rss" rogan podcast)
-     ("https://stratechery.com/feed" tech)
-     ("http://feeds.megaphone.fm/PPY4159411087" nba nuggets podcast)))
+     ("http://feeds.megaphone.fm/PPY4159411087" nba nuggets podcast)
+     ("https://stratechery.com/feed" tech blog)
+     ("https://www.overcomingbias.com/feed" blog)
+     ))
   (setq-default elfeed-search-filter "@1-week-ago +unread "))
 
 (defun elfeed-download-yt ()
