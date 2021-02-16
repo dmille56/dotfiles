@@ -315,7 +315,11 @@
 (use-package company-box
   :hook (company-mode . company-box-mode))
 
-(use-package read-aloud)
+(use-package read-aloud
+  :init
+  (global-set-key (kbd "C-C r p") 'read-aloud-buf)
+  (global-set-key (kbd "C-C r s") 'read-aloud-stop)
+  (global-set-key (kbd "C-C r t") 'read-aloud-this))
 
 ;; lsp-mode performance settings
 (setq gc-cons-threshold 100000000)
