@@ -179,7 +179,7 @@ in {
 
     oh-my-zsh = {
       enable = true;
-      theme = "sunaku";
+      theme = "agnoster";
       plugins = [ "git" ];
     };
 

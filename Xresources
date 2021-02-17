@@ -1,6 +1,6 @@
 !powerline fonts need to be gotten from github.com/powerline/fonts
-!XTerm*faceName: DejaVu Sans Mono for Powerline
-xterm*faceSize: 12
+XTerm*faceName: DejaVu Sans Mono for Powerline
+xterm*faceSize: 14
 xterm*vt100*geometry: 1920x1080
 xterm*saveLines: 16384
 xterm*loginShell: true

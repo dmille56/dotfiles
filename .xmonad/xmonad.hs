@@ -123,6 +123,7 @@ main = do
         }
         `additionalKeys` [ ((myModMask .|. shiftMask, xK_z), spawn "xscreensaver-command -lock; xset dpms force off"),
                            ((myModMask, xK_p), spawn "rofi -show run"),
+                           ((myModMask, xK_i), spawn "rofi -show window"),
                            ((myModMask, xK_o), spawn "twitchy-emacs-play-script"),
                            ((myModMask, xK_s), promptSearch myXPConfig duckduckgo),
                            ((myModMask .|. shiftMask, xK_s), selectSearch duckduckgo),
@@ -154,6 +155,7 @@ main = do
                                  ((0, xK_r), notifySpawn "xterm -e ranger"),
                                  ((0, xK_t), notifySpawn "thunar"),
                                  ((0, xK_d), notifySpawn "xterm -e dropbox"),
+                                 ((0, xK_x), notifySpawn "xterm"),
                                  ((0, xK_e), notifySpawn "emacsclient -n -c")
                                ]
                            )

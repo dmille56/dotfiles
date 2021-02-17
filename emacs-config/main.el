@@ -61,6 +61,12 @@
   :config
   (global-evil-surround-mode 1))
 
+;; Set default font
+(set-face-attribute 'default nil
+                    :family "Deja Vu Sans Mono for Powerline"
+                    :height 110
+                    :weight 'normal
+                    :width 'normal)
 (semantic-mode 1) ;; use semantic
 
 ;; ask y/n instead of yes/no
@@ -260,7 +266,8 @@
             (lambda ()
               (evil-org-set-key-theme)))
   (require 'evil-org-agenda)
-  (evil-org-agenda-set-keys))
+  (evil-org-agenda-set-keys)
+  (setq org-startup-folded "overview"))
 
 (global-set-key "\C-xa" 'org-agenda)
 (global-set-key "\M-x" 'evil-ex)
