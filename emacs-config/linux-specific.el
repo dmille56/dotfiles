@@ -7,3 +7,7 @@
 (setq org-agenda-files (list "~/Dropbox/org/todo.org"
                             "~/Dropbox/org/stuff.org"
                             "~/Dropbox/org/notes.org"))
+
+(use-package direnv
+ :config
+ (direnv-mode))

@@ -153,7 +153,6 @@
   :config
   (setq lsp-ui-doc-enable nil))
 
-(use-package company-lsp :commands company-lsp)
 (use-package helm-lsp :commands helm-lsp-workspace-symbol)
 (use-package lsp-treemacs :commands lsp-treemacs-errors-list)
 (use-package yasnippet)
@@ -191,10 +190,12 @@
 ;; install themes
 (use-package sublime-themes)
 (use-package spacemacs-theme)
+(use-package dracula-theme)
 
 (if (or (display-graphic-p) (daemonp))
     ;; (load-theme 'odersky t)
-    (load-theme 'spacemacs-dark t))
+    ;;(load-theme 'spacemacs-dark t)
+    (load-theme 'dracula t))
 
 ;; install nix-mode
 (use-package nix-mode

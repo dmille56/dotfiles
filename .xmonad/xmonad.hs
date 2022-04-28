@@ -98,6 +98,7 @@ main = do
   xmproc <- spawnPipe "xmobar"
   spawn "xfsettingsd"
   spawn "start-pulseaudio-x11"
+  spawn "redshift -l 47.608013:-122.335167 -t 6500:3500"
   emacsDaemon <- spawnPipe "emacs --daemon"
   greenclipDaemon <- spawnPipe "greenclip daemon"
   spawn "pavucontrol"

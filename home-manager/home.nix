@@ -26,6 +26,8 @@
 # add to .profile to fix locale issue:
 # export LOCALE_ARCHIVE=$(nix-build '<nixpkgs>' -A glibcLocales)/lib/locale/locale-archive
 
+# to fix issue: 'home-manager: line 73: NIX_PATH: unbound variable'
+# export NIX_PATH=$HOME/.nix-defexpr/channels${NIX_PATH:+:}$NIX_PATH
 
 let
   my-dotfile-dir = "/home/dono/dotfiles";
@@ -37,7 +39,7 @@ in {
   nixpkgs.overlays = [
     (import (builtins.fetchGit {
       url = "git://github.com/nix-community/emacs-overlay.git";
-      rev = "f0e9e4870ca015f402594cf4b55310ba5284fbbe";
+      rev = "b326ce0166ca52223e8efeae8a3763c00cca1ba4";
     }))
   ];
 
@@ -49,15 +51,20 @@ in {
     vim
     curl
     git
-    ((emacsPackagesNgGen emacsGit).emacsWithPackages
+    ((emacsPackagesFor emacsGit).emacsWithPackages
       (epkgs: [ epkgs.vterm epkgs.w3m ]))
     emacs-all-the-icons-fonts
+    nerdfonts
     zsh
     networkmanager
     cachix
+    lorri
+    nodejs
 
     powershell
+
     tmux
+    zellij
     ranger
     fzf
     ripgrep
@@ -66,13 +73,14 @@ in {
 
     stack
     cargo
+    sbcl
 
     gnupg
     pass
 
     mu
-    notmuch
-    notmuch-bower
+    # notmuch
+    # notmuch-bower
     isync
     cacert
 
@@ -86,7 +94,7 @@ in {
     xclip
     powerline-fonts
 
-    rtv
+    tuir # rtv
     ddgr
     w3m
     youtube-dl
@@ -109,12 +117,17 @@ in {
     cmake
     libvterm
     libtool
+    rdrview
 
     awscli
 
     (haskellPackages.greenclip)
     bluez
     bluez-tools
+
+    jdk8
+
+    tts
 
     #graphical
 
@@ -125,9 +138,11 @@ in {
     gparted
     chromium
     google-chrome
+    nyxt
 
     mplayer
     alsaLib
+    ffmpeg
     mpv
     vlc
     pavucontrol
@@ -143,12 +158,14 @@ in {
     dmenu
     conky
 
+    guvcview
+
     xscreensaver
     feh
 
     gnome3.gedit
     gnome3.gnome-system-monitor
-    gnome3.meld
+    pkgs.meld
     xfce.thunar
 
     streamlink
@@ -162,7 +179,12 @@ in {
 
     blueman
 
-    # redshift
+    darktable
+
+    android-studio
+    scrcpy
+
+    redshift
   ];
 
   programs.fzf = {
@@ -170,26 +192,62 @@ in {
     enableZshIntegration = true;
   };
 
-  programs.zsh = {
+ programs.zsh = {
+   enable = true; # had to disable to make home-manager switch work...
+   enableAutosuggestions = true;
+   # enableSyntaxHighlighting = true; #remove this line if not compile
+   initExtra =
+     "if [ -e ~/.nix-profile/etc/profile.d/nix.sh ]; then . ~/.nix-profile/etc/profile.d/nix.sh; fi";
+
+   oh-my-zsh = {
+     enable = true;
+     theme = "agnoster";
+     plugins = [ "git" ];
+   };
+
+   shellAliases = { cls = "clear"; };
+   sessionVariables = { RIPGREP_CONFIG_PATH = "${my-home-dir}/.ripgreprc"; };
+ };
+
+  programs.direnv = {
     enable = true;
-    enableAutosuggestions = true;
-    # enableSyntaxHighlighting = true; #remove this line if not compile
-    initExtra =
-      "if [ -e ~/.nix-profile/etc/profile.d/nix.sh ]; then . ~/.nix-profile/etc/profile.d/nix.sh; fi";
+    enableZshIntegration = true;
+  };
 
-    oh-my-zsh = {
-      enable = true;
-      theme = "agnoster";
-      plugins = [ "git" ];
-    };
+  programs.tmux = {
+    enable = true;
+    clock24 = true;
+    plugins = with pkgs.tmuxPlugins; [
+        sensible
+        yank
+        tmux-fzf
+        {
+        plugin = dracula;
+        extraConfig = ''
+            set -g @dracula-show-battery false
+            set -g @dracula-show-powerline true
+            set -g @dracula-refresh-rate 10
+        '';
+        }
+    ];
 
-    shellAliases = { cls = "clear"; };
-    sessionVariables = { RIPGREP_CONFIG_PATH = "${my-home-dir}/.ripgreprc"; };
+    extraConfig = ''
+        unbind C-b
+        set-option -g prefix C-a
+        bind-key C-a send-prefix
+
+        #map F5 to cycle to next window
+        bind -n F5 next-window
+
+        #map F6 to cycle to next pane
+        bind -n F6 select-pane -t :.+
+
+        set -g mouse on
+    '';
   };
 
   programs.home-manager = { enable = true; };
 
-  home.file.".tmux.conf".source = "${my-dotfile-dir}/tmux.conf";
   home.file.".vimrc".source = "${my-dotfile-dir}/vimrc";
   home.file.".Xresources".source = "${my-dotfile-dir}/Xresources";
   home.file.".xmobarrc".source = "${my-dotfile-dir}/xmobarrc";

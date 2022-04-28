@@ -1,4 +1,36 @@
 ;; install/setup elfeed
+
+(setq elfeed-feeds-blogs
+      '(
+        ("https://stratechery.com/feed" blog tech)
+        ("http://www.paulgraham.com/rss.html" blog) ;; Paul Graham (Ycombinator founder)
+        ("https://www.overcomingbias.com/feed" blog) ;; Robin Hanson (economist)
+        ("http://www.econlib.org/feed/indexCaplan_xml" blog) ;; Bryan Caplan (economist)
+        ("https://www.scottaaronson.com/blog/?feed=rss2" blog tech) ;; Scott Aaronson (Comp Sci prof)
+        ("https://astralcodexten.substack.com/feed" blog) ;; Scott Alexander
+        ("http://daviddfriedman.blogspot.com/atom.xml" blog) ;; David Friedman (economist)
+        ("http://feeds.feedburner.com/MeltingAsphalt" blog) ;; Kevin Simler (Elephant in the Brain)
+        ("https://graymirror.substack.com/feed" blog)
+        ))
+
+(setq elfeed-feeds-podcasts
+      '(
+        ("http://feeds.feedburner.com/freakonomicsradio" pc podcast freakonomics)
+        ("http://jockopodcast.libsyn.com/rss" pc podcast jocko)
+        ("http://www.joeroganexp.joerogan.libsynpro.com/rss" pc podcast rogan)
+        ("http://feeds.megaphone.fm/PPY4159411087" pc podcast nba nuggets)
+        ))
+
+(setq elfeed-feeds-misc
+      '(
+        ("https://news.ycombinator.com/rss" hn hacker-news)
+        ("https://www.reddit.com/r/haskell.rss" programming haskell)
+        ("https://www.denverstiffs.com/rss/current" nba nuggets)
+        ))
+
+(setq elfeed-all-the-feeds
+      (append elfeed-feeds-blogs elfeed-feeds-podcasts elfeed-feeds-misc))
+
 (use-package elfeed
   :bind
   ("C-x w" . elfeed)
@@ -8,16 +40,7 @@
     (kbd "g y") 'elfeed-download-yt)
   (evil-define-key 'normal elfeed-show-mode-map
     (kbd "g c") 'elfeed-browsecomments-search)
-  (setq elfeed-feeds
-   '(("https://news.ycombinator.com/rss" hn hacker-news)
-     ("https://www.reddit.com/r/haskell.rss" programming haskell)
-     ("http://feeds.feedburner.com/freakonomicsradio" freakonomics podcast)
-     ("http://jockopodcast.libsyn.com/rss" jocko podcast)
-     ("http://www.joeroganexp.joerogan.libsynpro.com/rss" rogan podcast)
-     ("http://feeds.megaphone.fm/PPY4159411087" nba nuggets podcast)
-     ("https://stratechery.com/feed" tech blog)
-     ("https://www.overcomingbias.com/feed" blog)
-     ))
+  (setq elfeed-feeds elfeed-all-the-feeds)
   (setq-default elfeed-search-filter "@1-week-ago +unread "))
 
 (defun elfeed-download-yt ()
