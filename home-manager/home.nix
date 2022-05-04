@@ -87,6 +87,8 @@ in {
     bat
     exa
     fd
+    bottom
+    delta
 
     cmus
     pandoc
@@ -214,6 +216,21 @@ in {
     enableZshIntegration = true;
   };
 
+  programs.zoxide = {
+    enable = true;
+    enableZshIntegration = true;
+  };
+
+  programs.git = {
+    enable = true;
+    delta = {
+      enable = true;
+      options = {
+        features = "dracula";
+      };
+    };
+  };
+
   programs.tmux = {
     enable = true;
     clock24 = true;
@@ -243,6 +260,128 @@ in {
         bind -n F6 select-pane -t :.+
 
         set -g mouse on
+    '';
+  };
+
+  programs.neovim = {
+    enable = true;
+    plugins = with pkgs.vimPlugins; [
+      vim-nix
+      vim-which-key
+      direnv-vim
+      dracula-vim
+      nerdtree
+      ctrlp-vim
+      vim-airline
+      nvim-lspconfig
+
+      # completion
+      cmp-nvim-lsp
+      cmp-buffer
+      cmp-path
+      cmp-cmdline
+      nvim-cmp
+      cmp-vsnip
+      vim-vsnip
+    ];
+
+    extraConfig = ''
+    set nocompatible
+
+    syntax enable
+
+    "get rid of annoyances
+    set noswapfile
+    set nobackup
+    set nowritebackup
+
+    set ignorecase          " Make searching case insensitive
+    set smartcase           " ... unless the query has capital letters.
+    set gdefault            " Use 'g' flag by default with :s/foo/bar/.
+
+    " set color scheme
+    colorscheme dracula
+    set termguicolors
+
+    "remap ; to : to save a keystroke
+    nnoremap : ;
+    nnoremap ; :
+    vnoremap : ;
+    vnoremap ; :
+
+    let mapleader="\<SPACE>"
+
+    "NERDTree
+    "-------------------------
+    nnoremap <leader>\ :NERDTreeToggle<CR>
+    let NERDTreeIgnore = [ '\.js_dyn_o', '\.js_hi', '\.js_o', '\.js_dyn_hi', '\.dyn_hi', '\.dyn_o', '\.hi', '\.o', '\.p_hi', '\.p_o' ]
+    "Automatically close if NERDTree is the only buffer left
+    autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
+
+    " Open file menu
+    nnoremap <Leader>o :CtrlP<CR>
+    " Open buffer menu
+    nnoremap <Leader>b :CtrlPBuffer<CR>
+    " Open most recently used files
+    nnoremap <Leader>f :CtrlPMRUFiles<CR>
+
+    let g:airline_powerline_fonts = 1
+    let g:airline_theme= 'dracula'
+
+    set completeopt=menu,menuone,noselect
+
+    lua <<EOF
+      -- Setup nvim-cmp.
+      local cmp = require'cmp'
+
+      cmp.setup {
+      -- As currently, i am not using any snippet manager, thus disabled it.
+          -- snippet = {
+              --   expand = function(args)
+                  --     require("luasnip").lsp_expand(args.body)
+                  --   end,
+              -- },
+  
+          mapping = {
+              ["<C-d>"] = cmp.mapping.scroll_docs(-4),
+              ["<C-f>"] = cmp.mapping.scroll_docs(4),
+              ["<C-e>"] = cmp.mapping.close(),
+              ['<C-Space>'] = cmp.mapping.complete(),
+              ['<C-e>'] = cmp.mapping.abort(),
+              ["<CR>"] = cmp.mapping.confirm {
+                  behavior = cmp.ConfirmBehavior.Insert,
+                  select = true,
+              },
+          },
+
+          snippet = {
+              -- REQUIRED - you must specify a snippet engine
+              expand = function(args)
+                  vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
+              end,
+          },
+  
+          sources = {
+              { name = "nvim_lsp"},
+              { name = "path" },
+              { name = 'vsnip' },
+              { name = "buffer" , keyword_length = 5},
+          },
+          experimental = {
+              ghost_text = true
+          }
+      }
+
+      -- Setup lspconfig.
+      local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+      -- Replace <YOUR_LSP_SERVER> with each lsp server you've enabled.
+      require('lspconfig')['hls'].setup {
+        capabilities = capabilities,
+        on_attach = function(client, bufnr)
+           vim.api.nvim_buf_set_keymap(bufnr, 'n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', { noremap=true, silent=true })
+        end,
+      }
+    EOF
     '';
   };
 
