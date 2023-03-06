@@ -5,8 +5,7 @@
         ("https://stratechery.com/feed" blog tech)
         ("http://www.paulgraham.com/rss.html" blog) ;; Paul Graham (Ycombinator founder)
         ("https://www.overcomingbias.com/feed" blog) ;; Robin Hanson (economist)
-        ("http://www.econlib.org/feed/indexCaplan_xml" blog) ;; Bryan Caplan (economist)
-        ("https://www.scottaaronson.com/blog/?feed=rss2" blog tech) ;; Scott Aaronson (Comp Sci prof)
+        ("https://betonit.substack.com/feed" blog) ;; Bryan Caplan (economist)
         ("https://astralcodexten.substack.com/feed" blog) ;; Scott Alexander
         ("http://daviddfriedman.blogspot.com/atom.xml" blog) ;; David Friedman (economist)
         ("http://feeds.feedburner.com/MeltingAsphalt" blog) ;; Kevin Simler (Elephant in the Brain)
@@ -16,8 +15,6 @@
 (setq elfeed-feeds-podcasts
       '(
         ("http://feeds.feedburner.com/freakonomicsradio" pc podcast freakonomics)
-        ("http://jockopodcast.libsyn.com/rss" pc podcast jocko)
-        ("http://www.joeroganexp.joerogan.libsynpro.com/rss" pc podcast rogan)
         ("http://feeds.megaphone.fm/PPY4159411087" pc podcast nba nuggets)
         ))
 

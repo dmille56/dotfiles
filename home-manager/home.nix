@@ -29,6 +29,8 @@
 # to fix issue: 'home-manager: line 73: NIX_PATH: unbound variable'
 # export NIX_PATH=$HOME/.nix-defexpr/channels${NIX_PATH:+:}$NIX_PATH
 
+# export NIX_PATH=${NIX_PATH:+$NIX_PATH:}$HOME/.nix-defexpr/channels
+
 let
   my-dotfile-dir = "/home/dono/dotfiles";
   my-home-dir = "/home/dono";
@@ -38,8 +40,8 @@ in {
 
   nixpkgs.overlays = [
     (import (builtins.fetchGit {
-      url = "git://github.com/nix-community/emacs-overlay.git";
-      rev = "b326ce0166ca52223e8efeae8a3763c00cca1ba4";
+      url = "https://github.com/nix-community/emacs-overlay.git";
+      rev = "e962b871a0b0984569506a576543eff8926d478f";
     }))
   ];
 
@@ -106,7 +108,7 @@ in {
 
     nix-prefetch-git
     dropbox
-    (import ../nix/twitchy.nix)
+    # (import ../nix/twitchy.nix) # TODO: fix 
     (import ../nix/twitchy-rofi-script.nix)
     (import ../nix/search-ddg-script.nix)
     (import ../nix/twitchy-play-emacs.nix)
@@ -183,8 +185,9 @@ in {
 
     darktable
 
-    android-studio
+    # android-studio
     scrcpy
+    flameshot
 
     redshift
   ];
@@ -325,6 +328,9 @@ in {
     " Open most recently used files
     nnoremap <Leader>f :CtrlPMRUFiles<CR>
 
+    nnoremap <Leader>a :tabprev<CR>
+    nnoremap <Leader>s :tabnext<CR>
+
     let g:airline_powerline_fonts = 1
     let g:airline_theme= 'dracula'
 
@@ -335,13 +341,6 @@ in {
       local cmp = require'cmp'
 
       cmp.setup {
-      -- As currently, i am not using any snippet manager, thus disabled it.
-          -- snippet = {
-              --   expand = function(args)
-                  --     require("luasnip").lsp_expand(args.body)
-                  --   end,
-              -- },
-  
           mapping = {
               ["<C-d>"] = cmp.mapping.scroll_docs(-4),
               ["<C-f>"] = cmp.mapping.scroll_docs(4),
@@ -373,7 +372,7 @@ in {
       }
 
       -- Setup lspconfig.
-      local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+      local capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
       -- Replace <YOUR_LSP_SERVER> with each lsp server you've enabled.
       require('lspconfig')['hls'].setup {
         capabilities = capabilities,
@@ -393,4 +392,6 @@ in {
   home.file.".xmonad/xmonad.hs".source = "${my-dotfile-dir}/.xmonad/xmonad.hs";
   home.file.".ghci".source = "${my-dotfile-dir}/.ghci";
   home.file.".ripgreprc".source = "${my-dotfile-dir}/.ripgreprc";
+
+  manual.manpages.enable = false; # TODO: reenable man pages eventually... they wouldn't update correctly
 }
