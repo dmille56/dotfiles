@@ -9,7 +9,16 @@
         ("https://astralcodexten.substack.com/feed" blog) ;; Scott Alexander
         ("http://daviddfriedman.blogspot.com/atom.xml" blog) ;; David Friedman (economist)
         ("http://feeds.feedburner.com/MeltingAsphalt" blog) ;; Kevin Simler (Elephant in the Brain)
-        ("https://graymirror.substack.com/feed" blog)
+        ("https://graymirror.substack.com/feed" blog) ;; Curtis Yarvin
+        ))
+
+(setq elfeed-feeds-yt
+      '(
+        ("https://www.youtube.com/feeds/videos.xml?channel_id=UCfQgsKhHjSyRLOp9mnffqVg" yt) ;; Renaissance Periodization
+	("https://www.youtube.com/feeds/videos.xml?channel_id=UCkZjTZNvuxq1CYMS3cwZa1Q" yt) ;; Huberman lab clips
+	("https://www.youtube.com/feeds/videos.xml?playlist_id=PLkL7BvJXiqSTWYYJtqjo-cKEcHd9g4g5J" yt) ;; Chris Williamson clips
+	("https://www.youtube.com/feeds/videos.xml?channel_id=UCV_zy48AlwwGpdJEka1ay7w" yt) ;; Garage Gym Reviews
+	("https://www.youtube.com/feeds/videos.xml?channel_id=UCzN7S0O87X-Q1CJqyWnJ9mw" yt)
         ))
 
 (setq elfeed-feeds-podcasts
@@ -26,7 +35,7 @@
         ))
 
 (setq elfeed-all-the-feeds
-      (append elfeed-feeds-blogs elfeed-feeds-podcasts elfeed-feeds-misc))
+      (append elfeed-feeds-blogs elfeed-feeds-yt elfeed-feeds-podcasts elfeed-feeds-misc))
 
 (use-package elfeed
   :bind
