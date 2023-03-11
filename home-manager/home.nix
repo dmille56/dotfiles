@@ -43,6 +43,12 @@ in {
       url = "https://github.com/nix-community/emacs-overlay.git";
       rev = "e962b871a0b0984569506a576543eff8926d478f";
     }))
+
+    (self: super: {
+      mpv = super.mpv.override {
+       scripts = [ self.mpvScripts.youtube-quality ];
+      };
+    })
   ];
 
   home.packages = with pkgs; [
@@ -53,7 +59,8 @@ in {
     vim
     curl
     git
-    ((emacsPackagesFor emacsGit).emacsWithPackages
+    # ((emacsPackagesFor emacsGit).emacsWithPackages # for emacs overlay
+    ((emacsPackagesFor emacs).emacsWithPackages
       (epkgs: [ epkgs.vterm epkgs.w3m ]))
     emacs-all-the-icons-fonts
     nerdfonts
@@ -102,6 +109,7 @@ in {
     ddgr
     w3m
     youtube-dl
+    yt-dlp
 
     youtube-viewer
     urlview
@@ -176,7 +184,7 @@ in {
 
     dolphinEmu
     mupen64plus
-    keepassx
+    keepassxc
 
     vscode
     protontricks
@@ -392,6 +400,7 @@ in {
   home.file.".xmonad/xmonad.hs".source = "${my-dotfile-dir}/.xmonad/xmonad.hs";
   home.file.".ghci".source = "${my-dotfile-dir}/.ghci";
   home.file.".ripgreprc".source = "${my-dotfile-dir}/.ripgreprc";
+  home.file.".config/mpv/mpv.conf".source = "${my-dotfile-dir}/mpv.conf";
 
   manual.manpages.enable = false; # TODO: reenable man pages eventually... they wouldn't update correctly
 }
