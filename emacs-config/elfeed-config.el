@@ -20,6 +20,7 @@
 	("https://www.youtube.com/feeds/videos.xml?playlist_id=PLkL7BvJXiqSTWYYJtqjo-cKEcHd9g4g5J" yt) ;; Chris Williamson clips
 	("https://www.youtube.com/feeds/videos.xml?channel_id=UCV_zy48AlwwGpdJEka1ay7w" yt fitness) ;; Garage Gym Reviews
 	("https://www.youtube.com/feeds/videos.xml?channel_id=UCzN7S0O87X-Q1CJqyWnJ9mw" yt)
+        ("https://www.youtube.com/feeds/videos.xml?channel_id=UCl8hzdP5wVlhuzNG3WCJa1w" yt nba nuggets) ;; Denver Nuggets yt channel
         ))
 
 (setq elfeed-feeds-podcasts
@@ -29,8 +30,9 @@
 
 (setq elfeed-feeds-misc
       '(
-        ("https://news.ycombinator.com/rss" hn hacker-news)
-        ("https://www.reddit.com/r/haskell.rss" r programming haskell)
+        ;; ("https://news.ycombinator.com/rss" hn hacker-news)
+        ("https://hnrss.org/frontpage?points=50&comments=20" hn hacker-news)
+        ;; ("https://www.reddit.com/r/haskell.rss" r programming haskell)
         ("https://www.reddit.com/r/Vitruvian_Form.rss" r fitness)
         ("https://www.denverstiffs.com/rss/current" nba nuggets)
 	("https://growth.design/case-studies/rss" tech)
@@ -58,21 +60,29 @@
   :config
   ;; Filter debates out
   (add-hook 'elfeed-new-entry-hook
-            (elfeed-make-tagger :feed-title "Playing With Fire"
-                                :entry-title ".*(Debate|DEBATE|Live|LIVE|Speed)"
+            (elfeed-make-tagger :feed-title "^Playing With Fire"
+                                :entry-title ".*(Debate|DEBATE|Live|LIVE|Speed|SPEED)"
                                 :add 'junk
                                 :remove 'unread))
 
   ;; Filter Open Threads out
   (add-hook 'elfeed-new-entry-hook
-            (elfeed-make-tagger :entry-title ".*Open Thread"
+            (elfeed-make-tagger :feed-title "^Astral Codex Ten"
+            (elfeed-make-tagger :entry-title "Open Thread"
                                 :add 'junk
                                 :remove 'unread))
 
   ;; Filter Hiring Threads out
   (add-hook 'elfeed-new-entry-hook
-            (elfeed-make-tagger :feed-title "Hacker News"
+            (elfeed-make-tagger :feed-title "^Hacker News"
                                 :entry-title ".*(Is Hiring|Launch HN)"
+                                :add 'junk
+                                :remove 'unread))
+
+  ;; Filter Hiring Threads out
+  (add-hook 'elfeed-new-entry-hook
+            (elfeed-make-tagger :feed-title "^Denver Nuggets"
+                                :entry-title '(not "Game Recap")
                                 :add 'junk
                                 :remove 'unread))
 )
