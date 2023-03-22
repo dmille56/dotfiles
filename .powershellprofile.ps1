@@ -39,18 +39,53 @@ function Install-PSColorModule
 
 function Get-Weather
 {
-	Param (
-		[Parameter(Mandatory = $false, Position = 0)]
-		[string]
-		$Location
+    Param (
+        [Parameter(Mandatory = $false, Position = 0)]
+        [string]
+        $Location
     )
 
-	(Invoke-WebRequest http://wttr.in/$Location -UserAgent curl).Content
+    (Invoke-WebRequest http://wttr.in/$Location -UserAgent curl).Content
 }
 
 function Copy-WorkingDirectoryToClipboard
 {
     Get-Location | ForEach-Object Path | clip
+}
+
+function Fzf-RunProg
+{
+    Param (
+        [Parameter(Mandatory = $true, Position = 0)]
+        [string]
+        $Program
+    )
+
+    $file = Invoke-Fzf
+    if ($file)
+    {
+        & $Program $file
+    }
+}
+
+function Fzf-NVim
+{
+    Fzf-RunProg 'nvim'
+}
+
+function Fzf-Emacs
+{
+    Fzf-RunProg 'emacs'
+}
+
+function Fzf-Notepad
+{
+    Fzf-RunProg 'notepad'
+}
+
+function Fzf-VSCode
+{
+    Fzf-RunProg 'code'
 }
 
 Set-Alias weath Get-Weather
@@ -68,6 +103,13 @@ if (Get-Command fzf -ErrorAction SilentlyContinue)
 {
     Remove-PSReadLineKeyHandler -Chord Control+r
     Import-Module PSFzf
+
+    Set-PSReadLineKeyHandler -Key Tab -ScriptBlock { Invoke-FzfTabCompletion }
+
+    Set-Alias fzfc Fzf-VSCode
+    Set-Alias fzfn Fzf-NVim
+    Set-Alias fzfp Fzf-Notepad
+    Set-Alias fzfe Fzf-Emacs
 }
 
 # need to have this installed on powershell core (for PSColor): Import-Module PowerShellCookbook

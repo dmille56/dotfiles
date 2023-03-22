@@ -110,6 +110,10 @@
               ("C-c C-f" . elfeed-tube-mpv-follow-mode)
               ("C-c C-w" . elfeed-tube-mpv-where)))
 
+(defun elfeed-hook-filterer (entry)
+  ;; TODO: implement me
+  )
+
 (defun elfeed-cur-entry ()
   (if (eq major-mode 'elfeed-show-mode) elfeed-show-entry (elfeed-search-selected :single)))
 
