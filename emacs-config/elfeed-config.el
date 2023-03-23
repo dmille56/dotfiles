@@ -61,21 +61,21 @@
   ;; Filter debates out
   (add-hook 'elfeed-new-entry-hook
             (elfeed-make-tagger :feed-title "^Playing With Fire"
-                                :entry-title ".*(Debate|DEBATE|Live|LIVE|Speed|SPEED)"
+                                :entry-title "\\(Debate\\|DEBATE\\|Live\\|LIVE\\|Speed\\|SPEED\\)"
                                 :add 'junk
                                 :remove 'unread))
 
   ;; Filter Open Threads out
   (add-hook 'elfeed-new-entry-hook
             (elfeed-make-tagger :feed-title "^Astral Codex Ten"
-            (elfeed-make-tagger :entry-title "Open Thread"
+                                :entry-title "Open Thread"
                                 :add 'junk
                                 :remove 'unread))
 
   ;; Filter Hiring Threads out
   (add-hook 'elfeed-new-entry-hook
             (elfeed-make-tagger :feed-title "^Hacker News"
-                                :entry-title ".*(Is Hiring|Launch HN)"
+                                :entry-title "\\(Is Hiring\\|Launch HN\\)"
                                 :add 'junk
                                 :remove 'unread))
 
@@ -223,7 +223,10 @@
 		(and
 		 (string= nodeName "a")
 		 nodeLink
-		 (string-match "comments" nodeText)) node nil))
+                 (or
+                  (string-match "comments" nodeText)
+                  (string-match "https://news.ycombinator.com/item" nodeText))
+                 ) node nil))
     nil))
 
 (defun elfeed-getcommentnode (node)
