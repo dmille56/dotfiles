@@ -19,6 +19,7 @@
 	("https://www.youtube.com/feeds/videos.xml?channel_id=UCkZjTZNvuxq1CYMS3cwZa1Q" yt) ;; Huberman lab clips
 	("https://www.youtube.com/feeds/videos.xml?playlist_id=PLkL7BvJXiqSTWYYJtqjo-cKEcHd9g4g5J" yt) ;; Chris Williamson clips
 	("https://www.youtube.com/feeds/videos.xml?channel_id=UCV_zy48AlwwGpdJEka1ay7w" yt fitness) ;; Garage Gym Reviews
+        ("https://www.youtube.com/feeds/videos.xml?channel_id=UCXR5UyxWQdZ50pWyNn5FyoQ" yt fitness) ;; Connect The Watts
 	("https://www.youtube.com/feeds/videos.xml?channel_id=UCzN7S0O87X-Q1CJqyWnJ9mw" yt)
         ("https://www.youtube.com/feeds/videos.xml?channel_id=UCl8hzdP5wVlhuzNG3WCJa1w" yt nba nuggets) ;; Denver Nuggets yt channel
         ))
@@ -56,12 +57,12 @@
     (kbd "g d") 'elfeed-open-in-chromium
     (kbd "g p") 'elfeed-play-mpv)
   (setq elfeed-feeds elfeed-all-the-feeds)
-  (setq-default elfeed-search-filter "@1-week-ago -junk +unread ")
+  (setq-default elfeed-search-filter "@1-week-ago -junk +unread -hn")
   :config
   ;; Filter debates out
   (add-hook 'elfeed-new-entry-hook
             (elfeed-make-tagger :feed-title "^Playing With Fire"
-                                :entry-title "\\(Debate\\|DEBATE\\|Live\\|LIVE\\|Speed\\|SPEED\\)"
+                                :entry-title "\\(Debate\\|DEBATE\\|Live\\|LIVE\\|Speed\\|SPEED\\|Debating\\|DEBATING\\)"
                                 :add 'junk
                                 :remove 'unread))
 

@@ -48,7 +48,21 @@ in {
       mpv = super.mpv.override {
        scripts = [ self.mpvScripts.youtube-quality ];
       };
-    })
+
+      realvnc-vnc-viewer = super.realvnc-vnc-viewer.overrideAttrs (old: {
+        version = "7.1.0";
+        src = {
+          "x86_64-linux" = super.fetchurl {
+            url = "https://downloads.realvnc.com/download/file/viewer.files/VNC-Viewer-7.1.0-Linux-x64.rpm";
+            sha256 = "327e0ad872022bba301dc5c7f39209527727a4f679eb33726e41d9362a989076";
+          };
+        }.${super.stdenv.system} or (throw "Unsupported system: ${super.stdenv.hostPlatform.system}");
+        buildInputs = old.buildInputs ++ [
+          super.stdenv.cc.cc.libgcc
+        ];
+      });
+
+   })
   ];
 
   home.packages = with pkgs; [
@@ -71,6 +85,7 @@ in {
     nodejs
 
     powershell
+    jdk11
 
     tmux
     zellij
@@ -105,6 +120,8 @@ in {
     xclip
     powerline-fonts
 
+    warpd
+
     tuir # rtv
     ddgr
     w3m
@@ -137,8 +154,6 @@ in {
     bluez
     bluez-tools
 
-    jdk8
-
     tts
 
     #graphical
@@ -154,7 +169,7 @@ in {
 
     mplayer
     alsaLib
-    ffmpeg
+    ffmpeg-full
     mpv
     vlc
     pavucontrol
@@ -171,6 +186,7 @@ in {
     conky
 
     guvcview
+    realvnc-vnc-viewer
 
     xscreensaver
     feh
@@ -239,6 +255,12 @@ in {
       options = {
         features = "dracula";
       };
+    };
+    aliases = {
+      st = "status";
+      ci = "commit"; 
+      br = "branch";
+      co = "checkout";
     };
   };
 

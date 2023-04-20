@@ -35,6 +35,20 @@
   (setq auto-package-update-hide-results t)
   (auto-package-update-maybe))
 
+;; install straight.el
+(defvar bootstrap-version)
+(let ((bootstrap-file
+       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+      (bootstrap-version 6))
+  (unless (file-exists-p bootstrap-file)
+    (with-current-buffer
+        (url-retrieve-synchronously
+         "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
+         'silent 'inhibit-cookies)
+      (goto-char (point-max))
+      (eval-print-last-sexp)))
+  (load bootstrap-file nil 'nomessage))
+
 ;; add evil
 ;; note: "c-z" to toggle to/from emacs state
 (use-package evil
@@ -130,6 +144,8 @@
   :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
          (haskell-mode . lsp)
          (powershell-mode . lsp)
+         (csharp-mode . lsp)
+         (python-mode . lsp)
 	 (lsp-mode . lsp-enable-which-key-integration)
 	 )
   :commands lsp)
@@ -158,6 +174,10 @@
 (use-package helm-lsp :commands helm-lsp-workspace-symbol)
 (use-package lsp-treemacs :commands lsp-treemacs-errors-list)
 (use-package yasnippet)
+
+;; For C#
+(use-package csproj-mode)
+(add-to-list 'auto-mode-alist '("\\.*axaml\\'" . xml-mode))
 
 (use-package which-key
   :config
@@ -330,6 +350,33 @@
   (global-set-key (kbd "C-C r p") 'read-aloud-buf)
   (global-set-key (kbd "C-C r s") 'read-aloud-stop)
   (global-set-key (kbd "C-C r t") 'read-aloud-this))
+
+(use-package page-break-lines) ;; needed for dashboard
+
+(use-package dashboard
+  :ensure t
+  :config
+  (dashboard-setup-startup-hook)
+  (setq initial-buffer-choice (lambda () (get-buffer-create "*dashboard*")))
+  (setq dashboard-projects-backend 'projectile)
+  (setq dashboard-items '((recents  . 5)
+                        (bookmarks . 5)
+                        (projects . 5)
+                        (agenda . 5)
+                        (registers . 5)))
+  )
+
+(use-package dashboard-hackernews)
+
+;; Set up zone-matrix
+;; (straight-use-package
+;;  '(zone-matrix :type git :host github :repo "ober/zone-matrix"))
+;; 
+;; (require 'zone-matrix)
+;; (require 'zone-matrix-settings)
+;; (require 'zone-settings)
+;; (setq zone-programs [zone-matrix])
+;; (zone-when-idle 60)
 
 ;; lsp-mode performance settings
 (setq gc-cons-threshold 100000000)
