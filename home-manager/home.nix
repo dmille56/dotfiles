@@ -137,6 +137,7 @@ in {
     (import ../nix/twitchy-rofi-script.nix)
     (import ../nix/search-ddg-script.nix)
     (import ../nix/twitchy-play-emacs.nix)
+    (import ../nix/ChatGPT/ChatGPT-CLI.nix)
 
     cmatrix
     ormolu

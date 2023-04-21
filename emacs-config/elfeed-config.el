@@ -111,9 +111,51 @@
               ("C-c C-f" . elfeed-tube-mpv-follow-mode)
               ("C-c C-w" . elfeed-tube-mpv-where)))
 
-(defun elfeed-hook-filterer (entry)
+(defun elfeed-entry-hook-filterer (entry)
   ;; TODO: implement me
-  )
+
+  ;; id title link date content content-type enclosures tags feed-id meta)
+  (let*
+      (
+       (id (elfeed-entry-id entry))
+       (title (elfeed-entry-title entry))
+       (link (elfeed-entry-link entry))
+       (date (elfeed-entry-date entry))
+       (content (elfeed-deref (elfeed-entry-content entry)))
+       (content-type (elfeed-entry-content-type entry))
+       (enclosures (elfeed-entry-enclosures entry))
+       (tags (elfeed-entry-tags entry))
+       (feed-id (elfeed-entry-feed-id entry))
+       (meta (elfeed-entry-meta entry))
+       (feed (elfeed-entry-feed entry))
+  ;; id url title author meta)
+       (feed-title (elfeed-feed-title feed))
+
+       (isPwf (if
+                (and
+                 (string-match-p "^Playing With Fire" feed-title)
+                 (string-match-p "\\(Debate\\|DEBATE\\|Live\\|LIVE\\|Speed\\|SPEED\\)" title)
+                 ) t nil))
+       )
+    (print id)
+    (print title)
+    (print link)
+    (print date)
+    (print content)
+    (print content-type)
+    (print enclosures)
+    (print tags)
+    (print feed-id)
+    (print meta)
+    (print feed)
+    (print feed-title)
+    (print isPwf)
+    ))
+
+(defun elfeed-hook-tester ()
+  ;; TODO: remove me
+    (interactive)
+    (elfeed-entry-hook-filterer (elfeed-cur-entry)))
 
 (defun elfeed-cur-entry ()
   (if (eq major-mode 'elfeed-show-mode) elfeed-show-entry (elfeed-search-selected :single)))
