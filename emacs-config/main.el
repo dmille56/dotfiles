@@ -150,6 +150,8 @@
 	 )
   :commands lsp)
 
+(setq lsp-disabled-clients '(omnisharp))
+
 (use-package lsp-haskell
  :ensure t
  :config

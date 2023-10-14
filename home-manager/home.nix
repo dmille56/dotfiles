@@ -46,7 +46,7 @@ in {
 
     (self: super: {
       mpv = super.mpv.override {
-       scripts = [ self.mpvScripts.youtube-quality ];
+       scripts = [ self.mpvScripts.quality-menu ];
       };
 
       realvnc-vnc-viewer = super.realvnc-vnc-viewer.overrideAttrs (old: {
@@ -85,15 +85,12 @@ in {
     nodejs
 
     powershell
-    jdk11
 
     tmux
     zellij
     ranger
     fzf
     ripgrep
-    tig
-    lazygit
 
     stack
     cargo
@@ -102,17 +99,12 @@ in {
     gnupg
     pass
 
-    mu
-    # notmuch
-    # notmuch-bower
-    isync
-    cacert
-
     bat
-    exa
+    eza #exa
     fd
     bottom
     delta
+    thefuck
 
     cmus
     pandoc
@@ -125,11 +117,9 @@ in {
     tuir # rtv
     ddgr
     w3m
-    youtube-dl
     yt-dlp
-
-    youtube-viewer
-    urlview
+    ytfzf
+    ueberzugpp 
 
     nix-prefetch-git
     dropbox
@@ -138,6 +128,8 @@ in {
     (import ../nix/search-ddg-script.nix)
     (import ../nix/twitchy-play-emacs.nix)
     (import ../nix/ChatGPT/ChatGPT-CLI.nix)
+    (import ../nix/play-yt-script.nix)
+    (import ../nix/play-yt-script-format.nix)
 
     cmatrix
     ormolu
@@ -147,15 +139,13 @@ in {
     cmake
     libvterm
     libtool
-    rdrview
+    # rdrview
 
     awscli
 
     (haskellPackages.greenclip)
     bluez
     bluez-tools
-
-    tts
 
     #graphical
 
@@ -166,21 +156,15 @@ in {
     gparted
     chromium
     google-chrome
-    nyxt
 
     mplayer
     alsaLib
     ffmpeg-full
-    mpv
+    # mpv
     vlc
     pavucontrol
     pasystray
     playerctl
-
-    (spotifyd.override {
-      withALSA = false;
-      withPulseAudio = true;
-    })
 
     rofi
     dmenu
@@ -425,6 +409,8 @@ in {
   home.file.".ripgreprc".source = "${my-dotfile-dir}/.ripgreprc";
   home.file.".config/mpv/mpv.conf".source = "${my-dotfile-dir}/mpv.conf";
 
+  home.stateVersion = "18.09"; # one of "18.09", "19.03", "19.09", "20.03", "20.09", "21.03", "21.05", "21.11", "22.05", "22.11", "23.05", "23.11"
+  
   home.sessionVariables = {
     OPENAI_API_KEY = builtins.readFile "${my-dotfile-dir}/.openai_api_key";
     # OPENAI_API_KEY = builtins.extraBuiltins.pass "OPENAI_API_KEY"; #try to get working via: https://elvishjerricco.github.io/2018/06/24/secure-declarative-key-management.html

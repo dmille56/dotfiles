@@ -66,10 +66,10 @@
                                 :add 'junk
                                 :remove 'unread))
 
-  ;; Filter Open Threads out
+  ;; Filter non-blog posts
   (add-hook 'elfeed-new-entry-hook
             (elfeed-make-tagger :feed-title "^Astral Codex Ten"
-                                :entry-title "Open Thread"
+                                :entry-title "\\(Open Thread\\|Highlights From\\|Links For\\|Mantic Monday\\|Meetup\\)"
                                 :add 'junk
                                 :remove 'unread))
 
