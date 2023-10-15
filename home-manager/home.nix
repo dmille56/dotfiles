@@ -408,6 +408,7 @@ in {
   home.file.".ghci".source = "${my-dotfile-dir}/.ghci";
   home.file.".ripgreprc".source = "${my-dotfile-dir}/.ripgreprc";
   home.file.".config/mpv/mpv.conf".source = "${my-dotfile-dir}/mpv.conf";
+  home.file.".config/ytfzf/conf.sh".source = "${my-dotfile-dir}/ytfzf-conf.sh";
 
   home.stateVersion = "18.09"; # one of "18.09", "19.03", "19.09", "20.03", "20.09", "21.03", "21.05", "21.11", "22.05", "22.11", "23.05", "23.11"
   

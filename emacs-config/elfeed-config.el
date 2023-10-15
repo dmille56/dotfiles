@@ -16,12 +16,18 @@
 (setq elfeed-feeds-yt
       '(
         ("https://www.youtube.com/feeds/videos.xml?channel_id=UCfQgsKhHjSyRLOp9mnffqVg" yt fitness) ;; Renaissance Periodization
-	("https://www.youtube.com/feeds/videos.xml?channel_id=UCkZjTZNvuxq1CYMS3cwZa1Q" yt) ;; Huberman lab clips
-	("https://www.youtube.com/feeds/videos.xml?playlist_id=PLkL7BvJXiqSTWYYJtqjo-cKEcHd9g4g5J" yt) ;; Chris Williamson clips
+	("https://www.youtube.com/feeds/videos.xml?channel_id=UCkZjTZNvuxq1CYMS3cwZa1Q" yt) ;; Huberman Lab Clips
+	("https://www.youtube.com/feeds/videos.xml?playlist_id=PLkL7BvJXiqSTWYYJtqjo-cKEcHd9g4g5J" yt) ;; Chris Williamson Clips
 	("https://www.youtube.com/feeds/videos.xml?channel_id=UCV_zy48AlwwGpdJEka1ay7w" yt fitness) ;; Garage Gym Reviews
         ("https://www.youtube.com/feeds/videos.xml?channel_id=UCXR5UyxWQdZ50pWyNn5FyoQ" yt fitness) ;; Connect The Watts
+        ("https://www.youtube.com/feeds/videos.xml?channel_id=UCFGCfbYPyFpITa0mbwbTmhA" yt fitness) ;; Kaizen DIY Gym
 	("https://www.youtube.com/feeds/videos.xml?channel_id=UCzN7S0O87X-Q1CJqyWnJ9mw" yt)
         ("https://www.youtube.com/feeds/videos.xml?channel_id=UCl8hzdP5wVlhuzNG3WCJa1w" yt nba nuggets) ;; Denver Nuggets yt channel
+        ("https://www.youtube.com/feeds/videos.xml?channel_id=UCDfVqMBTxstChZ5YVrrXPPQ" yt nba nuggets) ;; Locked on Nuggets
+        ("https://www.youtube.com/feeds/videos.xml?channel_id=UCew5br5cO1ZKO7Z_F1WA8Bg" yt nfl broncos) ;; That's Good Sports
+        ("https://www.youtube.com/feeds/videos.xml?channel_id=UCsy9I56PY3IngCf_VGjunMQ" yt) ;; Peter Zeihan
+        ("https://www.youtube.com/feeds/videos.xml?channel_id=UCkh_BQ1i34Y0Ij7QxCRwzrw" yt) ;; Boyscast Clips
+        ("https://www.youtube.com/feeds/videos.xml?channel_id=UCSduXBjCHkLoo_y9ss2xzXw" yt) ;; PsycHacks
         ))
 
 (setq elfeed-feeds-podcasts
