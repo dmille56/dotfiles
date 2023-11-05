@@ -7,7 +7,6 @@
         ("https://www.overcomingbias.com/feed" blog) ;; Robin Hanson (economist)
         ("https://betonit.substack.com/feed" blog) ;; Bryan Caplan (economist)
         ("https://astralcodexten.substack.com/feed" blog) ;; Scott Alexander
-        ("http://daviddfriedman.blogspot.com/atom.xml" blog) ;; David Friedman (economist)
         ("https://daviddfriedman.substack.com/feed" blog) ;; David Friedman (economist)
         ("http://feeds.feedburner.com/MeltingAsphalt" blog) ;; Kevin Simler (Elephant in the Brain)
         ("https://graymirror.substack.com/feed" blog) ;; Curtis Yarvin
@@ -16,23 +15,24 @@
 (setq elfeed-feeds-yt
       '(
         ("https://www.youtube.com/feeds/videos.xml?channel_id=UCfQgsKhHjSyRLOp9mnffqVg" yt fitness) ;; Renaissance Periodization
-	("https://www.youtube.com/feeds/videos.xml?channel_id=UCkZjTZNvuxq1CYMS3cwZa1Q" yt) ;; Huberman Lab Clips
-	("https://www.youtube.com/feeds/videos.xml?playlist_id=PLkL7BvJXiqSTWYYJtqjo-cKEcHd9g4g5J" yt) ;; Chris Williamson Clips
-	("https://www.youtube.com/feeds/videos.xml?channel_id=UCV_zy48AlwwGpdJEka1ay7w" yt fitness) ;; Garage Gym Reviews
-        ("https://www.youtube.com/feeds/videos.xml?channel_id=UCXR5UyxWQdZ50pWyNn5FyoQ" yt fitness) ;; Connect The Watts
-        ("https://www.youtube.com/feeds/videos.xml?channel_id=UCFGCfbYPyFpITa0mbwbTmhA" yt fitness) ;; Kaizen DIY Gym
-	("https://www.youtube.com/feeds/videos.xml?channel_id=UCzN7S0O87X-Q1CJqyWnJ9mw" yt)
-        ("https://www.youtube.com/feeds/videos.xml?channel_id=UCl8hzdP5wVlhuzNG3WCJa1w" yt nba nuggets) ;; Denver Nuggets yt channel
-        ("https://www.youtube.com/feeds/videos.xml?channel_id=UCDfVqMBTxstChZ5YVrrXPPQ" yt nba nuggets) ;; Locked on Nuggets
-        ("https://www.youtube.com/feeds/videos.xml?channel_id=UCew5br5cO1ZKO7Z_F1WA8Bg" yt nfl broncos) ;; That's Good Sports
+	("https://www.youtube.com/feeds/videos.xml?channel_id=UCkZjTZNvuxq1CYMS3cwZa1Q" yt i) ;; Huberman Lab Clips
+	("https://www.youtube.com/feeds/videos.xml?playlist_id=PLkL7BvJXiqSTWYYJtqjo-cKEcHd9g4g5J" yt i) ;; Chris Williamson Clips
+	("https://www.youtube.com/feeds/videos.xml?channel_id=UCV_zy48AlwwGpdJEka1ay7w" yt fitness i) ;; Garage Gym Reviews
+        ("https://www.youtube.com/feeds/videos.xml?channel_id=UCXR5UyxWQdZ50pWyNn5FyoQ" yt fitness i) ;; Connect The Watts
+        ("https://www.youtube.com/feeds/videos.xml?channel_id=UCFGCfbYPyFpITa0mbwbTmhA" yt fitness i) ;; Kaizen DIY Gym
+	("https://www.youtube.com/feeds/videos.xml?channel_id=UCzN7S0O87X-Q1CJqyWnJ9mw" yt i)
+        ("https://www.youtube.com/feeds/videos.xml?channel_id=UCl8hzdP5wVlhuzNG3WCJa1w" yt nba nuggets sports) ;; Denver Nuggets yt channel
+        ("https://www.youtube.com/feeds/videos.xml?channel_id=UCDfVqMBTxstChZ5YVrrXPPQ" yt nba nuggets sports) ;; Locked on Nuggets
+        ("https://www.youtube.com/feeds/videos.xml?channel_id=UCew5br5cO1ZKO7Z_F1WA8Bg" yt nfl broncos sports) ;; That's Good Sports
         ("https://www.youtube.com/feeds/videos.xml?channel_id=UCsy9I56PY3IngCf_VGjunMQ" yt) ;; Peter Zeihan
         ("https://www.youtube.com/feeds/videos.xml?channel_id=UCkh_BQ1i34Y0Ij7QxCRwzrw" yt) ;; Boyscast Clips
         ("https://www.youtube.com/feeds/videos.xml?channel_id=UCSduXBjCHkLoo_y9ss2xzXw" yt) ;; PsycHacks
+        ("https://www.youtube.com/feeds/videos.xml?channel_id=UCyaN6mg5u8Cjy2ZI4ikWaug" yt i) ;; My First Million
         ))
 
 (setq elfeed-feeds-podcasts
       '(
-        ("https://freakonomics.com/series/freakonomics-radio/rss" pc podcast freakonomics)
+        ("https://freakonomics.com/series/freakonomics-radio/rss" pc podcast freakonomics e)
         ))
 
 (setq elfeed-feeds-misc
@@ -41,8 +41,6 @@
         ("https://hnrss.org/frontpage?points=50&comments=20" hn hacker-news)
         ;; ("https://www.reddit.com/r/haskell.rss" r programming haskell)
         ("https://www.reddit.com/r/Vitruvian_Form.rss" r fitness)
-        ("https://www.denverstiffs.com/rss/current" nba nuggets)
-	("https://growth.design/case-studies/rss" tech)
         ))
 
 (setq elfeed-all-the-feeds
@@ -63,12 +61,19 @@
     (kbd "g d") 'elfeed-open-in-chromium
     (kbd "g p") 'elfeed-play-mpv)
   (setq elfeed-feeds elfeed-all-the-feeds)
-  (setq-default elfeed-search-filter "@1-week-ago -junk +unread -hn")
+  (setq-default elfeed-search-filter "@1-week-ago -junk -short +unread -hn +i")
   :config
   ;; Filter debates out
   (add-hook 'elfeed-new-entry-hook
             (elfeed-make-tagger :feed-title "^Playing With Fire"
                                 :entry-title "\\(Debate\\|DEBATE\\|Live\\|LIVE\\|Speed\\|SPEED\\|Debating\\|DEBATING\\)"
+                                :add 'junk
+                                :remove 'unread))
+
+  ;; Filter out videos I don't care about
+  (add-hook 'elfeed-new-entry-hook
+            (elfeed-make-tagger :feed-title "^ThatsGoodSports"
+                                :entry-title "\\(winners . losers)\\|power rankings\\|preview\\)"
                                 :add 'junk
                                 :remove 'unread))
 
@@ -92,7 +97,10 @@
                                 :entry-title '(not "Game Recap")
                                 :add 'junk
                                 :remove 'unread))
-)
+
+  ;; Add short tag to youtube shorts
+  (add-hook 'elfeed-new-entry-hook #'elfeed-tag-yt-short)
+  )
 
 (use-package mpv)
 
@@ -116,53 +124,6 @@
   :bind (:map elfeed-show-mode-map
               ("C-c C-f" . elfeed-tube-mpv-follow-mode)
               ("C-c C-w" . elfeed-tube-mpv-where)))
-
-;; TODO: implement or remove commented code
-;; (defun elfeed-entry-hook-filterer (entry)
-;;   ;; TODO: implement me
-;; 
-;;   ;; id title link date content content-type enclosures tags feed-id meta)
-;;   (let*
-;;       (
-;;        (id (elfeed-entry-id entry))
-;;        (title (elfeed-entry-title entry))
-;;        (link (elfeed-entry-link entry))
-;;        (date (elfeed-entry-date entry))
-;;        (content (elfeed-deref (elfeed-entry-content entry)))
-;;        (content-type (elfeed-entry-content-type entry))
-;;        (enclosures (elfeed-entry-enclosures entry))
-;;        (tags (elfeed-entry-tags entry))
-;;        (feed-id (elfeed-entry-feed-id entry))
-;;        (meta (elfeed-entry-meta entry))
-;;        (feed (elfeed-entry-feed entry))
-;;   ;; id url title author meta)
-;;        (feed-title (elfeed-feed-title feed))
-;; 
-;;        (isPwf (if
-;;                 (and
-;;                  (string-match-p "^Playing With Fire" feed-title)
-;;                  (string-match-p "\\(Debate\\|DEBATE\\|Live\\|LIVE\\|Speed\\|SPEED\\)" title)
-;;                  ) t nil))
-;;        )
-;;     (print id)
-;;     (print title)
-;;     (print link)
-;;     (print date)
-;;     (print content)
-;;     (print content-type)
-;;     (print enclosures)
-;;     (print tags)
-;;     (print feed-id)
-;;     (print meta)
-;;     (print feed)
-;;     (print feed-title)
-;;     (print isPwf)
-;;     ))
-;; 
-;; (defun elfeed-hook-tester ()
-;;   ;; TODO: remove me
-;;     (interactive)
-;;     (elfeed-entry-hook-filterer (elfeed-cur-entry)))
 
 (defun elfeed-cur-entry ()
   (if (eq major-mode 'elfeed-show-mode) elfeed-show-entry (elfeed-search-selected :single)))
@@ -303,3 +264,49 @@
   (let ((link ""))
     (setq link (read-string "Enter youtube link: "))
     (elfeed-download-ytlink link)))
+
+(defun yt-parse-duration (duration-str)
+  "Parse a duration string in the format 'D:HH:MM:SS' and return the total number of seconds."
+  (let* ((components (mapcar #'string-to-number (split-string duration-str ":")))
+         (num-components (length components)))
+    (cond
+     ((= num-components 4)
+      (+ (* (nth 0 components) 86400)
+         (* (nth 1 components) 3600)
+         (* (nth 2 components) 60)
+         (nth 3 components)))
+     ((= num-components 3)
+      (+ (* (nth 0 components) 3600)
+         (* (nth 1 components) 60)
+         (nth 2 components)))
+     ((= num-components 2)
+      (+ (* (nth 0 components) 60)
+         (nth 1 components)))
+     ((= num-components 1)
+      (nth 0 components))
+     (t 0))))
+
+(defun yt-video-is-short (url)
+  "Check the duration of a YouTube video using yt-dlp."
+  (let*
+      (
+       (duration-str (shell-command-to-string (concat "yt-dlp --get-duration '" url "'")))
+       (duration (yt-parse-duration duration-str))
+       )
+    (if (boundp 'duration)
+        (if (> duration 120) nil t)
+      nil ;; If unable to parse return nil as fail-safe
+      )
+    )
+  )
+
+(defun elfeed-tag-yt-short (entry)
+  (let*
+      (
+       (link (elfeed-entry-link entry))
+       (is-youtube-link (string-match-p "youtube\\.com" link))
+       (is-short (if is-youtube-link (yt-video-is-short link) nil))
+       )
+    (if is-short (elfeed-tag entry 'short))
+    )
+  )

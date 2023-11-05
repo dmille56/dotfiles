@@ -119,6 +119,7 @@ in {
     w3m
     yt-dlp
     ytfzf
+    csvtool
     ueberzugpp 
 
     nix-prefetch-git
