@@ -98,7 +98,7 @@ main = do
   xmproc <- spawnPipe "xmobar"
   spawn "xfsettingsd"
   spawn "start-pulseaudio-x11"
-  spawn "redshift -l 47.608013:-122.335167 -t 6500:3500"
+  -- spawn "redshift -l 47.608013:-122.335167 -t 6500:3500" -- causes issues when starting it this way for some reason... TODO: figure out why
   emacsDaemon <- spawnPipe "emacs --daemon"
   greenclipDaemon <- spawnPipe "greenclip daemon"
   spawn "pavucontrol"
@@ -127,6 +127,7 @@ main = do
                            ((myModMask, xK_i), spawn "rofi -show window"),
                            -- ((myModMask, xK_o), spawn "twitchy-emacs-play-script"),
                            ((myModMask, xK_o), spawn "play-yt-script"),
+                           ((myModMask .|. shiftMask, xK_o), spawn "play-yt-script-format"),
                            ((myModMask, xK_s), promptSearch myXPConfig duckduckgo),
                            ((myModMask .|. shiftMask, xK_s), selectSearch duckduckgo),
                            ((myModMask, xK_v), shellPrompt myXPConfig),

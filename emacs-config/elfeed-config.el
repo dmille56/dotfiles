@@ -73,7 +73,7 @@
   ;; Filter out videos I don't care about
   (add-hook 'elfeed-new-entry-hook
             (elfeed-make-tagger :feed-title "^ThatsGoodSports"
-                                :entry-title "\\(winners . losers)\\|power rankings\\|preview\\)"
+                                :entry-title "\\(winners . losers)\\|power rankings\\|preview\\|live\\|Live\\|LIVE\\)"
                                 :add 'junk
                                 :remove 'unread))
 

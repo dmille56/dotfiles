@@ -29,7 +29,7 @@ pkgs.writeShellScriptBin "play-yt-script" ''
     echo "found regex in input arg"
   else
     url=$(xclip -o)
-    [[ "$url" =~ $regex ]] && echo "found regex in clipboard" || url=$(${pkgs.rofi}/bin/rofi -dmenu -p "Enter video url:")
+    [[ "$url" =~ $regex ]] && echo "found regex in clipboard" || url=$(${pkgs.rofi}/bin/rofi -dmenu -p "Enter video url")
   fi
 
   if [[ -n $url ]]; then
