@@ -380,6 +380,11 @@
   (solaire-global-mode)
   )
 
+(use-package spacious-padding
+  :init
+  (spacious-padding-mode)
+  )
+
 ;; Set up zone-matrix
 ;; (straight-use-package
 ;;  '(zone-matrix :type git :host github :repo "ober/zone-matrix"))
