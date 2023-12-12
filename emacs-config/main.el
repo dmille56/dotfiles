@@ -370,6 +370,16 @@
 
 (use-package dashboard-hackernews)
 
+(use-package golden-ratio
+  :init
+  (golden-ratio-mode 1)
+  )
+
+(use-package solaire-mode
+  :init
+  (solaire-global-mode)
+  )
+
 ;; Set up zone-matrix
 ;; (straight-use-package
 ;;  '(zone-matrix :type git :host github :repo "ober/zone-matrix"))
