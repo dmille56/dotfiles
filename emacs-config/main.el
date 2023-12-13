@@ -381,11 +381,26 @@
   )
 
 (use-package spacious-padding
-  :init
-  (if (eq system-type 'gnu/linux)
-      (spacious-padding-mode) ;; has issues with Windows OS
-    )
+  :ensure t
+  :hook (emacs-startup-hook . (spacious-padding-mode)) ;; prevents bug (where there's a white line between frames) by having it startup later
   )
+
+;; :TODO: fix svg-tag-mode so it actually works
+(use-package svg-tag-mode)
+
+(setq svg-tag-tags
+      '((":TODO:" . ((svg-tag-make "TODO" :face 'org-tag
+                                   :radius 0 :inverse t :margin 0)))
+        (":NOTE:" . ((svg-tag-make "NOTE" :face 'font-lock-comment-face
+                                   :inverse nil :margin 0 :radius 0)))
+        ("\([0-9a-zA-Z]\)" . ((lambda (tag)
+                                (svg-tag-make tag :beg 1 :end -1 :radius 12))))
+        ("\([0-9a-zA-Z][0-9a-zA-Z]\)" . ((lambda (tag)
+                                           (svg-tag-make tag :beg 1 :end -1 :radius 8))))
+        ("|[0-9a-zA-Z- ]+?|" . ((lambda (tag)
+                                  (svg-tag-make tag :face 'font-lock-comment-face
+                                                :margin 0 :beg 1 :end -1))))))
+(svg-tag-mode t)
 
 ;; Set up zone-matrix
 ;; (straight-use-package
