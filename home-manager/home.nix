@@ -234,6 +234,8 @@ in {
     enableZshIntegration = true;
   };
 
+  programs.thefuck.enable = true;
+
   programs.git = {
     enable = true;
     delta = {
