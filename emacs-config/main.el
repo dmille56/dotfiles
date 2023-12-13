@@ -382,7 +382,9 @@
 
 (use-package spacious-padding
   :init
-  (spacious-padding-mode)
+  (if (eq system-type 'gnu/linux)
+      (spacious-padding-mode) ;; has issues with Windows OS
+    )
   )
 
 ;; Set up zone-matrix
