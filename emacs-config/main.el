@@ -381,8 +381,7 @@
   )
 
 (use-package spacious-padding
-  :ensure t
-  :hook (emacs-startup-hook . (spacious-padding-mode)) ;; prevents bug (where there's a white line between frames) by having it startup later
+  :hook (emacs-startup . spacious-padding-mode) ;; prevents bug (where there's a white line between frames) by having it init at emacs-startup instead of after-init (which runs before emacs-startup)
   )
 
 ;; :TODO: fix svg-tag-mode so it actually works
@@ -400,7 +399,6 @@
         ("|[0-9a-zA-Z- ]+?|" . ((lambda (tag)
                                   (svg-tag-make tag :face 'font-lock-comment-face
                                                 :margin 0 :beg 1 :end -1))))))
-(svg-tag-mode t)
 
 ;; Set up zone-matrix
 ;; (straight-use-package
