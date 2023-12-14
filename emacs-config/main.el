@@ -297,6 +297,8 @@
 (global-set-key "\C-xa" 'org-agenda)
 (global-set-key "\M-x" 'evil-ex)
 
+(use-package all-the-icons) ;; remember need to run (all-the-icons-install-fonts) to install the fonts
+
 (use-package all-the-icons-dired
   :hook (dired-mode . all-the-icons-dired-mode))
 
@@ -364,8 +366,7 @@
   (setq dashboard-items '((recents  . 5)
                         (bookmarks . 5)
                         (projects . 5)
-                        (agenda . 5)
-                        (registers . 5)))
+                        (agenda . 5)))
   )
 
 (use-package dashboard-hackernews)
@@ -387,9 +388,6 @@
 ;; :TODO: add more svg-tag tags
 ;; :NOTE: svg-tag-mode example
 (use-package svg-tag-mode
-  :hook
-  ('org-mode-hook 'svg-tag-mode)
-  ('emacs-lisp-mode-hook 'svg-tag-mode)
   :init
   (setq svg-tag-tags
         '(
@@ -397,7 +395,11 @@
           (":NOTE:" . ((lambda (tag) (svg-tag-make "NOTE"))))
           )
         )
+  (add-hook 'org-mode-hook 'svg-tag-mode)
+  (add-hook 'emacs-lisp-mode-hook 'svg-tag-mode)
   )
+
+(use-package csv-mode)
 
 ;; Set up zone-matrix
 ;; (straight-use-package
