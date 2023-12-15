@@ -251,6 +251,11 @@ in {
       br = "branch";
       co = "checkout";
     };
+    extraConfig = {
+      color = {
+        ui = "always";
+      };
+    };
   };
 
   programs.tmux = {
