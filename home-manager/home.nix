@@ -177,6 +177,7 @@ in {
     xscreensaver
     feh
 
+    lite-xl
     gnome3.gedit
     gnome3.gnome-system-monitor
     pkgs.meld
