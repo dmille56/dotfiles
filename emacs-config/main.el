@@ -185,6 +185,8 @@
   :config
   (which-key-mode))
 
+;; use f5 to move to the next tab
+(global-set-key (kbd "<f5>") 'tab-bar-switch-to-next-tab)
 ;; use f6 to move to the next window
 (global-set-key (kbd "<f6>") 'other-window)
 
@@ -438,6 +440,8 @@
   (kbd "C-r") 'helm-eshell-history)
 
 (use-package evil-leader
+  :init
+  (setq evil-leader/in-all-states t) ;; allows evil leader via "C-<leader>" in other states
   :config
   (evil-leader/set-leader "<SPC>")
   (evil-leader/set-key
@@ -449,6 +453,8 @@
    "y" 'magit
    "g" 'avy-goto-char
    "l" 'avy-goto-line
+   "x" 'compile
+   "c" 'flycheck-list-errors
 
    ;; window management
    "o" 'other-window
