@@ -133,6 +133,7 @@ in {
     (import ../nix/play-yt-script-format.nix)
 
     cmatrix
+    snowmachine
     ormolu
     nixfmt
     closurecompiler

@@ -428,6 +428,7 @@
   (global-set-key (kbd "C-c h 9") 'harpoon-go-to-9)
   )
 
+;; enable tab-bar-mode
 (tab-bar-mode)
 
 (evil-define-key 'normal eshell-mode-map
@@ -436,6 +437,39 @@
 (evil-define-key 'insert eshell-mode-map
   (kbd "C-r") 'helm-eshell-history)
 
+(use-package evil-leader
+  :config
+  (evil-leader/set-leader "<SPC>")
+  (evil-leader/set-key
+   "p" 'helm-find-files
+   "i" 'helm-occur
+   "b" 'switch-to-buffer
+   "k" 'kill-buffer
+   "t" 'projectile-command-map
+   "y" 'magit
+   "g" 'avy-goto-char
+   "l" 'avy-goto-line
+
+   ;; window management
+   "o" 'other-window
+   "1" 'delete-other-windows
+   "2" 'split-window-below
+   "3" 'split-window-right
+
+   ;; tab management
+   "a" 'tab-bar-switch-to-prev-tab
+   "s" 'tab-bar-switch-to-next-tab
+   "q" 'tab-new
+   "w" 'tab-bar-switch-to-tab
+
+   ;; harpoon
+   "h" 'harpoon-toggle-quick-menu
+   "H a" 'harpoon-quick-menu-hydra
+   "H <return>" 'harpoon-add-file
+   )
+  ;; (evil-leader/set-key-for-mode 'emacs-lisp-mode "b" 'byte-compile-file) ;; mode specific keybindings example
+  (global-evil-leader-mode)
+  )
 
 ;; Set up zone-matrix
 ;; (straight-use-package
