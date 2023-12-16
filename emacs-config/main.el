@@ -430,6 +430,10 @@
 
 (tab-bar-mode)
 
+(add-hook 'eshell-mode-hook
+         (lambda ()
+           (local-set-key (kbd "C-c r h") #'helm-eshell-history)))
+
 ;; Set up zone-matrix
 ;; (straight-use-package
 ;;  '(zone-matrix :type git :host github :repo "ober/zone-matrix"))
@@ -446,7 +450,13 @@
 (setq lsp-completion-provider :capf)
 
 ;; disable backup files
-(setq make-backup-files nil)
+;; (setq make-backup-files nil)
+
+;; set auto save files to the temporary directory
+(setq backup-directory-alist
+      `((".*" . ,temporary-file-directory)))
+(setq auto-save-file-name-transforms
+      `((".*" ,temporary-file-directory t)))
 
 ;; disable startup screen
 (setq inhibit-startup-screen t)
