@@ -430,9 +430,12 @@
 
 (tab-bar-mode)
 
-(add-hook 'eshell-mode-hook
-         (lambda ()
-           (local-set-key (kbd "C-c r h") #'helm-eshell-history)))
+(evil-define-key 'normal eshell-mode-map
+  (kbd "C-r") 'helm-eshell-history)
+
+(evil-define-key 'insert eshell-mode-map
+  (kbd "C-r") 'helm-eshell-history)
+
 
 ;; Set up zone-matrix
 ;; (straight-use-package
