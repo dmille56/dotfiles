@@ -430,6 +430,17 @@
   (global-set-key (kbd "C-c h 9") 'harpoon-go-to-9)
   )
 
+(use-package chatgpt-shell
+  :ensure t
+  :custom
+  ((chatgpt-shell-openai-key
+    (lambda ()
+        (auth-source-pass-get 'secret "OPENAI_API_KEY")))))
+
+(use-package copilot
+  :straight (:host github :repo "zerolfx/copilot.el" :files ("dist" "*.el"))
+  :ensure t)
+
 ;; enable tab-bar-mode
 (tab-bar-mode)
 
@@ -452,9 +463,10 @@
    "t" 'projectile-command-map
    "y" 'magit
    "g" 'avy-goto-char
-   "l" 'avy-goto-line
+   "f" 'avy-goto-line
    "x" 'compile
    "c" 'flycheck-list-errors
+   "l" 'lsp-command-map
 
    ;; window management
    "o" 'other-window
