@@ -22,7 +22,8 @@
 # - install steam
 # - install nix
 # - install kdeconnect
-#
+# - add to /etc/default/keyboard (to remap caps lock)... might have to edit using sudo (and vi or nano)
+#   - XKBOPTIONS = "ctrl:nocaps" # remap caps lock to control
 # add to .profile to fix locale issue:
 # export LOCALE_ARCHIVE=$(nix-build '<nixpkgs>' -A glibcLocales)/lib/locale/locale-archive
 

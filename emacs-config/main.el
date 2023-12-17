@@ -49,6 +49,59 @@
       (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
 
+(use-package evil-leader
+  :init
+  (setq evil-leader/in-all-states t) ;; allows evil leader via "C-<leader>" in other states
+  :config
+  (evil-leader/set-leader "<SPC>")
+  (evil-leader/set-key
+   "p" 'helm-find-files
+   "i" 'helm-occur
+   "b" 'switch-to-buffer
+   "k" 'kill-buffer
+   "r" 'projectile-command-map
+   "t" 'treemacs
+   "y" 'magit
+   "j" 'avy-goto-char
+   "f" 'avy-goto-line
+   "x" 'compile
+   "c" 'flycheck-list-errors
+   ; "l" 'run-lsp-command-map
+   "g" 'keyboard-quit
+
+   ;; window management
+   "o" 'other-window
+   "1" 'delete-other-windows
+   "2" 'split-window-below
+   "3" 'split-window-right
+
+   ;; tab management
+   "a" 'tab-bar-switch-to-prev-tab ;; maybe remove these keybindings (switch to prev/next)... faster to just use tab-bar-switch-to-tab or ctrl-tab to cycle
+   "s" 'tab-bar-switch-to-next-tab
+   "q" 'tab-new
+   "w" 'tab-bar-switch-to-tab
+
+   ;; harpoon
+   "h" 'harpoon-toggle-quick-menu
+   "H a" 'harpoon-quick-menu-hydra
+   "H <return>" 'harpoon-add-file
+
+   ;; u submenu
+   "u d" 'ddg
+   "u r" 'rg-menu
+   )
+;;  (evil-leader/set-key
+;;    "L" '(lambda () (interactive) (which-key-show-keymap 'lsp-command-map))) ;; :TODO: remove this when get lsp-command-map working
+  ;; (evil-define-minor-mode-key 'normal lsp-mode (kbd "SPC l") lsp-command-map)
+  ;; (evil-leader/set-key-for-mode 'lsp-mode "L" 'lsp-command-map)
+  (evil-leader/set-key-for-mode 'lsp-mode "l" 'lsp-command-map)
+  (global-evil-leader-mode)
+  )
+
+(defun run-lsp-command-map ()
+  (interactive)
+  (which-key-show-keymap 'lsp-command-map))
+
 ;; add evil
 ;; note: "c-z" to toggle to/from emacs state
 (use-package evil
@@ -277,7 +330,7 @@
 	(terms (read-string "Enter duckduckgo search terms: ")))
     (browse-url (concat "https://duckduckgo.com/?q=" terms))))
 
-(global-set-key (kbd "<f9>") 'ddg)
+(global-set-key (kbd "<f8>") 'keyboard-quit) ;; alias Ctl-g to f8 (to save your pinky)
 
 (use-package spaceline
   :init
@@ -307,7 +360,7 @@
 (use-package ranger
   :bind
   ("C-x t" . ranger)
-  ("<f8>" . ranger)
+  ("<f9>" . ranger)
   (:map ranger-mode-map
 	("C-<tab>" . ranger-next-tab))
   :config
@@ -451,53 +504,6 @@
 
 (evil-define-key 'insert eshell-mode-map
   (kbd "C-r") 'helm-eshell-history)
-
-(use-package evil-leader
-  :init
-  (setq evil-leader/in-all-states t) ;; allows evil leader via "C-<leader>" in other states
-  :config
-  (evil-leader/set-leader "<SPC>")
-  (evil-leader/set-key
-   "p" 'helm-find-files
-   "i" 'helm-occur
-   "b" 'switch-to-buffer
-   "k" 'kill-buffer
-   "r" 'projectile-command-map
-   "t" 'treemacs
-   "y" 'magit
-   "g" 'avy-goto-char
-   "f" 'avy-goto-line
-   "x" 'compile
-   "c" 'flycheck-list-errors
-   "l" 'run-lsp-command-map
-
-   ;; window management
-   "o" 'other-window
-   "1" 'delete-other-windows
-   "2" 'split-window-below
-   "3" 'split-window-right
-
-   ;; tab management
-   "a" 'tab-bar-switch-to-prev-tab ;; maybe remove these keybindings (switch to prev/next)... faster to just use tab-bar-switch-to-tab or ctrl-tab to cycle
-   "s" 'tab-bar-switch-to-next-tab
-   "q" 'tab-new
-   "w" 'tab-bar-switch-to-tab
-
-   ;; harpoon
-   "h" 'harpoon-toggle-quick-menu
-   "H a" 'harpoon-quick-menu-hydra
-   "H <return>" 'harpoon-add-file
-   )
-  (evil-leader/set-key
-   ;; "l" '(lambda () (which-key-show-keymap 'lsp-command-map))) ;; :TODO: remove this when get lsp-command-map working
-   ;; "l" 'run-lsp-command-map) ;; :TODO: remove this when get lsp-command-map working
-   "L" '(lambda () (interactive) (which-key-show-keymap 'lsp-command-map))) ;; :TODO: remove this when get lsp-command-map working
-  (global-evil-leader-mode)
-  )
-
-(defun run-lsp-command-map ()
-  (interactive)
-  (which-key-show-keymap 'lsp-command-map))
 
 ;; Set up zone-matrix
 ;; (straight-use-package
