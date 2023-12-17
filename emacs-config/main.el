@@ -264,7 +264,11 @@
   ("<f7>" . helm-find-files)
   ("C-x c i" . helm-semantic-or-imenu)
   :init
-  (helm-mode 1))
+  (helm-mode 1)
+  :config
+  (define-key helm-map (kbd "ESC") 'helm-keyboard-quit)
+  (define-key helm-map (kbd "<f8>") 'helm-keyboard-quit)
+  )
 
 ;; install themes
 (use-package sublime-themes)
