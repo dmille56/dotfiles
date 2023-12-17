@@ -82,7 +82,6 @@ in {
     networkmanager
     cachix
     lorri
-    nodejs
 
     powershell
 

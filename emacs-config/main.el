@@ -437,6 +437,8 @@
     (lambda ()
         (auth-source-pass-get 'secret "OPENAI_API_KEY")))))
 
+(use-package editorconfig) ;; dependency for copilot
+
 (use-package copilot
   :straight (:host github :repo "zerolfx/copilot.el" :files ("dist" "*.el"))
   :ensure t)
@@ -460,13 +462,14 @@
    "i" 'helm-occur
    "b" 'switch-to-buffer
    "k" 'kill-buffer
-   "t" 'projectile-command-map
+   "r" 'projectile-command-map
+   "t" 'treemacs
    "y" 'magit
    "g" 'avy-goto-char
    "f" 'avy-goto-line
    "x" 'compile
    "c" 'flycheck-list-errors
-   "l" 'lsp-command-map
+   "l" 'run-lsp-command-map
 
    ;; window management
    "o" 'other-window
@@ -475,7 +478,7 @@
    "3" 'split-window-right
 
    ;; tab management
-   "a" 'tab-bar-switch-to-prev-tab
+   "a" 'tab-bar-switch-to-prev-tab ;; maybe remove these keybindings (switch to prev/next)... faster to just use tab-bar-switch-to-tab or ctrl-tab to cycle
    "s" 'tab-bar-switch-to-next-tab
    "q" 'tab-new
    "w" 'tab-bar-switch-to-tab
@@ -485,9 +488,16 @@
    "H a" 'harpoon-quick-menu-hydra
    "H <return>" 'harpoon-add-file
    )
-  ;; (evil-leader/set-key-for-mode 'emacs-lisp-mode "b" 'byte-compile-file) ;; mode specific keybindings example
+  (evil-leader/set-key
+   ;; "l" '(lambda () (which-key-show-keymap 'lsp-command-map))) ;; :TODO: remove this when get lsp-command-map working
+   ;; "l" 'run-lsp-command-map) ;; :TODO: remove this when get lsp-command-map working
+   "L" '(lambda () (interactive) (which-key-show-keymap 'lsp-command-map))) ;; :TODO: remove this when get lsp-command-map working
   (global-evil-leader-mode)
   )
+
+(defun run-lsp-command-map ()
+  (interactive)
+  (which-key-show-keymap 'lsp-command-map))
 
 ;; Set up zone-matrix
 ;; (straight-use-package
