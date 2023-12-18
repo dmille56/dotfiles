@@ -89,6 +89,7 @@
    ;; u submenu
    "u d" 'ddg
    "u r" 'rg-menu
+   "u g" 'chatgpt-shell
    )
 ;;  (evil-leader/set-key
 ;;    "L" '(lambda () (interactive) (which-key-show-keymap 'lsp-command-map))) ;; :TODO: remove this when get lsp-command-map working
@@ -356,6 +357,12 @@
 (global-set-key "\C-xa" 'org-agenda)
 (global-set-key "\M-x" 'evil-ex)
 
+(use-package org-modern
+  :config
+  (with-eval-after-load 'org (global-org-modern-mode))
+  )
+
+
 (use-package all-the-icons) ;; remember need to run (all-the-icons-install-fonts) to install the fonts
 
 (use-package all-the-icons-dired
@@ -454,7 +461,6 @@
           (":NOTE:" . ((lambda (tag) (svg-tag-make "NOTE"))))
           )
         )
-  (add-hook 'org-mode-hook 'svg-tag-mode)
   (add-hook 'emacs-lisp-mode-hook 'svg-tag-mode)
   )
 
