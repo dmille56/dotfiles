@@ -314,7 +314,7 @@
   (rg-enable-default-bindings))
 (use-package helm-rg)
 
-(use-package powershell)
+(use-package powershell) ;; :TODO: fix multi-line comments issue in this package
 
 (use-package erc)
 
@@ -505,6 +505,13 @@
 (use-package copilot
   :straight (:host github :repo "zerolfx/copilot.el" :files ("dist" "*.el"))
   :ensure t)
+
+;; :TODO: figure out how to configure both these packages
+(use-package dumb-jump) ;; :TODO: add support for powershell to this package
+(use-package corfu) ;; dumb code completion
+
+(define-key transient-map (kbd "<f8>") 'transient-quit-all)
+(define-key transient-map (kbd "ESC") 'transient-quit-all)
 
 ;; enable tab-bar-mode
 (tab-bar-mode)
