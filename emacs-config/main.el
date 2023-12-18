@@ -59,8 +59,8 @@
    "i" 'helm-occur
    "b" 'switch-to-buffer
    "k" 'kill-buffer
-   "r" 'projectile-command-map
-   "t" 'treemacs
+   "e" 'projectile-command-map
+   "q" 'treemacs
    "y" 'magit
    "j" 'avy-goto-char
    "f" 'avy-goto-line
@@ -78,7 +78,7 @@
    ;; tab management
    "a" 'tab-bar-switch-to-prev-tab ;; maybe remove these keybindings (switch to prev/next)... faster to just use tab-bar-switch-to-tab or ctrl-tab to cycle
    "s" 'tab-bar-switch-to-next-tab
-   "q" 'tab-new
+   "t" 'tab-new
    "w" 'tab-bar-switch-to-tab
 
    ;; harpoon
