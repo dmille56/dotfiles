@@ -60,14 +60,12 @@
    "b" 'switch-to-buffer
    "k" 'kill-buffer
    "e" 'projectile-command-map
-   "q" 'treemacs
-   "y" 'magit
    "j" 'avy-goto-char
    "f" 'avy-goto-line
    "x" 'compile
    "c" 'flycheck-list-errors
    ; "l" 'run-lsp-command-map
-   "g" 'keyboard-quit
+   "g" 'magit
 
    ;; window management
    "o" 'other-window
@@ -76,8 +74,6 @@
    "3" 'split-window-right
 
    ;; tab management
-   "a" 'tab-bar-switch-to-prev-tab ;; maybe remove these keybindings (switch to prev/next)... faster to just use tab-bar-switch-to-tab or ctrl-tab to cycle
-   "s" 'tab-bar-switch-to-next-tab
    "t" 'tab-new
    "w" 'tab-bar-switch-to-tab
 
@@ -88,8 +84,13 @@
 
    ;; u submenu
    "u d" 'ddg
-   "u r" 'rg-menu
+   "u s" 'rg-menu
    "u g" 'chatgpt-shell
+   "u b" 'helm-bookmarks
+   "u t" 'ranger
+   "u y" 'treemacs
+
+   ;; leave r for mode specific keymap
    )
 ;;  (evil-leader/set-key
 ;;    "L" '(lambda () (interactive) (which-key-show-keymap 'lsp-command-map))) ;; :TODO: remove this when get lsp-command-map working
@@ -513,6 +514,7 @@
   :custom
   (corfu-cycle t)
   (corfu-auto t)
+  (corfu-separator ?\s) ;; Orderless field separator
   ) ;; dumb code completion
 
 (use-package orderless
