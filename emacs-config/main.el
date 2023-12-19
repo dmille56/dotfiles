@@ -76,6 +76,16 @@
    ;; tab management
    "t" 'tab-new
    "w" 'tab-bar-switch-to-tab
+   "q 1" '(lambda () (interactive) (tab-bar-select-tab 1))
+   "q 2" '(lambda () (interactive) (tab-bar-select-tab 2))
+   "q 3" '(lambda () (interactive) (tab-bar-select-tab 3))
+   "q 4" '(lambda () (interactive) (tab-bar-select-tab 4))
+   "q 5" '(lambda () (interactive) (tab-bar-select-tab 5))
+   "q 6" '(lambda () (interactive) (tab-bar-select-tab 6))
+   "q 7" '(lambda () (interactive) (tab-bar-select-tab 7))
+   "q 8" '(lambda () (interactive) (tab-bar-select-tab 8))
+   "q 9" '(lambda () (interactive) (tab-bar-select-tab 9))
+   "q 0" '(lambda () (interactive) (tab-bar-select-tab 10))
 
    ;; harpoon
    "h" 'harpoon-toggle-quick-menu
