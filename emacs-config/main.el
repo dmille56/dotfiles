@@ -89,6 +89,7 @@
    "u b" 'helm-bookmarks
    "u t" 'ranger
    "u y" 'treemacs
+   "u w" 'elfeed
 
    ;; leave r for mode specific keymap
    )
@@ -527,6 +528,7 @@
  
 ;; enable tab-bar-mode
 (tab-bar-mode)
+(setq tab-bar-tab-hints t) ;; TODO: figure out how to switch tabs between by number still
 
 (evil-define-key 'normal eshell-mode-map
   (kbd "C-r") 'helm-eshell-history)
@@ -561,7 +563,12 @@
 ;; disable startup screen
 (setq inhibit-startup-screen t)
 
-(setq-local main-dir "~/dotfiles/emacs-config/")
+;; get the directory of the current file and place it in main-dir local variable
+(setq-local main-dir
+            (let ((current-file (buffer-file-name)))
+              (when current-file
+                (file-name-directory current-file)))
+            )
 
 (load-file
  (concat main-dir "twitchy.el"))
