@@ -506,13 +506,23 @@
   :straight (:host github :repo "zerolfx/copilot.el" :files ("dist" "*.el"))
   :ensure t)
 
-;; :TODO: figure out how to configure both these packages
+;; :TODO: figure out how to configure these packages (dumb-jump, corfu, and orderless)
 (use-package dumb-jump) ;; :TODO: add support for powershell to this package
-(use-package corfu) ;; dumb code completion
+
+(use-package corfu
+  :custom
+  (corfu-cycle t)
+  (corfu-auto t)
+  ) ;; dumb code completion
+
+(use-package orderless
+  :custom
+  (completion-styles '(basic partial-completion orderless))
+ )
 
 (define-key transient-map (kbd "<f8>") 'transient-quit-all)
 (define-key transient-map (kbd "ESC") 'transient-quit-all)
-
+ 
 ;; enable tab-bar-mode
 (tab-bar-mode)
 
