@@ -291,6 +291,7 @@
   )
 
 ;; install themes
+;; :TODO: look into installing and using circadian.el (to switch between light/dark at sunset)
 (use-package sublime-themes)
 (use-package spacemacs-theme)
 (use-package dracula-theme)
@@ -551,7 +552,7 @@
  
 ;; enable tab-bar-mode
 (tab-bar-mode)
-(setq tab-bar-tab-hints t) ;; TODO: figure out how to switch tabs between by number still
+(setq tab-bar-tab-hints t)
 
 (evil-define-key 'normal eshell-mode-map
   (kbd "C-r") 'helm-eshell-history)
@@ -576,6 +577,7 @@
 
 ;; disable backup files
 ;; (setq make-backup-files nil)
+(setq kill-buffer-delete-auto-save-files t) ;; prompt to delete auto save files when the buffer is killed
 
 ;; set auto save files to the temporary directory
 (setq backup-directory-alist
@@ -587,6 +589,7 @@
 (setq inhibit-startup-screen t)
 
 ;; get the directory of the current file and place it in main-dir local variable
+;; :TODO: figure out why this shit doesn't work sometimes
 (setq-local main-dir
             (let ((current-file (buffer-file-name)))
               (when current-file
