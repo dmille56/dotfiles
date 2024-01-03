@@ -1,6 +1,12 @@
-;; install/setup elfeed
+;;; elfeed-config --- Summary
 
-(setq elfeed-feeds-blogs
+;; setup elfeed configuration
+
+;;; Commentary:
+
+;;; Code:
+
+(setq-default elfeed-feeds-blogs
       '(
         ("https://stratechery.com/feed" blog tech)
         ("http://www.paulgraham.com/rss.html" blog) ;; Paul Graham (Ycombinator founder)
@@ -12,7 +18,7 @@
         ("https://graymirror.substack.com/feed" blog) ;; Curtis Yarvin
         ))
 
-(setq elfeed-feeds-yt
+(setq-default elfeed-feeds-yt
       '(
         ("https://www.youtube.com/feeds/videos.xml?channel_id=UCfQgsKhHjSyRLOp9mnffqVg" yt fitness) ;; Renaissance Periodization
 	("https://www.youtube.com/feeds/videos.xml?channel_id=UCkZjTZNvuxq1CYMS3cwZa1Q" yt i) ;; Huberman Lab Clips
@@ -30,12 +36,12 @@
         ("https://www.youtube.com/feeds/videos.xml?channel_id=UCyaN6mg5u8Cjy2ZI4ikWaug" yt i) ;; My First Million
         ))
 
-(setq elfeed-feeds-podcasts
+(setq-default elfeed-feeds-podcasts
       '(
         ("https://freakonomics.com/series/freakonomics-radio/rss" pc podcast freakonomics e)
         ))
 
-(setq elfeed-feeds-misc
+(setq-default elfeed-feeds-misc
       '(
         ;; ("https://news.ycombinator.com/rss" hn hacker-news)
         ("https://hnrss.org/frontpage?points=50&comments=20" hn hacker-news)
@@ -43,7 +49,7 @@
         ("https://www.reddit.com/r/Vitruvian_Form.rss" r fitness)
         ))
 
-(setq elfeed-all-the-feeds
+(setq-default elfeed-all-the-feeds
       (append elfeed-feeds-blogs elfeed-feeds-yt elfeed-feeds-podcasts elfeed-feeds-misc))
 
 (use-package elfeed
@@ -310,3 +316,6 @@
     (if is-short (elfeed-tag entry 'short))
     )
   )
+
+(provide 'elfeed-config)
+;;; elfeed-config.el ends here

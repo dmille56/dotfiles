@@ -49,6 +49,8 @@
       (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
 
+(setq evil-want-keybinding nil)
+
 (use-package evil-leader
   :init
   (setq evil-leader/in-all-states t) ;; allows evil leader via "C-<leader>" in other states
@@ -64,7 +66,7 @@
    "f" 'avy-goto-line
    "x" 'compile
    "c" 'flycheck-list-errors
-   ; "l" 'run-lsp-command-map
+   ;; "l" 'run-lsp-command-map
    "g" 'magit
 
    ;; window management
@@ -100,6 +102,11 @@
    "u t" 'ranger
    "u y" 'treemacs
    "u w" 'elfeed
+   "u r" 'helm-recentf
+   "u j" 'dumb-jump-go
+   "u J" 'dumb-jump-go-other-window
+   "u a" 'org-agenda
+   "u P" 'spacious-padding-mode
 
    ;; leave r for mode specific keymap
    )
@@ -119,9 +126,9 @@
 ;; note: "c-z" to toggle to/from emacs state
 (use-package evil
   :init
-  (setq evil-want-integration t) ;; This is optional since it's already set to t by default.
-  (setq evil-want-keybinding nil)
-  (setq evil-search-module 'evil-search)
+  ;; (setq evil-want-integration t) ;; This is optional since it's already set to t by default.
+  ;; (setq evil-want-keybinding nil)
+  ;; (setq evil-search-module 'evil-search)
   :config
   (evil-mode 1))
 
@@ -208,10 +215,10 @@
 
 (use-package lsp-mode
   :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
-         (haskell-mode . lsp)
-         (powershell-mode . lsp)
-         (csharp-mode . lsp)
-         (python-mode . lsp)
+         ;; (haskell-mode . lsp)
+         ;; (powershell-mode . lsp)
+         ;; (csharp-mode . lsp)
+         ;; (python-mode . lsp)
 	 (lsp-mode . lsp-enable-which-key-integration)
 	 )
   :commands lsp)
@@ -369,9 +376,13 @@
 (global-set-key "\C-xa" 'org-agenda)
 (global-set-key "\M-x" 'evil-ex)
 
+(setq org-agenda-span 14
+      org-agenda-start-on-weekday nil
+      org-agenda-start-day "-3d")
+
 (use-package org-modern
-  :config
-  (with-eval-after-load 'org (global-org-modern-mode))
+  ;; :config
+  ;; (with-eval-after-load 'org (global-org-modern-mode))
   )
 
 
@@ -519,7 +530,9 @@
   :ensure t)
 
 ;; :TODO: figure out how to configure these packages (dumb-jump, corfu, and orderless)
-(use-package dumb-jump) ;; :TODO: add support for powershell to this package
+(use-package dumb-jump
+  :config
+  (add-hook 'prog-mode-hook 'dumb-jump-mode)) ;; :TODO: add support for powershell to this package
 
 (use-package corfu
   :custom
@@ -579,6 +592,12 @@
               (when current-file
                 (file-name-directory current-file)))
             )
+
+(if (eq system-type 'gnu/linux)
+    (setq-local main-dir "~/dotfiles/emacs-config/"))
+
+(if (eq system-type 'windows-nt)
+    (setq-local main-dir "~\\scratch\\dotfiles\\emacs-config\\"))
 
 (load-file
  (concat main-dir "twitchy.el"))
