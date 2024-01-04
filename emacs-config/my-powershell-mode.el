@@ -11,7 +11,7 @@
 
 ;; Function to apply syntax properties for multi-line comments
 ;; :TODO: fix to make the trailing > also have the correct syntax highlighting
-(defun powershell-syntax-propertize-function (start end)
+(defun powershell-syntax-propertize-comments (start end)
   "Apply syntax properties for multi-line comments from START to END."
   (goto-char start)
   (while (re-search-forward "<#\\|\\#>" end t)
@@ -21,7 +21,33 @@
                          (if (equal match "<#")
                              '(11 . nil)  ;; Comment start
                              '(12 . nil)) ;; Comment end
+                         )
+      )))
+
+(defun powershell-syntax-propertize-strings (start end)
+  "Apply syntax properties for multi-line comments from START to END."
+  (goto-char start)
+  (while (re-search-forward "@\"\n\\|\\\n\"@" end t)
+    (let ((match (match-string 0)))
+      (put-text-property (match-beginning 0) (match-end 0)
+                         'syntax-table (string-to-syntax "|")
                          ))))
+
+(defun powershell-syntax-propertize-strings-2 (start end)
+  "Apply syntax properties for multi-line comments from START to END."
+  (goto-char start)
+  (while (re-search-forward "@\'\n\\|\\\n\'@" end t)
+    (let ((match (match-string 0)))
+      (put-text-property (match-beginning 0) (match-end 0)
+                         'syntax-table (string-to-syntax "|")
+                         ))))
+
+(defun powershell-syntax-propertize-function (start end)
+  "Wrapper function to apply syntax properties for both multi-line comments and strings."
+  (powershell-syntax-propertize-comments start end)
+  (powershell-syntax-propertize-strings start end)
+  (powershell-syntax-propertize-strings-2 start end)
+  )
 
 ;; Keywords for syntax highlighting
 (defvar powershell-font-lock-keywords
