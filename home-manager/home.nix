@@ -72,6 +72,7 @@ in {
 
     wget
     vim
+    vimgolf
     curl
     git
     # ((emacsPackagesFor emacsGit).emacsWithPackages # for emacs overlay
@@ -311,6 +312,8 @@ in {
       nvim-cmp
       cmp-vsnip
       vim-vsnip
+
+      vim-be-good
     ];
 
     extraConfig = ''

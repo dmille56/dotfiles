@@ -107,6 +107,7 @@
    "u J" 'dumb-jump-go-other-window
    "u a" 'org-agenda
    "u P" 'spacious-padding-mode
+   "u 2" '2048-game
 
    ;; leave r for mode specific keymap
    )
@@ -334,7 +335,7 @@
   (rg-enable-default-bindings))
 (use-package helm-rg)
 
-(use-package powershell) ;; :TODO: fix multi-line comments issue in this package
+;; (use-package powershell) ;; :TODO: fix multi-line comments issue in this package
 
 (use-package erc)
 
@@ -360,7 +361,11 @@
 (use-package spaceline
   :init
   (require 'spaceline-config)
-  (spaceline-emacs-theme))
+  (spaceline-emacs-theme)
+  (spaceline-helm-mode)
+  (spaceline-toggle-minor-modes-off) ;; helps reduce modeline clutter
+  (setq spaceline-highlight-face-func 'spaceline-highlight-face-evil-state)
+  )
 
 (use-package evil-org
   :ensure t
@@ -560,6 +565,15 @@
 (evil-define-key 'insert eshell-mode-map
   (kbd "C-r") 'helm-eshell-history)
 
+;; Games
+
+(use-package 2048-game)
+(use-package sudoku)
+(use-package pacmacs
+  :init
+  (evil-set-initial-state 'pacmacs-mode 'emacs)
+  )
+
 ;; Set up zone-matrix
 ;; (straight-use-package
 ;;  '(zone-matrix :type git :host github :repo "ober/zone-matrix"))
@@ -590,11 +604,13 @@
 
 ;; get the directory of the current file and place it in main-dir local variable
 ;; :TODO: figure out why this shit doesn't work sometimes
-(setq-local main-dir
-            (let ((current-file (buffer-file-name)))
-              (when current-file
-                (file-name-directory current-file)))
-            )
+;; (setq-local main-dir
+;;             (let ((current-file (buffer-file-name)))
+;;               (when current-file
+;;                 (file-name-directory current-file)))
+;;             )
+
+;; (setq-local main-dir default-directory)
 
 (if (eq system-type 'gnu/linux)
     (setq-local main-dir "~/dotfiles/emacs-config/"))
@@ -614,6 +630,9 @@
 
 (load-file
  (concat main-dir "elfeed-config.el"))
+
+(load-file
+ (concat main-dir "my-powershell-mode.el"))
 
 (if (eq system-type 'gnu/linux)
     (load-file
