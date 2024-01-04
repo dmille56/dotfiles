@@ -116,10 +116,17 @@
   ;; (evil-define-minor-mode-key 'normal lsp-mode (kbd "SPC l") lsp-command-map)
   ;; (evil-leader/set-key-for-mode 'lsp-mode "L" 'lsp-command-map)
   (evil-leader/set-key-for-mode 'lsp-mode "l" 'lsp-command-map)
+  (evil-leader/set-key-for-mode 'emacs-lisp-mode
+    "r r" 'eval-region
+    "r b" 'eval-buffer
+    "r l" '(lambda () (interactive) (load-file (buffer-file-name (window-buffer)))) ;; load buffer of current file
+    "r L" 'load-file
+    )
   (global-evil-leader-mode)
   )
 
 (defun run-lsp-command-map ()
+  "Show lsp-command-map."
   (interactive)
   (which-key-show-keymap 'lsp-command-map))
 
@@ -141,8 +148,10 @@
 
 ;; remap ; to : in evil (for efficiency) and unmap q (because it's a pain in the ass and i don't use macros)
 (with-eval-after-load 'evil-maps
-   (define-key evil-normal-state-map (kbd ":") 'evil-repeat-find-char)
+   ;; (define-key evil-normal-state-map (kbd ":") 'evil-repeat-find-char) ;; uncomment if you still want to be able to use the original ';' key
    (define-key evil-normal-state-map (kbd ";") 'evil-ex)
+   ;; (define-key evil-visual-state-map (kbd ":") 'evil-repeat-find-char)
+   (define-key evil-visual-state-map (kbd ";") 'evil-ex)
    (define-key evil-normal-state-map (kbd "q") 'quit-window))
 
 ;; install evil-surround

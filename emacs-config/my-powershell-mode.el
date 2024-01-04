@@ -1,4 +1,10 @@
-;; Define the PowerShell mode
+;;; my-powershell-mode --- Summary
+
+;; Simple mode for powershell syntax highlighting
+
+;;; Commentary:
+
+;;; Code:
 
 (defvar powershell-mode-syntax-table nil "Syntax table for `my-powershell-mode'.")
 
@@ -7,6 +13,8 @@
         ;; PowerShell comment syntax: # (single-line)
         (modify-syntax-entry ?# "< b" synTable)
         (modify-syntax-entry ?\n "> b" synTable)
+        ;; PowerShell single line single quote strings
+        (modify-syntax-entry ?' "\"" synTable)
         synTable))
 
 ;; Function to apply syntax properties for multi-line comments
@@ -25,7 +33,8 @@
       )))
 
 (defun powershell-syntax-propertize-strings (start end)
-  "Apply syntax properties for multi-line comments from START to END."
+  "Apply syntax properties for multi-line strings from START to END.
+For double quotes."
   (goto-char start)
   (while (re-search-forward "@\"\n\\|\\\n\"@" end t)
     (let ((match (match-string 0)))
@@ -33,8 +42,9 @@
                          'syntax-table (string-to-syntax "|")
                          ))))
 
-(defun powershell-syntax-propertize-strings-2 (start end)
-  "Apply syntax properties for multi-line comments from START to END."
+(defun powershell-syntax-propertize-strings-single-quote (start end)
+  "Apply syntax properties for multi-line strings from START to END.
+For single quotes."
   (goto-char start)
   (while (re-search-forward "@\'\n\\|\\\n\'@" end t)
     (let ((match (match-string 0)))
@@ -43,10 +53,11 @@
                          ))))
 
 (defun powershell-syntax-propertize-function (start end)
-  "Wrapper function to apply syntax properties for both multi-line comments and strings."
+  "Wrapper function to apply syntax properties for comments and strings.
+Go from START to END."
   (powershell-syntax-propertize-comments start end)
   (powershell-syntax-propertize-strings start end)
-  (powershell-syntax-propertize-strings-2 start end)
+  (powershell-syntax-propertize-strings-single-quote start end)
   )
 
 ;; Keywords for syntax highlighting
@@ -81,3 +92,4 @@
 (add-to-list 'auto-mode-alist '("\\.psd1\\'" . my-powershell-mode))
 
 (provide 'my-powershell-mode)
+;;; my-powershell-mode.el ends here
