@@ -83,6 +83,7 @@
   ("J" dumb-jump-back "go def back")
   ("a" org-agenda "agenda")
   ("P" spacious-padding-mode "padding toggle")
+  ("S" selectric-mode "typewriter toggle")
   ("g" hydra-game/body "game")
   )
 
@@ -92,7 +93,7 @@
   ("t" tetris "tetris")
   ("d" doctor "doctor")
   ("s" sudoku "sudoku")
-  ("p" pacmacs "pacmacs")
+  ("p" pacmacs-start "pacmacs")
   )
 
 (defhydra hydra-elisp-mode (:exit t)
@@ -607,6 +608,7 @@
 (use-package sudoku
   :init
   (evil-set-initial-state 'sudoku-mode 'emacs)
+  :config
   (define-key sudoku-mode-map (kbd "h") 'sudoku-move-point-left)
   (define-key sudoku-mode-map (kbd "H") 'sudoku-hint)
   )
