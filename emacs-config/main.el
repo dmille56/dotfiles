@@ -573,7 +573,7 @@
 (use-package dumb-jump
   :straight (:host github :repo "dmille56/dumb-jump" :files ("dumb-jump.el"))
   :config
-  (add-hook 'prog-mode-hook 'dump-jump-mode)
+  (add-hook 'prog-mode-hook 'dumb-jump-mode)
   )
 
 (use-package corfu
