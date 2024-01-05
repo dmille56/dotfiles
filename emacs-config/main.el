@@ -579,6 +579,8 @@
 (use-package helm-xref)
 
 (use-package corfu
+  :init
+  (global-corfu-mode)
   :custom
   (corfu-cycle t)
   (corfu-auto t)
