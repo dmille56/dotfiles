@@ -573,8 +573,10 @@
 (use-package dumb-jump
   :straight (:host github :repo "dmille56/dumb-jump" :files ("dumb-jump.el"))
   :config
-  (add-hook 'prog-mode-hook 'dumb-jump-mode)
+  (add-hook 'xref-backend-functions #'dumb-jump-xref-activate)
   )
+
+(use-package helm-xref)
 
 (use-package corfu
   :custom
