@@ -49,7 +49,59 @@
       (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
 
+(use-package hydra)
+
 (setq evil-want-keybinding nil)
+
+(defhydra hydra-tab-management (:exit t)
+  "tabs"
+  ("n" tab-new "new")
+  ("w" tab-bar-switch-to-tab "switch")
+  ("1" (lambda () (interactive) (tab-bar-select-tab 1)) "1")
+  ("2" (lambda () (interactive) (tab-bar-select-tab 2)) "2")
+  ("3" (lambda () (interactive) (tab-bar-select-tab 3)) "3")
+  ("4" (lambda () (interactive) (tab-bar-select-tab 4)) "4")
+  ("5" (lambda () (interactive) (tab-bar-select-tab 5)) "5")
+  ("6" (lambda () (interactive) (tab-bar-select-tab 6)) "6")
+  ("7" (lambda () (interactive) (tab-bar-select-tab 7)) "7")
+  ("8" (lambda () (interactive) (tab-bar-select-tab 8)) "8")
+  ("9" (lambda () (interactive) (tab-bar-select-tab 9)) "9")
+  ("0" (lambda () (interactive) (tab-bar-select-tab 10)) "0")
+  )
+
+(defhydra hydra-leader-misc (:exit t)
+  "misc"
+  ("d" ddg "ddg search" )
+  ("s" rg-menu "rg search")
+  ("g" chatgpt-shell "chatgpt")
+  ("b" helm-bookmarks "bookmarks")
+  ("t" ranger "ranger")
+  ("y" treemacs "tree")
+  ("w" elfeed "elfeed")
+  ("r" helm-recentf "recent")
+  ("j" dumb-jump-go "go def")
+  ("J" dumb-jump-back "go def back")
+  ("a" org-agenda "agenda")
+  ("P" spacious-padding-mode "padding toggle")
+  ("g" hydra-game/body "game")
+  )
+
+(defhydra hydra-game (:exit t)
+  "game"
+  ("2" 2048-game "2048")
+  ("t" tetris "tetris")
+  ("d" doctor "doctor")
+  ("s" sudoku "sudoku")
+  ("p" pacmacs "pacmacs")
+  )
+
+(defhydra hydra-elisp-mode (:exit t)
+  "elisp"
+  ("r" eval-region "eval region")
+  ("b" eval-buffer "eval buffer")
+  ("l" (lambda () (interactive) (load-file (buffer-file-name (window-buffer)))) "load current file")
+  ("L" load-file "load file")
+  )
 
 (use-package evil-leader
   :init
@@ -76,18 +128,7 @@
    "3" 'split-window-right
 
    ;; tab management
-   "t n" 'tab-new
-   "t w" 'tab-bar-switch-to-tab
-   "t 1" '(lambda () (interactive) (tab-bar-select-tab 1))
-   "t 2" '(lambda () (interactive) (tab-bar-select-tab 2))
-   "t 3" '(lambda () (interactive) (tab-bar-select-tab 3))
-   "t 4" '(lambda () (interactive) (tab-bar-select-tab 4))
-   "t 5" '(lambda () (interactive) (tab-bar-select-tab 5))
-   "t 6" '(lambda () (interactive) (tab-bar-select-tab 6))
-   "t 7" '(lambda () (interactive) (tab-bar-select-tab 7))
-   "t 8" '(lambda () (interactive) (tab-bar-select-tab 8))
-   "t 9" '(lambda () (interactive) (tab-bar-select-tab 9))
-   "t 0" '(lambda () (interactive) (tab-bar-select-tab 10))
+   "t" 'hydra-tab-management/body
 
    ;; harpoon
    "h" 'harpoon-toggle-quick-menu
@@ -95,19 +136,7 @@
    "H <return>" 'harpoon-add-file
 
    ;; u submenu
-   "u d" 'ddg
-   "u s" 'rg-menu
-   "u g" 'chatgpt-shell
-   "u b" 'helm-bookmarks
-   "u t" 'ranger
-   "u y" 'treemacs
-   "u w" 'elfeed
-   "u r" 'helm-recentf
-   "u j" 'dumb-jump-go
-   "u J" 'dumb-jump-go-other-window
-   "u a" 'org-agenda
-   "u P" 'spacious-padding-mode
-   "u 2" '2048-game
+   "u" 'hydra-leader-misc/body
 
    ;; leave r for mode specific keymap
    )
@@ -116,12 +145,7 @@
   ;; (evil-define-minor-mode-key 'normal lsp-mode (kbd "SPC l") lsp-command-map)
   ;; (evil-leader/set-key-for-mode 'lsp-mode "L" 'lsp-command-map)
   (evil-leader/set-key-for-mode 'lsp-mode "l" 'lsp-command-map)
-  (evil-leader/set-key-for-mode 'emacs-lisp-mode
-    "r r" 'eval-region
-    "r b" 'eval-buffer
-    "r l" '(lambda () (interactive) (load-file (buffer-file-name (window-buffer)))) ;; load buffer of current file
-    "r L" 'load-file
-    )
+  (evil-leader/set-key-for-mode 'emacs-lisp-mode "r" 'hydra-elisp-mode/body)
   (global-evil-leader-mode)
   )
 
@@ -579,7 +603,14 @@
 ;; Games
 
 (use-package 2048-game)
-(use-package sudoku)
+
+(use-package sudoku
+  :init
+  (evil-set-initial-state 'sudoku-mode 'emacs)
+  (define-key sudoku-mode-map (kbd "h") 'sudoku-move-point-left)
+  (define-key sudoku-mode-map (kbd "H") 'sudoku-hint)
+  )
+
 (use-package pacmacs
   :init
   (evil-set-initial-state 'pacmacs-mode 'emacs)
