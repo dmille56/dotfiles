@@ -546,8 +546,10 @@
 
 ;; :TODO: figure out how to configure these packages (dumb-jump, corfu, and orderless)
 (use-package dumb-jump
+  :straight (:host github :repo "dmille56/dumb-jump" :files ("dumb-jump.el"))
   :config
-  (add-hook 'prog-mode-hook 'dumb-jump-mode)) ;; :TODO: add support for powershell to this package
+  (add-hook 'prog-mode-hook 'dump-jump-mode)
+  )
 
 (use-package corfu
   :custom
