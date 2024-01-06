@@ -32,6 +32,9 @@
 
 # export NIX_PATH=${NIX_PATH:+$NIX_PATH:}$HOME/.nix-defexpr/channels
 
+# command to start webcam:
+# cvlc v4l2:///dev/video3
+
 let
   my-dotfile-dir = "/home/dono/dotfiles";
   my-home-dir = "/home/dono";

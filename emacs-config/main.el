@@ -102,6 +102,8 @@
   ("b" eval-buffer "eval buffer")
   ("l" (lambda () (interactive) (load-file (buffer-file-name (window-buffer)))) "load current file")
   ("L" load-file "load file")
+  ("d" eval-defun "eval defun")
+  ("e" eval-last-sexp "eval last sexp")
   )
 
 (use-package evil-leader
@@ -475,14 +477,15 @@
   :init
   (global-diff-hl-mode))
 
-(use-package company-box
-  :hook (company-mode . company-box-mode))
-
 (use-package read-aloud
   :init
   (global-set-key (kbd "C-C r p") 'read-aloud-buf)
   (global-set-key (kbd "C-C r s") 'read-aloud-stop)
   (global-set-key (kbd "C-C r t") 'read-aloud-this))
+
+;; (use-package company-box
+;;   :hook (company-mode . company-box-mode))
+(add-hook 'after-init-hook 'global-company-mode)
 
 (use-package page-break-lines) ;; needed for dashboard
 
@@ -511,7 +514,8 @@
   )
 
 (use-package spacious-padding
-  :hook (emacs-startup . spacious-padding-mode) ;; prevents bug (where there's a white line between frames) by having it init at emacs-startup instead of after-init (which runs before emacs-startup)
+  ;; reenable hook when the bug gets fixed...
+  ;; :hook (emacs-startup . spacious-padding-mode) ;; prevents bug (where there's a white line between frames) by having it init at emacs-startup instead of after-init (which runs before emacs-startup)
   )
 
 ;; :TODO: add more svg-tag tags
@@ -579,18 +583,18 @@
 (use-package helm-xref)
 
 (use-package corfu
-  :init
-  (global-corfu-mode)
+  ;; :init
+  ;; (global-corfu-mode)
   :custom
   (corfu-cycle t)
   (corfu-auto t)
   (corfu-separator ?\s) ;; Orderless field separator
   ) ;; dumb code completion
 
-(use-package orderless
-  :custom
-  (completion-styles '(basic partial-completion orderless))
- )
+;; (use-package orderless
+;;   :custom
+;;   (completion-styles '(basic partial-completion orderless))
+;;  )
 
 (define-key transient-map (kbd "<f8>") 'transient-quit-all)
 (define-key transient-map (kbd "ESC") 'transient-quit-all)
