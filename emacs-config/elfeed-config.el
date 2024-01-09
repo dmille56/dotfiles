@@ -9,7 +9,7 @@
 (setq-default elfeed-feeds-blogs
       '(
         ("https://stratechery.com/feed" blog tech)
-        ("http://www.paulgraham.com/rss.html" blog) ;; Paul Graham (Ycombinator founder)
+        ;; ("http://www.paulgraham.com/rss.html" blog) ;; Paul Graham (Ycombinator founder)
         ("https://www.overcomingbias.com/feed" blog) ;; Robin Hanson (economist)
         ("https://betonit.substack.com/feed" blog) ;; Bryan Caplan (economist)
         ("https://astralcodexten.substack.com/feed" blog) ;; Scott Alexander

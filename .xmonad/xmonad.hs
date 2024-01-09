@@ -2,6 +2,7 @@ import Data.Char (toLower)
 import Data.Default (def)
 import qualified Data.Map as M
 import Graphics.X11.ExtraTypes.XF86
+import MyTheme
 import System.IO
 import XMonad
 import XMonad.Actions.Search
@@ -22,13 +23,8 @@ import XMonad.Util.Run (spawnPipe)
 
 myModMask = mod4Mask -- Bind Mod to the windows key
 
-greyColor = "#928374"
-
-greyColor2 = "#282828"
-
-greenColor = "#689d6a"
-
-yellowColor = "#ebdbb2"
+myTheme :: MyTheme
+myTheme = draculaTheme
 
 fuzzyMatch :: String -> String -> Bool
 fuzzyMatch [] _ = True
@@ -40,26 +36,15 @@ fuzzyMatch xxs@(x : xs) (y : ys)
 myXPConfig :: XPConfig
 myXPConfig =
   def
-    { fgColor = yellowColor,
+    { fgColor = (_myTheme_xpConfigFgColor myTheme),
       searchPredicate = fuzzyMatch
-    }
-
-myTabConfig =
-  def
-    { inactiveBorderColor = greyColor,
-      inactiveColor = greyColor2,
-      activeTextColor = greenColor,
-      activeBorderColor = greenColor,
-      activeColor = greyColor2,
-      urgentTextColor = "red",
-      decoHeight = 20
     }
 
 myLayoutHook = onWorkspace "9:mon" ((smartBorders . avoidStruts) myLayout') $ ((smartBorders . avoidStruts) myLayout)
   where
     myLayout = tab ||| tiled ||| Full
     myLayout' = tiled ||| Full ||| tab
-    tab = tabbed shrinkText myTabConfig
+    tab = tabbed shrinkText (_myTheme_theme myTheme)
     tiled = Tall nmaster delta ratio
     nmaster = 1
     ratio = 1 / 2
@@ -112,15 +97,15 @@ main = do
             dynamicLogWithPP
               xmobarPP
                 { ppOutput = hPutStrLn xmproc,
-                  ppTitle = xmobarColor yellowColor "" . shorten 50,
-                  ppCurrent = xmobarColor greenColor ""
+                  ppTitle = xmobarColor (_myTheme_ppTitleColor myTheme) "" . shorten 50,
+                  ppCurrent = xmobarColor (_myTheme_ppCurrentColor myTheme) ""
                 },
           handleEventHook = handleEventHook def <+> XMonad.Hooks.EwmhDesktops.fullscreenEventHook <+> dynamicPropertyChange "WM_CLASS" myManageHook <+> docksEventHook,
           modMask = myModMask,
           borderWidth = 2,
-          normalBorderColor = greyColor,
-          focusedBorderColor = greenColor,
-          workspaces = ["1:web", "2:media", "3:music", "4:games", "5:dev", "6:term", "7", "8", "9:mon"]
+          normalBorderColor = (_myTheme_normalBorderColor myTheme),
+          focusedBorderColor = (_myTheme_focusedBorderColor myTheme),
+          workspaces = ["1:web", "2:vid", "3:music", "4:game", "5:dev", "6:term", "7", "8", "9:mon", "0"]
         }
         `additionalKeys` [ ((myModMask .|. shiftMask, xK_z), spawn "xscreensaver-command -lock; xset dpms force off"),
                            ((myModMask, xK_p), spawn "rofi -show run"),
@@ -160,7 +145,8 @@ main = do
                                  ((0, xK_t), notifySpawn "thunar"),
                                  ((0, xK_d), notifySpawn "xterm -e dropbox"),
                                  ((0, xK_x), notifySpawn "xterm"),
-                                 ((0, xK_e), notifySpawn "emacsclient -n -c")
+                                 ((0, xK_e), notifySpawn "emacsclient -n -c"),
+                                 ((0, xK_i), spawn "rofi -modi emoji -show emoji -font 'Noto Color Emoji 12'")
                                ]
                            )
                          ]

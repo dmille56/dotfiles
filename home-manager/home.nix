@@ -172,7 +172,10 @@ in {
     pasystray
     playerctl
 
-    rofi
+    # rofi
+    xdotool
+    noto-fonts-color-emoji
+
     dmenu
     conky
 
@@ -241,6 +244,13 @@ in {
   };
 
   programs.thefuck.enable = true;
+
+  programs.rofi = {
+    enable = true;
+    plugins = [pkgs.rofi-emoji];
+    # theme = "glue_pro_blue"; #good fallback theme that comes installed with rofi
+    theme = "dracula-theme";
+  };
 
   programs.git = {
     enable = true;
@@ -421,12 +431,23 @@ in {
   home.file.".Xresources".source = "${my-dotfile-dir}/Xresources";
   home.file.".xmobarrc".source = "${my-dotfile-dir}/xmobarrc";
   home.file.".xmonad/xmonad.hs".source = "${my-dotfile-dir}/.xmonad/xmonad.hs";
+  home.file.".xmonad/lib/MyTheme.hs".source = "${my-dotfile-dir}/.xmonad/MyTheme.hs";
   home.file.".ghci".source = "${my-dotfile-dir}/.ghci";
   home.file.".ripgreprc".source = "${my-dotfile-dir}/.ripgreprc";
   home.file.".config/mpv/mpv.conf".source = "${my-dotfile-dir}/mpv.conf";
   home.file.".config/ytfzf/conf.sh".source = "${my-dotfile-dir}/ytfzf-conf.sh";
 
+  home.file.".config/rofi/themes/dracula-theme.rasi".text = builtins.readFile(builtins.fetchurl {
+    url = "https://raw.githubusercontent.com/dracula/rofi/main/theme/config1.rasi";
+  });
+
+  home.file.".config/rofi/themes/dracula-theme-2.rasi".text = builtins.readFile(builtins.fetchurl {
+    url = "https://raw.githubusercontent.com/dracula/rofi/main/theme/config2.rasi";
+  });
+
   home.stateVersion = "18.09"; # one of "18.09", "19.03", "19.09", "20.03", "20.09", "21.03", "21.05", "21.11", "22.05", "22.11", "23.05", "23.11"
+
+  fonts.fontconfig.enable = true;
   
   home.sessionVariables = {
     OPENAI_API_KEY = builtins.readFile "${my-dotfile-dir}/.openai_api_key";

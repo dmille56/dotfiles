@@ -1,7 +1,7 @@
 ;;; package --- Summary
 
 ;;; Commentary:
-;;; Emacs config file
+;;; Emacs config file :smile:👍💪
 
 ;;; Code:
 
@@ -85,6 +85,7 @@
   ("P" spacious-padding-mode "padding toggle")
   ("S" selectric-mode "typewriter toggle")
   ("g" hydra-game/body "game")
+  ("c" calc "calculator" )
   )
 
 (defhydra hydra-game (:exit t)
@@ -483,9 +484,10 @@
   (global-set-key (kbd "C-C r s") 'read-aloud-stop)
   (global-set-key (kbd "C-C r t") 'read-aloud-this))
 
-;; (use-package company-box
-;;   :hook (company-mode . company-box-mode))
+(use-package company-box
+  :hook (company-mode . company-box-mode))
 (add-hook 'after-init-hook 'global-company-mode)
+;; use company-search with C-s
 
 (use-package page-break-lines) ;; needed for dashboard
 
@@ -625,6 +627,9 @@
   :init
   (evil-set-initial-state 'pacmacs-mode 'emacs)
   )
+
+(use-package emojify
+  :hook (after-init . global-emojify-mode))
 
 ;; Set up zone-matrix
 ;; (straight-use-package
