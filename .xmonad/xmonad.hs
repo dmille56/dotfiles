@@ -105,7 +105,7 @@ main = do
           borderWidth = 2,
           normalBorderColor = (_myTheme_normalBorderColor myTheme),
           focusedBorderColor = (_myTheme_focusedBorderColor myTheme),
-          workspaces = ["1:web", "2:vid", "3:music", "4:game", "5:dev", "6:term", "7", "8", "9:mon", "0"]
+          workspaces = ["1:web", "2:vid", "3:music", "4:game", "5:dev", "6:term", "7", "8", "9:mon"]
         }
         `additionalKeys` [ ((myModMask .|. shiftMask, xK_z), spawn "xscreensaver-command -lock; xset dpms force off"),
                            ((myModMask, xK_p), spawn "rofi -show run"),
