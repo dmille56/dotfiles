@@ -14,15 +14,15 @@ data MyTheme = MyTheme
 
 draculaActiveColor = "#6272a4"
 
-draculaActiveTextColor = "#6272a4"
+draculaActiveTextColor = "#ffffff"
 
 draculaActiveBorderColor = "#6272a4"
 
-draculaInactiveBorderColor = greyColor
+draculaInactiveBorderColor = "#384261"
 
-draculaInactiveColor = greyColor
+draculaInactiveColor = "#282A36"
 
-draculaInactiveTextColor = greyColor
+draculaInactiveTextColor = "#dfe3ec"
 
 draculaUrgentTextColor = "red"
 
@@ -30,9 +30,10 @@ draculaNormalBorderColor = draculaInactiveBorderColor
 
 draculaFocusedBorderColor = draculaActiveBorderColor
 
-draculaPPTitle = draculaInactiveTextColor
+-- draculaPPTitle = "#9ea8c7"
+draculaPPTitle = "#eff1f6"
 
-draculaPPCurrent = draculaActiveTextColor
+draculaPPCurrent = draculaPPTitle
 
 draculaTheme :: MyTheme
 draculaTheme =
@@ -41,11 +42,13 @@ draculaTheme =
         def
           { inactiveBorderColor = draculaInactiveBorderColor,
             inactiveColor = draculaInactiveColor,
+            inactiveTextColor = draculaInactiveTextColor,
             activeTextColor = draculaActiveTextColor,
             activeBorderColor = draculaActiveBorderColor,
             activeColor = draculaActiveColor,
             urgentTextColor = draculaUrgentTextColor,
-            decoHeight = 20
+            urgentColor = draculaUrgentTextColor,
+            urgentBorderColor = draculaUrgentTextColor
           },
       _myTheme_ppTitleColor = draculaPPTitle,
       _myTheme_ppCurrentColor = draculaPPCurrent,
