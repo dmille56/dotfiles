@@ -50,6 +50,17 @@
   (load bootstrap-file nil 'nomessage))
 
 (use-package hydra)
+(use-package posframe)
+
+;; (use-package helm-posframe
+;;   :config
+;;   (helm-posframe-enable))
+
+;; (use-package hydra-posframe
+;; ;; :NOTE: not recommended way to install... but I didn't want to install el-get
+;; ;; https://github.com/Ladicle/hydra-posframe
+;;   :straight (:host github :repo "ladicle/hydra-posframe" :files ("*.el"))
+;;   :hook (after-init . hydra-posframe-mode))
 
 (setq evil-want-keybinding nil)
 

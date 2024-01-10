@@ -173,9 +173,11 @@ in {
     playerctl
 
     # rofi
+    rofi-bluetooth 
     xdotool
     noto-fonts-color-emoji
 
+    gmrun
     dmenu
     conky
 
