@@ -1,9 +1,11 @@
 Config { font = "-*-Fixed-Bold-R-Normal-*-13-*-*-*-*-*-*-*"
         , borderColor = "#282828"
         , border = TopB
-        , bgColor = "#282828"
+        -- , bgColor = "#282828"
+        , bgColor = "#282A36"
         -- , fgColor = "#ebdbb2" -- matrix theme
-        , fgColor = "#c7c0b8" -- dracula theme
+        -- , fgColor = "#c7c0b8" -- dracula theme
+        , fgColor = "#6272A4"
         , position = BottomW L 100
         , commands = [ Run Cpu ["-L","25","-H","75","--normal","#689d6a","--high","red"] 10
                         , Run Memory ["-t","Mem: <usedratio>%"] 10

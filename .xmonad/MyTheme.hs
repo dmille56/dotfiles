@@ -14,7 +14,7 @@ data MyTheme = MyTheme
 
 draculaActiveColor = "#6272a4"
 
-draculaActiveTextColor = "#ffffff"
+draculaActiveTextColor = "#F8F8F2"
 
 draculaActiveBorderColor = "#6272a4"
 
@@ -30,8 +30,7 @@ draculaNormalBorderColor = draculaInactiveBorderColor
 
 draculaFocusedBorderColor = draculaActiveBorderColor
 
--- draculaPPTitle = "#9ea8c7"
-draculaPPTitle = "#eff1f6"
+draculaPPTitle = "#F8F8F2"
 
 draculaPPCurrent = draculaPPTitle
 
