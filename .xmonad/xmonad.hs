@@ -98,7 +98,9 @@ main = do
               xmobarPP
                 { ppOutput = hPutStrLn xmproc,
                   ppTitle = xmobarColor (_myTheme_ppTitleColor myTheme) "" . shorten 50,
-                  ppCurrent = xmobarColor (_myTheme_ppCurrentColor myTheme) ""
+                  ppCurrent = xmobarColor (_myTheme_ppCurrentColor myTheme) "",
+                  ppLayout = xmobarColor (_myTheme_ppLayoutColor myTheme) "",
+                  ppSep = " | "
                 },
           handleEventHook = handleEventHook def <+> XMonad.Hooks.EwmhDesktops.fullscreenEventHook <+> dynamicPropertyChange "WM_CLASS" myManageHook <+> docksEventHook,
           modMask = myModMask,

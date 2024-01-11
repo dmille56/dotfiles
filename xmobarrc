@@ -1,13 +1,14 @@
-Config { font = "-*-Fixed-Bold-R-Normal-*-13-*-*-*-*-*-*-*"
+Config {
+          font = "-*-Fixed-Bold-R-Normal-*-13-*-*-*-*-*-*-*"
+          -- font = "xft:Mononoki Nerd Font:pixelsize=13:antialias=true:hinting=true"
         , borderColor = "#282828"
         , border = TopB
-        -- , bgColor = "#282828"
         , bgColor = "#282A36"
-        -- , fgColor = "#ebdbb2" -- matrix theme
-        -- , fgColor = "#c7c0b8" -- dracula theme
-        , fgColor = "#6272A4"
+        , fgColor = "#F8F8F2"
         , position = BottomW L 100
-        , commands = [ Run Cpu ["-L","25","-H","75","--normal","#689d6a","--high","red"] 10
+        , commands = [
+                        Run Com "echo" ["<fn=3>\xf17c</fn>"] "penguin" 3600
+                        , Run Cpu ["-L","25","-H","75","--normal","#689d6a","--high","red"] 10
                         , Run Memory ["-t","Mem: <usedratio>%"] 10
                         , Run Swap [] 10
                         , Run Date "%a %b %d %Y %H:%M" "date" 10

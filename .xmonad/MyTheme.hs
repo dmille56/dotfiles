@@ -7,6 +7,7 @@ data MyTheme = MyTheme
   { _myTheme_theme :: Theme,
     _myTheme_ppTitleColor :: String, -- xmobar title
     _myTheme_ppCurrentColor :: String, -- xmobar current window
+    _myTheme_ppLayoutColor :: String, -- xmobar current layout
     _myTheme_normalBorderColor :: String,
     _myTheme_focusedBorderColor :: String,
     _myTheme_xpConfigFgColor :: String
@@ -24,15 +25,17 @@ draculaInactiveColor = "#282A36"
 
 draculaInactiveTextColor = "#dfe3ec"
 
-draculaUrgentTextColor = "red"
+draculaUrgentTextColor = "#FF5555"
 
 draculaNormalBorderColor = draculaInactiveBorderColor
 
 draculaFocusedBorderColor = draculaActiveBorderColor
 
-draculaPPTitle = "#F8F8F2"
+draculaPPCurrent = "#FF79C6"
 
-draculaPPCurrent = draculaPPTitle
+draculaPPTitle = "#8BE9fd"
+
+draculaPPLayout = "#BD93f9"
 
 draculaTheme :: MyTheme
 draculaTheme =
@@ -46,11 +49,12 @@ draculaTheme =
             activeBorderColor = draculaActiveBorderColor,
             activeColor = draculaActiveColor,
             urgentTextColor = draculaUrgentTextColor,
-            urgentColor = draculaUrgentTextColor,
+            urgentColor = draculaInactiveColor,
             urgentBorderColor = draculaUrgentTextColor
           },
       _myTheme_ppTitleColor = draculaPPTitle,
       _myTheme_ppCurrentColor = draculaPPCurrent,
+      _myTheme_ppLayoutColor = draculaPPLayout,
       _myTheme_normalBorderColor = draculaNormalBorderColor,
       _myTheme_focusedBorderColor = draculaFocusedBorderColor,
       _myTheme_xpConfigFgColor = draculaPPTitle
@@ -80,6 +84,7 @@ matrixTheme =
             decoHeight = 20
           },
       _myTheme_ppTitleColor = yellowColor,
+      _myTheme_ppLayoutColor = yellowColor,
       _myTheme_ppCurrentColor = greenColor,
       _myTheme_normalBorderColor = greyColor,
       _myTheme_focusedBorderColor = greenColor,

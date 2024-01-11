@@ -447,6 +447,11 @@ in {
     url = "https://raw.githubusercontent.com/dracula/rofi/main/theme/config2.rasi";
   });
 
+  home.file.".themes/dracula".source = builtins.fetchGit {
+    url = "https://github.com/dracula/gtk";
+    rev = "f3c876d8c97f9bb504c98592a8d96770e70585bb";
+  };
+
   home.stateVersion = "18.09"; # one of "18.09", "19.03", "19.09", "20.03", "20.09", "21.03", "21.05", "21.11", "22.05", "22.11", "23.05", "23.11"
 
   fonts.fontconfig.enable = true;
