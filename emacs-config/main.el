@@ -135,6 +135,7 @@
    "c" 'flycheck-list-errors
    ;; "l" 'run-lsp-command-map
    "g" 'magit
+   "R" 'query-replace-regexp
 
    ;; window management
    "o" 'other-window

@@ -34,6 +34,8 @@
         ("https://www.youtube.com/feeds/videos.xml?channel_id=UCkh_BQ1i34Y0Ij7QxCRwzrw" yt) ;; Boyscast Clips
         ("https://www.youtube.com/feeds/videos.xml?channel_id=UCSduXBjCHkLoo_y9ss2xzXw" yt) ;; PsycHacks
         ("https://www.youtube.com/feeds/videos.xml?channel_id=UCyaN6mg5u8Cjy2ZI4ikWaug" yt i) ;; My First Million
+        ("https://www.youtube.com/feeds/videos.xml?channel_id=UCVls1GmFKf6WlTraIb_IaJg" yt emacs linux) ;; DistroTube (linux/emacs tips)
+        ("https://www.youtube.com/feeds/videos.xml?channel_id=UCCRdRbI93UGW0AZttVH3SbA" yt emacs) ;; Gopar (emacs tips)
         ))
 
 (setq-default elfeed-feeds-podcasts
