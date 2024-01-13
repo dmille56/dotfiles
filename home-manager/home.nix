@@ -188,7 +188,7 @@ in {
     feh
 
     lite-xl
-    gnome3.gedit
+    gedit
     gnome3.gnome-system-monitor
     pkgs.meld
     xfce.thunar

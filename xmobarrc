@@ -1,9 +1,7 @@
 Config {
-          -- font = "Ubuntu Bold 9"
-          -- font = "DejaVu Sans Mono for Powerline Bold 9"
-          font = "xft:Mononoki Nerd Font:pixelsize=11:antialias=true:hinting=true"
+          font = "xft:Ubuntu:size=13:antialias=true:hinting=true,xft:Noto Color Emoji:size=13:antialias=true:hinting=true"
         , additionalFonts = [
-                          "xft:Mononoki Nerd Font:pixelsize=11:antialias=true:hinting=true"
+                          "xft:DejaVuSansM Nerd Font Mono:size=13:antialias=true:hinting=true"
                           ]
         , borderColor = "#282828"
         , border = TopB
@@ -11,17 +9,30 @@ Config {
         , fgColor = "#F8F8F2"
         , position = BottomW L 100
         , commands = [
-                        Run Com "echo" ["<fn=1>\xf4bc</fn>"] "cpu_icon" 10
-                        , Run Com "echo -e" ["<fn=1>\xf240</fn>"] "bat_icon" 10
-                        , Run Cpu ["-L","25","-H","75","--normal","#689d6a","--high","red"] 10
-                        , Run Memory ["-t","Mem: <usedratio>%"] 10
-                        , Run Swap [] 10
+                        Run Com "echo" ["<fn=1>\xf4bc</fn>"] "mem_icon" 3600
+                        , Run Com "echo" ["<fn=1>\xf240</fn>"] "bat_icon" 3600
+                        , Run Com "echo" ["<fn=1>\xe255</fn>"] "cpu_icon" 3600 -- TODO: find a more appropriate CPU icon to use
+                        , Run Com "echo" ["<fn=1>\xebcb</fn>"] "swap_icon" 3600
+                        , Run Cpu ["-L","25","-H","75","--normal","#50FA7B","--high","#FF5555", "-t", "<total>%"] 10
+                        , Run Memory ["-t","<usedratio>%"] 10
+                        , Run Swap ["-t", "<usedratio>%"] 10
                         , Run Date "%a %b %d %Y %H:%M" "date" 10
                         , Run StdinReader
                         , Run BatteryP ["BAT0"]
-			["-t", "Bat: <left>% (chg: <acstatus>)"] 60
+                        [
+                        "-t"
+                        , "<left>% (<acstatus>)"
+                        ,"--" -- battery specific options
+                        -- discharging status
+                        , "-o", "<left>% (<timeleft>)"
+                        -- AC "on" status
+                        , "-O", "<fc=##F1FA8C>Charging</fc>"
+                        -- charged status
+                        , "-i", "<fc=#50FA7b>Charged</fc>"
+                        ]
+                        60
                         ]
         , sepChar = "%"
         , alignSep = "}{"
-        , template = "%StdinReader% }{ %bat_icon% %battery% | <fc=#BD93F9>%cpu_icon% %cpu%</fc> | <fc=#8BE9FD>%memory%</fc> | <fc=#50FA7B>%swap%</fc> | <fc=#FF79C6>%date%</fc>"
+        , template = "%StdinReader% }{ %bat_icon% %battery% | <fc=#BD93F9>%cpu_icon% %cpu%</fc> | <fc=#8BE9FD>%mem_icon% %memory%</fc> | <fc=#50FA7B>%swap_icon% %swap%</fc> | <fc=#FF79C6>%date%</fc>"
         }
