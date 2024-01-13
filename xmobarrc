@@ -18,21 +18,21 @@ Config {
                         , Run Swap ["-t", "<usedratio>%"] 10
                         , Run Date "%a %b %d %Y %H:%M" "date" 10
                         , Run StdinReader
-                        , Run BatteryP ["BAT0"]
-                        [
-                        "-t"
-                        , "<left>% (<acstatus>)"
-                        ,"--" -- battery specific options
-                        -- discharging status
-                        , "-o", "<left>% (<timeleft>)"
-                        -- AC "on" status
-                        , "-O", "<fc=##F1FA8C>Charging</fc>"
-                        -- charged status
-                        , "-i", "<fc=#50FA7b>Charged</fc>"
-                        ]
-                        60
+                        -- , Run BatteryP ["BAT0"]
+                        -- [
+                        -- "-t"
+                        -- , "<left>% (<acstatus>)"
+                        -- ,"--" -- battery specific options
+                        -- -- discharging status
+                        -- , "-o", "<left>% (<timeleft>)"
+                        -- -- AC "on" status
+                        -- , "-O", "<fc=##F1FA8C>Charging</fc>"
+                        -- -- charged status
+                        -- , "-i", "<fc=#50FA7b>Charged</fc>"
+                        -- ]
+                        -- 60
                         ]
         , sepChar = "%"
         , alignSep = "}{"
-        , template = "%StdinReader% }{ %bat_icon% %battery% | <fc=#BD93F9>%cpu_icon% %cpu%</fc> | <fc=#8BE9FD>%mem_icon% %memory%</fc> | <fc=#50FA7B>%swap_icon% %swap%</fc> | <fc=#FF79C6>%date%</fc>"
+        , template = "%StdinReader% }{ <fc=#BD93F9>%cpu_icon% %cpu%</fc> | <fc=#8BE9FD>%mem_icon% %memory%</fc> | <fc=#50FA7B>%swap_icon% %swap%</fc> | <fc=#FF79C6>%date%</fc>"
         }
