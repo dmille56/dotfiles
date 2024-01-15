@@ -95,8 +95,9 @@
   ("a" org-agenda "agenda")
   ("P" spacious-padding-mode "padding toggle")
   ("S" selectric-mode "typewriter toggle")
-  ("g" hydra-game/body "game")
+  ("G" hydra-game/body "game")
   ("c" calc "calculator" )
+  ("h" help-for-help "emacs help")
   )
 
 (defhydra hydra-game (:exit t)
@@ -118,6 +119,31 @@
   ("e" eval-last-sexp "eval last sexp")
   )
 
+(defhydra hydra-doc-view-mode (:exit t)
+  "doc-view"
+  ("g" doc-view-goto-page "go to page")
+  ("n" doc-view-next-page "next page")
+  ("p" doc-view-previous-page "prev page")
+  )
+
+(defhydra hydra-org-mode (:exit t)
+  "org"
+  ("o" org-open-at-point "open")
+  ("l" org-insert-link "insert link")
+  ("j" avy-org-goto-heading-timer "go to heading")
+  ("c" avy-org-refile-as-child "avy refile child")
+  )
+
+(defhydra hydra-python-mode (:exit t)
+  "python"
+  ("l" python-shell-send-file "run file")
+  ("b" python-shell-send-buffer "run buffer")
+  ("e" python-shell-send-statement "run statement")
+  ("p" run-python "start python shell")
+  ("r" python-shell-send-region "run region")
+  ("z" python-shell-switch-to-shell "switch to shell")
+  )
+
 (use-package evil-leader
   :init
   (setq evil-leader/in-all-states t) ;; allows evil leader via "C-<leader>" in other states
@@ -129,13 +155,16 @@
    "b" 'switch-to-buffer
    "k" 'kill-buffer
    "e" 'projectile-command-map
-   "j" 'avy-goto-char
+   ;; "j" 'avy-goto-char
+   "j" 'avy-goto-word-1
    "f" 'avy-goto-line
    "x" 'compile
    "c" 'flycheck-list-errors
    ;; "l" 'run-lsp-command-map
    "g" 'magit
    "R" 'query-replace-regexp
+   "v" 'helm-semantic-or-imenu
+   "a" 'link-hint-open-link
 
    ;; window management
    "o" 'other-window
@@ -154,7 +183,7 @@
    ;; u submenu
    "u" 'hydra-leader-misc/body
 
-   ;; leave r for mode specific keymap
+   ;; leave r for mode specific keymaps
    )
 ;;  (evil-leader/set-key
 ;;    "L" '(lambda () (interactive) (which-key-show-keymap 'lsp-command-map))) ;; :TODO: remove this when get lsp-command-map working
@@ -162,6 +191,10 @@
   ;; (evil-leader/set-key-for-mode 'lsp-mode "L" 'lsp-command-map)
   (evil-leader/set-key-for-mode 'lsp-mode "l" 'lsp-command-map)
   (evil-leader/set-key-for-mode 'emacs-lisp-mode "r" 'hydra-elisp-mode/body)
+  (evil-leader/set-key-for-mode 'doc-view-mode "r" 'hydra-doc-view-mode/body)
+  (evil-leader/set-key-for-mode 'org-mode "r" 'hydra-org-mode/body)
+  (evil-leader/set-key-for-mode 'python-mode "r" 'hydra-python-mode/body)
+  (evil-leader/set-key-for-mode 'python-ts-mode "r" 'hydra-python-mode/body)
   (global-evil-leader-mode)
   )
 
@@ -642,6 +675,19 @@
 
 (use-package emojify
   :hook (after-init . global-emojify-mode))
+
+(use-package link-hint)
+
+(use-package treesit-auto
+  :config
+  (global-treesit-auto-mode))
+
+(require 'eglot)
+;; Add-hooks for eglot
+(add-hook 'python-mode-hook 'eglot-ensure)
+(add-hook 'python-ts-mode-hook 'eglot-ensure)
+(add-hook 'nix-mode-hook 'eglot-ensure)
+(add-to-list 'eglot-server-programs '(nix-mode . ("rnix-lsp")))
 
 ;; Set up zone-matrix
 ;; (straight-use-package

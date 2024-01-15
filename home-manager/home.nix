@@ -140,6 +140,7 @@ in {
     snowmachine
     ormolu
     nixfmt
+    rnix-lsp
     closurecompiler
     nodejs
     cmake
@@ -192,6 +193,8 @@ in {
     gnome3.gnome-system-monitor
     pkgs.meld
     xfce.thunar
+    pcmanfm
+    dolphin
 
     streamlink
 
