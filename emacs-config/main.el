@@ -689,6 +689,18 @@
 (add-hook 'nix-mode-hook 'eglot-ensure)
 (add-to-list 'eglot-server-programs '(nix-mode . ("rnix-lsp")))
 
+(use-package parrot
+  :config
+  (parrot-mode))
+
+(defun my/parrot-animate-when-compile-success (buffer result)
+  (if (string-match "^finished" result)
+      (parrot-start-animation)))
+
+(add-to-list 'compilation-finish-functions 'my/parrot-animate-when-compile-success)
+
+(setq compilation-scroll-output 'first-error)
+
 ;; Set up zone-matrix
 ;; (straight-use-package
 ;;  '(zone-matrix :type git :host github :repo "ober/zone-matrix"))

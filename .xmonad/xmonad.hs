@@ -12,6 +12,7 @@ import XMonad.Hooks.DynamicProperty
 import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.ManageHelpers
+import XMonad.Layout.Accordion
 import XMonad.Layout.NoBorders
 import XMonad.Layout.PerWorkspace
 import XMonad.Layout.Tabbed
@@ -42,8 +43,8 @@ myXPConfig =
 
 myLayoutHook = onWorkspace "9:mon" ((smartBorders . avoidStruts) myLayout') $ ((smartBorders . avoidStruts) myLayout)
   where
-    myLayout = tab ||| tiled ||| Full
-    myLayout' = tiled ||| Full ||| tab
+    myLayout = tab ||| tiled ||| Accordion
+    myLayout' = tiled ||| Accordion ||| tab
     tab = tabbed shrinkText (_myTheme_theme myTheme)
     tiled = Tall nmaster delta ratio
     nmaster = 1
@@ -53,12 +54,13 @@ myLayoutHook = onWorkspace "9:mon" ((smartBorders . avoidStruts) myLayout') $ ((
 myManageHook =
   composeAll
     [ className =? "Spotify" --> doShift "3:music",
-      className =? "Steam" --> doShift "4:games",
-      className =? "mpv" --> doShift "2:media",
-      className =? "vlc" --> doShift "2:media",
+      className =? "Steam" --> doShift "4:game",
+      className =? "mpv" --> doShift "2:vid",
+      className =? "vlc" --> doShift "2:vid",
       className =? "Gnome-system-monitor" --> doShift "9:mon",
       className =? "Pavucontrol" --> doShift "9:mon",
-      className =? "Chromium-browser" --> doShift "2:media",
+      className =? "Chromium-browser" --> doShift "2:vid",
+      title =? "Mozilla Firefox" --> doShift "1:web",
       (isFullscreen --> doFullFloat),
       manageDocks,
       manageHook def
