@@ -86,6 +86,7 @@
   ("s" rg-menu "rg search")
   ("g" chatgpt-shell "chatgpt")
   ("b" helm-bookmarks "bookmarks")
+  ("B" bookmark-set "set bookmark")
   ("t" ranger "ranger")
   ("y" treemacs "tree")
   ("w" elfeed "elfeed")
@@ -159,6 +160,7 @@
    "j" 'avy-goto-word-1
    "f" 'avy-goto-line
    "x" 'compile
+   "E" 'recompile
    "c" 'flycheck-list-errors
    ;; "l" 'run-lsp-command-map
    "g" 'magit

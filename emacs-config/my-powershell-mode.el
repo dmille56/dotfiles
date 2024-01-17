@@ -60,11 +60,57 @@ Go from START to END."
   (powershell-syntax-propertize-strings-single-quote start end)
   )
 
+;; Taken from About_Keywords
+(defvar powershell-keywords
+  (concat "\\_<"
+          (regexp-opt
+           '(
+             "begin" "break" "catch" "class"
+             "continue" "data" "define" "do"
+             "dynamicparam" "else" "elseif" "end"
+             "exit" "filter" "finally" "for"
+             "foreach" "from" "function" "if"
+             "in" "inlinescript" "parallel" "param"
+             "process" "return" "switch" "throw"
+             "trap" "try" "until" "using"
+             "var" "while" "workflow"
+             )
+           t)
+          "\\_>")
+  "PowerShell keywords.")
+
+(defvar powershell-operators
+  (concat "\\_<"
+          (regexp-opt
+           '("-eq" "-ne" "-gt" "-ge" "-lt" "-le"
+             ;; case sensitive versions
+             "-ceq" "-cne" "-cgt" "-cge" "-clt" "-cle"
+             ;; explicitly case insensitive
+             "-ieq" "-ine" "-igt" "-ige" "-ilt" "-ile"
+             "-band" "-bor" "-bxor" "-bnot"
+             "-and" "-or" "-xor" "-not" "!"
+             "-like" "-notlike" "-clike" "-cnotlike" "-ilike" "-inotlike"
+             "-match" "-notmatch" "-cmatch" "-cnotmatch" "-imatch" "-inotmatch"
+             "-contains" "-notcontains" "-ccontains" "-cnotcontains"
+             "-icontains" "-inotcontains"
+             "-replace" "-creplace" "-ireplace"
+             "-is" "-isnot" "-as" "-f"
+             "-in" "-cin" "-iin" "-notin" "-cnotin" "-inotin"
+             "-split" "-csplit" "-isplit"
+             "-join"
+             "-shl" "-shr"
+             ;; Questionable --> specific to certain contexts
+             "-casesensitive" "-wildcard" "-regex" "-exact" ;specific to case
+             "-begin" "-process" "-end" ;specific to scriptblock
+             ) t)
+          "\\_>")
+  "PowerShell operators.")
+
 ;; Keywords for syntax highlighting
 (defvar powershell-font-lock-keywords
   `(
     ;; Keywords
-    ("\\_<\\(function\\|param\\|if\\|else\\|foreach\\|while\\|switch\\|return\\|True\\|False\\|Begin\\|Process\\|End\\)\\_>" . font-lock-keyword-face)
+    (powershell-keywords . font-lock-keyword-face)
     
     ;; Cmdlets
     ("\\_<\\(Get-\\|Set-\\|New-\\|Remove-\\|Start-\\|Stop-\\|Out-\\|Invoke-\\)[A-Za-z0-9-]+\\_>" . font-lock-function-name-face)
@@ -73,7 +119,7 @@ Go from START to END."
     ("\\_<\\($[a-zA-Z0-9_]+\\)\\_>" . font-lock-variable-name-face)
 
     ;; Operators
-    ("\\_<\\(-eq\\|-ne\\|-lt\\|-le\\|-gt\\|-ge\\|-like\\|-notlike\\|-match\\|-notmatch\\|-contains\\|-notcontains\\|-in\\|-notin\\)\\_>" . font-lock-builtin-face)
+    (powershell-operators . font-lock-builtin-face)
 
     ;; Add more patterns here
     ))
