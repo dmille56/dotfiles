@@ -106,12 +106,12 @@ Go from START to END."
           "\\_>")
   "PowerShell operators.")
 
-(defvar powershell-variable-drive-names
-  (append '("env" "function" "variable" "alias" "hklm" "hkcu" "wsman") powershell-scope-names)
-  "Names of scopes in PowerShell mode.")
-
 (defvar powershell-scope-names
   '("global"   "local"    "private"  "script"   )
+  "Names of scopes in PowerShell mode.")
+
+(defvar powershell-variable-drive-names
+  (append '("env" "function" "variable" "alias" "hklm" "hkcu" "wsman") powershell-scope-names)
   "Names of scopes in PowerShell mode.")
 
 (defconst powershell-variables-regexp
