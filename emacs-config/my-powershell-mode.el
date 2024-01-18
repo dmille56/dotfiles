@@ -106,17 +106,47 @@ Go from START to END."
           "\\_>")
   "PowerShell operators.")
 
+(defvar powershell-variable-drive-names
+  (append '("env" "function" "variable" "alias" "hklm" "hkcu" "wsman") powershell-scope-names)
+  "Names of scopes in PowerShell mode.")
+
+(defvar powershell-scope-names
+  '("global"   "local"    "private"  "script"   )
+  "Names of scopes in PowerShell mode.")
+
+(defconst powershell-variables-regexp
+  ;; There are 2 syntaxes detected: ${[scope:]name} and $[scope:]name
+  ;; Match 0 is the entire variable name.
+  ;; Match 1 is scope when the former syntax is found.
+  ;; Match 2 is scope when the latter syntax is found.
+  (concat
+   "\\_<$\\(?:{\\(?:" (regexp-opt powershell-variable-drive-names t)
+   ":\\)?[^}]+}\\|"
+   "\\(?:" (regexp-opt powershell-variable-drive-names t)
+   ":\\)?[a-zA-Z0-9_]+\\_>\\)")
+  "Identifies legal powershell variable names.")
+
+(defconst powershell-function-names-regex
+  ;; Syntax detected is [scope:]verb-noun
+  ;; Match 0 is the entire name.
+  ;; Match 1 is the scope if any.
+  ;; Match 2 is the function name (which must exist)
+  (concat
+   "\\_<\\(?:" (regexp-opt powershell-scope-names t) ":\\)?"
+   "\\([A-Z][a-zA-Z0-9]*-[A-Z0-9][a-zA-Z0-9]*\\)\\_>")
+  "Identifies legal function & filter names.")
+
 ;; Keywords for syntax highlighting
 (defvar powershell-font-lock-keywords
   `(
     ;; Keywords
     (powershell-keywords . font-lock-keyword-face)
     
-    ;; Cmdlets
-    ("\\_<\\(Get-\\|Set-\\|New-\\|Remove-\\|Start-\\|Stop-\\|Out-\\|Invoke-\\)[A-Za-z0-9-]+\\_>" . font-lock-function-name-face)
+    ;; Functions
+    (powershell-function-names-regex . font-lock-function-name-face)
     
     ;; Variables
-    ("\\_<\\($[a-zA-Z0-9_]+\\)\\_>" . font-lock-variable-name-face)
+    (powershell-variables-regexp . font-lock-variable-name-face)
 
     ;; Operators
     (powershell-operators . font-lock-builtin-face)
