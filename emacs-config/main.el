@@ -703,6 +703,10 @@
 
 (setq compilation-scroll-output 'first-error)
 
+(use-package fireplace)
+
+(use-package autotetris-mode)
+
 ;; Set up zone-matrix
 ;; (straight-use-package
 ;;  '(zone-matrix :type git :host github :repo "ober/zone-matrix"))
