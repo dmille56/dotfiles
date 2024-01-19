@@ -149,7 +149,7 @@ main = do
                                  ((0, xK_r), notifySpawn "xterm -e ranger"),
                                  ((0, xK_t), notifySpawn "thunar"),
                                  ((0, xK_d), notifySpawn "xterm -e dropbox"),
-                                 ((0, xK_x), notifySpawn "xterm"),
+                                 ((0, xK_x), notifySpawn "termonad"),
                                  ((0, xK_e), notifySpawn "emacsclient -n -c"),
                                  ((0, xK_i), spawn "rofi -modi emoji -show emoji -font 'Noto Color Emoji 12'")
                                ]
