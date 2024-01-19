@@ -74,6 +74,7 @@ in {
     #terminal
 
     wget
+    nano
     vim
     vimgolf
     curl
@@ -160,6 +161,7 @@ in {
 
     firefox-bin
     xterm
+    termonad
     gparted
     chromium
     google-chrome
@@ -441,6 +443,7 @@ in {
   home.file.".ripgreprc".source = "${my-dotfile-dir}/.ripgreprc";
   home.file.".config/mpv/mpv.conf".source = "${my-dotfile-dir}/mpv.conf";
   home.file.".config/ytfzf/conf.sh".source = "${my-dotfile-dir}/ytfzf-conf.sh";
+  home.file.".config/termonad/termonad.hs".source = "${my-dotfile-dir}/.termonad/termonad.hs";
 
   home.file.".config/rofi/themes/dracula-theme.rasi".text = builtins.readFile(builtins.fetchurl {
     url = "https://raw.githubusercontent.com/dracula/rofi/main/theme/config1.rasi";
