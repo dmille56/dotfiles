@@ -13,6 +13,7 @@ import Termonad.Config
     defaultConfigOptions,
     defaultFontConfig,
     defaultTMConfig,
+    enableSixel,
     fontConfig,
     fontFamily,
     fontSize,
@@ -102,7 +103,8 @@ main = do
                   -- Make sure the scrollbar is always visible.
                   showScrollbar = ShowScrollbarAlways,
                   confirmExit = False,
-                  showMenu = False
+                  showMenu = False,
+                  enableSixel = True
                 }
           }
           `addColourExtension` colExt

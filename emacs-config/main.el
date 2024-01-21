@@ -88,6 +88,7 @@
   ("b" helm-bookmarks "bookmarks")
   ("B" bookmark-set "set bookmark")
   ("t" ranger "ranger")
+  ("T" hydra-org-timer/body "timers")
   ("y" treemacs "tree")
   ("w" elfeed "elfeed")
   ("r" helm-recentf "recent")
@@ -143,6 +144,14 @@
   ("p" run-python "start python shell")
   ("r" python-shell-send-region "run region")
   ("z" python-shell-switch-to-shell "switch to shell")
+  )
+
+ (defhydra hydra-org-timer (:exit t)
+  "timer"
+  ("t" org-timer-set-timer "set timer")
+  ("s" org-timer-stop "stop")
+  ("r" org-timer-start "start")
+  ("p" org-timer-pause-or-continue "pause/continue")
   )
 
 (use-package evil-leader
@@ -493,7 +502,11 @@
 
 (use-package nyan-mode
   :init
+  (setq nyan-animate-nyancat t)
+  (setq nyan-wavy-trail t)
   (nyan-mode))
+
+(use-package zone-nyan)
 
 (use-package projectile
   :bind
@@ -715,7 +728,8 @@
 ;; (require 'zone-matrix-settings)
 ;; (require 'zone-settings)
 ;; (setq zone-programs [zone-matrix])
-;; (zone-when-idle 60)
+
+(setq zone-programs [zone-nyan])
 
 ;; lsp-mode performance settings
 (setq gc-cons-threshold 100000000)
@@ -750,6 +764,8 @@
 
 (if (eq system-type 'windows-nt)
     (setq-local main-dir "~\\scratch\\dotfiles\\emacs-config\\"))
+
+(setq org-clock-sound (concat main-dir "timer.wav"))
 
 (load-file
  (concat main-dir "twitchy.el"))

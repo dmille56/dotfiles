@@ -126,6 +126,7 @@ in {
     ytfzf
     csvtool
     ueberzugpp 
+    gitui
 
     nix-prefetch-git
     dropbox
