@@ -154,10 +154,18 @@
   ("p" org-timer-pause-or-continue "pause/continue")
   )
 
+ (defhydra hydra-shell-run (:exit t)
+   "run shell commands"
+  ("r" shell-command-on-region "run region")
+  ("x" async-shell-command "async run command")
+  ("X" shell-command "run command")
+  )
+
 (use-package evil-leader
   :init
   (setq evil-leader/in-all-states t) ;; allows evil leader via "C-<leader>" in other states
   :config
+  (require 'evil-leader)
   (evil-leader/set-leader "<SPC>")
   (evil-leader/set-key
    "p" 'helm-find-files
@@ -169,6 +177,7 @@
    "j" 'avy-goto-word-1
    "f" 'avy-goto-line
    "x" 'compile
+   "X" 'hydra-shell-run/body
    "E" 'recompile
    "c" 'flycheck-list-errors
    ;; "l" 'run-lsp-command-map
@@ -670,6 +679,11 @@
 
 (evil-define-key 'insert eshell-mode-map
   (kbd "C-r") 'helm-eshell-history)
+
+(use-package eshell-syntax-highlighting
+  :config
+  ;; Enable in all Eshell buffers.
+  (eshell-syntax-highlighting-global-mode +1))
 
 ;; Games
 

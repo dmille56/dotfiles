@@ -238,7 +238,7 @@ in {
    };
 
    shellAliases = { cls = "clear"; };
-   sessionVariables = { RIPGREP_CONFIG_PATH = "${my-home-dir}/.ripgreprc"; };
+   # sessionVariables = { RIPGREP_CONFIG_PATH = "${my-home-dir}/.ripgreprc"; };
  };
 
   programs.direnv = {
@@ -467,6 +467,7 @@ in {
     OPENAI_API_KEY = builtins.readFile "${my-dotfile-dir}/.openai_api_key";
     # OPENAI_API_KEY = builtins.extraBuiltins.pass "OPENAI_API_KEY"; #try to get working via: https://elvishjerricco.github.io/2018/06/24/secure-declarative-key-management.html
     OPENAI_API_MODEL = "gpt-3.5-turbo"; # options: gpt-3.5-turbo, gpt-4
+    RIPGREP_CONFIG_PATH = "${my-home-dir}/.ripgreprc";
   };
 
   manual.manpages.enable = false; # TODO: reenable man pages eventually... they wouldn't update correctly
