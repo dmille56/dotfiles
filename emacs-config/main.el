@@ -382,7 +382,6 @@
 ;; install helm
 (use-package helm
   :bind
-  ("<f3>" . helm-bookmarks)
   ("<f4>" . helm-occur)
   ("<f7>" . helm-find-files)
   ("C-x c i" . helm-semantic-or-imenu)
@@ -684,6 +683,22 @@
   :config
   ;; Enable in all Eshell buffers.
   (eshell-syntax-highlighting-global-mode +1))
+
+(use-package eshell-toggle
+  :init
+  (setq eshell-toggle-window-side 'right)
+  (setq eshell-toggle-use-projectile-root t)
+  ;; (setq eshell-toggle-run-command nil)
+  :bind
+  ("C-x C-z" . eshell-toggle)
+  ("<f3>" . eshell-toggle)
+  )
+
+(add-hook 'eshell-mode-hook
+          (lambda ()
+            (eshell/alias "ff" "find-file $1")
+            (eshell/alias "cls" "clear-scrollback")
+            ))
 
 ;; Games
 

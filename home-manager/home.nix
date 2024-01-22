@@ -140,6 +140,7 @@ in {
 
     cmatrix
     snowmachine
+    lolcat
     ormolu
     nixfmt
     rnix-lsp
