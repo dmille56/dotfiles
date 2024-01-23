@@ -8,6 +8,38 @@
 
 (require 'eshell-toggle)
 
+(defgroup eshell-extensions nil
+  "Customize group for eshell-extensions.el"
+  :group 'emacs)
+
+(defcustom eshell-extensions-string-process-function
+  'eshell-extensions-strip-comments-from-str
+  "Function to process strings with before sending to eshell."
+  :type 'function
+  :group 'eshell-extensions)
+
+(defcustom eshell-extensions-comment-strs
+  '("#" "//" "--" ";;")
+  "List of comment starter strings."
+  :type '(repeat string)
+  :group 'eshell-extensions)
+
+(defun eshell-extensions-strip-comments-from-str (str)
+  "Strip comment delimiters and leading whitespace from each line in STR.
+Can be in a single or multi-line string.  Retains the content after the comment characters."
+  (let* ((comment-regex (concat "^[[:space:]]*\\("
+                                (mapconcat (lambda (delim)
+                                             (regexp-quote delim))
+                                           eshell-extensions-comment-strs
+                                           "\\|")
+                                "\\)[[:space:]]*"))
+         (lines (split-string str "\n")))
+    (mapconcat (lambda (line)
+                 (if (string-match comment-regex line)
+                     (substring line (match-end 0))
+                   line))
+               lines "\n")))
+
 (defun eshell-extensions-get-toggle-window (buf)
   "Open BUF in another window if not already visible, otherwise focus on it."
     (if (not buf)
@@ -31,12 +63,15 @@
 (defun eshell-extensions-send-string-to-eshell (command)
   "Send a COMMAND string to an Eshell buffer and execute it."
   (interactive)
-  (let ((eshell-buffer (eshell-extensions-get-toggle-buffer)))
+  (let (
+        (eshell-buffer (eshell-extensions-get-toggle-buffer))
+        (processed-command (funcall eshell-extensions-string-process-function command))
+         )
     (eshell-extensions-get-toggle-window eshell-buffer)
     ;; Send the command to Eshell
     (with-current-buffer eshell-buffer
       (goto-char (point-max))              ; Move to the end of the Eshell buffer
-      (insert command)                     ; Insert the command
+      (insert processed-command)                     ; Insert the command
       (eshell-send-input))))               ; Simulate pressing "return"
 
 (defun eshell-extensions-get-cur-line ()
