@@ -134,6 +134,8 @@
   ("l" org-insert-link "insert link")
   ("j" avy-org-goto-heading-timer "go to heading")
   ("c" avy-org-refile-as-child "avy refile child")
+  ("s" org-schedule "schedule")
+  ("t" org-todo "todo")
   )
 
 (defhydra hydra-python-mode (:exit t)
