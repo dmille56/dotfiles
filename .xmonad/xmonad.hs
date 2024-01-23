@@ -53,7 +53,7 @@ myLayoutHook = onWorkspace "9:mon" ((smartBorders . avoidStruts) myLayout') $ ((
 
 myManageHook =
   composeAll
-    [ className =? "Spotify" --> doShift "3:music",
+    [ className =? "Spotify" --> doShift "3:mus",
       className =? "Steam" --> doShift "4:game",
       className =? "mpv" --> doShift "2:vid",
       className =? "vlc" --> doShift "2:vid",
@@ -109,7 +109,7 @@ main = do
           borderWidth = 2,
           normalBorderColor = (_myTheme_normalBorderColor myTheme),
           focusedBorderColor = (_myTheme_focusedBorderColor myTheme),
-          workspaces = ["1:web", "2:vid", "3:music", "4:game", "5:dev", "6:term", "7", "8", "9:mon"]
+          workspaces = ["1:web", "2:vid", "3:mus", "4:game", "5:dev", "6:term", "7", "8", "9:mon"]
         }
         `additionalKeys` [ ((myModMask .|. shiftMask, xK_z), spawn "xscreensaver-command -lock; xset dpms force off"),
                            ((myModMask, xK_p), spawn "rofi -show run"),
@@ -151,6 +151,7 @@ main = do
                                  ((0, xK_d), notifySpawn "xterm -e dropbox"),
                                  ((0, xK_x), notifySpawn "termonad"),
                                  ((0, xK_e), notifySpawn "emacsclient -n -c"),
+                                 ((shiftMask, xK_e), notifySpawn "emacs"),
                                  ((0, xK_i), spawn "rofi -modi emoji -show emoji -font 'Noto Color Emoji 12'")
                                ]
                            )

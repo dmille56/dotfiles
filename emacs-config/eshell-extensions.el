@@ -1,6 +1,8 @@
 ;;; eshell-extensions.el --- Summary
 
 ;;; Commentary:
+;;; Version: 0.10.0
+;;; Package-Requires: ((eshell-toggle "0.10.0"))
 
 ;;; Code:
 
@@ -25,6 +27,7 @@
         ))
     (get-buffer buf-name)))
 
+;;;###autoload
 (defun eshell-extensions-send-string-to-eshell (command)
   "Send a COMMAND string to an Eshell buffer and execute it."
   (interactive)
@@ -38,15 +41,27 @@
 
 (defun eshell-extensions-get-cur-line ()
   "Return the content of the current line as a string."
-  (interactive)
   (buffer-substring-no-properties (line-beginning-position) (line-end-position)))
 
 (defun eshell-extensions-get-cur-region ()
   "Return the currently selected region as a string."
-  (interactive)
   (if (use-region-p)
       (buffer-substring-no-properties (region-beginning) (region-end))
     (error "No region selected")))
+
+;;;###autoload
+(defun eshell-extensions-send-cur-line-to-eshell ()
+  "Send the current line to an eshell buffer and execute it."
+  (interactive)
+  (eshell-extensions-send-string-to-eshell (eshell-extensions-get-cur-line))
+  )
+
+;;;###autoload
+(defun eshell-extensions-send-cur-region-to-eshell ()
+  "Send the current line to an eshell buffer and execute it."
+  (interactive)
+  (eshell-extensions-send-string-to-eshell (eshell-extensions-get-cur-region))
+  )
 
 ;; Usage example
 ;; (eshell-extensions-send-string-to-eshell "echo Hello, Eshell!")

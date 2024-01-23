@@ -156,9 +156,12 @@
 
  (defhydra hydra-shell-run (:exit t)
    "run shell commands"
-  ("r" shell-command-on-region "run region")
+  ("R" shell-command-on-region "run region")
   ("x" async-shell-command "async run command")
   ("X" shell-command "run command")
+  ("l" eshell-extensions-send-cur-line-to-eshell "run cur line in eshell")
+  ("r" eshell-extensions-send-cur-region-to-eshell "run region in eshell")
+  ("e" eshell-extensions-send-string-to-eshell "run command in eshell")
   )
 
 (use-package evil-leader
