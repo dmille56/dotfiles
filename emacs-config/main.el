@@ -177,8 +177,8 @@
    "j" 'avy-goto-word-1
    "f" 'avy-goto-line
    "x" 'compile
-   "X" 'hydra-shell-run/body
-   "E" 'recompile
+   "E" 'hydra-shell-run/body
+   "X" 'recompile
    "c" 'flycheck-list-errors
    ;; "l" 'run-lsp-command-map
    "g" 'magit
@@ -723,8 +723,11 @@
 (use-package link-hint)
 
 (use-package treesit-auto
+  :custom
+  (setq treesit-auto-install 'prompt)
   :config
-  (global-treesit-auto-mode))
+  (global-treesit-auto-mode)
+  )
 
 (require 'eglot)
 ;; Add-hooks for eglot
@@ -811,6 +814,9 @@
 
 (load-file
  (concat main-dir "my-powershell-mode.el"))
+
+(load-file
+ (concat main-dir "eshell-extensions.el"))
 
 (if (eq system-type 'gnu/linux)
     (load-file
