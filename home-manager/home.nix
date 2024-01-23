@@ -1,13 +1,13 @@
 { pkgs, ... }:
 
 # How to upgrade nix pkgs:
-# 1. nix-channel --update
-# 2. nix-env --upgrade
-# 3. home-manager switch
+# nix-channel --update
+# nix-env --upgrade
+# home-manager switch
 
 # Upgrade ubuntu:
-# 1. sudo apt-get update
-# 2. sudo apt-get upgrade
+# sudo apt-get update
+# sudo apt-get upgrade
 
 # Garbage collect nix:
 # nix-collect-garbage -d

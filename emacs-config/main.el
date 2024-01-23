@@ -568,6 +568,7 @@
   (dashboard-setup-startup-hook)
   (setq initial-buffer-choice (lambda () (get-buffer-create "*dashboard*")))
   (setq dashboard-projects-backend 'projectile)
+  (setq dashboard-center-content t)
   (setq dashboard-items '((recents  . 5)
                         (bookmarks . 5)
                         (projects . 5)
@@ -754,6 +755,18 @@
 (use-package fireplace)
 
 (use-package autotetris-mode)
+
+(straight-use-package
+ '(eat :type git
+       :host codeberg
+       :repo "akib/emacs-eat"
+       :files ("*.el" ("term" "term/*.el") "*.texi"
+               "*.ti" ("terminfo/e" "terminfo/e/*")
+               ("terminfo/65" "terminfo/65/*")
+               ("integration" "integration/*")
+               (:exclude ".dir-locals.el" "*-tests.el"))))
+
+(evil-set-initial-state 'eat-mode 'emacs)
 
 ;; Set up zone-matrix
 ;; (straight-use-package
