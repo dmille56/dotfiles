@@ -787,7 +787,9 @@
 (setq lsp-completion-provider :capf)
 
 ;; disable backup files
-;; (setq make-backup-files nil)
+(setq make-backup-files nil)
+(setq auto-save-default nil)
+
 (setq kill-buffer-delete-auto-save-files t) ;; prompt to delete auto save files when the buffer is killed
 
 ;; set auto save files to the temporary directory
