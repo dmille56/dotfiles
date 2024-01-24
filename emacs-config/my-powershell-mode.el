@@ -163,9 +163,9 @@ Go from START to END."
   (setq font-lock-defaults '((powershell-font-lock-keywords))))
 
 ;; Associate .ps1 files with powershell-mode
-(add-to-list 'auto-mode-alist '("\\.ps1\\'" . my-powershell-mode))
-(add-to-list 'auto-mode-alist '("\\.psm1\\'" . my-powershell-mode))
-(add-to-list 'auto-mode-alist '("\\.psd1\\'" . my-powershell-mode))
+;; (add-to-list 'auto-mode-alist '("\\.ps1\\'" . my-powershell-mode))
+;; (add-to-list 'auto-mode-alist '("\\.psm1\\'" . my-powershell-mode))
+;; (add-to-list 'auto-mode-alist '("\\.psd1\\'" . my-powershell-mode))
 
 (provide 'my-powershell-mode)
 ;;; my-powershell-mode.el ends here
