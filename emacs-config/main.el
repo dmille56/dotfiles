@@ -443,6 +443,9 @@
 
 ;; (use-package powershell) ;; :TODO: fix multi-line comments issue in this package
 
+
+(use-package powershell
+  :straight (:host github :repo "dmille56/powershell.el" :files ("powershell.el")))
 (use-package erc)
 
 (use-package md4rd
