@@ -446,13 +446,15 @@ in {
   home.file.".config/mpv/mpv.conf".source = "${my-dotfile-dir}/mpv.conf";
   home.file.".config/ytfzf/conf.sh".source = "${my-dotfile-dir}/ytfzf-conf.sh";
   home.file.".config/termonad/termonad.hs".source = "${my-dotfile-dir}/.termonad/termonad.hs";
-
+ 
   home.file.".config/rofi/themes/dracula-theme.rasi".text = builtins.readFile(builtins.fetchurl {
-    url = "https://raw.githubusercontent.com/dracula/rofi/main/theme/config1.rasi";
+    url = "https://raw.githubusercontent.com/dracula/rofi/48a024639fbf25e3237766f0dcef4af75a2df908/theme/config1.rasi";
+    sha256 = "52f26dd7c44bb919a7a604d71bea26df5e52bd2188f9804e103fc002239bc99a";
   });
 
   home.file.".config/rofi/themes/dracula-theme-2.rasi".text = builtins.readFile(builtins.fetchurl {
-    url = "https://raw.githubusercontent.com/dracula/rofi/main/theme/config2.rasi";
+    url = "https://raw.githubusercontent.com/dracula/rofi/48a024639fbf25e3237766f0dcef4af75a2df908/theme/config2.rasi";
+    sha256 = "68010556ad7b351b63b6d061f5c4b7c8feb9d9b32687bf0530b105a86634766c";
   });
 
   home.file.".themes/dracula".source = builtins.fetchGit {

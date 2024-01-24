@@ -410,11 +410,16 @@
 
 ;; install nix-mode
 (use-package nix-mode
-  :mode "\\.nix\\'")
+  :mode "\\.nix\\'"
+  :init
+  (add-hook 'nix-mode-hook (lambda () (setq-local compile-command "home-manager switch")))
+  )
 
 ;; for nix formatting
 (use-package format-all
-  :init (add-hook 'nix-mode-hook 'format-all-mode))
+  :init
+  (add-hook 'nix-mode-hook 'format-all-mode)
+  )
 
 ;; install yaml-mode
 (use-package yaml-mode)
