@@ -75,6 +75,7 @@ in {
 
     wget
     nano
+    kakoune
     vim
     vimgolf
     curl

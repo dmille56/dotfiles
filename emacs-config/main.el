@@ -166,6 +166,12 @@
   ("e" eshell-extensions-send-string-to-eshell "run command in eshell")
   )
 
+ (defhydra hydra-emms-mode (:exit t)
+   "emms"
+  ("e" emms "emms")
+  ("s" emms-streams "emms streams")
+  )
+
 (use-package evil-leader
   :init
   (setq evil-leader/in-all-states t) ;; allows evil leader via "C-<leader>" in other states
@@ -190,6 +196,7 @@
    "R" 'query-replace-regexp
    "v" 'helm-semantic-or-imenu
    "a" 'link-hint-open-link
+   "M" 'hydra-emms-mode/body
 
    ;; window management
    "o" 'other-window
@@ -439,6 +446,7 @@
     (emms-default-players))
   (setq emms-source-file-default-directory "~/Music/")
   (setq emms-stream-default-action "play")
+  (evil-set-initial-state 'emms-playlist-mode 'emacs)
   )
 
 (use-package rg
@@ -710,7 +718,10 @@
 
 (add-hook 'eshell-mode-hook
           (lambda ()
-            (eshell/alias "ff" "find-file $1")
+            (eshell/alias "ff" "find-file-other-window $1")
+            (eshell/alias "ffw" "find-file $1")
+            (eshell/alias "fft" "find-file-other-tab $1")
+            (eshell/alias "ffo" "find-file-other-frame $1")
             (eshell/alias "cls" "clear-scrollback")
             ))
 
