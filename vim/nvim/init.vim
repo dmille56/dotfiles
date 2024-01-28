@@ -11,8 +11,10 @@ call plug#begin('~/AppData/Local/nvim/plugged')
     Plug 'neovim/nvim-lspconfig'
     Plug 'easymotion/vim-easymotion'
     Plug 'nvim-telescope/telescope.nvim'
+    Plug 'jvgrootveld/telescope-zoxide'
     
     "Neogit + dependencies
+    Plug 'nvim-lua/popup.nvim'
     Plug 'nvim-lua/plenary.nvim'
     Plug 'NeogitNrg/neogit'
     

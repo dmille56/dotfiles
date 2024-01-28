@@ -328,6 +328,7 @@ in {
       nvim-lspconfig
       vim-easymotion
       telescope-nvim
+      telescope-zoxide
       neogit
 
       # completion
@@ -433,6 +434,8 @@ in {
     nnoremap <leader>b :Telescope buffers<CR>
 
     nnoremap <leader>g :Neogit<CR>
+
+    nnoremap <leader>z :Telescope zoxide list<CR>
 
     let g:airline_powerline_fonts = 1
     let g:airline_theme= 'dracula'
