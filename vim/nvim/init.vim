@@ -1,3 +1,6 @@
+" Remember to call :PlugInstall and :PlugUpdate to update
+" Remember to install vim-plug: https://github.com/junegunn/vim-plug
+
 "Vim-plug
 call plug#begin('~/AppData/Local/nvim/plugged')
 

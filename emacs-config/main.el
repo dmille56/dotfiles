@@ -14,16 +14,16 @@
 
 (delete-selection-mode 1)
 (electric-indent-mode -1)
-(electric-pair-mode 1)
+;; (electric-pair-mode 1)
 ;; (global-display-line-numbers-mode 1)
 (global-visual-line-mode t)
 (setq org-edit-src-content-indentation 0)
 
 ;; Workaround to make org-tempo work with electric-pair-mode
-(add-hook 'org-mode-hook (lambda ()
-                           (setq-local electric-pair-inhibit-predicate
-                           `(lambda (c)
-                              (if (char-equal c ?<) t(,electric-pair-inhibit-predicate c))))))
+;; (add-hook 'org-mode-hook (lambda ()
+;;                            (setq-local electric-pair-inhibit-predicate
+;;                            `(lambda (c)
+;;                               (if (char-equal c ?<) t(,electric-pair-inhibit-predicate c))))))
 
 ;; insert space instead of tabs
 (setq-default indent-tabs-mode nil)

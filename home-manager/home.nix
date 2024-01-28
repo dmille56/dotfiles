@@ -423,6 +423,8 @@ in {
     nnoremap <leader>t0 10gt<CR>
 
     " :TODO: figure out a keybinding for fuzzy deleting buffers
+    " :TODO: add toggleterm package and keybindings
+    " :TODO: look into integrations with tmux
     
     " Control+W followed by W
     nnoremap <leader>o <C-w>w<CR>
