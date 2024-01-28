@@ -872,6 +872,9 @@
  (concat main-dir "my-powershell-mode.el"))
 
 (load-file
+ (concat main-dir "powershell-ts-mode.el"))
+
+(load-file
  (concat main-dir "eshell-extensions.el"))
 
 (if (eq system-type 'gnu/linux)

@@ -423,8 +423,10 @@ in {
     nnoremap <leader>t0 10gt<CR>
 
     " :TODO: figure out a keybinding for fuzzy deleting buffers
-    " :TODO: add toggleterm package and keybindings
-    " :TODO: look into integrations with tmux
+    " :TODO: add toggleterm package and keybindings https://github.com/akinsho/toggleterm.nvim
+    " :TODO: look into integrations with tmux https://github.com/aserowy/tmux.nvim
+    " :TODO: add harpoon plugin and keybindings https://github.com/ThePrimeagen/harpoon/tree/harpoon2
+    " :TODO: look into this plugin https://github.com/junegunn/fzf.vim
     
     " Control+W followed by W
     nnoremap <leader>o <C-w>w<CR>
@@ -438,6 +440,9 @@ in {
     nnoremap <leader>g :Neogit<CR>
 
     nnoremap <leader>z :Telescope zoxide list<CR>
+
+    " Make terminal ESC work like you would expect it to
+    tnoremap <Esc> <C-\><C-n>
 
     let g:airline_powerline_fonts = 1
     let g:airline_theme= 'dracula'

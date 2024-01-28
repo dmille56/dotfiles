@@ -1,5 +1,6 @@
 " Remember to call :PlugInstall and :PlugUpdate to update
 " Remember to install vim-plug: https://github.com/junegunn/vim-plug
+" Note: airline-themes needs 'base16-dracula' for non nix install instead of 'dracula' for some reason
 
 "Vim-plug
 call plug#begin('~/AppData/Local/nvim/plugged')
