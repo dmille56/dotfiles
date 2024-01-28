@@ -1,5 +1,5 @@
 "Vim-plug
-call plug #begin('~/AppData/Local/nvim/plugged')
+call plug#begin('~/AppData/Local/nvim/plugged')
 
     Plug 'LnL7/vim-nix'
     Plug 'liuchengxu/vim-which-key'
@@ -10,8 +10,11 @@ call plug #begin('~/AppData/Local/nvim/plugged')
     Plug 'vim-airline/vim-airline-themes'
     Plug 'neovim/nvim-lspconfig'
     Plug 'easymotion/vim-easymotion'
-    Plug 'nvim-telescope/telescope-nvim'
-    Plug 'neogitorg/neogit'
+    Plug 'nvim-telescope/telescope.nvim'
+    
+    "Neogit + dependencies
+    Plug 'nvim-lua/plenary.nvim'
+    Plug 'NeogitNrg/neogit'
     
     "completion
     Plug 'hrsh7th/cmp-nvim-lsp'
@@ -24,4 +27,4 @@ call plug #begin('~/AppData/Local/nvim/plugged')
 
 call plug#end()
 
-source hm-init.vim
+source ~/AppData/Local/nvim/hm-init.vim
