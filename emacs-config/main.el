@@ -5,10 +5,25 @@
 
 ;;; Code:
 
+;; Some same defaults to start:
+
 ;; disable toolbar, scrollbars, & menubar
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
 (menu-bar-mode -1)
+
+(delete-selection-mode 1)
+(electric-indent-mode -1)
+(electric-pair-mode 1)
+;; (global-display-line-numbers-mode 1)
+(global-visual-line-mode t)
+(setq org-edit-src-content-indentation 0)
+
+;; Workaround to make org-tempo work with electric-pair-mode
+(add-hook 'org-mode-hook (lambda ()
+                           (setq-local electric-pair-inhibit-predicate
+                           `(lambda (c)
+                              (if (char-equal c ?<) t(,electric-pair-inhibit-predicate c))))))
 
 ;; insert space instead of tabs
 (setq-default indent-tabs-mode nil)
@@ -265,6 +280,8 @@
   :config
   (global-evil-surround-mode 1))
 
+(use-package evil-tutor)
+
 ;; Set default font
 (set-face-attribute 'default nil
                     :family "Deja Vu Sans Mono for Powerline"
@@ -513,6 +530,13 @@
   ;; (with-eval-after-load 'org (global-org-modern-mode))
   )
 
+(with-eval-after-load 'evil-maps
+  (define-key evil-motion-state-map (kbd "SPC") nil)
+  (define-key evil-motion-state-map (kbd "RET") nil)
+  (define-key evil-motion-state-map (kbd "TAB") nil)
+  )
+(setq org-return-follows-link t)
+
 
 (use-package all-the-icons) ;; remember need to run (all-the-icons-install-fonts) to install the fonts
 
@@ -631,26 +655,7 @@
 
 (use-package selectric-mode) ;; haha this is the funniest package
 
-(use-package harpoon
-  :config
-  ;; You can use this hydra menu that have all the commands
-  (global-set-key (kbd "C-c a") 'harpoon-quick-menu-hydra)
-  (global-set-key (kbd "C-c h <return>") 'harpoon-add-file)
-
-  ;; And the vanilla commands
-  (global-set-key (kbd "C-c h f") 'harpoon-toggle-file)
-  (global-set-key (kbd "C-c h h") 'harpoon-toggle-quick-menu)
-  (global-set-key (kbd "C-c h c") 'harpoon-clear)
-  (global-set-key (kbd "C-c h 1") 'harpoon-go-to-1)
-  (global-set-key (kbd "C-c h 2") 'harpoon-go-to-2)
-  (global-set-key (kbd "C-c h 3") 'harpoon-go-to-3)
-  (global-set-key (kbd "C-c h 4") 'harpoon-go-to-4)
-  (global-set-key (kbd "C-c h 5") 'harpoon-go-to-5)
-  (global-set-key (kbd "C-c h 6") 'harpoon-go-to-6)
-  (global-set-key (kbd "C-c h 7") 'harpoon-go-to-7)
-  (global-set-key (kbd "C-c h 8") 'harpoon-go-to-8)
-  (global-set-key (kbd "C-c h 9") 'harpoon-go-to-9)
-  )
+(use-package harpoon)
 
 (use-package chatgpt-shell
   :ensure t
@@ -789,6 +794,16 @@
 
 (evil-set-initial-state 'eat-mode 'emacs)
 
+(use-package perspective
+  :bind
+  ("C-x C-b" . persp-list-buffers)         ; or use a nicer switcher, see below
+  :custom
+  (persp-mode-prefix-key (kbd "C-c M-p"))  ; pick your own prefix key here
+  :init
+  (persp-mode))
+
+(use-package git-timemachine)
+
 ;; Set up zone-matrix
 ;; (straight-use-package
 ;;  '(zone-matrix :type git :host github :repo "ober/zone-matrix"))
@@ -819,6 +834,8 @@
 
 ;; disable startup screen
 (setq inhibit-startup-screen t)
+
+(global-set-key [escape] 'keyboard-escape-quit)
 
 ;; get the directory of the current file and place it in main-dir local variable
 ;; :TODO: figure out why this shit doesn't work sometimes
