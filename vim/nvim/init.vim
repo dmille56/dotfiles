@@ -16,6 +16,7 @@ call plug#begin('~/AppData/Local/nvim/plugged')
     Plug 'easymotion/vim-easymotion'
     Plug 'nvim-telescope/telescope.nvim'
     Plug 'jvgrootveld/telescope-zoxide'
+    Plug 'roman/golden-ratio'
     
     "Neogit + dependencies
     Plug 'nvim-lua/popup.nvim'

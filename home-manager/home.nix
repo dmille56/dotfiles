@@ -330,6 +330,7 @@ in {
       telescope-nvim
       telescope-zoxide
       neogit
+      golden-ratio
 
       # completion
       cmp-nvim-lsp

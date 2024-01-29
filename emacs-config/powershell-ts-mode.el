@@ -57,61 +57,60 @@
     :language powershell
     :feature function
     :override t
-    ((comparison_operator) @font-lock-operator-face)
+    ((comparison_operator) @font-lock-builtin-face)
 
     ;; if statement
     :language powershell
     :feature function
     :override t
-    ((if_statement "if" @font-lock-operator-face))
+    ((if_statement "if" @font-lock-keyword-face))
 
     ;; else statement
     :language powershell
     :feature function
     :override t
-    ((else_clause "else" @font-lock-operator-face))
-
+    ((else_clause "else" @font-lock-keyword-face))
 
     ;; foreach statement
     :language powershell
     :feature function
     :override t
-    ((foreach_statement "foreach" @font-lock-operator-face))
+    ((foreach_statement "foreach" @font-lock-keyword-face))
 
     ;; for statement
     :language powershell
     :feature function
     :override t
-    ((for_statement "for" @font-lock-operator-face))
+    ((for_statement "for" @font-lock-keyword-face))
 
     ;; while statement
     :language powershell
     :feature function
     :override t
-    ((while_statement "while" @font-lock-operator-face))
+    ((while_statement "while" @font-lock-keyword-face))
 
     ;; do while statement
     :language powershell
     :feature function
     :override t
-    ((do_statement "do" @font-lock-operator-face "while" @font-lock-operator-face))
+    ((do_statement "do" @font-lock-keyword-face "while" @font-lock-keyword-face))
 
     ;; do until statement
     :language powershell
     :feature function
     :override t
-    ((do_statement "do" @font-lock-operator-face "until" @font-lock-operator-face))
+    ((do_statement "do" @font-lock-keyword-face "until" @font-lock-keyword-face))
 
     ;; flow control statements (continue/break)
     :language powershell
     :feature function
     :override t
-    ((flow_control_statement "continue" @font-lock-operator-face))
+    ((flow_control_statement "continue" @font-lock-keyword-face))
 
     :language powershell
     :feature function
     :override t
-    ((flow_control_statement "break" @font-lock-operator-face))
+    ((flow_control_statement "break" @font-lock-keyword-face))
 ))
 
 (defun powershell-ts-setup ()
@@ -133,13 +132,16 @@
 
   ;; (setq-local treesit-simple-indent-rules powershell-ts-indent-rules)
 
+  (setq-local electric-indent-chars
+              (append "{}():;," electric-indent-chars))
+
   (treesit-major-mode-setup))
 
 ;;;###autoload
 (define-derived-mode powershell-ts-mode prog-mode "PS[ts]"
   "Major mode for editing Powershell with tree-sitter."
   :syntax-table prog-mode-syntax-table
-  
+
   (setq-local font-lock-defaults nil)
   (when (treesit-ready-p 'powershell)
     (treesit-parser-create 'powershell)
