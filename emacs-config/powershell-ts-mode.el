@@ -14,11 +14,32 @@
 (require 'treesit)
 (require 'prog-mode)
 
+;; strings
+;; (string_literal (expandable_string_literal))))))))))))))
+;; (string_literal (verbatim_string_characters))))))))))))))
+
+;; variable
+;; (unary_expression (variable)))))))))))
+
 (defvar powershell-ts-font-lock-rules
   '(
     :language powershell
     :feature comment
-    ((comment) @font-lock-comment-face)))
+    ((comment) @font-lock-comment-face)
+
+    :language powershell
+    :feature variable
+    ((unary_expression (variable) @font-lock-variable-name-face))
+
+    :language powershell
+    :feature string
+    ((string_literal (expandable_string_literal) @font-lock-string-face))
+
+    :language powershell
+    :feature string
+    :override t
+    ((string_literal (verbatim_string_characters) @font-lock-string-face))
+))
 
 (defun powershell-ts-setup ()
   "Setup treesit for powershell-ts-mode."
@@ -32,7 +53,10 @@
   (setq-local treesit-font-lock-level 5)
 
   (setq-local treesit-font-lock-feature-list
-              '((comment)))
+              '((comment)
+                (variable)
+                (string)
+))
 
   ;; (setq-local treesit-simple-indent-rules powershell-ts-indent-rules)
 
