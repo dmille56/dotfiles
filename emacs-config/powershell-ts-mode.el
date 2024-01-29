@@ -7,24 +7,12 @@
 
 ;;; Code:
 
-;; :TODO: add syntax highlighting
+;; :TODO: add syntax highlighting... fix all the features being functions...
 ;; :TODO: add indentation support
 ;; :TODO: add imenu support
 
 (require 'treesit)
 (require 'prog-mode)
-
-;; strings
-;; (string_literal (expandable_string_literal))))))))))))))
-;; (string_literal (verbatim_string_characters))))))))))))))
-;; (string_literal (expandable_here_string_literal))))))))))))))
-
-;; variable
-;; (unary_expression (variable)))))))))))
-
-;; function
-;; (function_statement function (function_name) {
-;; (command command_name: (command_name))))
 
 (defvar powershell-ts-font-lock-rules
   '(
@@ -52,33 +40,78 @@
 
     :language powershell
     :feature function
-    ((function_statement "function" (function_name) @font-lock-function-name-face))
+    ((function_statement "function" @font-lock-operator-face (function_name) @font-lock-function-name-face))
     
     :language powershell
     :feature function
     :override t
     ((command command_name: (command_name) @font-lock-function-call-face))
     
+    ;; parameter
     :language powershell
     :feature function
     :override t
     ((command_parameter) @font-lock-constant-face)
 
+    ;; comparison operator
     :language powershell
     :feature function
     :override t
     ((comparison_operator) @font-lock-operator-face)
 
-    ;; :language powershell
-    ;; :feature ifelse
-    ;; ((if_statement "if") @font-lock-operator-face)
+    ;; if statement
+    :language powershell
+    :feature function
+    :override t
+    ((if_statement "if" @font-lock-operator-face))
 
-    ;; :language powershell
-    ;; :feature ifelse
-    ;; ((else_clause "else") @font-lock-operator-face)
+    ;; else statement
+    :language powershell
+    :feature function
+    :override t
+    ((else_clause "else" @font-lock-operator-face))
 
-    ;; (if_statement if (
-    ;; (else_clause else
+
+    ;; foreach statement
+    :language powershell
+    :feature function
+    :override t
+    ((foreach_statement "foreach" @font-lock-operator-face))
+
+    ;; for statement
+    :language powershell
+    :feature function
+    :override t
+    ((for_statement "for" @font-lock-operator-face))
+
+    ;; while statement
+    :language powershell
+    :feature function
+    :override t
+    ((while_statement "while" @font-lock-operator-face))
+
+    ;; do while statement
+    :language powershell
+    :feature function
+    :override t
+    ((do_statement "do" @font-lock-operator-face "while" @font-lock-operator-face))
+
+    ;; do until statement
+    :language powershell
+    :feature function
+    :override t
+    ((do_statement "do" @font-lock-operator-face "until" @font-lock-operator-face))
+
+    ;; flow control statements (continue/break)
+    :language powershell
+    :feature function
+    :override t
+    ((flow_control_statement "continue" @font-lock-operator-face))
+
+    :language powershell
+    :feature function
+    :override t
+    ((flow_control_statement "break" @font-lock-operator-face))
 ))
 
 (defun powershell-ts-setup ()
