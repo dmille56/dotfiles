@@ -17,9 +17,14 @@
 ;; strings
 ;; (string_literal (expandable_string_literal))))))))))))))
 ;; (string_literal (verbatim_string_characters))))))))))))))
+;; (string_literal (expandable_here_string_literal))))))))))))))
 
 ;; variable
 ;; (unary_expression (variable)))))))))))
+
+;; function
+;; (function_statement function (function_name) {
+;; (command command_name: (command_name))))
 
 (defvar powershell-ts-font-lock-rules
   '(
@@ -33,12 +38,47 @@
 
     :language powershell
     :feature string
+    ((string_literal (verbatim_string_characters) @font-lock-string-face))
+
+    :language powershell
+    :feature string
+    :override t
     ((string_literal (expandable_string_literal) @font-lock-string-face))
 
     :language powershell
     :feature string
     :override t
-    ((string_literal (verbatim_string_characters) @font-lock-string-face))
+    ((string_literal (expandable_here_string_literal) @font-lock-string-face))
+
+    :language powershell
+    :feature function
+    ((function_statement "function" (function_name) @font-lock-function-name-face))
+    
+    :language powershell
+    :feature function
+    :override t
+    ((command command_name: (command_name) @font-lock-function-call-face))
+    
+    :language powershell
+    :feature function
+    :override t
+    ((command_parameter) @font-lock-constant-face)
+
+    :language powershell
+    :feature function
+    :override t
+    ((comparison_operator) @font-lock-operator-face)
+
+    ;; :language powershell
+    ;; :feature ifelse
+    ;; ((if_statement "if") @font-lock-operator-face)
+
+    ;; :language powershell
+    ;; :feature ifelse
+    ;; ((else_clause "else") @font-lock-operator-face)
+
+    ;; (if_statement if (
+    ;; (else_clause else
 ))
 
 (defun powershell-ts-setup ()
@@ -56,7 +96,7 @@
               '((comment)
                 (variable)
                 (string)
-))
+                ( function )))
 
   ;; (setq-local treesit-simple-indent-rules powershell-ts-indent-rules)
 
