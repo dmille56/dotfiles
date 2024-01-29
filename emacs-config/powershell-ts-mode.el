@@ -1,7 +1,13 @@
 ;;; powershell-ts-mode --- Summary
 
 ;; Powershell mode using treesitter
-;; treesitter grammar at: https://github.com/airbus-cert/tree-sitter-powershell
+
+;; To install treesitter grammar (requires Emacs 29, git, C compiler, C++ compiler):
+;; M-x treesit-install-language-grammer
+;; Enter in powershell as your language
+;; Enter yes to build recipe for powershell interactively
+;; Enter in the url of the grammar: https://github.com/airbus-cert/tree-sitter-powershell
+;; Stick to the defaults for git branch, "src" directory, C compiler, and C++ compilers
 
 ;;; Commentary:
 
@@ -111,6 +117,12 @@
     :feature function
     :override t
     ((flow_control_statement "break" @font-lock-keyword-face))
+
+    ;; [System.Data] like syntax
+    :language powershell
+    :feature function
+    :override t
+    ((type_literal) @font-lock-type-face)
 ))
 
 (defun powershell-ts-setup ()
