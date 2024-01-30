@@ -16,6 +16,9 @@
 ;; :TODO: add syntax highlighting... fix all the features being functions...
 ;; :TODO: add indentation support
 ;; :TODO: add imenu support
+;;  - make top level variables work better
+;;  - get rid of duplicates in the list
+;;  - add option to disable top level duplicates in imenu (in case of performance issues)
 
 (require 'treesit)
 (require 'prog-mode)
@@ -47,6 +50,10 @@
     :feature string
     :override t
     ((string_literal (expandable_here_string_literal) @font-lock-string-face))
+
+    :language powershell
+    :feature function
+    ((class_statement "class" @font-lock-keyword-face (simple_name)))
 
     :language powershell
     :feature function
@@ -111,7 +118,7 @@
     :override t
     ((do_statement "do" @font-lock-keyword-face "until" @font-lock-keyword-face))
 
-    ;; flow control statements (continue/break)
+    ;; flow control statements (continue/break/return)
     :language powershell
     :feature function
     :override t
@@ -121,6 +128,11 @@
     :feature function
     :override t
     ((flow_control_statement "break" @font-lock-keyword-face))
+
+    :language powershell
+    :feature function
+    :override t
+    ((flow_control_statement "return" @font-lock-keyword-face))
 
     ;; type [System.Data] like syntax
     :language powershell
@@ -135,7 +147,38 @@
        (equal (treesit-node-type (treesit-node-parent node)) "function_statement")))
 
 (defun powershell-ts-imenu-func-name-function (node)
-  "Return the text of a function name from a function definition NODE."
+  "Return the name of a function from a function definition NODE."
+  (treesit-node-text node))
+
+(defun powershell-ts-imenu-var-node-is-top-level (node)
+  "Return non-nil if the NODE has an assignment parent and not a class or function parent."
+  (let (
+        (has-assign-node nil)
+        (has-func-node nil)
+        (has-class-node nil)
+        (node-type nil)
+        (parent (treesit-node-parent node))
+        )
+    (while parent
+      (setq node-type (treesit-node-type parent))
+      (if (equal node-type "assignment_expression") (setq has-assign-node t))
+      (if (equal node-type "function_statement") (setq has-func-node t))
+      (if (equal node-type "class_statement") (setq has-class-node t))
+
+      (setq parent (treesit-node-parent parent))
+      )
+    (if (and has-assign-node (not has-func-node) (not has-class-node)) t nil)
+    )
+  )
+
+(defun powershell-ts-imenu-var-node-p (node)
+  "Return non-nil if the NODE is a top level variable definition."
+  (and (equal (treesit-node-type node) "variable")
+       (equal (treesit-node-type (treesit-node-parent node)) "unary_expression")
+       (powershell-ts-imenu-var-node-is-top-level node)))
+
+(defun powershell-ts-imenu-var-name-function (node)
+  "Return the text of a variable from a top level variable definition NODE."
   (treesit-node-text node))
 
 (defun powershell-ts-setup ()
@@ -158,7 +201,10 @@
   ;; (setq-local treesit-simple-indent-rules powershell-ts-indent-rules)
   
   (setq-local treesit-simple-imenu-settings
-              `(("Function" powershell-ts-imenu-func-node-p nil powershell-ts-imenu-func-name-function)))
+              `(
+                ("Function" powershell-ts-imenu-func-node-p nil powershell-ts-imenu-func-name-function)
+                ("Top variables" powershell-ts-imenu-var-node-p nil powershell-ts-imenu-var-name-function)
+                ))
 
   (setq-local electric-indent-chars
               (append "{}():;," electric-indent-chars))
