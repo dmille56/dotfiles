@@ -31,6 +31,10 @@
     ((unary_expression (variable) @font-lock-variable-name-face))
 
     :language powershell
+    :feature variable
+    ((variable) @font-lock-variable-name-face)
+
+    :language powershell
     :feature string
     ((string_literal (verbatim_string_characters) @font-lock-string-face))
 
@@ -118,7 +122,7 @@
     :override t
     ((flow_control_statement "break" @font-lock-keyword-face))
 
-    ;; [System.Data] like syntax
+    ;; type [System.Data] like syntax
     :language powershell
     :feature function
     :override t
