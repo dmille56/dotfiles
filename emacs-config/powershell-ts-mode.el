@@ -19,9 +19,25 @@
 ;;  - make top level variables work better
 ;;  - get rid of duplicates in the list
 ;;  - add option to disable top level duplicates in imenu (in case of performance issues)
+;; :TODO: make sure Which Function Mode works
 
 (require 'treesit)
 (require 'prog-mode)
+
+(defgroup powershell-ts-mode nil
+  "Customize group for powershell-ts-mode.el"
+  :group 'emacs)
+
+(defcustom powershell-ts-command-default
+  'pwsh
+  "Default command pwsh or powershell."
+  :type '(choice (const pwsh)
+                 (const powershell))
+  :group 'powershell-ts-mode)
+
+(defvar powershell-ts-compile-command
+  '(concat (symbol-name powershell-ts-command-default) " " (buffer-file-name))
+  "Default command compile command to run a powershell script.")
 
 (defvar powershell-ts-font-lock-rules
   '(
@@ -206,9 +222,12 @@
                 ("Top variables" powershell-ts-imenu-var-node-p nil powershell-ts-imenu-var-name-function)
                 ))
 
+  ;; some other non treesitter setup
   (setq-local electric-indent-chars
               (append "{}():;," electric-indent-chars))
+  (setq-local compile-command powershell-ts-compile-command)
 
+  ;; finish with this call to finalize the treesit setup
   (treesit-major-mode-setup))
 
 ;;;###autoload
