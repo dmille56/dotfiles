@@ -8,18 +8,22 @@
 ;; Enter yes to build recipe for powershell interactively
 ;; Enter in the url of the grammar: https://github.com/airbus-cert/tree-sitter-powershell
 ;; Stick to the defaults for git branch, "src" directory, C compiler, and C++ compilers
+;; Tested with commit: 9d95502e730fb403bdf56279d84630c8178b10be
 
 ;;; Commentary:
 
 ;;; Code:
 
-;; :TODO: add syntax highlighting... fix all the features being functions...
+;; :TODO: go through tutorial / language features make sure everything looks good
+;; :TODO: syntax highlighting
+;;  - fix all the features being functions...
 ;; :TODO: add indentation support
-;; :TODO: add imenu support
+;; :TODO: imenu support
+;;  - add support for classes and functions in classes
 ;;  - make top level variables work better
 ;;  - get rid of duplicates in the list
-;;  - add option to disable top level duplicates in imenu (in case of performance issues)
 ;; :TODO: make sure Which Function Mode works
+;; :TODO: add powershell shell support
 
 (require 'treesit)
 (require 'prog-mode)
@@ -35,9 +39,17 @@
                  (const powershell))
   :group 'powershell-ts-mode)
 
-(defvar powershell-ts-compile-command
+(defcustom powershell-ts-compile-command
   '(concat (symbol-name powershell-ts-command-default) " " (buffer-file-name))
-  "Default command compile command to run a powershell script.")
+  "Default command compile command to run a powershell script."
+  :type 'string
+  :group 'powershell-ts-mode)
+
+(defcustom powershell-ts-enable-imenu-top-level-vars
+  t
+  "True to enable top level vars in imenu."
+  :type 'boolean
+  :group 'powershell-ts-mode)
 
 (defvar powershell-ts-font-lock-rules
   '(
@@ -67,14 +79,22 @@
     :override t
     ((string_literal (expandable_here_string_literal) @font-lock-string-face))
 
+    ;; class definition
     :language powershell
     :feature function
     ((class_statement "class" @font-lock-keyword-face (simple_name)))
+    
+    ;; function definition (in a class)
+    :language powershell
+    :feature function
+    ((class_method_definition (simple_name) @font-lock-function-name-face))
 
+    ;; function definition
     :language powershell
     :feature function
     ((function_statement "function" @font-lock-operator-face (function_name) @font-lock-function-name-face))
     
+    ;; function call
     :language powershell
     :feature function
     :override t
@@ -215,12 +235,13 @@
                 ( function )))
 
   ;; (setq-local treesit-simple-indent-rules powershell-ts-indent-rules)
-  
+
   (setq-local treesit-simple-imenu-settings
-              `(
-                ("Function" powershell-ts-imenu-func-node-p nil powershell-ts-imenu-func-name-function)
-                ("Top variables" powershell-ts-imenu-var-node-p nil powershell-ts-imenu-var-name-function)
-                ))
+              (append 
+               `(("Function" powershell-ts-imenu-func-node-p nil powershell-ts-imenu-func-name-function))
+               (if powershell-ts-enable-imenu-top-level-vars 
+                   `(("Top variables" powershell-ts-imenu-var-node-p nil powershell-ts-imenu-var-name-function))
+                 nil)))
 
   ;; some other non treesitter setup
   (setq-local electric-indent-chars
