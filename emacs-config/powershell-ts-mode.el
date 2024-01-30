@@ -129,6 +129,15 @@
     ((type_literal) @font-lock-type-face)
 ))
 
+(defun powershell-ts-imenu-func-node-p (node)
+  "Return non-nil if the NODE is a function definition."
+  (and (equal (treesit-node-type node) "function_name")
+       (equal (treesit-node-type (treesit-node-parent node)) "function_statement")))
+
+(defun powershell-ts-imenu-func-name-function (node)
+  "Return the text of a function name from a function definition NODE."
+  (treesit-node-text node))
+
 (defun powershell-ts-setup ()
   "Setup treesit for powershell-ts-mode."
   (interactive)
@@ -147,6 +156,9 @@
                 ( function )))
 
   ;; (setq-local treesit-simple-indent-rules powershell-ts-indent-rules)
+  
+  (setq-local treesit-simple-imenu-settings
+              `(("Function" powershell-ts-imenu-func-node-p nil powershell-ts-imenu-func-name-function)))
 
   (setq-local electric-indent-chars
               (append "{}():;," electric-indent-chars))
