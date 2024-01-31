@@ -229,6 +229,7 @@ And not a class or function parent."
                  ((parent-is "class_method_definition") parent-bol powershell-ts-mode-indent-offset)
                  ((parent-is "function_statement") parent-bol powershell-ts-mode-indent-offset)
                  ((parent-is "ERROR") parent-bol powershell-ts-mode-indent-offset) ;; :NOTE: indent for params is weird here... not sure why the grammar parses it like this... might cause issues
+                 ((parent-is "param_block") parent-bol powershell-ts-mode-indent-offset)
                  (no-node parent 0)
                  )))
 
