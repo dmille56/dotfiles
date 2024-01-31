@@ -115,6 +115,8 @@
   ("G" hydra-game/body "game")
   ("c" calc "calculator" )
   ("h" help-for-help "emacs help")
+  ("." clippy-describe-function "clippy func")
+  (">" clippy-describe-variable "clippy var")
   )
 
 (defhydra hydra-game (:exit t)
@@ -187,6 +189,13 @@
   ("s" emms-streams "emms streams")
   )
 
+ (defhydra hydra-evil-macros (:exit t)
+   "macros"
+  ("r" evil-record-macro "record macro") ;; traditionally q in vim/evil
+  ("x" evil-execute-macro "execute macro") ;; also @ followed by macro register in vim/evil
+  ("l" evil-execute-last-recorded-macro "execute last macro") ;; also @@ in vim/evil
+  )
+
 (use-package evil-leader
   :init
   (setq evil-leader/in-all-states t) ;; allows evil leader via "C-<leader>" in other states
@@ -212,6 +221,7 @@
    "v" 'helm-semantic-or-imenu
    "a" 'link-hint-open-link
    "M" 'hydra-emms-mode/body
+   "m" 'hydra-evil-macros/body
 
    ;; window management
    "o" 'other-window
@@ -803,6 +813,7 @@
   (persp-mode))
 
 (use-package git-timemachine)
+(use-package clippy)
 
 ;; Set up zone-matrix
 ;; (straight-use-package

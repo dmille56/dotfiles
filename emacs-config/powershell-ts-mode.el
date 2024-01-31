@@ -17,7 +17,8 @@
 ;; :TODO: go through tutorial / language features make sure everything looks good
 ;; :TODO: syntax highlighting
 ;;  - fix all the features being functions...
-;; :TODO: add indentation support
+;; :TODO: indentation support
+;;  - test more thoroughly... figure out if anything seems missing
 ;; :TODO: imenu support
 ;;  - add support for classes and functions in classes
 ;;  - make top level variables work better
@@ -29,11 +30,10 @@
 (require 'prog-mode)
 
 (defgroup powershell-ts-mode nil
-  "Customize group for powershell-ts-mode.el"
+  "Customize group for powershell-ts-mode.el."
   :group 'emacs)
 
-(defcustom powershell-ts-command-default
-  'pwsh
+(defcustom powershell-ts-command-default 'pwsh
   "Default command pwsh or powershell."
   :type '(choice (const pwsh)
                  (const powershell))
@@ -45,10 +45,14 @@
   :type 'string
   :group 'powershell-ts-mode)
 
-(defcustom powershell-ts-enable-imenu-top-level-vars
-  t
-  "True to enable top level vars in imenu."
+(defcustom powershell-ts-enable-imenu-top-level-vars t
+  "Non-nil to enable top level vars in imenu."
   :type 'boolean
+  :group 'powershell-ts-mode)
+
+(defcustom powershell-ts-mode-indent-offset 4
+  "Number of spaces for each indentation step in `powershell-ts-mode'."
+  :type 'integer
   :group 'powershell-ts-mode)
 
 (defvar powershell-ts-font-lock-rules
@@ -187,7 +191,8 @@
   (treesit-node-text node))
 
 (defun powershell-ts-imenu-var-node-is-top-level (node)
-  "Return non-nil if the NODE has an assignment parent and not a class or function parent."
+  "Return non-nil if the NODE has an assignment parent.
+And not a class or function parent."
   (let (
         (has-assign-node nil)
         (has-func-node nil)
@@ -217,6 +222,16 @@
   "Return the text of a variable from a top level variable definition NODE."
   (treesit-node-text node))
 
+(defvar powershell-ts-indent-rules
+              `((powershell
+                 ((parent-is "statement_block") parent-bol powershell-ts-mode-indent-offset)
+                 ((parent-is "class_statement") parent-bol powershell-ts-mode-indent-offset)
+                 ((parent-is "class_method_definition") parent-bol powershell-ts-mode-indent-offset)
+                 ((parent-is "function_statement") parent-bol powershell-ts-mode-indent-offset)
+                 ((parent-is "ERROR") parent-bol powershell-ts-mode-indent-offset) ;; :NOTE: indent for params is weird here... not sure why the grammar parses it like this... might cause issues
+                 (no-node parent 0)
+                 )))
+
 (defun powershell-ts-setup ()
   "Setup treesit for powershell-ts-mode."
   (interactive)
@@ -234,12 +249,12 @@
                 (string)
                 ( function )))
 
-  ;; (setq-local treesit-simple-indent-rules powershell-ts-indent-rules)
+  (setq-local treesit-simple-indent-rules powershell-ts-indent-rules)
 
   (setq-local treesit-simple-imenu-settings
-              (append 
+              (append
                `(("Function" powershell-ts-imenu-func-node-p nil powershell-ts-imenu-func-name-function))
-               (if powershell-ts-enable-imenu-top-level-vars 
+               (if powershell-ts-enable-imenu-top-level-vars
                    `(("Top variables" powershell-ts-imenu-var-node-p nil powershell-ts-imenu-var-name-function))
                  nil)))
 
