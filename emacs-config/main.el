@@ -885,6 +885,11 @@
 (load-file
  (concat main-dir "powershell-ts-mode.el"))
 
+;; Associate .ps1 files with powershell-ts-mode
+(add-to-list 'auto-mode-alist '("\\.ps1\\'" . powershell-ts-mode))
+(add-to-list 'auto-mode-alist '("\\.psm1\\'" . powershell-ts-mode))
+(add-to-list 'auto-mode-alist '("\\.psd1\\'" . powershell-ts-mode))
+
 (load-file
  (concat main-dir "eshell-extensions.el"))
 
