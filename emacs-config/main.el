@@ -202,6 +202,7 @@
   ("n" hl-todo-next "next")
   ("o" hl-todo-occur "occur")
   ("i" hl-todo-insert "insert todo")
+  ("r" hl-todo-rgrep "rgrep")
   )
 
 (use-package evil-leader
@@ -288,11 +289,9 @@
 ;; remap ; to : in evil (for efficiency) and unmap q (because it's a pain in the ass and i don't use macros)
 (with-eval-after-load 'evil-maps
    ;; (define-key evil-normal-state-map (kbd ":") 'evil-repeat-find-char) ;; uncomment if you still want to be able to use the original ';' key
-   ;; (define-key evil-normal-state-map (kbd ";") 'evil-ex)
-   (define-key evil-normal-state-map (kbd ";") 'helm-M-x)
+   (define-key evil-normal-state-map (kbd ";") 'evil-ex)
    ;; (define-key evil-visual-state-map (kbd ":") 'evil-repeat-find-char)
-   ;; (define-key evil-visual-state-map (kbd ";") 'evil-ex)
-   (define-key evil-visual-state-map (kbd ";") 'helm-M-x)
+   (define-key evil-visual-state-map (kbd ";") 'evil-ex)
    (define-key evil-normal-state-map (kbd "q") 'quit-window))
 
 ;; install evil-surround
