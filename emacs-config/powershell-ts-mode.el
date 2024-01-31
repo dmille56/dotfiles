@@ -209,9 +209,41 @@
   (and (equal (treesit-node-type node) "simple_name")
        (equal (treesit-node-type (treesit-node-parent node)) "class_method_definition")))
 
+(defun powershell-ts--get-child-by-type (node type)
+  "Return the first treesit NODE child that matches the given TYPE."
+  (let (
+        (children (treesit-node-children node))
+        )
+    (catch 'found-child
+      (dolist (child children)
+        (if (equal (treesit-node-type child) type)
+            (throw 'found-child child))
+        )
+      nil)
+    )
+  )
+
 (defun powershell-ts-imenu-class-func-name-function (node)
   "Return the name of a function from a class function definition NODE."
-  (treesit-node-text node))
+  (let (
+        (func-name (treesit-node-text node))
+        (cur (treesit-node-parent node))
+        child
+        class-name
+        node-type
+        )
+    (while (and cur (not class-name))
+      (setq node-type (treesit-node-type cur))
+
+      (setq child (powershell-ts--get-child-by-type cur "simple_name"))
+      (if (and (equal node-type "class_statement") child)
+          (setq class-name (treesit-node-text child)))
+
+      (setq cur (treesit-node-parent cur))
+      )
+    (concat class-name "." func-name)
+    )
+  )
 
 (defun powershell-ts-imenu-var-node-is-top-level (node)
   "Return non-nil if the NODE has an assignment parent.
