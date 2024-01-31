@@ -2,7 +2,7 @@ with import <nixpkgs> { };
 
 pkgs.writeShellScriptBin "play-yt-script-format" ''
   #!${pkgs.bash}
-  # TODO: finish this
+  # :TODO: finish this
 
   url=$(${pkgs.rofi}/bin/rofi -dmenu -p "Youtube url")
   if [[ -n $url ]]; then

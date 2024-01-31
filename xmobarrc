@@ -11,7 +11,7 @@ Config {
         , commands = [
                         Run Com "echo" ["<fn=1>\xf4bc</fn>"] "mem_icon" 3600
                         , Run Com "echo" ["<fn=1>\xf240</fn>"] "bat_icon" 3600
-                        , Run Com "echo" ["<fn=1>\xe255</fn>"] "cpu_icon" 3600 -- TODO: find a more appropriate CPU icon to use
+                        , Run Com "echo" ["<fn=1>\xe255</fn>"] "cpu_icon" 3600 -- :TODO: find a more appropriate CPU icon to use
                         , Run Com "echo" ["<fn=1>\xebcb</fn>"] "swap_icon" 3600
                         , Run Cpu ["-L","25","-H","75","--normal","#50FA7B","--high","#FF5555", "-t", "<total>%"] 10
                         , Run Memory ["-t","<usedratio>%"] 10
