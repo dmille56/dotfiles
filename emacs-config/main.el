@@ -644,17 +644,27 @@
   ;; :hook (emacs-startup . spacious-padding-mode) ;; prevents bug (where there's a white line between frames) by having it init at emacs-startup instead of after-init (which runs before emacs-startup)
   )
 
+(defface svg-tag-todo-face
+  '((t (:foreground "#282A36" :background "#FFB86C" :weight bold)))
+  "A custom face for todo tags using svg-tag-mode."
+  :group 'emacs)
+
+(defface svg-tag-note-face
+  '((t (:foreground "#282A36" :background "#8BE9FD" :weight bold)))
+  "A custom face for note tags using svg-tag-mode."
+  :group 'emacs)
+
 ;; :TODO: add more svg-tag tags
 ;; :NOTE: svg-tag-mode example
 (use-package svg-tag-mode
   :init
   (setq svg-tag-tags
         '(
-          (":TODO:" . ((lambda (tag) (svg-tag-make "TODO"))))
-          (":NOTE:" . ((lambda (tag) (svg-tag-make "NOTE"))))
+          (":TODO:" . ((lambda (tag) (svg-tag-make "TODO" :face 'svg-tag-todo-face))))
+          (":NOTE:" . ((lambda (tag) (svg-tag-make "NOTE" :face 'svg-tag-note-face))))
           )
         )
-  (add-hook 'emacs-lisp-mode-hook 'svg-tag-mode)
+  (add-hook 'prog-mode-hook 'svg-tag-mode)
   )
 
 (use-package csv-mode)
