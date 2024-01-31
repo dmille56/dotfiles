@@ -23,9 +23,8 @@
 ;; :TODO: indentation support
 ;;  - test more thoroughly... figure out if anything seems missing
 ;; :TODO: imenu support
-;;  - add support for classes and functions in classes
 ;;  - make top level variables work better
-;;  - get rid of duplicates in the list
+;;  - get rid of duplicates in the list (for top level variables)
 ;; :TODO: make sure Which Function Mode works
 ;; :TODO: add powershell shell support
 
