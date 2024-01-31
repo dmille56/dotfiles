@@ -196,6 +196,14 @@
   ("l" evil-execute-last-recorded-macro "execute last macro") ;; also @@ in vim/evil
   )
 
+ (defhydra hydra-hl-todo (:exit t)
+   "hl-todo"
+  ("p" hl-todo-previous "previous")
+  ("n" hl-todo-next "next")
+  ("o" hl-todo-occur "occur")
+  ("i" hl-todo-insert "insert todo")
+  )
+
 (use-package evil-leader
   :init
   (setq evil-leader/in-all-states t) ;; allows evil leader via "C-<leader>" in other states
@@ -215,6 +223,7 @@
    "E" 'hydra-shell-run/body
    "X" 'recompile
    "c" 'flycheck-list-errors
+   "C" 'hydra-hl-todo/body
    ;; "l" 'run-lsp-command-map
    "g" 'magit
    "R" 'query-replace-regexp
@@ -279,9 +288,11 @@
 ;; remap ; to : in evil (for efficiency) and unmap q (because it's a pain in the ass and i don't use macros)
 (with-eval-after-load 'evil-maps
    ;; (define-key evil-normal-state-map (kbd ":") 'evil-repeat-find-char) ;; uncomment if you still want to be able to use the original ';' key
-   (define-key evil-normal-state-map (kbd ";") 'evil-ex)
+   ;; (define-key evil-normal-state-map (kbd ";") 'evil-ex)
+   (define-key evil-normal-state-map (kbd ";") 'helm-M-x)
    ;; (define-key evil-visual-state-map (kbd ":") 'evil-repeat-find-char)
-   (define-key evil-visual-state-map (kbd ";") 'evil-ex)
+   ;; (define-key evil-visual-state-map (kbd ";") 'evil-ex)
+   (define-key evil-visual-state-map (kbd ";") 'helm-M-x)
    (define-key evil-normal-state-map (kbd "q") 'quit-window))
 
 ;; install evil-surround
@@ -425,6 +436,7 @@
   ("<f7>" . helm-find-files)
   ("C-x c i" . helm-semantic-or-imenu)
   :init
+  (global-set-key (kbd "M-x") #'helm-M-x)
   (helm-mode 1)
   :config
   (define-key helm-map (kbd "ESC") 'helm-keyboard-quit)
