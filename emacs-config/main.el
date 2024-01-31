@@ -667,6 +667,18 @@
   (add-hook 'prog-mode-hook 'svg-tag-mode)
   )
 
+(use-package hl-todo)
+
+(use-package flycheck-hl-todo
+  :ensure t
+  :defer 5 ; Need to be initialized after the rest of checkers
+  :config
+  (flycheck-hl-todo-setup))
+
+(use-package magit-todos
+  :after magit
+  :config (magit-todos-mode 1))
+
 (use-package csv-mode)
 
 (use-package beacon
