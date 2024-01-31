@@ -12,8 +12,11 @@
 
 ;;; Commentary:
 
-;;; Code:
+;; Useful references:
+;; - https://www.masteringemacs.org/article/lets-write-a-treesitter-major-mode
+;; - https://github.com/mickeynp/html-ts-mode
 
+;; Notes:
 ;; :TODO: go through tutorial / language features make sure everything looks good
 ;; :TODO: syntax highlighting
 ;;  - fix all the features being functions...
@@ -25,6 +28,8 @@
 ;;  - get rid of duplicates in the list
 ;; :TODO: make sure Which Function Mode works
 ;; :TODO: add powershell shell support
+
+;;; Code:
 
 (require 'treesit)
 (require 'prog-mode)
@@ -190,6 +195,24 @@
   "Return the name of a function from a function definition NODE."
   (treesit-node-text node))
 
+(defun powershell-ts-imenu-class-node-p (node)
+  "Return non-nil if the NODE is a class function definition."
+  (and (equal (treesit-node-type node) "simple_name")
+       (equal (treesit-node-type (treesit-node-parent node)) "class_statement")))
+
+(defun powershell-ts-imenu-class-name-function (node)
+  "Return the name of a function from a class function definition NODE."
+  (treesit-node-text node))
+
+(defun powershell-ts-imenu-class-func-node-p (node)
+  "Return non-nil if the NODE is a class function definition."
+  (and (equal (treesit-node-type node) "simple_name")
+       (equal (treesit-node-type (treesit-node-parent node)) "class_method_definition")))
+
+(defun powershell-ts-imenu-class-func-name-function (node)
+  "Return the name of a function from a class function definition NODE."
+  (treesit-node-text node))
+
 (defun powershell-ts-imenu-var-node-is-top-level (node)
   "Return non-nil if the NODE has an assignment parent.
 And not a class or function parent."
@@ -255,6 +278,8 @@ And not a class or function parent."
 
   (setq-local treesit-simple-imenu-settings
               (append
+               `(("Class" powershell-ts-imenu-class-node-p nil powershell-ts-imenu-class-name-function))
+               `(("Method" powershell-ts-imenu-class-func-node-p nil powershell-ts-imenu-class-func-name-function))
                `(("Function" powershell-ts-imenu-func-node-p nil powershell-ts-imenu-func-name-function))
                (if powershell-ts-enable-imenu-top-level-vars
                    `(("Top variables" powershell-ts-imenu-var-node-p nil powershell-ts-imenu-var-name-function))

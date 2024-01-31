@@ -290,8 +290,10 @@
 (with-eval-after-load 'evil-maps
    ;; (define-key evil-normal-state-map (kbd ":") 'evil-repeat-find-char) ;; uncomment if you still want to be able to use the original ';' key
    (define-key evil-normal-state-map (kbd ";") 'evil-ex)
+   (define-key evil-normal-state-map (kbd "M-x") 'helm-M-x)
    ;; (define-key evil-visual-state-map (kbd ":") 'evil-repeat-find-char)
    (define-key evil-visual-state-map (kbd ";") 'evil-ex)
+   (define-key evil-visual-state-map (kbd "M-x") 'helm-M-x)
    (define-key evil-normal-state-map (kbd "q") 'quit-window))
 
 ;; install evil-surround
