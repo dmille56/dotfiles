@@ -27,6 +27,7 @@
 ;;  - get rid of duplicates in the list (for top level variables)
 ;; :TODO: make sure Which Function Mode works
 ;; :TODO: add powershell shell support
+;; :TODO: add code folding support
 
 ;;; Code:
 
@@ -290,8 +291,6 @@ And not a class or function parent."
 
 (defun powershell-ts-setup ()
   "Setup treesit for powershell-ts-mode."
-  (interactive)
-
   (setq-local treesit-font-lock-settings
                (apply #'treesit-font-lock-rules
                     powershell-ts-font-lock-rules))

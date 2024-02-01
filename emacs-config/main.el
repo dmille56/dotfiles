@@ -935,6 +935,10 @@
 (add-to-list 'auto-mode-alist '("\\.psm1\\'" . powershell-ts-mode))
 (add-to-list 'auto-mode-alist '("\\.psd1\\'" . powershell-ts-mode))
 
+;; :TODO: make hs-minor-mode work with powershell-ts-mode
+(add-to-list 'hs-special-modes-alist '(powershell-ts-mode "{" "}" "/[*/]" nil nil))
+;; (add-hook 'powershell-ts-mode-hook 'hs-minor-mode)
+
 (load-file
  (concat main-dir "eshell-extensions.el"))
 
