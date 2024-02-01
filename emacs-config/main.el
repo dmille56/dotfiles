@@ -117,8 +117,6 @@
   ("y" treemacs "tree")
   ("w" elfeed "elfeed")
   ("r" helm-recentf "recent")
-  ("j" dumb-jump-go "go def")
-  ("J" dumb-jump-back "go def back")
   ("a" org-agenda "agenda")
   ("P" spacious-padding-mode "padding toggle")
   ("S" selectric-mode "typewriter toggle")
