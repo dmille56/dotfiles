@@ -115,6 +115,11 @@
     :override t
     ((command_parameter) @font-lock-constant-face)
 
+    :language powershell
+    :feature function
+    :override t
+    ((param_block "param" @font-lock-keyword-face))
+
     ;; comparison operator
     :language powershell
     :feature function
