@@ -40,7 +40,7 @@
 
 ;;;###autoload
 (defun powershell-ts-shell ()
-  "Run an inferior instance of `cassandra-cli' inside Emacs."
+  "Run an inferior instance of `powershell' inside Emacs."
   (interactive)
   (let* ((powershell-program powershell-ts-shell-file-path)
          (buffer (get-buffer-create powershell-ts-shell-buffer-name))
@@ -58,7 +58,7 @@
       (pop-to-buffer buffer))))
 
 (defun powershell-ts-shell--initialize ()
-  "Helper function to initialize Cassandra."
+  "Helper function to initialize powershell."
   (setq comint-process-echoes t)
   (setq comint-use-prompt-regexp t))
 
@@ -73,7 +73,7 @@
   (setq comint-prompt-read-only t)
   ;; this makes it so commands like M-{ and M-} work.
   (set (make-local-variable 'paragraph-separate) "\\'")
-  ;; (set (make-local-variable 'font-lock-defaults) '(cassandra-font-lock-keywords t)) ;; :TODO: look into adding font lock keywords
+  ;; (set (make-local-variable 'font-lock-defaults) '(powershell-ts-shell-font-lock-keywords t)) ;; :TODO: look into adding font lock keywords
   (set (make-local-variable 'paragraph-start) powershell-ts-shell-prompt-regex))
 
 (add-hook 'powershell-ts-shell-mode-hook 'powershell-ts-shell--initialize)
