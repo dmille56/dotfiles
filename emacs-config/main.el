@@ -761,6 +761,19 @@
 (evil-define-key 'insert eshell-mode-map
   (kbd "C-r") 'helm-eshell-history)
 
+(defun eshell-go-up-one-dir ()
+  "Go up one directory in eshell."
+  (interactive)
+  (eshell/cd "..")
+  (eshell-send-input)
+)
+
+(evil-define-key 'normal eshell-mode-map
+  (kbd "C-l") 'eshell-go-up-one-dir)
+
+(evil-define-key 'insert eshell-mode-map
+  (kbd "C-l") 'eshell-go-up-one-dir)
+
 (use-package eshell-syntax-highlighting
   :config
   ;; Enable in all Eshell buffers.
