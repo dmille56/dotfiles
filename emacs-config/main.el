@@ -378,7 +378,7 @@
 (setq lsp-keymap-prefix "C-l")
 
 (use-package lsp-mode
-  :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
+  :hook (;; replace X-mode with concrete major-mode(e. g. python-mode)
          ;; (haskell-mode . lsp)
          ;; (powershell-mode . lsp)
          ;; (csharp-mode . lsp)
@@ -502,13 +502,11 @@
 (use-package rg
   :init
   (rg-enable-default-bindings))
+
 (use-package helm-rg)
 
-;; (use-package powershell) ;; :TODO: fix multi-line comments issue in this package
+(use-package powershell)
 
-
-(use-package powershell
-  :straight (:host github :repo "dmille56/powershell.el" :files ("powershell.el")))
 (use-package erc)
 
 (use-package md4rd
@@ -714,6 +712,8 @@
 
 (use-package chatgpt-shell
   :ensure t
+  :config
+  (setq chatgpt-shell-model-version 3)
   :custom
   ((chatgpt-shell-openai-key
     (lambda ()
@@ -936,7 +936,7 @@
 (add-to-list 'auto-mode-alist '("\\.psd1\\'" . powershell-ts-mode))
 
 ;; :TODO: make hs-minor-mode work with powershell-ts-mode
-(add-to-list 'hs-special-modes-alist '(powershell-ts-mode "{" "}" "/[*/]" nil nil))
+(add-to-list 'hs-special-modes-alist '(powershell-ts-mode "{" "}" "<[#>]" nil nil))
 ;; (add-hook 'powershell-ts-mode-hook 'hs-minor-mode)
 
 (load-file

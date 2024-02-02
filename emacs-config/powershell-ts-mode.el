@@ -163,7 +163,7 @@
     :override t
     ((do_statement "do" @font-lock-keyword-face "until" @font-lock-keyword-face))
 
-    ;; flow control statements (continue/break/return)
+    ;; flow control statements (continue/break/return/throw)
     :language powershell
     :feature function
     :override t
@@ -179,11 +179,32 @@
     :override t
     ((flow_control_statement "return" @font-lock-keyword-face))
 
+    :language powershell
+    :feature function
+    :override t
+    ((flow_control_statement "throw" @font-lock-keyword-face))
+
     ;; type [System.Data] like syntax
     :language powershell
     :feature function
     :override t
     ((type_literal) @font-lock-type-face)
+    
+    ;; try/catch/finally statements
+    :language powershell
+    :feature function
+    :override t
+    ((try_statement "try"  @font-lock-keyword-face))
+
+    :language powershell
+    :feature function
+    :override t
+    ((catch_clause "catch"  @font-lock-keyword-face))
+
+    :language powershell
+    :feature function
+    :override t
+    ((finally_clause "finally"  @font-lock-keyword-face))
 ))
 
 (defun powershell-ts-imenu-func-node-p (node)
