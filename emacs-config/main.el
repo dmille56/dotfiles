@@ -874,15 +874,14 @@
 (use-package clippy)
 
 ;; Set up zone-matrix
-;; (straight-use-package
-;;  '(zone-matrix :type git :host github :repo "ober/zone-matrix"))
-;; 
-;; (require 'zone-matrix)
-;; (require 'zone-matrix-settings)
-;; (require 'zone-settings)
-;; (setq zone-programs [zone-matrix])
+(straight-use-package
+ '(zone-matrix :type git :host github :repo "dmille56/zone-matrix"))
+ 
+(require 'zone-matrix)
+(require 'zone-matrix-settings)
+(require 'zone-settings)
 
-(setq zone-programs [zone-nyan])
+(setq zone-programs [zone-nyan zone-matrix])
 
 ;; lsp-mode performance settings
 (setq gc-cons-threshold 100000000)
