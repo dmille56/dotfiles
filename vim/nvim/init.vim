@@ -21,7 +21,7 @@ call plug#begin('~/AppData/Local/nvim/plugged')
     "Neogit + dependencies
     Plug 'nvim-lua/popup.nvim'
     Plug 'nvim-lua/plenary.nvim'
-    Plug 'NeogitNrg/neogit'
+    Plug 'NeogitOrg/neogit'
     
     "completion
     Plug 'hrsh7th/cmp-nvim-lsp'

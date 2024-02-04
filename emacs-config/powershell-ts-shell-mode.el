@@ -18,7 +18,7 @@
 (require 'comint)
 
 (defvar powershell-ts-shell-file-path "pwsh"
-  "Path to the program used by `run-powershell'")
+  "Path to the program used by `run-powershell'.")
 
 ;; "-NoProfile"
 ;; "-Command" "-"

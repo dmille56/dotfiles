@@ -506,6 +506,7 @@
 (use-package helm-rg)
 
 (use-package powershell)
+(use-package koopa-mode)
 
 (use-package erc)
 
@@ -568,6 +569,25 @@
   )
 (setq org-return-follows-link t)
 
+;; :TODO: learn how to use org-roam package for notes
+;; :TODO: also look up org-drill
+(use-package org-roam
+  :ensure t
+  :custom
+  (org-roam-directory (file-truename "~/roam-notes"))
+  :bind (("C-c n l" . org-roam-buffer-toggle)
+         ("C-c n f" . org-roam-node-find)
+         ("C-c n g" . org-roam-graph)
+         ("C-c n i" . org-roam-node-insert)
+         ("C-c n c" . org-roam-capture)
+         ;; Dailies
+         ("C-c n j" . org-roam-dailies-capture-today))
+  :config
+  ;; If you're using a vertical completion framework, you might want a more informative completion interface
+  (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
+  (org-roam-db-autosync-mode)
+  ;; If using org-roam-protocol
+  (require 'org-roam-protocol))
 
 (use-package all-the-icons) ;; remember need to run (all-the-icons-install-fonts) to install the fonts
 
@@ -872,6 +892,8 @@
 
 (use-package git-timemachine)
 (use-package clippy)
+
+(use-package command-log-mode)
 
 ;; Set up zone-matrix
 (straight-use-package
