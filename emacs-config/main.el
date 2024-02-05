@@ -789,11 +789,15 @@
 (evil-define-key 'insert eshell-mode-map
   (kbd "C-r") 'helm-eshell-history)
 
+(defun eshell-my-cd (dir)
+  "Change DIR in eshell."
+  (eshell/cd dir)
+  (eshell-send-input))
+
 (defun eshell-go-up-one-dir ()
   "Go up one directory in eshell."
   (interactive)
-  (eshell/cd "..")
-  (eshell-send-input)
+  (eshell-my-cd "..")
 )
 
 (evil-define-key 'normal eshell-mode-map
@@ -824,6 +828,7 @@
             (eshell/alias "fft" "find-file-other-tab $1")
             (eshell/alias "ffo" "find-file-other-frame $1")
             (eshell/alias "cls" "clear-scrollback")
+            (eshell/alias "zi" "eshell-cd-with-zoxide $1")
             ))
 
 ;; Games
@@ -913,14 +918,9 @@
 ;; :TODO: figure out how to either integrate zoxide or eshell-z
 (use-package zoxide)
 
-;; :TODO: make this shit work
-(defun eshell-my-switch-directory (dir) 
-  (eshell/cd dir)
-  (eshell-send-input))
-
-(defun eshell-cd-with-zoxide ()
+(defun eshell-cd-with-zoxide (&optional query)
    (interactive)
-   (zoxide-open-with nil 'eshell-my-switch-directory t))
+   (zoxide-open-with query 'eshell-my-cd))
 
 (use-package eshell-z)
 
