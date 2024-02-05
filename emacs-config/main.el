@@ -64,6 +64,14 @@
       (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
 
+(setq my-config-machine
+      (cond
+             ((eq (system-name) "van") 'pc)
+             ((eq (system-name) "localhost") 'phone)
+             ((eq (system-name) "LOCAL-D31D4TRU3") 'work)
+             (t 'pc) ;; fall-back to pc
+             ))
+
 (use-package hydra)
 (use-package posframe)
 
