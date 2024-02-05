@@ -290,6 +290,8 @@ in {
         sensible
         yank
         tmux-fzf
+        jump
+        urlview
         {
         plugin = dracula;
         extraConfig = ''
