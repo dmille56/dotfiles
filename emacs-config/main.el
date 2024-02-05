@@ -8,8 +8,8 @@
 ;; Some same defaults to start:
 
 ;; disable toolbar, scrollbars, & menubar
-(tool-bar-mode -1)
-(scroll-bar-mode -1)
+(if (require 'tool-bar nil 'noerror) (tool-bar-mode -1))
+(if (require 'scroll-bar nil 'noerror) (scroll-bar-mode -1))
 (menu-bar-mode -1)
 
 (delete-selection-mode 1)
@@ -301,6 +301,7 @@
    (define-key evil-normal-state-map (kbd ";") 'evil-ex)
    (define-key evil-normal-state-map (kbd "M-x") 'helm-M-x)
    (define-key evil-normal-state-map (kbd "Q") 'evil-record-macro)
+   (define-key evil-normal-state-map (kbd "gZ") 'zoxide-find-file)
    ;; (define-key evil-visual-state-map (kbd ":") 'evil-repeat-find-char)
    (define-key evil-visual-state-map (kbd ";") 'evil-ex)
    (define-key evil-visual-state-map (kbd "M-x") 'helm-M-x)
@@ -460,10 +461,9 @@
 (use-package spacemacs-theme)
 (use-package dracula-theme)
 
-(if (or (display-graphic-p) (daemonp))
-    ;; (load-theme 'odersky t)
-    ;;(load-theme 'spacemacs-dark t)
-    (load-theme 'dracula t))
+(load-theme 'dracula t)
+;; (if (or (display-graphic-p) (daemonp))
+;;     (load-theme 'dracula t))
 
 ;; install nix-mode
 (use-package nix-mode
@@ -894,6 +894,27 @@
 (use-package clippy)
 
 (use-package command-log-mode)
+
+(use-package smartparens-mode
+  :ensure smartparens  ;; install the package
+  :hook (prog-mode text-mode markdown-mode) ;; add `smartparens-mode` to these hooks
+  :config
+  ;; load default config
+  (require 'smartparens-config))
+
+;; :TODO: figure out how to either integrate zoxide or eshell-z
+(use-package zoxide)
+
+;; :TODO: make this shit work
+(defun eshell-my-switch-directory (dir) 
+  (eshell/cd dir)
+  (eshell-send-input))
+
+(defun eshell-cd-with-zoxide ()
+   (interactive)
+   (zoxide-open-with nil 'eshell-my-switch-directory t))
+
+(use-package eshell-z)
 
 ;; Set up zone-matrix
 (straight-use-package
