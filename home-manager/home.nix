@@ -227,11 +227,13 @@ in {
   };
 
  programs.zsh = {
-   enable = true; # had to disable to make home-manager switch work...
+   enable = true;
    enableAutosuggestions = true;
-   # enableSyntaxHighlighting = true; #remove this line if not compile
-   initExtra =
-     "if [ -e ~/.nix-profile/etc/profile.d/nix.sh ]; then . ~/.nix-profile/etc/profile.d/nix.sh; fi";
+
+   initExtra = ''
+     if [ -e ~/.nix-profile/etc/profile.d/nix.sh ]; then . ~/.nix-profile/etc/profile.d/nix.sh; fi
+     source ${pkgs.zsh-syntax-highlighting}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+   '';
 
    oh-my-zsh = {
      enable = true;
@@ -239,7 +241,22 @@ in {
      plugins = [ "git" ];
    };
 
-   shellAliases = { cls = "clear"; };
+   shellAliases = {
+     cls = "clear";
+     r = "ranger";
+     nv = "nvim";
+   };
+
+   plugins = [
+     {
+       name = "syntax-highlighting";
+       src = "${pkgs.zsh-syntax-highlighting}/share/zsh/site-functions";
+     }
+   ];
+
+   localVariables = {
+     ZSH_DISABLE_COMPFIX = "true"; # for syntax highlighting to work
+   };
    # sessionVariables = { RIPGREP_CONFIG_PATH = "${my-home-dir}/.ripgreprc"; };
  };
 
