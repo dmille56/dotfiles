@@ -107,6 +107,8 @@ lua <<EOF
       mapping = {
           ["<C-d>"] = cmp.mapping.scroll_docs(-4),
           ["<C-f>"] = cmp.mapping.scroll_docs(4),
+          ['<Up>'] = cmp.mapping.select_prev_item(select_opts),
+          ['<Down>'] = cmp.mapping.select_next_item(select_opts),
           ["<C-e>"] = cmp.mapping.close(),
           ['<C-Space>'] = cmp.mapping.complete(),
           ['<C-e>'] = cmp.mapping.abort(),
@@ -137,6 +139,7 @@ lua <<EOF
   -- Setup lspconfig.
   local capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
   -- Replace <YOUR_LSP_SERVER> with each lsp server you've enabled.
+  require('lspconfig')['pylsp'].setup { capabilities = capabilities }
   require('lspconfig')['hls'].setup {
     capabilities = capabilities,
     on_attach = function(client, bufnr)
