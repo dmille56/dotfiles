@@ -247,13 +247,6 @@ in {
      nv = "nvim";
    };
 
-   plugins = [
-     {
-       name = "syntax-highlighting";
-       src = "${pkgs.zsh-syntax-highlighting}/share/zsh/site-functions";
-     }
-   ];
-
    localVariables = {
      ZSH_DISABLE_COMPFIX = "true"; # for syntax highlighting to work
    };

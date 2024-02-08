@@ -168,7 +168,7 @@
     :override t
     ((do_statement "do" @font-lock-keyword-face "until" @font-lock-keyword-face))
 
-    ;; flow control statements (continue/break/return/throw)
+    ;; flow control statements (continue/break/return/throw/exit)
     :language powershell
     :feature function
     :override t
@@ -188,6 +188,11 @@
     :feature function
     :override t
     ((flow_control_statement "throw" @font-lock-keyword-face))
+
+    :language powershell
+    :feature function
+    :override t
+    ((flow_control_statement "exit" @font-lock-keyword-face))
 
     ;; type [System.Data] like syntax
     :language powershell
