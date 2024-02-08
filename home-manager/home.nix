@@ -247,6 +247,18 @@ in {
      nv = "nvim";
    };
 
+   plugins = [
+     {
+       name = "fzf-tab";
+       src = pkgs.fetchFromGitHub {
+         owner = "Aloxaf";
+         repo = "fzf-tab";
+         rev = "c2b4aa5ad2532cca91f23908ac7f00efb7ff09c9";
+         sha256 = "1b4pksrc573aklk71dn2zikiymsvq19bgvamrdffpf7azpq6kxl2";
+       };
+     }
+   ];
+
    localVariables = {
      ZSH_DISABLE_COMPFIX = "true"; # for syntax highlighting to work
    };
