@@ -45,7 +45,7 @@
   :group 'powershell-ts-mode)
 
 (defcustom powershell-ts-compile-command
-  '(concat (symbol-name powershell-ts-command-default) " " (buffer-file-name))
+  '(concat (symbol-name powershell-ts-command-default) " \"" (buffer-file-name) "\"")
   "Default command compile command to run a powershell script."
   :type 'string
   :group 'powershell-ts-mode)

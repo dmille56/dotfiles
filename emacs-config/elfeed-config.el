@@ -27,6 +27,7 @@
         ("https://www.youtube.com/feeds/videos.xml?channel_id=UCXR5UyxWQdZ50pWyNn5FyoQ" yt fitness i) ;; Connect The Watts
         ("https://www.youtube.com/feeds/videos.xml?channel_id=UCFGCfbYPyFpITa0mbwbTmhA" yt fitness i) ;; Kaizen DIY Gym
 	("https://www.youtube.com/feeds/videos.xml?channel_id=UCzN7S0O87X-Q1CJqyWnJ9mw" yt i)
+        ("https://www.youtube.com/feeds/videso.xml?channel_id=UCsEPI9OwGEw5Lm0E7Paq62g" yt i)
         ("https://www.youtube.com/feeds/videos.xml?channel_id=UCl8hzdP5wVlhuzNG3WCJa1w" yt nba nuggets sports) ;; Denver Nuggets yt channel
         ("https://www.youtube.com/feeds/videos.xml?channel_id=UCDfVqMBTxstChZ5YVrrXPPQ" yt nba nuggets sports) ;; Locked on Nuggets
         ("https://www.youtube.com/feeds/videos.xml?channel_id=UCew5br5cO1ZKO7Z_F1WA8Bg" yt nfl broncos sports) ;; That's Good Sports
