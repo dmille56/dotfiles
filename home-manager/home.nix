@@ -246,6 +246,7 @@ in {
      cls = "clear";
      r = "ranger";
      nv = "nvim";
+     lg = "lazygit";
    };
 
    plugins = [
