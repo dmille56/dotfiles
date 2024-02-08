@@ -128,6 +128,7 @@ in {
     csvtool
     ueberzugpp 
     gitui
+    lazygit
 
     nix-prefetch-git
     dropbox
