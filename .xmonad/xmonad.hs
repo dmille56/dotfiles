@@ -54,7 +54,7 @@ myLayoutHook = onWorkspace "9:mon" ((smartBorders . avoidStruts) myLayout') $ ((
 myManageHook =
   composeAll
     [ className =? "Spotify" --> doShift "3:mus",
-      className =? "Steam" --> doShift "4:game",
+      className =? "steam" --> doShift "4:game",
       className =? "mpv" --> doShift "2:vid",
       className =? "vlc" --> doShift "2:vid",
       className =? "Gnome-system-monitor" --> doShift "9:mon",
