@@ -60,6 +60,8 @@ myManageHook =
       className =? "Gnome-system-monitor" --> doShift "9:mon",
       className =? "Pavucontrol" --> doShift "9:mon",
       className =? "Chromium-browser" --> doShift "2:vid",
+      className =? "Emacs" --> doShift "5:dev",
+      className =? "Termonad-linux-x86_64" --> doShift "6:term",
       title =? "Mozilla Firefox" --> doShift "1:web",
       (isFullscreen --> doFullFloat),
       manageDocks,
@@ -86,7 +88,7 @@ main = do
   spawn "xfsettingsd"
   spawn "start-pulseaudio-x11"
   -- spawn "redshift -l 47.608013:-122.335167 -t 6500:3500" -- causes issues when starting it this way for some reason... TODO: figure out why
-  emacsDaemon <- spawnPipe "emacs --daemon"
+  -- emacsDaemon <- spawnPipe "emacs --daemon"
   greenclipDaemon <- spawnPipe "greenclip daemon"
   spawn "pavucontrol"
   spawn "gnome-system-monitor"

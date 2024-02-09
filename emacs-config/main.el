@@ -310,6 +310,7 @@
    (define-key evil-normal-state-map (kbd "M-x") 'helm-M-x)
    (define-key evil-normal-state-map (kbd "Q") 'evil-record-macro)
    (define-key evil-normal-state-map (kbd "gZ") 'zoxide-find-file)
+   (define-key evil-normal-state-map (kbd "gb") 'evil-jump-backward)
    ;; (define-key evil-visual-state-map (kbd ":") 'evil-repeat-find-char)
    (define-key evil-visual-state-map (kbd ";") 'evil-ex)
    (define-key evil-visual-state-map (kbd "M-x") 'helm-M-x)
