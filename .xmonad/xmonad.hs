@@ -19,7 +19,9 @@ import XMonad.Layout.Tabbed
 import XMonad.Prompt
 import XMonad.Prompt.Shell
 import XMonad.Prompt.Window
+import qualified XMonad.StackSet as W
 import XMonad.Util.EZConfig (additionalKeys)
+import XMonad.Util.NamedScratchpad
 import XMonad.Util.Run (spawnPipe)
 
 myModMask = mod4Mask -- Bind Mod to the windows key
@@ -67,10 +69,31 @@ myManageHook =
       manageDocks,
       manageHook def
     ]
+    <+> namedScratchpadManageHook myScratchPads
 
--- audioPlayPauseCommand = "dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause"
--- audioPreviousCommand = "dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Previous"
--- audioNextCommand = "dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Next"
+rectCentered :: Rational -> W.RationalRect
+rectCentered percentage = W.RationalRect offset offset percentage percentage
+  where
+    offset = (1 - percentage) / 2
+
+-- Scratchpads
+myScratchPads :: [NamedScratchpad]
+myScratchPads = [btm, term]
+  where
+    btm = NS "btm" spawn' find manage'
+      where
+        spawn' = "xterm -name btm_term -e btm"
+        find = resource =? "btm_term"
+        manage' = customFloating $ rectCentered 0.9
+    term = NS "term" spawn' find manage'
+      where
+        spawn' = "xterm -name scratchpad_term"
+        find = resource =? "scratchpad_term"
+        manage' = customFloating $ rectCentered 0.9
+
+openScratchPad :: String -> X ()
+openScratchPad = namedScratchpadAction myScratchPads
+
 audioPlayPauseCommand = "playerctl play-pause -p spotifyd,spotify,chromium,firefox"
 
 audioPreviousCommand = "playerctl previous -p spotifyd,spotify,chromium,firefox"
@@ -87,8 +110,8 @@ main = do
   xmproc <- spawnPipe "xmobar"
   spawn "xfsettingsd"
   spawn "start-pulseaudio-x11"
-  -- spawn "redshift -l 47.608013:-122.335167 -t 6500:3500" -- causes issues when starting it this way for some reason... TODO: figure out why
-  -- emacsDaemon <- spawnPipe "emacs --daemon"
+  -- spawn "redshift -l 47.608013:-122.335167 -t 6500:3500" -- causes issues when starting it this way for some reason... :TODO: figure out why
+  -- emacsDaemon <- spawnPipe "emacs --daemon" -- maybe re-enable this at some point... :TODO: figure out why svg-tag-mode causes issues when started as a daemon
   greenclipDaemon <- spawnPipe "greenclip daemon"
   spawn "pavucontrol"
   spawn "gnome-system-monitor"
@@ -127,6 +150,8 @@ main = do
                            ((myModMask .|. shiftMask, xK_g), windowPrompt myXPConfig Bring allWindows),
                            ((myModMask, xK_c), spawn "rofi -modi 'clipboard:greenclip print' -show clipboard -run-command '{cmd}'"),
                            ((myModMask, xK_y), spawn "ytfzf -D"),
+                           ((myModMask, xK_backslash), openScratchPad "term"),
+                           ((myModMask .|. shiftMask, xK_backslash), openScratchPad "btm"),
                            ((myModMask, xK_F9), spawn audioQueryTrackInfoCommand),
                            ((0, xF86XK_AudioPlay), spawn audioPlayPauseCommand),
                            ((myModMask, xK_F12), spawn audioPlayPauseCommand),
