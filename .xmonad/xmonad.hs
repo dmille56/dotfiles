@@ -82,12 +82,12 @@ myScratchPads = [btm, term]
   where
     btm = NS "btm" spawn' find manage'
       where
-        spawn' = "xterm -name btm_term -e btm"
+        spawn' = "xterm -name btm_term -fs 14 -e btm"
         find = resource =? "btm_term"
         manage' = customFloating $ rectCentered 0.9
     term = NS "term" spawn' find manage'
       where
-        spawn' = "xterm -name scratchpad_term"
+        spawn' = "xterm -name scratchpad_term -fs 14"
         find = resource =? "scratchpad_term"
         manage' = customFloating $ rectCentered 0.9
 
