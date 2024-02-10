@@ -221,6 +221,16 @@
   ("r" hl-todo-rgrep "rgrep")
   )
 
+ (defhydra hydra-org-roam (:exit t)
+   "org-roam"
+  ("l" org-roam-buffer-toggle "buf toggle")
+  ("f" org-roam-node-find "find")
+  ("g" org-roam-graph "graph")
+  ("i" org-roam-node-insert "node insert")
+  ("c" org-roam-capture "capture")
+  ("j" org-roam-dailies-capture-today "capture today")
+  )
+
 (use-package evil-leader
   :init
   (setq evil-leader/in-all-states t) ;; allows evil leader via "C-<leader>" in other states
@@ -248,6 +258,7 @@
    "a" 'link-hint-open-link
    "M" 'hydra-emms-mode/body
    "m" 'hydra-evil-macros/body
+   "O" 'hydra-org-roam/body
 
    ;; window management
    "o" 'other-window
