@@ -43,7 +43,7 @@ myXPConfig =
       searchPredicate = fuzzyMatch
     }
 
-myLayoutHook = onWorkspace "9:mon" ((smartBorders . avoidStruts) myLayout') $ ((smartBorders . avoidStruts) myLayout)
+myLayoutHook = onWorkspace "9" ((smartBorders . avoidStruts) myLayout') $ ((smartBorders . avoidStruts) myLayout)
   where
     myLayout = tab ||| tiled ||| Accordion
     myLayout' = tiled ||| Accordion ||| tab
@@ -58,8 +58,6 @@ myManageHook =
     [ className =? "steam" --> doShift "3:game",
       className =? "mpv" --> doShift "2:vid",
       className =? "vlc" --> doShift "2:vid",
-      className =? "Gnome-system-monitor" --> doShift "9:mon",
-      className =? "Pavucontrol" --> doShift "9:mon",
       className =? "Chromium-browser" --> doShift "2:vid",
       className =? "Emacs" --> doShift "5:dev",
       className =? "Termonad-linux-x86_64" --> doShift "4:term",
@@ -77,12 +75,17 @@ rectCentered percentage = W.RationalRect offset offset percentage percentage
 
 -- Scratchpads
 myScratchPads :: [NamedScratchpad]
-myScratchPads = [btm, term, fileManager, lazygit, music]
+myScratchPads = [btm, term, fileManager, lazygit, music, volumeControl]
   where
     btm = NS "btm" spawn' find manage'
       where
         spawn' = "xterm -name btm_term -fs 14 -e btm"
         find = resource =? "btm_term"
+        manage' = customFloating $ rectCentered 0.9
+    volumeControl = NS "volumeControl" spawn' find manage'
+      where
+        spawn' = "pavucontrol"
+        find = className =? "Pavucontrol"
         manage' = customFloating $ rectCentered 0.9
     term = NS "term" spawn' find manage'
       where
@@ -98,7 +101,7 @@ myScratchPads = [btm, term, fileManager, lazygit, music]
       where
         spawn' = "xterm -name lazygit_term -fs 14 -e lazygit"
         find = resource =? "lazygit_term"
-        manage' = customFloating $ rectCentered 0.9
+        manage' = customFloating $ rectCentered 0.95
     music = NS "music" spawn' find manage'
       where
         spawn' = "spotify"
@@ -127,8 +130,8 @@ main = do
   -- spawn "redshift -l 47.608013:-122.335167 -t 6500:3500" -- causes issues when starting it this way for some reason... :TODO: figure out why
   -- emacsDaemon <- spawnPipe "emacs --daemon" -- maybe re-enable this at some point... :TODO: figure out why svg-tag-mode causes issues when started as a daemon
   greenclipDaemon <- spawnPipe "greenclip daemon"
-  spawn "pavucontrol"
-  spawn "gnome-system-monitor"
+  -- spawn "pavucontrol"
+  -- spawn "gnome-system-monitor"
   xmonad $
     ewmh $
       def
@@ -148,12 +151,11 @@ main = do
           borderWidth = 2,
           normalBorderColor = (_myTheme_normalBorderColor myTheme),
           focusedBorderColor = (_myTheme_focusedBorderColor myTheme),
-          workspaces = ["1:web", "2:vid", "3:game", "4:term", "5:dev", "6", "7", "8", "9:mon"]
+          workspaces = ["1:web", "2:vid", "3:game", "4:term", "5:dev", "6", "7", "8", "9"]
         }
         `additionalKeys` [ ((myModMask .|. shiftMask, xK_z), spawn "xscreensaver-command -lock; xset dpms force off"),
                            ((myModMask, xK_p), spawn "rofi -show run"),
                            ((myModMask, xK_i), spawn "rofi -show window"),
-                           -- ((myModMask, xK_o), spawn "twitchy-emacs-play-script"),
                            ((myModMask, xK_o), spawn "play-yt-script"),
                            ((myModMask .|. shiftMask, xK_o), spawn "play-yt-script-format"),
                            ((myModMask, xK_s), promptSearch myXPConfig duckduckgo),
@@ -167,6 +169,7 @@ main = do
                            ((myModMask, xK_backslash), openScratchPad "term"),
                            ((myModMask .|. shiftMask, xK_backslash), openScratchPad "lazygit"),
                            ((myModMask, xK_bracketright), openScratchPad "btm"),
+                           ((myModMask .|. shiftMask, xK_bracketright), openScratchPad "volumeControl"),
                            ((myModMask, xK_bracketleft), openScratchPad "music"),
                            ((myModMask .|. shiftMask, xK_bracketleft), openScratchPad "fileManager"),
                            ((myModMask, xK_F9), spawn audioQueryTrackInfoCommand),

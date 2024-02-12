@@ -335,6 +335,9 @@
 
 (use-package evil-tutor)
 
+;; :TODO: figure out how to use this package effectively
+(use-package evil-textobj-tree-sitter)
+
 ;; Set default font
 (set-face-attribute 'default nil
                     :family "Deja Vu Sans Mono for Powerline"
