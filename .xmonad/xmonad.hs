@@ -55,15 +55,14 @@ myLayoutHook = onWorkspace "9:mon" ((smartBorders . avoidStruts) myLayout') $ ((
 
 myManageHook =
   composeAll
-    [ className =? "Spotify" --> doShift "3:mus",
-      className =? "steam" --> doShift "4:game",
+    [ className =? "steam" --> doShift "3:game",
       className =? "mpv" --> doShift "2:vid",
       className =? "vlc" --> doShift "2:vid",
       className =? "Gnome-system-monitor" --> doShift "9:mon",
       className =? "Pavucontrol" --> doShift "9:mon",
       className =? "Chromium-browser" --> doShift "2:vid",
       className =? "Emacs" --> doShift "5:dev",
-      className =? "Termonad-linux-x86_64" --> doShift "6:term",
+      className =? "Termonad-linux-x86_64" --> doShift "4:term",
       title =? "Mozilla Firefox" --> doShift "1:web",
       (isFullscreen --> doFullFloat),
       manageDocks,
@@ -78,7 +77,7 @@ rectCentered percentage = W.RationalRect offset offset percentage percentage
 
 -- Scratchpads
 myScratchPads :: [NamedScratchpad]
-myScratchPads = [btm, term]
+myScratchPads = [btm, term, fileManager, lazygit, music]
   where
     btm = NS "btm" spawn' find manage'
       where
@@ -89,6 +88,21 @@ myScratchPads = [btm, term]
       where
         spawn' = "xterm -name scratchpad_term -fs 14"
         find = resource =? "scratchpad_term"
+        manage' = customFloating $ rectCentered 0.9
+    fileManager = NS "fileManager" spawn' find manage'
+      where
+        spawn' = "thunar"
+        find = className =? "Thunar"
+        manage' = customFloating $ rectCentered 0.9
+    lazygit = NS "lazygit" spawn' find manage'
+      where
+        spawn' = "xterm -name lazygit_term -fs 14 -e lazygit"
+        find = resource =? "lazygit_term"
+        manage' = customFloating $ rectCentered 0.9
+    music = NS "music" spawn' find manage'
+      where
+        spawn' = "spotify"
+        find = className =? "Spotify"
         manage' = customFloating $ rectCentered 0.9
 
 openScratchPad :: String -> X ()
@@ -134,7 +148,7 @@ main = do
           borderWidth = 2,
           normalBorderColor = (_myTheme_normalBorderColor myTheme),
           focusedBorderColor = (_myTheme_focusedBorderColor myTheme),
-          workspaces = ["1:web", "2:vid", "3:mus", "4:game", "5:dev", "6:term", "7", "8", "9:mon"]
+          workspaces = ["1:web", "2:vid", "3:game", "4:term", "5:dev", "6", "7", "8", "9:mon"]
         }
         `additionalKeys` [ ((myModMask .|. shiftMask, xK_z), spawn "xscreensaver-command -lock; xset dpms force off"),
                            ((myModMask, xK_p), spawn "rofi -show run"),
@@ -151,7 +165,10 @@ main = do
                            ((myModMask, xK_c), spawn "rofi -modi 'clipboard:greenclip print' -show clipboard -run-command '{cmd}'"),
                            ((myModMask, xK_y), spawn "ytfzf -D"),
                            ((myModMask, xK_backslash), openScratchPad "term"),
-                           ((myModMask .|. shiftMask, xK_backslash), openScratchPad "btm"),
+                           ((myModMask .|. shiftMask, xK_backslash), openScratchPad "lazygit"),
+                           ((myModMask, xK_bracketright), openScratchPad "btm"),
+                           ((myModMask, xK_bracketleft), openScratchPad "music"),
+                           ((myModMask .|. shiftMask, xK_bracketleft), openScratchPad "fileManager"),
                            ((myModMask, xK_F9), spawn audioQueryTrackInfoCommand),
                            ((0, xF86XK_AudioPlay), spawn audioPlayPauseCommand),
                            ((myModMask, xK_F12), spawn audioPlayPauseCommand),

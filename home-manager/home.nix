@@ -567,6 +567,11 @@ in {
     rev = "f3c876d8c97f9bb504c98592a8d96770e70585bb";
   };
 
+  home.file.".config/lazygit/theme/lazygit".source = builtins.fetchGit {
+    url = "https://github.com/catppuccin/lazygit";
+    rev = "a544cef9a18c3a94e0344281e0ddcf99a18a8ede";
+  };
+
   home.stateVersion = "18.09"; # one of "18.09", "19.03", "19.09", "20.03", "20.09", "21.03", "21.05", "21.11", "22.05", "22.11", "23.05", "23.11"
 
   fonts.fontconfig.enable = true;
@@ -576,6 +581,7 @@ in {
     # OPENAI_API_KEY = builtins.extraBuiltins.pass "OPENAI_API_KEY"; #try to get working via: https://elvishjerricco.github.io/2018/06/24/secure-declarative-key-management.html
     OPENAI_API_MODEL = "gpt-3.5-turbo"; # options: gpt-3.5-turbo, gpt-4
     RIPGREP_CONFIG_PATH = "${my-home-dir}/.ripgreprc";
+    LG_CONFIG_FILE= "${my-home-dir}/.config/lazygit/config.yml,${my-home-dir}/.config/lazygit/theme/lazygit/themes-mergable/mocha/blue.yml";
   };
 
   manual.manpages.enable = false; # :TODO: reenable man pages eventually... they wouldn't update correctly
