@@ -483,6 +483,8 @@
 (use-package sublime-themes)
 (use-package spacemacs-theme)
 (use-package dracula-theme)
+(straight-use-package '(nano-theme :type git :host github
+                                   :repo "rougier/nano-theme"))
 
 (load-theme 'dracula t)
 ;; (if (or (display-graphic-p) (daemonp))
