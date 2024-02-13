@@ -361,6 +361,7 @@ in {
       telescope-zoxide
       neogit
       golden-ratio
+      lazygit-nvim
 
       # completion
       cmp-nvim-lsp
@@ -469,6 +470,7 @@ in {
     nnoremap <leader>b :Telescope buffers<CR>
 
     nnoremap <leader>g :Neogit<CR>
+    nnoremap <leader>G :LazyGit<CR>
 
     nnoremap <leader>z :Telescope zoxide list<CR>
 
