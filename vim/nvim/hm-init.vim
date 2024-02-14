@@ -88,6 +88,9 @@ nnoremap <leader>p :Telescope find_files<CR>
 nnoremap <leader>b :Telescope buffers<CR>
 
 nnoremap <leader>g :Neogit<CR>
+nnoremap <leader>G :LazyGit<CR>
+
+nnoremap <leader>z :Telescope zoxide list<CR>
 
 let g:airline_powerline_fonts = 1
 let g:airline_theme= 'dracula'

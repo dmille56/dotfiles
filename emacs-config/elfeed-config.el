@@ -64,11 +64,16 @@
     (kbd "g d") 'elfeed-open-in-chromium
     (kbd "g p") 'elfeed-play-mpv
     (kbd "g y") 'elfeed-download-yt
-    (kbd "g e") 'elfeed-download-ytaudio)
+    (kbd "g e") 'elfeed-download-ytaudio
+    (kbd "f i") (lambda () (interactive) (elfeed-search-set-filter "@1-week-ago -junk -short +unread -hn +i"))
+    (kbd "f o") (lambda () (interactive) (elfeed-search-set-filter "@1-week-ago -junk -short +unread -hn -i"))
+    (kbd "f h") (lambda () (interactive) (elfeed-search-set-filter "@1-week-ago -junk -short +unread +hn"))
+    )
   (evil-define-key 'normal elfeed-show-mode-map
     (kbd "g c") 'elfeed-browsecomments-wrapper
     (kbd "g d") 'elfeed-open-in-chromium
-    (kbd "g p") 'elfeed-play-mpv)
+    (kbd "g p") 'elfeed-play-mpv
+    )
   (setq elfeed-feeds elfeed-all-the-feeds)
   (setq-default elfeed-search-filter "@1-week-ago -junk -short +unread -hn +i")
   :config
