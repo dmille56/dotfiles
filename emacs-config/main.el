@@ -228,6 +228,8 @@
   ("g" org-roam-graph "graph")
   ("i" org-roam-node-insert "node insert")
   ("c" org-roam-capture "capture")
+  ("b" my/org-roam-capture-inbox "capture inbox")
+  ("o" my/org-roam-capture-1-on-1 "capture 1-on-1")
   ("j" org-roam-dailies-capture-today "capture today")
   )
 
@@ -606,6 +608,34 @@
   )
 (setq org-return-follows-link t)
 
+;; :TODO: add more org-roam-capture-templates and figure out how they work correctly
+(setq org-roam-capture-templates
+        '(
+          ("d" "default" plain "%?"
+            :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
+                                "#+title: ${title}\n")
+            :unnarrowed t)
+        )
+
+(defun my/org-roam-capture-inbox ()
+  (interactive)
+  (org-roam-capture- :node (org-roam-node-create)
+                     :templates '(("i" "inbox" plain "* %?"
+                                  :if-new (file+head "inbox.org" "#+title: inbox\n#+filetags: :inbox:")))))
+
+(defun my/org-roam-capture-1-on-1 ()
+  (interactive)
+  (org-roam-capture- :node (org-roam-node-create)
+                     :templates '(("o" "1-on-1" plain "* %<%Y-%m-%d> %?"
+                                  :if-new (file+head "1-on-1.org" "#+title: 1-on-1\n#+filetags: :1-on-1:meeting:")))))
+
+;; :TODO: fix this shit
+(defun my/org-roam-capture-tree ()
+  (interactive)
+  (org-roam-capture- :node (org-roam-node-create)
+                     :templates '(("t" "tree" plain "* %<%Y-%m>\n ** %<%Y-%m-%d> %?\n"
+                                  :if-new (file+head "tree.org" "#+title: tree\n#+filetags: :tree:")))))
+
 ;; :TODO: learn how to use org-roam package for notes
 ;; :TODO: also look up org-drill
 (use-package org-roam
@@ -617,6 +647,7 @@
          ("C-c n g" . org-roam-graph)
          ("C-c n i" . org-roam-node-insert)
          ("C-c n c" . org-roam-capture)
+         ("C-c n b" . my/org-roam-capture-inbox)
          ;; Dailies
          ("C-c n j" . org-roam-dailies-capture-today))
   :config
