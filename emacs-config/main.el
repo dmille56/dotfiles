@@ -241,6 +241,7 @@
   (evil-leader/set-leader "<SPC>")
   (evil-leader/set-key
    "p" 'helm-find-files
+   "P" 'check-parens
    "i" 'helm-occur
    "b" 'switch-to-buffer
    "k" 'kill-buffer
@@ -616,6 +617,7 @@
                                 "#+title: ${title}\n")
             :unnarrowed t)
         )
+)
 
 (defun my/org-roam-capture-inbox ()
   (interactive)
@@ -710,8 +712,7 @@
   :init
   (global-diff-hl-mode)
   (add-hook 'magit-pre-refresh-hook 'diff-hl-magit-pre-refresh)
-  (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh)
-)
+  (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh))
 
 (use-package read-aloud
   :init
