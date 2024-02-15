@@ -356,6 +356,7 @@ And not a class or function parent."
   (setq-local electric-indent-chars
               (append "{}():;," electric-indent-chars))
   (setq-local compile-command powershell-ts-compile-command)
+  (setq-local which-func-functions nil)
 
   ;; finish with this call to finalize the treesit setup
   (treesit-major-mode-setup))
