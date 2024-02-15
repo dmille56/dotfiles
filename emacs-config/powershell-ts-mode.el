@@ -138,6 +138,12 @@
     :override t
     ((else_clause "else" @font-lock-keyword-face))
 
+    ;; elseif statement
+    :language powershell
+    :feature function
+    :override t
+    ((elseif_clause "elseif" @font-lock-keyword-face))
+
     ;; foreach statement
     :language powershell
     :feature function
