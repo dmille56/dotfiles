@@ -635,8 +635,8 @@
 (defun my/org-roam-capture-tree ()
   (interactive)
   (org-roam-capture- :node (org-roam-node-create)
-                     :templates '(("t" "tree" plain "* %<%Y-%m>\n ** %<%Y-%m-%d> %?\n"
-                                  :if-new (file+head "tree.org" "#+title: tree\n#+filetags: :tree:")))))
+                     :templates '(("m" "meeting" plain "%?\n"
+                                  :if-new (file+datetree "meeting-test.org" "")))))
 
 ;; :TODO: learn how to use org-roam package for notes
 ;; :TODO: also look up org-drill
