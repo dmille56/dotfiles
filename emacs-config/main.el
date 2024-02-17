@@ -152,6 +152,7 @@
   ("L" load-file "load file")
   ("d" eval-defun "eval defun")
   ("e" eval-last-sexp "eval last sexp")
+  ("D" edebug-defun "edebug function")
   )
 
 (defhydra hydra-doc-view-mode (:exit t)
@@ -247,6 +248,7 @@
    "k" 'kill-buffer
    "e" 'projectile-command-map
    ;; "j" 'avy-goto-char
+   "d" 'pop-global-mark ;; go back where you were before a jump with say... avy
    "j" 'avy-goto-word-1
    "f" 'avy-goto-line
    "x" 'compile
@@ -316,6 +318,8 @@
   :ensure t
   :config
   (evil-collection-init))
+
+(add-hook 'edebug-mode-hook 'evil-normalize-keymaps)
 
 ;; remap ; to : in evil (for efficiency) and unmap q (because it's a pain in the ass and i don't use macros)
 (with-eval-after-load 'evil-maps
@@ -977,6 +981,9 @@
    (zoxide-open-with query 'eshell-my-cd))
 
 (use-package eshell-z)
+
+(use-package ts-query-highlight
+  :straight (:type git :host sourcehut :repo "meow_king/ts-query-highlight"))
 
 ;; Set up zone-matrix
 (straight-use-package
