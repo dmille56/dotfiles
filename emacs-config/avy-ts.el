@@ -44,21 +44,29 @@
                                start end)))))))
       (message "Tree-sitter is not active or not available for the current buffer.")))))
 
-(defun my/query-i ()
-  (interactive)
-  (my/query-tree-sitter-ast "(function_definition)")
-)
-
-(defun my/query-get (query-list)
+(defun my/query-get-positions (query-list)
   (let* (
          (start-window (window-start))
          (end-window (window-end (selected-window) t))
          (root-node (treesit-buffer-root-node))
-         (captures (treesit-query-capture root-node query start-window end-window t))
-         (captures-list nil)
-         (positions nil)
+         (captures-list (mapcar (lambda (query) (treesit-query-capture root-node query start-window end-window t)) query-list))
+         (positions (sort (mapcar #'treesit-node-start (apply #'append captures-list)) #'<))
          )
+    positions
     ))
+
+(defun my/query-jump (query-list)
+  (interactive)
+  (let* (
+         (positions (my/query-get-positions query-list))
+         )
+    (avy-with my/query-jump(avy--process positions (avy--style-fn avy-style)))
+    ))
+
+(defun my/query-i ()
+  (interactive)
+  (my/query-jump '("(comment) @comment" "(function_statement) @function" "(if_statement) @if"))
+)
 
 (defun my/query-tree-small ()
   (interactive)
@@ -121,7 +129,7 @@
 
 (global-set-key (kbd "<f9>") 'my/query-tree-small)
 
-(global-set-key (kbd "<f9>") 'my/query-ts)
+(global-set-key (kbd "<f9>") 'my/query-i)
 
  ;; (class_definition class)
  ;; (function_definition def)
