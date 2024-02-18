@@ -9,6 +9,8 @@
 
 ;; Notes:
 ;; :TODO: add code to jump between visibile classes/functions/loops/conditionals/etc.
+;; :TODO: add code to allow deletion of classes/functoins/loops/etc. through avy
+;; :TODO: add code to allow change inside like functionality of classes/functoins/loops/etc. through avy
 
 ;;; Code:
 
