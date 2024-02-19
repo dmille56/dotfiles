@@ -230,7 +230,9 @@
   ("i" org-roam-node-insert "node insert")
   ("c" org-roam-capture "capture")
   ("b" my/org-roam-capture-inbox "capture inbox")
-  ("o" my/org-roam-capture-1-on-1 "capture 1-on-1")
+  ("1" my/org-roam-capture-1-on-1 "capture 1-on-1")
+  ("m" my/org-roam-capture-meeting "capture meeting")
+  ("h" my/org-roam-capture-hype-doc "capture 1-on-1")
   ("j" org-roam-dailies-capture-today "capture today")
   )
 
@@ -629,18 +631,23 @@
                      :templates '(("i" "inbox" plain "* %?"
                                   :if-new (file+head "inbox.org" "#+title: inbox\n#+filetags: :inbox:")))))
 
+(defun my/org-roam-capture-meeting ()
+  (interactive)
+  (org-roam-capture- :node (org-roam-node-create)
+                     :templates '(("m" "meeting" plain "* %<%Y-%m-%d> %?"
+                                  :if-new (file+head "meetings.org" "#+title: meetings\n#+filetags: :meetings:")))))
+
 (defun my/org-roam-capture-1-on-1 ()
   (interactive)
   (org-roam-capture- :node (org-roam-node-create)
-                     :templates '(("o" "1-on-1" plain "* %<%Y-%m-%d> %?"
-                                  :if-new (file+head "1-on-1.org" "#+title: 1-on-1\n#+filetags: :1-on-1:meeting:")))))
+                     :templates '(("o" "1-on-1" plain "%?\n"
+                                  :if-new (file+datetree "1-on-1.org" "")))))
 
-;; :TODO: fix this shit
-(defun my/org-roam-capture-tree ()
+(defun my/org-roam-capture-hype-doc ()
   (interactive)
   (org-roam-capture- :node (org-roam-node-create)
-                     :templates '(("m" "meeting" plain "%?\n"
-                                  :if-new (file+datetree "meeting-test.org" "")))))
+                     :templates '(("h" "hype" plain "* %<%Y-%m-%d> %?"
+                                  :if-new (file+head "hype-doc.org" "#+title: hype doc\n#+filetags: :hype:")))))
 
 ;; :TODO: learn how to use org-roam package for notes
 ;; :TODO: also look up org-drill
