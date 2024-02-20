@@ -29,6 +29,21 @@
   "Customize group for avy-ts-mode.el."
   :group 'emacs)
 
+(defvar avy-ts-python-queries '(
+"(function_definition body: (block)? @function.inner) @function.outer"
+"(class_definition body: (block)? @class.inner) @class.outer"
+"(parameter ((_) @parameter.inner . \",\"? @parameter.outer) @parameter.outer)"
+"(lambda_parameters ((_) @parameter.inner . \",\"? @parameter.outer) @parameter.outer)"
+"(argument_list ((_) @parameter.inner . \",\"? @parameter.outer) @parameter.outer)"
+"(comment) @comment.inner"
+"(comment)+ @comment.outer"
+;; "((function_definition name: (identifier) @_name body: (block)? @test.inner) @test.outer (#match \"^test_\" @_name))"
+"((function_definition name: (identifier) @name body: (block)? @test.inner) @test.outer)"
+"(for_statement body: (_) @loop.inner) @loop.outer"
+"(while_statement body: (_) @loop.inner) @loop.outer"
+"(if_statement consequence: (_) @conditional.inner) @conditional.outer"
+))
+
 (defcustom avy-ts-queries '("(comment) @comment" "(function_statement) @func" "(if_statement) @if" "(else_clause) @else" "(elseif_clause) @elseif" "(class_statement) @class" "(param_block) @param" "(for_statement) @for" "(while_statement) @while" "(do_statement) @do" "(class_method_definition) @classmeth" "(foreach_statement) @for" "(try_statement) @try" "(catch_clause) @catch" "(finally_clause) @finally")
   "Queries to search for."
   :type '(repeat string)
@@ -55,11 +70,45 @@
 
 (defun avy-ts-avy-jump ()
   (interactive)
-  (avy-ts-query-avy-jump avy-ts-queries)
+  ;;(avy-ts-query-avy-jump avy-ts-queries)
+  (avy-ts-query-avy-jump avy-ts-python-queries)
 )
 
+(defun avy-ts--get-query (language queries-dir top-level)
+  "Get tree sitter query for `LANGUAGE' from `QUERIES-DIR'.
+`TOP-LEVEL' is used to mention if we should load optional inherits."
+  (let (
+        (filename (concat queries-dir language "/textobjects.scm"))
+        )
+    (with-temp-buffer
+      (if (file-exists-p filename)
+          (progn
+            (insert-file-contents filename)
+            (goto-char (point-min))
+            (let ((inherits-line (evil-textobj-tree-sitter--get-inherits-line filename)))
+              (if inherits-line
+                  (insert (string-join (mapcar (lambda (x)
+                                                 (if (string-prefix-p "(" x)
+                                                     (if top-level
+                                                         (avy-ts--get-queries (substring x 1 -1)
+                                                                                                       queries-dir nil))
+                                                   (avy-ts--get-queries x queries-dir nil)))
+                                               (split-string inherits-line ","))
+                                       "\n"))))
+            (buffer-string))))))
+
+(defun avy-ts-test-scm-queries ()
+  (interactive)
+  (let* (
+        (query (avy-ts--get-query "python" "~/dotfiles/emacs-config/treesit-queries/" t))
+        )
+    (avy-ts-query-avy-jump (list query))
+    ))
+
 ;; :TODO: remove this global set-key
-(global-set-key (kbd "<f9>") 'avy-ts-avy-jump)
+;; (global-set-key (kbd "<f9>") 'avy-ts-avy-jump)
+;; 
+;; (global-set-key (kbd "<f9>") 'avy-ts-test-scm-queries)
 
 (provide 'avy-ts)
 ;;; avy-ts.el ends here
