@@ -1,4 +1,4 @@
-;;; avy-ts --- Summary
+;;; treesit-jump --- Summary
 
 ;; Jump around using treesitter
 
@@ -25,60 +25,60 @@
 (require 'treesit)
 (require 'avy)
 
-(defgroup avy-ts-mode nil
-  "Customize group for avy-ts-mode.el."
+(defgroup treesit-jump-mode nil
+  "Customize group for treesit-jump-mode.el."
   :group 'emacs)
 
-(defcustom avy-ts-queries '("(comment) @comment" "(function_statement) @func" "(if_statement) @if" "(else_clause) @else" "(elseif_clause) @elseif" "(class_statement) @class" "(param_block) @param" "(for_statement) @for" "(while_statement) @while" "(do_statement) @do" "(class_method_definition) @classmeth" "(foreach_statement) @for" "(try_statement) @try" "(catch_clause) @catch" "(finally_clause) @finally")
+(defcustom treesit-jump-queries '("(comment) @comment" "(function_statement) @func" "(if_statement) @if" "(else_clause) @else" "(elseif_clause) @elseif" "(class_statement) @class" "(param_block) @param" "(for_statement) @for" "(while_statement) @while" "(do_statement) @do" "(class_method_definition) @classmeth" "(foreach_statement) @for" "(try_statement) @try" "(catch_clause) @catch" "(finally_clause) @finally")
   "Queries to search for."
   :type '(repeat string)
-  :group 'avy-ts-mode)
+  :group 'treesit-jump-mode)
 
-(defcustom avy-ts-queries-filter-list '("inner" "test" "param")
+(defcustom treesit-jump-queries-filter-list '("inner" "test" "param")
   "Query captures to filter out of results uses regex."
   :type '(repeat string)
-  :group 'avy-ts-mode)
+  :group 'treesit-jump-mode)
 
-(defcustom avy-ts-queries-filter-func #'avy-ts-queries-filter-default-func
+(defcustom treesit-jump-queries-filter-func #'treesit-jump-queries-filter-default-func
   "Function used to filter matched treesit queries."
   :type 'function
-  :group 'avy-ts-mode)
+  :group 'treesit-jump-mode)
 
-(defun avy-ts-queries-filter-default-func (query)
+(defun treesit-jump-queries-filter-default-func (query)
   (let* (
         (capture-name (symbol-name (car query)))
-        (matches (seq-filter (lambda (s) (string-match s capture-name)) avy-ts-queries-filter-list))
+        (matches (seq-filter (lambda (s) (string-match s capture-name)) treesit-jump-queries-filter-list))
         )
     (if matches nil t)
     ))
 
-(defun avy-ts-query-get-positions (query-list)
+(defun treesit-jump-query-get-positions (query-list)
   (let* (
          (start-window (window-start))
          (end-window (window-end (selected-window) t))
          (root-node (treesit-buffer-root-node))
          (raw-captures (apply #'append (mapcar (lambda (query) (treesit-query-capture root-node query start-window end-window)) query-list)))
-         (captures (seq-filter (lambda (x) (funcall avy-ts-queries-filter-func x)) raw-captures))
+         (captures (seq-filter (lambda (x) (funcall treesit-jump-queries-filter-func x)) raw-captures))
          (positions (sort (mapcar #'treesit-node-start (mapcar #'cdr captures)) #'<))
          )
     positions
     ))
 
-(defun avy-ts-query-avy-jump (query-list)
+(defun treesit-jump-query-avy-jump (query-list)
   (interactive)
   (let* (
-         (positions (avy-ts-query-get-positions query-list))
+         (positions (treesit-jump-query-get-positions query-list))
          )
-    (avy-with avy-ts-query-avy-jump (avy--process positions (avy--style-fn avy-style)))
+    (avy-with treesit-jump-query-avy-jump (avy--process positions (avy--style-fn avy-style)))
     ))
 
-(defun avy-ts-avy-jump ()
+(defun treesit-jump-avy-jump ()
   (interactive)
-  ;;(avy-ts-query-avy-jump avy-ts-queries)
-  (avy-ts-query-avy-jump avy-ts-python-queries)
+  ;;(treesit-jump-query-avy-jump treesit-jump-queries)
+  (treesit-jump-query-avy-jump treesit-jump-python-queries)
 )
 
-(defun avy-ts--get-query (language queries-dir top-level)
+(defun treesit-jump--get-query (language queries-dir top-level)
   "Get tree sitter query for `LANGUAGE' from `QUERIES-DIR'.
 `TOP-LEVEL' is used to mention if we should load optional inherits."
   (let (
@@ -94,25 +94,25 @@
                   (insert (string-join (mapcar (lambda (x)
                                                  (if (string-prefix-p "(" x)
                                                      (if top-level
-                                                         (avy-ts--get-queries (substring x 1 -1)
+                                                         (treesit-jump--get-queries (substring x 1 -1)
                                                                                                        queries-dir nil))
-                                                   (avy-ts--get-queries x queries-dir nil)))
+                                                   (treesit-jump--get-queries x queries-dir nil)))
                                                (split-string inherits-line ","))
                                        "\n"))))
             (buffer-string))))))
 
-(defun avy-ts-test-scm-queries ()
+(defun treesit-jump-test-scm-queries ()
   (interactive)
   (let* (
-        (query (avy-ts--get-query "python" "~/dotfiles/emacs-config/treesit-queries/" t))
+        (query (treesit-jump--get-query "python" "~/dotfiles/emacs-config/treesit-queries/" t))
         )
-    (avy-ts-query-avy-jump (list query))
+    (treesit-jump-query-avy-jump (list query))
     ))
 
 ;; :TODO: remove this global set-key
-;; (global-set-key (kbd "<f9>") 'avy-ts-avy-jump)
+;; (global-set-key (kbd "<f9>") 'treesit-jump-avy-jump)
 ;; 
-;; (global-set-key (kbd "<f9>") 'avy-ts-test-scm-queries)
+(global-set-key (kbd "<f9>") 'treesit-jump-test-scm-queries)
 
-(provide 'avy-ts)
-;;; avy-ts.el ends here
+(provide 'treesit-jump)
+;;; treesit-jump.el ends here
