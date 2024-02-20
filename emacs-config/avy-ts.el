@@ -29,33 +29,32 @@
   "Customize group for avy-ts-mode.el."
   :group 'emacs)
 
-(defvar avy-ts-python-queries '(
-"(function_definition body: (block)? @function.inner) @function.outer"
-"(class_definition body: (block)? @class.inner) @class.outer"
-"(parameter ((_) @parameter.inner . \",\"? @parameter.outer) @parameter.outer)"
-"(lambda_parameters ((_) @parameter.inner . \",\"? @parameter.outer) @parameter.outer)"
-"(argument_list ((_) @parameter.inner . \",\"? @parameter.outer) @parameter.outer)"
-"(comment) @comment.inner"
-"(comment)+ @comment.outer"
-;; "((function_definition name: (identifier) @_name body: (block)? @test.inner) @test.outer (#match \"^test_\" @_name))"
-"((function_definition name: (identifier) @name body: (block)? @test.inner) @test.outer)"
-"(for_statement body: (_) @loop.inner) @loop.outer"
-"(while_statement body: (_) @loop.inner) @loop.outer"
-"(if_statement consequence: (_) @conditional.inner) @conditional.outer"
-))
-
 (defcustom avy-ts-queries '("(comment) @comment" "(function_statement) @func" "(if_statement) @if" "(else_clause) @else" "(elseif_clause) @elseif" "(class_statement) @class" "(param_block) @param" "(for_statement) @for" "(while_statement) @while" "(do_statement) @do" "(class_method_definition) @classmeth" "(foreach_statement) @for" "(try_statement) @try" "(catch_clause) @catch" "(finally_clause) @finally")
   "Queries to search for."
   :type '(repeat string)
   :group 'avy-ts-mode)
+
+(defcustom avy-ts-queries-filter-list '("inner" "test" "param")
+  "Query captures to filter out of results uses regex."
+  :type '(repeat string)
+  :group 'avy-ts-mode)
+
+(defun avy-ts-queries-filter-func (query)
+  (let* (
+        (capture-name (symbol-name (car query)))
+        (matches (seq-filter (lambda (s) (string-match s capture-name)) avy-ts-queries-filter-list))
+        )
+    (if matches nil t)
+    ))
 
 (defun avy-ts-query-get-positions (query-list)
   (let* (
          (start-window (window-start))
          (end-window (window-end (selected-window) t))
          (root-node (treesit-buffer-root-node))
-         (captures-list (mapcar (lambda (query) (treesit-query-capture root-node query start-window end-window t)) query-list))
-         (positions (sort (mapcar #'treesit-node-start (apply #'append captures-list)) #'<))
+         (raw-captures (apply #'append (mapcar (lambda (query) (treesit-query-capture root-node query start-window end-window)) query-list)))
+         (captures (seq-filter #'avy-ts-queries-filter-func raw-captures))
+         (positions (sort (mapcar #'treesit-node-start (mapcar #'cdr captures)) #'<))
          )
     positions
     ))
