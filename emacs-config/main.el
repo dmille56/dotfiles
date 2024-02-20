@@ -719,6 +719,15 @@
   (global-set-key (kbd "C-:") 'avy-goto-line)
   (global-set-key (kbd "C-;") 'avy-goto-char))
 
+(defun my/goto-first-non-whitespace ()
+  "Move the cursor to the first non-whitespace character on the current line."
+  (interactive)
+  (beginning-of-line)  ; Move to the beginning of the current line
+  (skip-chars-forward " \t")  ; Skip forward over spaces and tabs
+  )
+
+(advice-add 'avy-goto-line :after #'my/goto-first-non-whitespace)
+
 (use-package diff-hl
   :init
   (global-diff-hl-mode)

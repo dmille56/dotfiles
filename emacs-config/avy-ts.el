@@ -39,7 +39,12 @@
   :type '(repeat string)
   :group 'avy-ts-mode)
 
-(defun avy-ts-queries-filter-func (query)
+(defcustom avy-ts-queries-filter-func #'avy-ts-queries-filter-default-func
+  "Function used to filter matched treesit queries."
+  :type 'function
+  :group 'avy-ts-mode)
+
+(defun avy-ts-queries-filter-default-func (query)
   (let* (
         (capture-name (symbol-name (car query)))
         (matches (seq-filter (lambda (s) (string-match s capture-name)) avy-ts-queries-filter-list))
@@ -53,7 +58,7 @@
          (end-window (window-end (selected-window) t))
          (root-node (treesit-buffer-root-node))
          (raw-captures (apply #'append (mapcar (lambda (query) (treesit-query-capture root-node query start-window end-window)) query-list)))
-         (captures (seq-filter #'avy-ts-queries-filter-func raw-captures))
+         (captures (seq-filter (lambda (x) (funcall avy-ts-queries-filter-func x)) raw-captures))
          (positions (sort (mapcar #'treesit-node-start (mapcar #'cdr captures)) #'<))
          )
     positions
