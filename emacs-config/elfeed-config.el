@@ -68,6 +68,7 @@
     (kbd "f i") (lambda () (interactive) (elfeed-search-set-filter "@1-week-ago -junk -short +unread -hn +i"))
     (kbd "f o") (lambda () (interactive) (elfeed-search-set-filter "@1-week-ago -junk -short +unread -hn -i"))
     (kbd "f h") (lambda () (interactive) (elfeed-search-set-filter "@1-week-ago -junk -short +unread +hn"))
+    (kbd "r") 'elfeed-search-untag-all-unread
     )
   (evil-define-key 'normal elfeed-show-mode-map
     (kbd "g c") 'elfeed-browsecomments-wrapper

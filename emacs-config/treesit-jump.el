@@ -24,6 +24,7 @@
 
 (require 'treesit)
 (require 'avy)
+(require 'cl-lib)
 
 (defgroup treesit-jump-mode nil
   "Customize group for treesit-jump-mode.el."
@@ -44,6 +45,11 @@
   :type 'function
   :group 'treesit-jump-mode)
 
+(defcustom treesit-jump-positions-filter-func #'avy-process
+  "Function used to select matched treesit queries on screen."
+  :type 'function
+  :group 'treesit-jump-mode)
+
 (defun treesit-jump-queries-filter-default-func (query)
   (let* (
         (capture-name (symbol-name (car query)))
@@ -52,30 +58,62 @@
     (if matches nil t)
     ))
 
-(defun treesit-jump-query-get-positions (query-list)
+(defun treesit-jump-query-get-captures (query-list)
   (let* (
          (start-window (window-start))
          (end-window (window-end (selected-window) t))
          (root-node (treesit-buffer-root-node))
          (raw-captures (apply #'append (mapcar (lambda (query) (treesit-query-capture root-node query start-window end-window)) query-list)))
          (captures (seq-filter (lambda (x) (funcall treesit-jump-queries-filter-func x)) raw-captures))
-         (positions (sort (mapcar #'treesit-node-start (mapcar #'cdr captures)) #'<))
          )
-    positions
+    captures
     ))
 
-(defun treesit-jump-query-avy-jump (query-list)
+(defun treesit-jump-query-select (query-list)
+  (let* (
+         (captures (treesit-jump-query-get-captures query-list))
+         (positions (sort (mapcar #'treesit-node-start (mapcar #'cdr captures)) #'<))
+         (selected-pos (funcall treesit-jump-positions-filter-func positions))
+         )
+    (if selected-pos (cl-find-if (lambda (x) (= (treesit-node-start (cdr x)) selected-pos)) captures) nil)
+    ))
+
+(defun treesit-jump-query-select-go-to (query-list)
   (interactive)
   (let* (
-         (positions (treesit-jump-query-get-positions query-list))
+         (selected (treesit-jump-query-select query-list))
+         (start (treesit-node-start (cdr selected)))
          )
-    (avy-with treesit-jump-query-avy-jump (avy--process positions (avy--style-fn avy-style)))
-    ))
+    (when start
+      (goto-char start)
+      )))
+
+(defun treesit-jump-query-select-visual (query-list)
+  (interactive)
+  (let* (
+         (selected (treesit-jump-query-select query-list))
+         (start (treesit-node-start (cdr selected)))
+         (end (treesit-node-end (cdr selected)))
+         )
+    (when (and start end)
+          (goto-char start)
+          (set-mark end)
+         )))
+
+(defun treesit-jump-query-select-delete (query-list)
+  (interactive)
+  (let* (
+         (selected (treesit-jump-query-select query-list))
+         (start (treesit-node-start (cdr selected)))
+         (end (treesit-node-end (cdr selected)))
+         )
+    (when (and start end)
+      (delete-region start end))))
 
 (defun treesit-jump-avy-jump ()
   (interactive)
-  ;;(treesit-jump-query-avy-jump treesit-jump-queries)
-  (treesit-jump-query-avy-jump treesit-jump-python-queries)
+  ;; (treesit-jump-query-select-go-to treesit-jump-python-queries)
+  (treesit-jump-query-select-visual treesit-jump-python-queries)
 )
 
 (defun treesit-jump--get-query (language queries-dir top-level)
@@ -106,7 +144,9 @@
   (let* (
         (query (treesit-jump--get-query "python" "~/dotfiles/emacs-config/treesit-queries/" t))
         )
-    (treesit-jump-query-avy-jump (list query))
+    (treesit-jump-query-select-go-to (list query))
+    ;; (treesit-jump-query-select-visual (list query))
+    ;; (treesit-jump-query-select-delete (list query))
     ))
 
 ;; :TODO: remove this global set-key
