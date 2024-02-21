@@ -8,13 +8,10 @@
 ;;; Commentary:
 
 ;; Notes:
-;; :TODO: add code to jump between visibile classes/functions/loops/conditionals/etc.
-;; :TODO: add code to allow deletion of classes/functoins/loops/etc. through avy
-;; :TODO: add code to allow change inside like functionality of classes/functoins/loops/etc. through avy
 ;; :TODO: add compiled queries using treesit-query-compile for faster searching
-
-; Here is a way to get an avy style jump tree to positions 1, 4 or 12. You could use any list of positions you want, e.g. calculated from some function.
-; (avy-with my-jumper (avy--process '(1 4 12) (avy--style-fn avy-style)))
+;; :TODO: add different queries per language and test that they can compile
+;; :TODO: add override queries for each language
+;; :TODO: add documentation for each function
 
 ;; Useful links:
 ;; https://github.com/emacs-mirror/emacs/blob/master/admin/notes/tree-sitter/starter-guide
