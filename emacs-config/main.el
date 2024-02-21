@@ -948,8 +948,15 @@
 ;; Add-hooks for eglot
 (add-hook 'python-mode-hook 'eglot-ensure)
 (add-hook 'python-ts-mode-hook 'eglot-ensure)
+(add-hook 'yaml-mode-hook 'eglot-ensure)
 (add-hook 'nix-mode-hook 'eglot-ensure)
 (add-to-list 'eglot-server-programs '(nix-mode . ("rnix-lsp")))
+
+(use-package flycheck-eglot
+  :ensure t
+  :after (flycheck eglot)
+  :config
+  (global-flycheck-eglot-mode 1))
 
 (setq compilation-scroll-output 'first-error)
 
