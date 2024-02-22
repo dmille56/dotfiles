@@ -66,9 +66,9 @@
 
 (setq my-config-machine
       (cond
-             ((eq (system-name) "van") 'pc)
-             ((eq (system-name) "localhost") 'phone)
-             ((eq (system-name) "LOCAL-D31D4TRU3") 'work)
+             ((string-equal (system-name) "van") 'pc)
+             ((string-equal (system-name) "localhost") 'phone)
+             ((string-equal (system-name) "LOCAL-D31D4TRU3") 'work)
              (t 'pc) ;; fall-back to pc
              ))
 
