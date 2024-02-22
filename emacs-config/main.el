@@ -651,7 +651,7 @@
 
 (setq my-org-roam-directory
       (cond
-       ((eq my-config-machine 'work) "~\\One Drive - Microsoft\\Desktop\\roam-notes")
+       ((eq my-config-machine 'work) "~\\OneDrive - Microsoft\\Desktop\\roam-notes")
        (t "~/roam-notes")
        ))
 
