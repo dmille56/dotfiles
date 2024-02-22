@@ -649,12 +649,18 @@
                      :templates '(("h" "hype" plain "* %<%Y-%m-%d> %?"
                                   :if-new (file+head "hype-doc.org" "#+title: hype doc\n#+filetags: :hype:")))))
 
+(setq my-org-roam-directory
+      (cond
+       ((eq my-config-machine 'work) "~\\One Drive - Microsoft\\Desktop\\roam-notes")
+       (t "~/roam-notes")
+       ))
+
 ;; :TODO: learn how to use org-roam package for notes
 ;; :TODO: also look up org-drill
 (use-package org-roam
   :ensure t
   :custom
-  (org-roam-directory (file-truename "~/roam-notes"))
+  (org-roam-directory (file-truename my-org-roam-directory))
   :bind (("C-c n l" . org-roam-buffer-toggle)
          ("C-c n f" . org-roam-node-find)
          ("C-c n g" . org-roam-graph)
