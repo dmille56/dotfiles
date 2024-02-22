@@ -128,6 +128,8 @@ main = do
   xmproc <- spawnPipe "xmobar"
   spawn "xfsettingsd"
   spawn "start-pulseaudio-x11"
+  spawn "xrdb ~./Xresources" -- load xresources to set up xterm colors
+  spawn "xmodmap ~/.Xmodmap" -- load xmodmap to remap keys
   -- spawn "redshift -l 47.608013:-122.335167 -t 6500:3500" -- causes issues when starting it this way for some reason... :TODO: figure out why
   -- emacsDaemon <- spawnPipe "emacs --daemon" -- maybe re-enable this at some point... :TODO: figure out why svg-tag-mode causes issues when started as a daemon
   greenclipDaemon <- spawnPipe "greenclip daemon"
