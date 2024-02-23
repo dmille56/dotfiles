@@ -8,10 +8,11 @@
 ;;; Commentary:
 
 ;; Notes:
-;; :TODO: add compiled queries using treesit-query-compile for faster searching
+;; :TODO: add jumping between parents of the node under your cursor
 ;; :TODO: add different queries per language and test that they can compile
-;; :TODO: add override queries for each language
 ;; :TODO: add documentation for each function
+;; :TODO: add override queries for each language
+;; :TODO: add compiled queries using treesit-query-compile for faster searching
 
 ;; Useful links:
 ;; https://github.com/emacs-mirror/emacs/blob/master/admin/notes/tree-sitter/starter-guide
