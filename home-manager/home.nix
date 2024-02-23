@@ -27,7 +27,6 @@
 # - to switch Pause Break and Insert keys (for kinesis freestyle 2 keyboard)
 #   - xmodmap -e "keycode 127 = Insert"
 #   - xmodmap -e "keycode 118 = Pause"
-#   - add to ~/.Xmodmap and run xmodmap ~/.Xmodmap to load the settings (without the xmodmap -e part or the double quotes)
 # add to .profile to fix locale issue:
 # export LOCALE_ARCHIVE=$(nix-build '<nixpkgs>' -A glibcLocales)/lib/locale/locale-archive
 
@@ -120,6 +119,7 @@ in {
     pandoc
 
     xclip
+    xbindkeys
     powerline-fonts
 
     warpd
@@ -549,7 +549,7 @@ in {
 
   home.file.".vimrc".source = "${my-dotfile-dir}/vim/vim/vimrc";
   home.file.".Xresources".source = "${my-dotfile-dir}/Xresources";
-  home.file.".Xmodmap".source = "${my-dotfile-dir}/.Xmodmap";
+  home.file.".xbindkeysrc".source = "${my-dotfile-dir}/.xbindkeysrc";
   home.file.".xmobarrc".source = "${my-dotfile-dir}/xmobarrc";
   home.file.".xmonad/xmonad.hs".source = "${my-dotfile-dir}/.xmonad/xmonad.hs";
   home.file.".xmonad/lib/MyTheme.hs".source = "${my-dotfile-dir}/.xmonad/MyTheme.hs";

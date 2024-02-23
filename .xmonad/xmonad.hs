@@ -129,7 +129,9 @@ main = do
   spawn "xfsettingsd"
   spawn "start-pulseaudio-x11"
   spawn "xrdb ~/.Xresources" -- load xresources to set up xterm colors
-  spawn "xmodmap ~/.Xmodmap" -- load xmodmap to remap keys
+  spawn "xmodmap -e 'keycode 127 = Insert'"
+  spawn "xmodmap -e 'keycode 118 = Pause'"
+  spawn "xbindkeys" -- load xbindkey to remap keybindings
   -- spawn "redshift -l 47.608013:-122.335167 -t 6500:3500" -- causes issues when starting it this way for some reason... :TODO: figure out why
   -- emacsDaemon <- spawnPipe "emacs --daemon" -- maybe re-enable this at some point... :TODO: figure out why svg-tag-mode causes issues when started as a daemon
   greenclipDaemon <- spawnPipe "greenclip daemon"
@@ -175,8 +177,8 @@ main = do
                            ((myModMask .|. shiftMask, xK_bracketright), openScratchPad "volumeControl"),
                            ((myModMask, xK_bracketleft), openScratchPad "music"),
                            ((myModMask .|. shiftMask, xK_bracketleft), openScratchPad "fileManager"),
-                           ((myModMask, xK_j), spawn "xdotool key Page_Down"), -- Remap mod+j, mod+k to page down / up
-                           ((myModMask, xK_k), spawn "xdotool key Page_Up"),
+                           -- ((myModMask, xK_j), spawn "xdotool key Page_Down"), -- Remap mod+j, mod+k to page down / up
+                           -- ((myModMask, xK_k), spawn "xdotool key Page_Up"),
                            ((myModMask, xK_F9), spawn audioQueryTrackInfoCommand),
                            ((0, xF86XK_AudioPlay), spawn audioPlayPauseCommand),
                            ((myModMask, xK_F12), spawn audioPlayPauseCommand),
