@@ -1,3 +1,0 @@
-! switch Pause Break and Insert keys (useful for kinesis freestyle 2 keyboard)
-keycode 127 = Insert
-keycode 118 = Pause
