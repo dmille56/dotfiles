@@ -64,6 +64,10 @@
       (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
 
+;; How to check for system type:
+;; (if (eq system-type 'gnu/linux)
+;; (if (eq system-type 'windows-nt)
+
 (setq my/config-machine
       (cond
              ((string-equal (system-name) "van") 'pc)
@@ -1058,21 +1062,12 @@
 
 (global-set-key [escape] 'keyboard-escape-quit)
 
-;; get the directory of the current file and place it in my/main-dir local variable
-;; :TODO: figure out why this shit doesn't work sometimes
-;; (setq-local my/main-dir
-;;             (let ((current-file (buffer-file-name)))
-;;               (when current-file
-;;                 (file-name-directory current-file)))
-;;             )
-
-;; (setq-local my/main-dir default-directory)
-
-(if (eq system-type 'gnu/linux)
-    (setq-local my/main-dir "~/dotfiles/emacs-config/"))
-
-(if (eq system-type 'windows-nt)
-    (setq-local my/main-dir "~\\scratch\\dotfiles\\emacs-config\\"))
+(setq-local my/main-dir
+      (cond
+       ((eq my/config-machine 'pc) "~/dotfiles/emacs-config/")
+       ((eq my/config-machine 'work) "~\\scratch\\dotfiles\\emacs-config\\")
+       (t "~/dotfiles/emacs-config/")
+       ))
 
 (setq org-clock-sound (concat my/main-dir "timer.wav"))
 
