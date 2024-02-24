@@ -64,7 +64,7 @@
       (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
 
-(setq my-config-machine
+(setq my/config-machine
       (cond
              ((string-equal (system-name) "van") 'pc)
              ((string-equal (system-name) "localhost") 'phone)
@@ -651,7 +651,7 @@
 
 (setq my-org-roam-directory
       (cond
-       ((eq my-config-machine 'work) "~\\OneDrive - Microsoft\\Desktop\\roam-notes")
+       ((eq my/config-machine 'work) "~\\OneDrive - Microsoft\\Desktop\\roam-notes")
        (t "~/roam-notes")
        ))
 
@@ -1058,54 +1058,54 @@
 
 (global-set-key [escape] 'keyboard-escape-quit)
 
-;; get the directory of the current file and place it in main-dir local variable
+;; get the directory of the current file and place it in my/main-dir local variable
 ;; :TODO: figure out why this shit doesn't work sometimes
-;; (setq-local main-dir
+;; (setq-local my/main-dir
 ;;             (let ((current-file (buffer-file-name)))
 ;;               (when current-file
 ;;                 (file-name-directory current-file)))
 ;;             )
 
-;; (setq-local main-dir default-directory)
+;; (setq-local my/main-dir default-directory)
 
 (if (eq system-type 'gnu/linux)
-    (setq-local main-dir "~/dotfiles/emacs-config/"))
+    (setq-local my/main-dir "~/dotfiles/emacs-config/"))
 
 (if (eq system-type 'windows-nt)
-    (setq-local main-dir "~\\scratch\\dotfiles\\emacs-config\\"))
+    (setq-local my/main-dir "~\\scratch\\dotfiles\\emacs-config\\"))
 
-(setq org-clock-sound (concat main-dir "timer.wav"))
+(setq org-clock-sound (concat my/main-dir "timer.wav"))
 
 (load-file
- (concat main-dir "twitchy.el"))
+ (concat my/main-dir "twitchy.el"))
 
 (global-set-key (kbd "M-p") 'twitchy-play-stream)
 
 (load-file
- (concat main-dir "youtube.el"))
+ (concat my/main-dir "youtube.el"))
 
 (global-set-key (kbd "M-y") 'youtube)
 
 (load-file
- (concat main-dir "elfeed-config.el"))
+ (concat my/main-dir "elfeed-config.el"))
 
 ;; (load-file
-;;  (concat main-dir "powershell-ts-mode.el"))
+;;  (concat my/main-dir "powershell-ts-mode.el"))
 
 ;; :TODO: make hs-minor-mode work with powershell-ts-mode
 (add-to-list 'hs-special-modes-alist '(powershell-ts-mode "{" "}" "<[#>]" nil nil))
 ;; (add-hook 'powershell-ts-mode-hook 'hs-minor-mode)
 
 (load-file
- (concat main-dir "eshell-extensions.el"))
+ (concat my/main-dir "eshell-extensions.el"))
 
 (if (eq system-type 'gnu/linux)
     (load-file
-     (concat main-dir "linux-specific.el")))
+     (concat my/main-dir "linux-specific.el")))
 
 (if (eq system-type 'windows-nt)
     (load-file
-     (concat main-dir "windows-specific.el")))
+     (concat my/main-dir "windows-specific.el")))
 
 (provide 'main)
 ;;; main.el ends here
