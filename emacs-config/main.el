@@ -1014,6 +1014,18 @@
 (use-package ts-query-highlight
   :straight (:type git :host sourcehut :repo "meow_king/ts-query-highlight"))
 
+(use-package treesit-jump
+  :straight (:host github :repo "dmille56/treesit-jump"))
+
+(use-package powershell-ts-mode
+  :straight (:host github :repo "dmille56/powershell-ts-mode")
+  :config
+  ;; Associate .ps1 files with powershell-ts-mode
+  (add-to-list 'auto-mode-alist '("\\.ps1\\'" . powershell-ts-mode))
+  (add-to-list 'auto-mode-alist '("\\.psm1\\'" . powershell-ts-mode))
+  (add-to-list 'auto-mode-alist '("\\.psd1\\'" . powershell-ts-mode))
+)
+
 ;; Set up zone-matrix
 (straight-use-package
  '(zone-matrix :type git :host github :repo "dmille56/zone-matrix"))
@@ -1077,16 +1089,8 @@
 (load-file
  (concat main-dir "elfeed-config.el"))
 
-(load-file
- (concat main-dir "my-powershell-mode.el"))
-
-(load-file
- (concat main-dir "powershell-ts-mode.el"))
-
-;; Associate .ps1 files with powershell-ts-mode
-(add-to-list 'auto-mode-alist '("\\.ps1\\'" . powershell-ts-mode))
-(add-to-list 'auto-mode-alist '("\\.psm1\\'" . powershell-ts-mode))
-(add-to-list 'auto-mode-alist '("\\.psd1\\'" . powershell-ts-mode))
+;; (load-file
+;;  (concat main-dir "powershell-ts-mode.el"))
 
 ;; :TODO: make hs-minor-mode work with powershell-ts-mode
 (add-to-list 'hs-special-modes-alist '(powershell-ts-mode "{" "}" "<[#>]" nil nil))
