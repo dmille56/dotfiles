@@ -174,6 +174,7 @@
   ("c" avy-org-refile-as-child "avy refile child")
   ("s" org-schedule "schedule")
   ("t" org-todo "todo")
+  ("T" org-set-tags-command "set tags")
   )
 
 (defhydra hydra-python-mode (:exit t)
@@ -679,6 +680,10 @@
   (org-roam-db-autosync-mode)
   ;; If using org-roam-protocol
   (require 'org-roam-protocol))
+
+(use-package toc-org
+  :init
+  (add-hook 'org-mode-hook 'toc-org-mode))
 
 (use-package all-the-icons) ;; remember need to run (all-the-icons-install-fonts) to install the fonts
 
