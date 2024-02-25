@@ -1020,7 +1020,10 @@
   :straight (:type git :host sourcehut :repo "meow_king/ts-query-highlight"))
 
 (use-package treesit-jump
-  :straight (:host github :repo "dmille56/treesit-jump"))
+  :straight (:host github :repo "dmille56/treesit-jump")
+  :config
+  (global-set-key (kbd "<f9>") 'treesit-jump-jump)
+)
 
 (use-package powershell-ts-mode
   :straight (:host github :repo "dmille56/powershell-ts-mode")
