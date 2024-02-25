@@ -369,7 +369,7 @@
                     :height 110
                     :weight 'normal
                     :width 'normal)
-(semantic-mode 1) ;; use semantic
+;; (semantic-mode 1) ;; use semantic :TODO: re-enable when figure out why it kept throwing error
 
 ;; ask y/n instead of yes/no
 (fset 'yes-or-no-p 'y-or-n-p)
@@ -845,7 +845,8 @@
 
 (use-package copilot
   :straight (:host github :repo "zerolfx/copilot.el" :files ("dist" "*.el"))
-  :ensure t)
+  :ensure t
+  :bind (("C-M-\\" . copilot-accept-completion)))
 
 ;; :TODO: figure out how to configure these packages (dumb-jump, corfu, and orderless)
 (use-package dumb-jump
