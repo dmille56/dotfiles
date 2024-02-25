@@ -1029,6 +1029,7 @@
   (add-to-list 'auto-mode-alist '("\\.ps1\\'" . powershell-ts-mode))
   (add-to-list 'auto-mode-alist '("\\.psm1\\'" . powershell-ts-mode))
   (add-to-list 'auto-mode-alist '("\\.psd1\\'" . powershell-ts-mode))
+  (setq powershell-ts-enable-imenu-top-level-vars nil)
 )
 
 ;; Set up zone-matrix
