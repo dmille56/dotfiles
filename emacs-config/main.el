@@ -175,6 +175,7 @@
   ("s" org-schedule "schedule")
   ("t" org-todo "todo")
   ("T" org-set-tags-command "set tags")
+  ("e" org-export-dispatch "org export")
   )
 
 (defhydra hydra-python-mode (:exit t)
