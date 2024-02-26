@@ -1026,7 +1026,7 @@
   :straight (:type git :host sourcehut :repo "meow_king/ts-query-highlight"))
 
 (use-package treesit-jump
-  :straight (:host github :repo "dmille56/treesit-jump")
+  :straight (:host github :repo "dmille56/treesit-jump" :files ("*.el" "treesit-queries"))
   :config
   (global-set-key (kbd "<f9>") 'treesit-jump-jump)
 )
