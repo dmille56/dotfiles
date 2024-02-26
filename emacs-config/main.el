@@ -1095,13 +1095,6 @@
 (load-file
  (concat my/main-dir "elfeed-config.el"))
 
-;; (load-file
-;;  (concat my/main-dir "powershell-ts-mode.el"))
-
-;; :TODO: make hs-minor-mode work with powershell-ts-mode
-(add-to-list 'hs-special-modes-alist '(powershell-ts-mode "{" "}" "<[#>]" nil nil))
-;; (add-hook 'powershell-ts-mode-hook 'hs-minor-mode)
-
 (load-file
  (concat my/main-dir "eshell-extensions.el"))
 
