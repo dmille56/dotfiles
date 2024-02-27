@@ -23,6 +23,7 @@ import qualified XMonad.StackSet as W
 import XMonad.Util.EZConfig (additionalKeys)
 import XMonad.Util.NamedScratchpad
 import XMonad.Util.Run (spawnPipe)
+import XMonad.Util.SpawnOnce (spawnOnce)
 
 myModMask :: KeyMask
 myModMask = mod4Mask -- Bind Mod to the windows key
@@ -178,6 +179,7 @@ main = do
                            ((myModMask .|. shiftMask, xK_bracketleft), openScratchPad "fileManager"),
                            -- ((myModMask, xK_j), spawn "xdotool key Page_Down"), -- Remap mod+j, mod+k to page down / up
                            -- ((myModMask, xK_k), spawn "xdotool key Page_Up"),
+                           ((myModMask, xK_d), spawn "export BROWSER=sensible-browser && rofi-buku"),
                            ((myModMask, xK_F9), spawn audioQueryTrackInfoCommand),
                            ((0, xF86XK_AudioPlay), spawn audioPlayPauseCommand),
                            ((myModMask, xK_F12), spawn audioPlayPauseCommand),

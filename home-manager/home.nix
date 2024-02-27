@@ -589,6 +589,7 @@ in {
     OPENAI_API_MODEL = "gpt-3.5-turbo"; # options: gpt-3.5-turbo, gpt-4
     RIPGREP_CONFIG_PATH = "${my-home-dir}/.ripgreprc";
     LG_CONFIG_FILE= "${my-home-dir}/.config/lazygit/config.yml,${my-home-dir}/.config/lazygit/theme/lazygit/themes-mergable/mocha/blue.yml";
+    BROWSER = "sensible-browser";
   };
 
   manual.manpages.enable = false; # :TODO: reenable man pages eventually... they wouldn't update correctly
