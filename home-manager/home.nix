@@ -125,6 +125,7 @@ in {
 
     tuir # rtv
     ddgr
+    buku
     w3m
     yt-dlp
     ytfzf
@@ -142,6 +143,7 @@ in {
     (import ../nix/ChatGPT/ChatGPT-CLI.nix)
     (import ../nix/play-yt-script.nix)
     (import ../nix/play-yt-script-format.nix)
+    (import ../nix/rofi-buku.nix)
 
     cmatrix
     snowmachine
