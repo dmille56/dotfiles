@@ -125,23 +125,25 @@ audioLowerVolumeCommand = "amixer -D pulse sset Master 5%-; notify-send -i audio
 
 audioRaiseVolumeCommand = "amixer -D pulse sset Master 5%+; notify-send -i audio-volume-medium -t 1000 'Volume: '$(amixer -D pulse sget Master | grep 'Left:' | awk -F'[][]' '{ print $2 } ')"
 
-main = do
-  xmproc <- spawnPipe "xmobar"
-  spawn "xfsettingsd"
-  spawn "start-pulseaudio-x11"
-  spawn "xrdb ~/.Xresources" -- load xresources to set up xterm colors
+myStartupHook :: X ()
+myStartupHook = do
+  spawnOnce "xfsettingsd"
+  spawnOnce "start-pulseaudio-x1ll"
+  spawnOnce "xrdb ~/.XResources"
+  greenclipDaemon <- spawnPipe "greenclip daemon"
   spawn "xmodmap -e 'keycode 127 = Insert'"
   spawn "xmodmap -e 'keycode 118 = Pause'"
+
+main = do
+  xmproc <- spawnPipe "xmobar"
   -- spawn "redshift -l 47.608013:-122.335167 -t 6500:3500" -- causes issues when starting it this way for some reason... :TODO: figure out why
   -- emacsDaemon <- spawnPipe "emacs --daemon" -- maybe re-enable this at some point... :TODO: figure out why svg-tag-mode causes issues when started as a daemon
-  greenclipDaemon <- spawnPipe "greenclip daemon"
-  -- spawn "pavucontrol"
-  -- spawn "gnome-system-monitor"
   xmonad $
     ewmh $
       def
         { manageHook = myManageHook,
           layoutHook = myLayoutHook,
+          startupHook = myStartupHook,
           logHook =
             dynamicLogWithPP
               xmobarPP
