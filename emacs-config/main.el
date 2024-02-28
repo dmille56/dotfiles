@@ -171,7 +171,9 @@
   ("o" org-open-at-point "open")
   ("l" org-insert-link "insert link")
   ("j" avy-org-goto-heading-timer "go to heading")
-  ("c" avy-org-refile-as-child "avy refile child")
+  ("r" avy-org-refile-as-child "avy refile child")
+  ("c" org-make-toc-insert "insert table of contents")
+  ("C" org-make-toc-set "edit table of contents")
   ("s" org-schedule "schedule")
   ("t" org-todo "todo")
   ("T" org-set-tags-command "set tags")
@@ -682,9 +684,10 @@
   ;; If using org-roam-protocol
   (require 'org-roam-protocol))
 
-(use-package toc-org
-  :init
-  (add-hook 'org-mode-hook 'toc-org-mode))
+(use-package org-make-toc
+  :config
+  (add-hook 'org-mode-hook #'org-make-toc-mode)
+  (setq org-make-toc-insert-custom-ids t))
 
 (use-package all-the-icons) ;; remember need to run (all-the-icons-install-fonts) to install the fonts
 
