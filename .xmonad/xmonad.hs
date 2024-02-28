@@ -129,7 +129,7 @@ myStartupHook :: X ()
 myStartupHook = do
   spawnOnce "xfsettingsd"
   spawnOnce "start-pulseaudio-x1ll"
-  spawnOnce "xrdb ~/.XResources"
+  spawn "xrdb ~/.XResources"
   greenclipDaemon <- spawnPipe "greenclip daemon"
   spawn "xmodmap -e 'keycode 127 = Insert'"
   spawn "xmodmap -e 'keycode 118 = Pause'"
