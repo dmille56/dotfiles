@@ -1047,6 +1047,8 @@
 
 (use-package ebuku)
 
+(use-package ellama)
+
 ;; Set up zone-matrix
 (straight-use-package
  '(zone-matrix :type git :host github :repo "dmille56/zone-matrix"))
