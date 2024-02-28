@@ -717,6 +717,7 @@
   (:map projectile-mode-map
 	("C-c p" . projectile-command-map))
   :init
+  (setq projectile-switch-project-action 'projectile-dired)
   (projectile-mode +1))
 
 (use-package helm-projectile
@@ -1043,6 +1044,8 @@
   (add-to-list 'auto-mode-alist '("\\.psd1\\'" . powershell-ts-mode))
   (setq powershell-ts-enable-imenu-top-level-vars nil)
 )
+
+(use-package ebuku)
 
 ;; Set up zone-matrix
 (straight-use-package
