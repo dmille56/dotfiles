@@ -123,6 +123,7 @@ in {
 
     warpd
 
+    ollama
     tuir # rtv
     ddgr
     buku
