@@ -240,7 +240,7 @@
   ("b" my/org-roam-capture-inbox "capture inbox")
   ("1" my/org-roam-capture-1-on-1 "capture 1-on-1")
   ("m" my/org-roam-capture-meeting "capture meeting")
-  ("h" my/org-roam-capture-hype-doc "capture 1-on-1")
+  ("h" my/org-roam-capture-hype-doc "capture hype doc")
   ("j" org-roam-dailies-capture-today "capture today")
   )
 
@@ -534,7 +534,11 @@
   )
 
 ;; install yaml-mode
-(use-package yaml-mode)
+;; (use-package yaml-mode)
+
+(use-package yaml)
+
+(use-package yaml-pro)
 
 ;; install/setup emms
 (use-package emms
@@ -649,14 +653,14 @@
 (defun my/org-roam-capture-1-on-1 ()
   (interactive)
   (org-roam-capture- :node (org-roam-node-create)
-                     :templates '(("o" "1-on-1" plain "%?\n"
-                                  :if-new (file+datetree "1-on-1.org" "")))))
+                     :templates '(("o" "1-on-1" plain "* %<%Y-%m-%d> %?"
+                                  :if-new (file+head "1-on-1.org" "#+title: 1-on-1\n#+filetags: :1-on-1:meetings:career:")))))
 
 (defun my/org-roam-capture-hype-doc ()
   (interactive)
   (org-roam-capture- :node (org-roam-node-create)
                      :templates '(("h" "hype" plain "* %<%Y-%m-%d> %?"
-                                  :if-new (file+head "hype-doc.org" "#+title: hype doc\n#+filetags: :hype:")))))
+                                  :if-new (file+head "hype-doc.org" "#+title: hype doc\n#+filetags: :hype:career:")))))
 
 (setq my-org-roam-directory
       (cond
