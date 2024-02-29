@@ -27,6 +27,8 @@
 # - to switch Pause Break and Insert keys (for kinesis freestyle 2 keyboard)
 #   - xmodmap -e "keycode 127 = Insert"
 #   - xmodmap -e "keycode 118 = Pause"
+# - other possible solution: edit the file pc in /usr/share/X11/xkb/symbols/
+#   - ex: nano /usr/share/X11/xkb/symbols/pc
 # add to .profile to fix locale issue:
 # export LOCALE_ARCHIVE=$(nix-build '<nixpkgs>' -A glibcLocales)/lib/locale/locale-archive
 
