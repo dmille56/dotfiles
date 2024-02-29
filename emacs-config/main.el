@@ -1049,7 +1049,10 @@
 
 (use-package ebuku)
 
-(use-package ellama)
+(use-package ellama
+  :init
+  ;; setup key bindings
+  (setopt ellama-keymap-prefix "C-c e"))
 
 ;; Set up zone-matrix
 (straight-use-package

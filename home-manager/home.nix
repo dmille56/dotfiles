@@ -123,7 +123,9 @@ in {
 
     warpd
 
+    gptcommit
     ollama
+
     tuir # rtv
     ddgr
     buku
