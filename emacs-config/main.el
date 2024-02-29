@@ -718,6 +718,7 @@
 	("C-c p" . projectile-command-map))
   :init
   (setq projectile-switch-project-action 'projectile-dired)
+  (setq projectile-sort-order 'recently-active)
   (projectile-mode +1))
 
 (use-package helm-projectile
