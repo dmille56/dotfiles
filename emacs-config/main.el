@@ -120,6 +120,7 @@
 (defhydra hydra-leader-misc (:exit t)
   "misc"
   ("d" ddg "ddg search" )
+  ("D" dired "dired" )
   ("s" rg-menu "rg search")
   ("g" chatgpt-shell "chatgpt")
   ("b" helm-bookmarks "bookmarks")
@@ -700,6 +701,10 @@
 (use-package all-the-icons-dired
   :hook (dired-mode . all-the-icons-dired-mode))
 
+(use-package all-the-icons-completion
+  :init
+  (all-the-icons-completion-mode))
+
 (use-package ranger
   :bind
   ("C-x t" . ranger)
@@ -887,6 +892,8 @@
 ;;   :custom
 ;;   (completion-styles '(basic partial-completion orderless))
 ;;  )
+
+(use-package consult)
 
 (define-key transient-map (kbd "<f8>") 'transient-quit-all)
 (define-key transient-map (kbd "ESC") 'transient-quit-all)
