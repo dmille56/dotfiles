@@ -23,8 +23,8 @@
         ("https://www.youtube.com/feeds/videos.xml?channel_id=UCfQgsKhHjSyRLOp9mnffqVg" yt fitness) ;; Renaissance Periodization
 	("https://www.youtube.com/feeds/videos.xml?channel_id=UCkZjTZNvuxq1CYMS3cwZa1Q" yt i) ;; Huberman Lab Clips
 	("https://www.youtube.com/feeds/videos.xml?playlist_id=PLkL7BvJXiqSTWYYJtqjo-cKEcHd9g4g5J" yt i) ;; Chris Williamson Clips
-	("https://www.youtube.com/feeds/videos.xml?channel_id=UCV_zy48AlwwGpdJEka1ay7w" yt fitness i) ;; Garage Gym Reviews
-        ("https://www.youtube.com/feeds/videos.xml?channel_id=UCXR5UyxWQdZ50pWyNn5FyoQ" yt fitness i) ;; Connect The Watts
+	("https://www.youtube.com/feeds/videos.xml?channel_id=UCV_zy48AlwwGpdJEka1ay7w" yt fitness) ;; Garage Gym Reviews
+        ("https://www.youtube.com/feeds/videos.xml?channel_id=UCXR5UyxWQdZ50pWyNn5FyoQ" yt fitness) ;; Connect The Watts
         ("https://www.youtube.com/feeds/videos.xml?channel_id=UCFGCfbYPyFpITa0mbwbTmhA" yt fitness i) ;; Kaizen DIY Gym
 	("https://www.youtube.com/feeds/videos.xml?channel_id=UCzN7S0O87X-Q1CJqyWnJ9mw" yt i)
         ("https://www.youtube.com/feeds/videso.xml?channel_id=UCsEPI9OwGEw5Lm0E7Paq62g" yt i)
@@ -50,7 +50,7 @@
         ("https://hnrss.org/frontpage?points=50&comments=20" hn hacker-news)
         ;; ("https://www.reddit.com/r/haskell.rss" r programming haskell)
         ("https://www.reddit.com/r/Vitruvian_Form.rss" r fitness)
-        ("https://ihrss.io/top/week" indiehackers)
+        ("https://ihrss.io/top/month" indiehackers)
         ))
 
 (setq-default elfeed-all-the-feeds
@@ -68,7 +68,7 @@
     (kbd "g e") 'elfeed-download-ytaudio
     (kbd "f i") (lambda () (interactive) (elfeed-search-set-filter "@1-week-ago -junk -short +unread -hn +i"))
     (kbd "f o") (lambda () (interactive) (elfeed-search-set-filter "@1-week-ago -junk -short +unread -hn -i"))
-    (kbd "f h") (lambda () (interactive) (elfeed-search-set-filter "@1-week-ago -junk -short +unread +hn +indiehackers"))
+    (kbd "f h") (lambda () (interactive) (elfeed-search-set-filter "@1-week-ago -junk -short +unread +hn"))
     (kbd "r") 'elfeed-search-untag-all-unread
     )
   (evil-define-key 'normal elfeed-show-mode-map
