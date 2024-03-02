@@ -898,7 +898,7 @@
 (use-package consult)
 
 (define-key transient-map (kbd "<f8>") 'transient-quit-all)
-(define-key transient-map (kbd "ESC") 'transient-quit-all)
+(define-key transient-map (kbd "<escape>") 'transient-quit-all)
  
 ;; enable tab-bar-mode
 (tab-bar-mode)
