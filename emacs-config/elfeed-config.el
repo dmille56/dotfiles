@@ -50,6 +50,7 @@
         ("https://hnrss.org/frontpage?points=50&comments=20" hn hacker-news)
         ;; ("https://www.reddit.com/r/haskell.rss" r programming haskell)
         ("https://www.reddit.com/r/Vitruvian_Form.rss" r fitness)
+        ("https://ihrss.io/top/week" indiehackers)
         ))
 
 (setq-default elfeed-all-the-feeds
@@ -67,7 +68,7 @@
     (kbd "g e") 'elfeed-download-ytaudio
     (kbd "f i") (lambda () (interactive) (elfeed-search-set-filter "@1-week-ago -junk -short +unread -hn +i"))
     (kbd "f o") (lambda () (interactive) (elfeed-search-set-filter "@1-week-ago -junk -short +unread -hn -i"))
-    (kbd "f h") (lambda () (interactive) (elfeed-search-set-filter "@1-week-ago -junk -short +unread +hn"))
+    (kbd "f h") (lambda () (interactive) (elfeed-search-set-filter "@1-week-ago -junk -short +unread +hn +indiehackers"))
     (kbd "r") 'elfeed-search-untag-all-unread
     )
   (evil-define-key 'normal elfeed-show-mode-map
