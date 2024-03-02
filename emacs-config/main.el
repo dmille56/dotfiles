@@ -1037,8 +1037,8 @@
   :straight (:type git :host sourcehut :repo "meow_king/ts-query-highlight"))
 
 (use-package treesit-jump
-  ;; :straight (:host github :repo "dmille56/treesit-jump" :files ("*.el" "treesit-queries"))
-  :load-path "~/Desktop/prog/treesit-jump/"
+  :straight (:host github :repo "dmille56/treesit-jump" :files ("*.el" "treesit-queries"))
+  ;; :load-path "~/Desktop/prog/treesit-jump/"
   :config
   (global-set-key (kbd "<f9>") 'treesit-jump-jump)
   (setq treesit-jump-queries-filter-list '("inner" "test" "param"))
@@ -1048,8 +1048,8 @@
 ;; (add-to-list 'treesit-jump-queries-extra-alist (cons 'python-ts-mode '("(return_statement (_)) @return")))
 
 (use-package powershell-ts-mode
-  ;; :straight (:host github :repo "dmille56/powershell-ts-mode")
-  :load-path "~/Desktop/prog/powershell-ts-mode/"
+  :straight (:host github :repo "dmille56/powershell-ts-mode")
+  ;; :load-path "~/Desktop/prog/powershell-ts-mode/"
   :config
   ;; Associate .ps1 files with powershell-ts-mode
   (add-to-list 'auto-mode-alist '("\\.ps1\\'" . powershell-ts-mode))
