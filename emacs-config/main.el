@@ -526,11 +526,7 @@
 ;;     (load-theme 'dracula t))
 
 ;; install nix-mode
-(use-package nix-mode
-  :mode "\\.nix\\'"
-  :init
-  (add-hook 'nix-mode-hook (lambda () (setq-local compile-command "home-manager switch")))
-  )
+(use-package nix-mode :mode "\\.nix\\'")
 
 ;; for nix formatting
 (use-package format-all
