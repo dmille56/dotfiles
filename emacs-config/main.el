@@ -153,12 +153,14 @@
 (defhydra hydra-elisp-mode (:exit t)
   "elisp"
   ("r" eval-region "eval region")
-  ("b" eval-buffer "eval buffer")
+  ("B" eval-buffer "eval buffer")
   ("l" (lambda () (interactive) (load-file (buffer-file-name (window-buffer)))) "load current file")
   ("L" load-file "load file")
   ("d" eval-defun "eval defun")
   ("e" eval-last-sexp "eval last sexp")
   ("D" edebug-defun "edebug function")
+  ("s" paredit-forward-slurp-sexp "slurp")
+  ("b" paredit-forward-barf-sexp "barf")
   )
 
 (defhydra hydra-doc-view-mode (:exit t)
@@ -1066,6 +1068,8 @@
   (add-to-list 'auto-mode-alist '("\\.psd1\\'" . powershell-ts-mode))
   (setq powershell-ts-enable-imenu-top-level-vars nil)
 )
+
+(use-package paredit)
 
 (use-package ebuku)
 
