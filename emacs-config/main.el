@@ -702,9 +702,9 @@
 (use-package all-the-icons-dired
   :hook (dired-mode . all-the-icons-dired-mode))
 
-(use-package all-the-icons-completion
-  :init
-  (all-the-icons-completion-mode))
+;; (use-package all-the-icons-completion
+;;   :init
+;;   (all-the-icons-completion-mode))
 
 (use-package ranger
   :bind
@@ -879,6 +879,7 @@
   )
 
 (use-package helm-xref)
+(use-package helm-swoop)
 
 (use-package corfu
   ;; :init
