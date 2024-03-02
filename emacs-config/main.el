@@ -703,7 +703,7 @@
 (use-package ranger
   :bind
   ("C-x t" . ranger)
-  ("<f9>" . ranger)
+  ;; ("<f9>" . ranger)
   (:map ranger-mode-map
 	("C-<tab>" . ranger-next-tab))
   :config
@@ -1041,6 +1041,7 @@
   :load-path "~/Desktop/prog/treesit-jump/"
   :config
   (global-set-key (kbd "<f9>") 'treesit-jump-jump)
+  (setq treesit-jump-queries-filter-list '("inner" "test" "param"))
 )
 
 ;; (add-to-list 'treesit-jump-queries-extra-alist (cons 'powershell-ts-mode '("(flow_control_statement (_)) @flow")))
