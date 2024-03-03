@@ -666,6 +666,7 @@
 (setq my-org-roam-directory
       (cond
        ((eq my/config-machine 'work) "~\\OneDrive - Microsoft\\Desktop\\roam-notes")
+       ((eq my/config-machine 'phone) "/data/data/com.termux/files/home/storage/shared/roam-notes")
        (t "~/roam-notes")
        ))
 
@@ -1063,6 +1064,11 @@
   (add-to-list 'auto-mode-alist '("\\.psm1\\'" . powershell-ts-mode))
   (add-to-list 'auto-mode-alist '("\\.psd1\\'" . powershell-ts-mode))
   (setq powershell-ts-enable-imenu-top-level-vars nil)
+)
+
+(use-package imenu-list
+  :config
+  (global-set-key (kbd "C-'") #'imenu-list-smart-toggle)
 )
 
 (use-package paredit)

@@ -141,6 +141,7 @@ in {
 
     nix-prefetch-git
     dropbox
+    syncthing
     # (import ../nix/twitchy.nix) # :TODO: fix 
     (import ../nix/twitchy-rofi-script.nix)
     (import ../nix/search-ddg-script.nix)
