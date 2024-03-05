@@ -557,6 +557,10 @@ in {
 
   programs.home-manager = { enable = true; };
 
+  home.file.".config/kak/kakrc".text = ''
+    colorscheme dracula
+  '';
+
   home.file.".vimrc".source = "${my-dotfile-dir}/vim/vim/vimrc";
   home.file.".Xresources".source = "${my-dotfile-dir}/Xresources";
   home.file.".xmobarrc".source = "${my-dotfile-dir}/xmobarrc";
@@ -578,11 +582,16 @@ in {
     sha256 = "68010556ad7b351b63b6d061f5c4b7c8feb9d9b32687bf0530b105a86634766c";
   });
 
+  home.file.".config/kak/colors/dracula.kak".text = builtins.readFile(builtins.fetchurl {
+    url = "https://raw.githubusercontent.com/dracula/kakoune/master/colors/dracula.kak";
+    sha256 = "57e11ca24375df2a02541a44670d4a48cf90ce179f4eecfc0f5ba005c2c03a02";
+  });
+
   home.file.".themes/dracula".source = builtins.fetchGit {
     url = "https://github.com/dracula/gtk";
     rev = "f3c876d8c97f9bb504c98592a8d96770e70585bb";
   };
-
+  
   home.file.".config/lazygit/theme/lazygit".source = builtins.fetchGit {
     url = "https://github.com/catppuccin/lazygit";
     rev = "a544cef9a18c3a94e0344281e0ddcf99a18a8ede";
