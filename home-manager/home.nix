@@ -81,6 +81,7 @@ in {
     wget
     nano
     kakoune
+    helix
     vim
     vimgolf
     curl
@@ -559,6 +560,10 @@ in {
 
   home.file.".config/kak/kakrc".text = ''
     colorscheme dracula
+  '';
+
+  home.file.".config/helix/config.toml".text = ''
+    theme = "dracula"
   '';
 
   home.file.".vimrc".source = "${my-dotfile-dir}/vim/vim/vimrc";
