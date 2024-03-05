@@ -552,6 +552,10 @@ in {
     '';
   };
 
+  services.syncthing = {
+    enable = true;
+  };
+
   programs.home-manager = { enable = true; };
 
   home.file.".vimrc".source = "${my-dotfile-dir}/vim/vim/vimrc";

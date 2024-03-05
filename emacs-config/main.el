@@ -182,6 +182,7 @@
   ("t" org-todo "todo")
   ("T" org-set-tags-command "set tags")
   ("e" org-export-dispatch "org export")
+  ("b" org-toggle-checkbox "checkbox")
   )
 
 (defhydra hydra-python-mode (:exit t)
