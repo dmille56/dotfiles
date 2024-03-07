@@ -83,7 +83,8 @@ nnoremap <leader>o <C-w>w<CR>
 nnoremap <leader>2 <C-w>s<CR>
 nnoremap <leader>3 <C-w>v<CR>
 
-nnoremap <leader>i :Telescope live_grep<CR>
+nnoremap <leader>i :Telescope current_buffer_fuzzy_find<CR>
+nnoremap <leader>us :Telescope live_grep<CR>
 nnoremap <leader>p :Telescope find_files<CR>
 nnoremap <leader>b :Telescope buffers<CR>
 
