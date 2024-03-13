@@ -118,7 +118,7 @@
   (add-hook 'elfeed-new-entry-hook #'elfeed-tag-yt-short)
   )
 
-(use-package mpv)
+(use-package mpv :defer)
 
 (use-package elfeed-tube
   :ensure t

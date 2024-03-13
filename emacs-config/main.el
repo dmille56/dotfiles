@@ -689,9 +689,9 @@
   :config
   ;; If you're using a vertical completion framework, you might want a more informative completion interface
   (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
-  (org-roam-db-autosync-mode)
-  ;; If using org-roam-protocol
-  (require 'org-roam-protocol))
+  ;; :TODO: look into org-roam-protocol at some point
+  ;; (require 'org-roam-protocol)
+  (org-roam-db-autosync-mode))
 
 (use-package org-make-toc
   :defer
@@ -995,13 +995,12 @@
   (global-treesit-auto-mode)
   )
 
-(require 'eglot)
 ;; Add-hooks for eglot
 (add-hook 'python-mode-hook 'eglot-ensure)
 (add-hook 'python-ts-mode-hook 'eglot-ensure)
 (add-hook 'yaml-mode-hook 'eglot-ensure)
 (add-hook 'nix-mode-hook 'eglot-ensure)
-(add-to-list 'eglot-server-programs '(nix-mode . ("rnix-lsp")))
+(with-eval-after-load 'eglot (add-to-list 'eglot-server-programs '(nix-mode . ("rnix-lsp"))))
 
 (use-package flycheck-eglot
   :ensure t
@@ -1015,15 +1014,14 @@
 
 (use-package autotetris-mode :defer)
 
-(straight-use-package
- '(eat :type git
-       :host codeberg
-       :repo "akib/emacs-eat"
-       :files ("*.el" ("term" "term/*.el") "*.texi"
-               "*.ti" ("terminfo/e" "terminfo/e/*")
-               ("terminfo/65" "terminfo/65/*")
-               ("integration" "integration/*")
-               (:exclude ".dir-locals.el" "*-tests.el"))))
+(use-package eat
+  :defer
+  :straight (:type git :host codeberg :repo "akib/emacs-eat"
+                   :files ("*.el" ("term" "term/*.el") "*.texi"
+                           "*.ti" ("terminfo/e" "terminfo/e/*")
+                           ("terminfo/65" "terminfo/65/*")
+                           ("integration" "integration/*")
+                           (:exclude ".dir-locals.el" "*-tests.el"))))
 
 (evil-set-initial-state 'eat-mode 'emacs)
 
@@ -1084,8 +1082,7 @@
 (use-package imenu-list
   :defer
   :config
-  (global-set-key (kbd "C-'") #'imenu-list-smart-toggle)
-)
+  (global-set-key (kbd "C-'") #'imenu-list-smart-toggle))
 
 (use-package paredit :defer)
 
@@ -1097,13 +1094,9 @@
   ;; setup key bindings
   (setopt ellama-keymap-prefix "C-c e"))
 
-;; Set up zone-matrix
-(straight-use-package
- '(zone-matrix :type git :host github :repo "dmille56/zone-matrix"))
- 
-(require 'zone-matrix)
-(require 'zone-matrix-settings)
-(require 'zone-settings)
+(use-package zone-matrix
+  :defer
+  :straight (:host github :repo "dmille56/zone-matrix"))
 
 (setq zone-programs [zone-nyan zone-matrix])
 
