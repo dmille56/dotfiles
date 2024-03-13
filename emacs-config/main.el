@@ -39,19 +39,15 @@
  'package-archives
  '("melpa" . "http://melpa.org/packages/") t)
 (package-initialize)
-(package-refresh-contents)
+(unless package-archive-contents (package-refresh-contents))
 
 ;; install use-package
 (package-install 'use-package)
 (require 'use-package)
 (setq use-package-always-ensure t)
 
-;; to help benchmark your init file
-(use-package benchmark-init
-  :ensure t
-  :config
-  ;; To disable collection of benchmark data after init is done.
-  (add-hook 'after-init-hook 'benchmark-init/deactivate))
+;; run esup to benchmark startup code
+(use-package esup :defer)
 
 (use-package auto-package-update
   :config
@@ -562,17 +558,19 @@
   )
 
 (use-package rg
+  :defer
   :init
   (rg-enable-default-bindings))
 
-(use-package helm-rg)
+(use-package helm-rg :defer)
 
-(use-package powershell)
+(use-package powershell :defer)
 ;; (use-package koopa-mode)
 
-(use-package erc)
+(use-package erc :defer)
 
 (use-package md4rd
+  :defer
   :bind (
 	 :map md4rd-mode-map
 	  ("q" . kill-this-buffer)
