@@ -355,7 +355,7 @@
 (use-package evil-tutor)
 
 ;; :TODO: figure out how to use this package effectively
-(use-package evil-textobj-tree-sitter)
+(use-package evil-textobj-tree-sitter :after prog-mode)
 
 ;; bind `function.outer`(entire function block) to `f` for use in things like `vaf`, `yaf`
 ;; bind `function.inner`(function block without name and args) to `f` for use in things like `vif`, `yif`
@@ -694,7 +694,7 @@
   (org-roam-db-autosync-mode))
 
 (use-package org-make-toc
-  :defer
+  :after org
   :config
   (add-hook 'org-mode-hook #'org-make-toc-mode)
   (setq org-make-toc-insert-custom-ids t))
@@ -702,6 +702,7 @@
 (use-package all-the-icons) ;; remember need to run (all-the-icons-install-fonts) to install the fonts
 
 (use-package all-the-icons-dired
+  :defer
   :hook (dired-mode . all-the-icons-dired-mode))
 
 ;; (use-package all-the-icons-completion
@@ -777,6 +778,8 @@
   (global-set-key (kbd "C-C r p") 'read-aloud-buf)
   (global-set-key (kbd "C-C r s") 'read-aloud-stop)
   (global-set-key (kbd "C-C r t") 'read-aloud-this))
+
+(use-package company)
 
 (use-package company-box
   :hook (company-mode . company-box-mode))
