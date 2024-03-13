@@ -5,6 +5,8 @@
 
 ;;; Code:
 
+(setq gc-cons-threshold 100000000)
+
 ;; Some same defaults to start:
 
 ;; disable toolbar, scrollbars, & menubar
@@ -43,6 +45,13 @@
 (package-install 'use-package)
 (require 'use-package)
 (setq use-package-always-ensure t)
+
+;; to help benchmark your init file
+(use-package benchmark-init
+  :ensure t
+  :config
+  ;; To disable collection of benchmark data after init is done.
+  (add-hook 'after-init-hook 'benchmark-init/deactivate))
 
 (use-package auto-package-update
   :config
@@ -114,8 +123,7 @@
   ("m7" (lambda () (interactive) (tab-bar-move-tab-to 7)) "move 7")
   ("m8" (lambda () (interactive) (tab-bar-move-tab-to 8)) "move 8")
   ("m9" (lambda () (interactive) (tab-bar-move-tab-to 9)) "move 9")
-  ("m0" (lambda () (interactive) (tab-bar-move-tab-to 10)) "move 10")
-  )
+  ("m0" (lambda () (interactive) (tab-bar-move-tab-to 10)) "move 10"))
 
 (defhydra hydra-leader-misc (:exit t)
   "misc"
@@ -138,8 +146,7 @@
   ("h" help-for-help "emacs help")
   ("." clippy-describe-function "clippy func")
   (">" clippy-describe-variable "clippy var")
-  ("e" revert-buffer "revert buffer")
-  )
+  ("e" revert-buffer "revert buffer"))
 
 (defhydra hydra-game (:exit t)
   "game"
@@ -147,8 +154,7 @@
   ("t" tetris "tetris")
   ("d" doctor "doctor")
   ("s" sudoku "sudoku")
-  ("p" pacmacs-start "pacmacs")
-  )
+  ("p" pacmacs-start "pacmacs"))
 
 (defhydra hydra-elisp-mode (:exit t)
   "elisp"
@@ -160,15 +166,13 @@
   ("e" eval-last-sexp "eval last sexp")
   ("D" edebug-defun "edebug function")
   ("s" paredit-forward-slurp-sexp "slurp")
-  ("b" paredit-forward-barf-sexp "barf")
-  )
+  ("b" paredit-forward-barf-sexp "barf"))
 
 (defhydra hydra-doc-view-mode (:exit t)
   "doc-view"
   ("g" doc-view-goto-page "go to page")
   ("n" doc-view-next-page "next page")
-  ("p" doc-view-previous-page "prev page")
-  )
+  ("p" doc-view-previous-page "prev page"))
 
 (defhydra hydra-org-mode (:exit t)
   "org"
@@ -179,11 +183,11 @@
   ("c" org-make-toc-insert "insert table of contents")
   ("C" org-make-toc-set "edit table of contents")
   ("s" org-schedule "schedule")
+  ("S" org-insert-structure-template "structure template")
   ("t" org-todo "todo")
   ("T" org-set-tags-command "set tags")
   ("e" org-export-dispatch "org export")
-  ("b" org-toggle-checkbox "checkbox")
-  )
+  ("b" org-toggle-checkbox "checkbox"))
 
 (defhydra hydra-python-mode (:exit t)
   "python"
@@ -192,16 +196,14 @@
   ("l" python-shell-send-statement "run statement")
   ("p" run-python "start python shell")
   ("r" python-shell-send-region "run region")
-  ("z" python-shell-switch-to-shell "switch to shell")
-  )
+  ("z" python-shell-switch-to-shell "switch to shell"))
 
  (defhydra hydra-org-timer (:exit t)
   "timer"
   ("t" org-timer-set-timer "set timer")
   ("s" org-timer-stop "stop")
   ("r" org-timer-start "start")
-  ("p" org-timer-pause-or-continue "pause/continue")
-  )
+  ("p" org-timer-pause-or-continue "pause/continue"))
 
  (defhydra hydra-shell-run (:exit t)
    "run shell commands"
@@ -210,21 +212,18 @@
   ("X" shell-command "run command")
   ("l" eshell-extensions-send-cur-line-to-eshell "run cur line in eshell")
   ("r" eshell-extensions-send-cur-region-to-eshell "run region in eshell")
-  ("e" eshell-extensions-send-string-to-eshell "run command in eshell")
-  )
+  ("e" eshell-extensions-send-string-to-eshell "run command in eshell"))
 
  (defhydra hydra-emms-mode (:exit t)
    "emms"
   ("e" emms "emms")
-  ("s" emms-streams "emms streams")
-  )
+  ("s" emms-streams "emms streams"))
 
  (defhydra hydra-evil-macros (:exit t)
    "macros"
   ("r" evil-record-macro "record macro") ;; traditionally q in vim/evil
   ("x" evil-execute-macro "execute macro") ;; also @ followed by macro register in vim/evil
-  ("l" evil-execute-last-recorded-macro "execute last macro") ;; also @@ in vim/evil
-  )
+  ("l" evil-execute-last-recorded-macro "execute last macro")) ;; also @@ in vim/evil
 
  (defhydra hydra-hl-todo (:exit t)
    "hl-todo"
@@ -232,8 +231,7 @@
   ("n" hl-todo-next "next")
   ("o" hl-todo-occur "occur")
   ("i" hl-todo-insert "insert todo")
-  ("r" hl-todo-rgrep "rgrep")
-  )
+  ("r" hl-todo-rgrep "rgrep"))
 
  (defhydra hydra-org-roam (:exit t)
    "org-roam"
@@ -246,8 +244,7 @@
   ("1" my/org-roam-capture-1-on-1 "capture 1-on-1")
   ("m" my/org-roam-capture-meeting "capture meeting")
   ("h" my/org-roam-capture-hype-doc "capture hype doc")
-  ("j" org-roam-dailies-capture-today "capture today")
-  )
+  ("j" org-roam-dailies-capture-today "capture today"))
 
 (use-package evil-leader
   :init
@@ -311,8 +308,7 @@
   (evil-leader/set-key-for-mode 'org-mode "r" 'hydra-org-mode/body)
   (evil-leader/set-key-for-mode 'python-mode "r" 'hydra-python-mode/body)
   (evil-leader/set-key-for-mode 'python-ts-mode "r" 'hydra-python-mode/body)
-  (global-evil-leader-mode)
-  )
+  (global-evil-leader-mode))
 
 (defun run-lsp-command-map ()
   "Show lsp-command-map."
@@ -393,11 +389,12 @@
   (global-flycheck-mode))
 
 (use-package treemacs
+  :defer
   :bind
   ("C-x y" . treemacs))
 
-(use-package treemacs-projectile)
-(use-package treemacs-evil)
+(use-package treemacs-projectile :defer)
+(use-package treemacs-evil :defer)
 
 ;; Install Dante
 (use-package dante
@@ -438,6 +435,7 @@
 (setq lsp-keymap-prefix "C-l")
 
 (use-package lsp-mode
+  :defer
   :hook (;; replace X-mode with concrete major-mode(e. g. python-mode)
          ;; (haskell-mode . lsp)
          ;; (powershell-mode . lsp)
@@ -450,6 +448,7 @@
 (setq lsp-disabled-clients '(omnisharp))
 
 (use-package lsp-haskell
+ :defer
  :ensure t
  :config
  (setq lsp-haskell-process-path-hie "haskell-language-server-wrapper")
@@ -471,7 +470,7 @@
   (setq lsp-ui-doc-enable nil))
 
 (use-package helm-lsp :commands helm-lsp-workspace-symbol)
-(use-package lsp-treemacs :commands lsp-treemacs-errors-list)
+(use-package lsp-treemacs :commands lsp-treemacs-errors-list :defer)
 (use-package yasnippet)
 
 ;; For C#
@@ -488,7 +487,7 @@
 (global-set-key (kbd "<f6>") 'other-window)
 
 ;; install maggit
-(use-package magit)
+(use-package magit :defer)
 
 ;; install markdown-mode and set it to use pandoc
 ;; make sure you have pandoc installed!
@@ -502,6 +501,7 @@
 
 ;; install helm
 (use-package helm
+  :defer
   :bind
   ("<f4>" . helm-occur)
   ("<f7>" . helm-find-files)
@@ -516,21 +516,21 @@
 
 ;; install themes
 ;; :TODO: look into installing and using circadian.el (to switch between light/dark at sunset)
-(use-package sublime-themes)
-(use-package spacemacs-theme)
+;; (use-package sublime-themes)
+;; (use-package spacemacs-theme)
 (use-package dracula-theme)
-(straight-use-package '(nano-theme :type git :host github
-                                   :repo "rougier/nano-theme"))
+;; (straight-use-package '(nano-theme :type git :host github :repo "rougier/nano-theme"))
 
 (load-theme 'dracula t)
 ;; (if (or (display-graphic-p) (daemonp))
 ;;     (load-theme 'dracula t))
 
 ;; install nix-mode
-(use-package nix-mode :mode "\\.nix\\'")
+(use-package nix-mode :mode "\\.nix\\'" :defer)
 
 ;; for nix formatting
 (use-package format-all
+  :defer
   :init
   (add-hook 'nix-mode-hook 'format-all-mode)
   )
@@ -538,12 +538,13 @@
 ;; install yaml-mode
 ;; (use-package yaml-mode)
 
-(use-package yaml)
+(use-package yaml :defer)
 
-(use-package yaml-pro)
+(use-package yaml-pro :defer)
 
 ;; install/setup emms
 (use-package emms
+  :defer
   :bind
   ("C-x e" . emms)
   ("C-x s" . emms-streams)
@@ -567,7 +568,7 @@
 (use-package helm-rg)
 
 (use-package powershell)
-(use-package koopa-mode)
+;; (use-package koopa-mode)
 
 (use-package erc)
 
@@ -618,10 +619,10 @@
       org-agenda-start-on-weekday nil
       org-agenda-start-day "-3d")
 
-(use-package org-modern
-  ;; :config
-  ;; (with-eval-after-load 'org (global-org-modern-mode))
-  )
+;; (use-package org-modern
+;;   ;; :config
+;;   ;; (with-eval-after-load 'org (global-org-modern-mode))
+;;   )
 
 (with-eval-after-load 'evil-maps
   (define-key evil-motion-state-map (kbd "SPC") nil)
@@ -693,6 +694,7 @@
   (require 'org-roam-protocol))
 
 (use-package org-make-toc
+  :defer
   :config
   (add-hook 'org-mode-hook #'org-make-toc-mode)
   (setq org-make-toc-insert-custom-ids t))
@@ -722,7 +724,7 @@
   (setq nyan-wavy-trail t)
   (nyan-mode))
 
-(use-package zone-nyan)
+(use-package zone-nyan :defer)
 
 (use-package projectile
   :bind
@@ -734,6 +736,7 @@
   (projectile-mode +1))
 
 (use-package helm-projectile
+  :after projectile
   :init
   (helm-projectile-on))
 
@@ -745,9 +748,10 @@
   :ensure t
   :hook (prog-mode . rainbow-delimiters-mode))
 
-(use-package restart-emacs)
+(use-package restart-emacs :defer)
 
 (use-package avy
+  :defer
   :init
   (global-set-key (kbd "C-:") 'avy-goto-line)
   (global-set-key (kbd "C-;") 'avy-goto-char))
@@ -768,6 +772,7 @@
   (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh))
 
 (use-package read-aloud
+  :defer
   :init
   (global-set-key (kbd "C-C r p") 'read-aloud-buf)
   (global-set-key (kbd "C-C r s") 'read-aloud-stop)
@@ -845,7 +850,7 @@
   :after magit
   :config (magit-todos-mode 1))
 
-(use-package csv-mode)
+(use-package csv-mode :defer)
 
 (use-package beacon
   :init
@@ -856,6 +861,7 @@
 (use-package harpoon)
 
 (use-package chatgpt-shell
+  :defer
   :ensure t
   :config
   (setq chatgpt-shell-model-version 3)
@@ -928,6 +934,7 @@
   (kbd "C-l") 'eshell-go-up-one-dir)
 
 (use-package eshell-syntax-highlighting
+  :defer
   :config
   ;; Enable in all Eshell buffers.
   (eshell-syntax-highlighting-global-mode +1))
@@ -954,9 +961,10 @@
 
 ;; Games
 
-(use-package 2048-game)
+(use-package 2048-game :defer)
 
 (use-package sudoku
+  :defer
   :init
   (evil-set-initial-state 'sudoku-mode 'emacs)
   :config
@@ -965,6 +973,7 @@
   )
 
 (use-package pacmacs
+  :defer
   :init
   (evil-set-initial-state 'pacmacs-mode 'emacs)
   )
@@ -972,9 +981,10 @@
 (use-package emojify
   :hook (after-init . global-emojify-mode))
 
-(use-package link-hint)
+(use-package link-hint :defer)
 
 (use-package treesit-auto
+  :defer
   :custom
   (setq treesit-auto-install 'prompt)
   :config
@@ -997,9 +1007,9 @@
 
 (setq compilation-scroll-output 'first-error)
 
-(use-package fireplace)
+(use-package fireplace :defer)
 
-(use-package autotetris-mode)
+(use-package autotetris-mode :defer)
 
 (straight-use-package
  '(eat :type git
@@ -1014,6 +1024,7 @@
 (evil-set-initial-state 'eat-mode 'emacs)
 
 (use-package perspective
+  :defer
   :bind
   ("C-x C-b" . persp-list-buffers)         ; or use a nicer switcher, see below
   :custom
@@ -1021,10 +1032,9 @@
   :init
   (persp-mode))
 
-(use-package git-timemachine)
-(use-package clippy)
+(use-package clippy :defer)
 
-(use-package command-log-mode)
+(use-package command-log-mode :defer)
 
 (use-package smartparens-mode
   :ensure smartparens  ;; install the package
@@ -1034,13 +1044,13 @@
   (require 'smartparens-config))
 
 ;; :TODO: figure out how to either integrate zoxide or eshell-z
-(use-package zoxide)
+(use-package zoxide :defer)
 
 (defun eshell-cd-with-zoxide (&optional query)
    (interactive)
    (zoxide-open-with query 'eshell-my-cd))
 
-(use-package eshell-z)
+(use-package eshell-z :defer)
 
 (use-package ts-query-highlight
   :straight (:type git :host sourcehut :repo "meow_king/ts-query-highlight"))
@@ -1068,15 +1078,17 @@
 )
 
 (use-package imenu-list
+  :defer
   :config
   (global-set-key (kbd "C-'") #'imenu-list-smart-toggle)
 )
 
-(use-package paredit)
+(use-package paredit :defer)
 
-(use-package ebuku)
+(use-package ebuku :defer)
 
 (use-package ellama
+  :defer
   :init
   ;; setup key bindings
   (setopt ellama-keymap-prefix "C-c e"))
@@ -1092,7 +1104,6 @@
 (setq zone-programs [zone-nyan zone-matrix])
 
 ;; lsp-mode performance settings
-(setq gc-cons-threshold 100000000)
 (setq read-process-output-max (* 1024 1024)) ;; 1mb
 (setq lsp-completion-provider :capf)
 
