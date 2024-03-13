@@ -798,20 +798,17 @@
   (setq dashboard-items '((recents  . 5)
                         (bookmarks . 5)
                         (projects . 5)
-                        (agenda . 5)))
-  )
+                        (agenda . 5))))
 
-(use-package dashboard-hackernews)
+;; (use-package dashboard-hackernews)
 
 (use-package golden-ratio
   :init
-  (golden-ratio-mode 1)
-  )
+  (golden-ratio-mode 1))
 
-(use-package solaire-mode
-  :init
-  (solaire-global-mode)
-  )
+;; (use-package solaire-mode
+;;   :init
+;;   (solaire-global-mode))
 
 (use-package spacious-padding
   ;; reenable hook when the bug gets fixed...
@@ -863,9 +860,9 @@
 (if (eq my/config-machine 'work)
     (global-hl-line-mode))
 
-(use-package selectric-mode) ;; haha this is the funniest package
+(use-package selectric-mode :defer) ;; haha this is the funniest package
 
-(use-package harpoon)
+(use-package harpoon :defer)
 
 (use-package chatgpt-shell
   :defer
@@ -891,12 +888,13 @@
   (add-hook 'xref-backend-functions #'dumb-jump-xref-activate)
   )
 
-(use-package helm-xref)
-(use-package helm-swoop)
+(use-package helm-xref :defer)
+(use-package helm-swoop :defer)
 
 (use-package corfu
   ;; :init
   ;; (global-corfu-mode)
+  :defer
   :custom
   (corfu-cycle t)
   (corfu-auto t)
@@ -908,7 +906,7 @@
 ;;   (completion-styles '(basic partial-completion orderless))
 ;;  )
 
-(use-package consult)
+(use-package consult :defer)
 
 (define-key transient-map (kbd "<f8>") 'transient-quit-all)
 (define-key transient-map (kbd "<escape>") 'transient-quit-all)
@@ -941,7 +939,7 @@
   (kbd "C-l") 'eshell-go-up-one-dir)
 
 (use-package eshell-syntax-highlighting
-  :defer
+  :after eshell
   :config
   ;; Enable in all Eshell buffers.
   (eshell-syntax-highlighting-global-mode +1))
@@ -1065,8 +1063,7 @@
   ;; :load-path "~/Desktop/prog/treesit-jump/"
   :config
   (global-set-key (kbd "<f9>") 'treesit-jump-jump)
-  (setq treesit-jump-queries-filter-list '("inner" "test" "param"))
-)
+  (setq treesit-jump-queries-filter-list '("inner" "test" "param")))
 
 ;; (add-to-list 'treesit-jump-queries-extra-alist (cons 'powershell-ts-mode '("(flow_control_statement (_)) @flow")))
 ;; (add-to-list 'treesit-jump-queries-extra-alist (cons 'python-ts-mode '("(return_statement (_)) @return")))
@@ -1079,8 +1076,7 @@
   (add-to-list 'auto-mode-alist '("\\.ps1\\'" . powershell-ts-mode))
   (add-to-list 'auto-mode-alist '("\\.psm1\\'" . powershell-ts-mode))
   (add-to-list 'auto-mode-alist '("\\.psd1\\'" . powershell-ts-mode))
-  (setq powershell-ts-enable-imenu-top-level-vars nil)
-)
+  (setq powershell-ts-enable-imenu-top-level-vars nil))
 
 (use-package imenu-list
   :defer
