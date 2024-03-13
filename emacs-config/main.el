@@ -1130,15 +1130,15 @@
 
 (setq org-clock-sound (concat my/main-dir "timer.wav"))
 
-(load-file
- (concat my/main-dir "twitchy.el"))
+;; (load-file
+;;  (concat my/main-dir "twitchy.el"))
+;; 
+;; (global-set-key (kbd "M-p") 'twitchy-play-stream)
 
-(global-set-key (kbd "M-p") 'twitchy-play-stream)
+;; (load-file
+;;  (concat my/main-dir "youtube.el"))
 
-(load-file
- (concat my/main-dir "youtube.el"))
-
-(global-set-key (kbd "M-y") 'youtube)
+;; (global-set-key (kbd "M-y") 'youtube)
 
 (load-file
  (concat my/main-dir "elfeed-config.el"))
