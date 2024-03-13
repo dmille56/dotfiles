@@ -852,9 +852,13 @@
 
 (use-package csv-mode :defer)
 
-(use-package beacon
-  :init
-  (beacon-mode 1))
+(unless (eq my/config-machine 'work)
+  (use-package beacon
+    :init
+    (beacon-mode 1)))
+
+(if (eq my/config-machine 'work)
+    (global-hl-line-mode))
 
 (use-package selectric-mode) ;; haha this is the funniest package
 
