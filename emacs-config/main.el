@@ -991,7 +991,6 @@
   (global-treesit-auto-mode)
   )
 
-(require 'eglot)
 ;; Add-hooks for eglot
 (add-hook 'python-mode-hook 'eglot-ensure)
 (add-hook 'python-ts-mode-hook 'eglot-ensure)
