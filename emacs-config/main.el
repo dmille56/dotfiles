@@ -1066,6 +1066,7 @@
   ;; :load-path "~/Desktop/prog/treesit-jump/"
   :defer
   :config
+  :after treesit
   :init
   (global-set-key (kbd "<f9>") 'treesit-jump-jump)
   :config
@@ -1079,6 +1080,7 @@
   ;; :load-path "~/Desktop/prog/powershell-ts-mode/"
   :defer
   :config
+  :init
   ;; Associate .ps1 files with powershell-ts-mode
   (add-to-list 'auto-mode-alist '("\\.ps1\\'" . powershell-ts-mode))
   (add-to-list 'auto-mode-alist '("\\.psm1\\'" . powershell-ts-mode))

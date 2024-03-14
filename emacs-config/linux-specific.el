@@ -11,5 +11,5 @@
 
 (use-package direnv
  :defer
- :config
+ :init
  (direnv-mode))
