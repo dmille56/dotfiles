@@ -1067,7 +1067,9 @@
   ;; :load-path "~/Desktop/prog/treesit-jump/"
   :defer
   :config
+  :init
   (global-set-key (kbd "<f9>") 'treesit-jump-jump)
+  :config
   (setq treesit-jump-queries-filter-list '("inner" "test" "param")))
 
 ;; (add-to-list 'treesit-jump-queries-extra-alist (cons 'powershell-ts-mode '("(flow_control_statement (_)) @flow")))
@@ -1145,11 +1147,11 @@
 
 ;; (global-set-key (kbd "M-y") 'youtube)
 
-(load-file
- (concat my/main-dir "elfeed-config.el"))
+(setq elfeed-config-path (concat my/main-dir "elfeed-config.el"))
+(setq eshell-extensions-path (concat my/main-dir "eshell-extensions.el"))
 
-(load-file
- (concat my/main-dir "eshell-extensions.el"))
+(load-file elfeed-config-path)
+(use-package eshell-extensions :defer :load-path eshell-extensions-path)
 
 (if (eq system-type 'gnu/linux)
     (load-file
