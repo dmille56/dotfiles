@@ -81,8 +81,8 @@
              (t 'pc) ;; fall-back to pc
              ))
 
-(use-package hydra)
-(use-package posframe)
+(use-package hydra :defer)
+(use-package posframe :defer)
 
 ;; (use-package helm-posframe
 ;;   :config
@@ -246,7 +246,6 @@
   :init
   (setq evil-leader/in-all-states t) ;; allows evil leader via "C-<leader>" in other states
   :config
-  (require 'evil-leader)
   (evil-leader/set-leader "<SPC>")
   (evil-leader/set-key
    "p" 'helm-find-files
@@ -366,11 +365,12 @@
 (define-key evil-inner-text-objects-map "a" (evil-textobj-tree-sitter-get-textobj ("conditional.inner" "loop.inner")))
 
 ;; Set default font
-(set-face-attribute 'default nil
-                    :family "Deja Vu Sans Mono for Powerline"
-                    :height 110
-                    :weight 'normal
-                    :width 'normal)
+(unless (eq my/config-machine 'phone)
+  (set-face-attribute 'default nil
+                      :family "Deja Vu Sans Mono for Powerline"
+                      :height 110
+                      :weight 'normal
+                      :width 'normal))
 ;; (semantic-mode 1) ;; use semantic :TODO: re-enable when figure out why it kept throwing error
 
 ;; ask y/n instead of yes/no
@@ -465,15 +465,16 @@
   :config
   (setq lsp-ui-doc-enable nil))
 
-(use-package helm-lsp :commands helm-lsp-workspace-symbol)
+(use-package helm-lsp :commands helm-lsp-workspace-symbol :defer)
 (use-package lsp-treemacs :commands lsp-treemacs-errors-list :defer)
-(use-package yasnippet)
+(use-package yasnippet :defer)
 
 ;; For C#
-(use-package csproj-mode)
+(use-package csproj-mode :defer)
 (add-to-list 'auto-mode-alist '("\\.*axaml\\'" . xml-mode))
 
 (use-package which-key
+  :defer
   :config
   (which-key-mode))
 
@@ -488,6 +489,7 @@
 ;; install markdown-mode and set it to use pandoc
 ;; make sure you have pandoc installed!
 (use-package markdown-mode
+  :defer
   :ensure t
   :commands (markdown-mode gfm-mode)
   :mode (("README\\.md\\'" . gfm-mode)
@@ -504,10 +506,10 @@
   ("C-x c i" . helm-semantic-or-imenu)
   :init
   (global-set-key (kbd "M-x") #'helm-M-x)
-  (helm-mode 1)
   :config
   (define-key helm-map (kbd "ESC") 'helm-keyboard-quit)
   (define-key helm-map (kbd "<f8>") 'helm-keyboard-quit)
+  (helm-mode 1)
   )
 
 ;; install themes
@@ -547,7 +549,7 @@
   (:map emms-playlist-mode-map
    ("j" . next-line)
    ("k" . previous-line))
-  :init
+  :config
   (emms-all)
   (if (eq system-type 'gnu/linux)
       (setq emms-player-list '(emms-player-mpv))
@@ -565,7 +567,7 @@
 (use-package helm-rg :defer)
 
 (use-package powershell :defer)
-;; (use-package koopa-mode)
+(use-package koopa-mode :defer)
 
 (use-package erc :defer)
 
@@ -590,13 +592,13 @@
 (global-set-key (kbd "<f8>") 'keyboard-quit) ;; alias Ctl-g to f8 (to save your pinky)
 
 (use-package spaceline
+  :defer
   :init
-  (require 'spaceline-config)
   (spaceline-emacs-theme)
+  :config
   (spaceline-helm-mode)
   (spaceline-toggle-minor-modes-off) ;; helps reduce modeline clutter
-  (setq spaceline-highlight-face-func 'spaceline-highlight-face-evil-state)
-  )
+  (setq spaceline-highlight-face-func 'spaceline-highlight-face-evil-state))
 
 (use-package evil-org
   :ensure t
@@ -673,7 +675,7 @@
 ;; :TODO: learn how to use org-roam package for notes
 ;; :TODO: also look up org-drill
 (use-package org-roam
-  :ensure t
+  :defer
   :custom
   (org-roam-directory my-org-roam-directory)
   :bind (("C-c n l" . org-roam-buffer-toggle)
@@ -708,6 +710,7 @@
 ;;   (all-the-icons-completion-mode))
 
 (use-package ranger
+  :defer
   :bind
   ("C-x t" . ranger)
   ;; ("<f9>" . ranger)
@@ -726,6 +729,7 @@
 (use-package zone-nyan :defer)
 
 (use-package projectile
+  :defer
   :bind
   (:map projectile-mode-map
 	("C-c p" . projectile-command-map))
@@ -735,8 +739,8 @@
   (projectile-mode +1))
 
 (use-package helm-projectile
-  :after projectile
-  :init
+  :defer
+  :config
   (helm-projectile-on))
 
 (use-package cheat-sh
@@ -1038,6 +1042,7 @@
 (use-package command-log-mode :defer)
 
 (use-package smartparens-mode
+  :defer
   :ensure smartparens  ;; install the package
   :hook (prog-mode text-mode markdown-mode) ;; add `smartparens-mode` to these hooks
   :config
@@ -1054,11 +1059,13 @@
 (use-package eshell-z :defer)
 
 (use-package ts-query-highlight
+  :defer
   :straight (:type git :host sourcehut :repo "meow_king/ts-query-highlight"))
 
 (use-package treesit-jump
   :straight (:host github :repo "dmille56/treesit-jump" :files ("*.el" "treesit-queries"))
   ;; :load-path "~/Desktop/prog/treesit-jump/"
+  :defer
   :config
   (global-set-key (kbd "<f9>") 'treesit-jump-jump)
   (setq treesit-jump-queries-filter-list '("inner" "test" "param")))
@@ -1069,6 +1076,7 @@
 (use-package powershell-ts-mode
   :straight (:host github :repo "dmille56/powershell-ts-mode")
   ;; :load-path "~/Desktop/prog/powershell-ts-mode/"
+  :defer
   :config
   ;; Associate .ps1 files with powershell-ts-mode
   (add-to-list 'auto-mode-alist '("\\.ps1\\'" . powershell-ts-mode))
