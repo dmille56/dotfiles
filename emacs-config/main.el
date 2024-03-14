@@ -376,8 +376,9 @@
 ;; ask y/n instead of yes/no
 (fset 'yes-or-no-p 'y-or-n-p)
 
-(define-key dired-mode-map (kbd "/") 'dired-narrow-fuzzy)
-(evil-define-key 'normal dired-mode-map ";" 'evil-ex)
+(with-eval-after-load 'dired
+  (define-key dired-mode-map (kbd "/") 'dired-narrow-fuzzy)
+  (evil-define-key 'normal dired-mode-map ";" 'evil-ex))
 
 ;; install flycheck
 (use-package flycheck
