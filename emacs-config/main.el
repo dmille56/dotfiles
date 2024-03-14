@@ -475,7 +475,7 @@
 
 (use-package which-key
   :defer
-  :config
+  :init
   (which-key-mode))
 
 ;; use f5 to move to the next tab
