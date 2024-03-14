@@ -847,9 +847,9 @@
   :config
   (flycheck-hl-todo-setup))
 
-(use-package magit-todos
-  :after magit
-  :config (magit-todos-mode 1))
+;; (use-package magit-todos
+;;   :after magit
+;;   :config (magit-todos-mode 1))
 
 (use-package csv-mode :defer)
 
