@@ -258,6 +258,7 @@ in {
      r = "ranger";
      nv = "nvim";
      lg = "lazygit";
+     e = "emacs";
    };
 
    plugins = [
