@@ -738,7 +738,7 @@
   (projectile-mode +1))
 
 (use-package helm-projectile
-  :defer
+  :after projectile
   :config
   (helm-projectile-on))
 
@@ -1055,7 +1055,7 @@
    (interactive)
    (zoxide-open-with query 'eshell-my-cd))
 
-(use-package eshell-z :defer)
+(use-package eshell-z :after eshell)
 
 (use-package ts-query-highlight
   :defer
@@ -1129,7 +1129,7 @@
 
 (global-set-key [escape] 'keyboard-escape-quit)
 
-(setq-local my/main-dir
+(setq my/main-dir
       (cond
        ((eq my/config-machine 'pc) "~/dotfiles/emacs-config/")
        ((eq my/config-machine 'work) "~\\scratch\\dotfiles\\emacs-config\\")
@@ -1152,7 +1152,10 @@
 (setq eshell-extensions-path (concat my/main-dir "eshell-extensions.el"))
 
 (load-file elfeed-config-path)
-(use-package eshell-extensions :defer :load-path eshell-extensions-path)
+
+(autoload 'eshell-extensions-send-string-to-eshell eshell-extensions-path nil t)
+(autoload 'eshell-extensions-send-cur-line-to-eshell eshell-extensions-path nil t)
+(autoload 'eshell-extensions-send-cur-region-to-eshell eshell-extensions-path nil t)
 
 (if (eq system-type 'gnu/linux)
     (load-file
