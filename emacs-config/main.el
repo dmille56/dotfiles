@@ -366,11 +366,7 @@
 
 ;; Set default font
 (unless (eq my/config-machine 'phone)
-  (set-face-attribute 'default nil
-                      :family "Deja Vu Sans Mono for Powerline"
-                      :height 110
-                      :weight 'normal
-                      :width 'normal))
+  (set-frame-font "DejaVu Sans Mono for Powerline-12" nil t))
 ;; (semantic-mode 1) ;; use semantic :TODO: re-enable when figure out why it kept throwing error
 
 ;; ask y/n instead of yes/no
@@ -557,12 +553,11 @@
     (emms-default-players))
   (setq emms-source-file-default-directory "~/Music/")
   (setq emms-stream-default-action "play")
-  (evil-set-initial-state 'emms-playlist-mode 'emacs)
-  )
+  (evil-set-initial-state 'emms-playlist-mode 'emacs))
 
 (use-package rg
   :defer
-  :init
+  :config
   (rg-enable-default-bindings))
 
 (use-package helm-rg :defer)
@@ -579,7 +574,7 @@
 	  ("q" . kill-this-buffer)
 	  ("j" . next-line)
 	  ("k" . previous-line))
-  :init
+  :config
   (evil-set-initial-state 'md4rd-mode 'emacs)
   (setq md4rd-subs-active '(haskell emacs programming)))
 
@@ -911,8 +906,9 @@
 
 (use-package consult :defer)
 
-(define-key transient-map (kbd "<f8>") 'transient-quit-all)
-(define-key transient-map (kbd "<escape>") 'transient-quit-all)
+(with-eval-after-load 'transient
+  (define-key transient-map (kbd "<f8>") 'transient-quit-all)
+  (define-key transient-map (kbd "<escape>") 'transient-quit-all))
  
 ;; enable tab-bar-mode
 (tab-bar-mode)
