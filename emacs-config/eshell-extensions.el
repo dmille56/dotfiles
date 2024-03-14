@@ -62,7 +62,7 @@ Can be in a single or multi-line string.  Retains the content after the comment 
 ;;;###autoload
 (defun eshell-extensions-send-string-to-eshell (command)
   "Send a COMMAND string to an Eshell buffer and execute it."
-  (interactive)
+  (interactive "sEnter a command to run in eshell: ")
   (let (
         (eshell-buffer (eshell-extensions-get-toggle-buffer))
         (processed-command (funcall eshell-extensions-string-process-function command))
