@@ -84,8 +84,10 @@
              ))
 
 (use-package hydra
-  :functions defhydra
-)
+  :demand t
+  :init
+  (require 'hydra))
+
 (use-package posframe :defer)
 
 ;; (use-package helm-posframe
@@ -376,8 +378,8 @@
   (define-key evil-inner-text-objects-map "c" (evil-textobj-tree-sitter-get-textobj "class.inner"))
 
   ;; You can also bind multiple items and we will match the first one we can find
-  (define-key evil-outer-text-objects-map "a" (evil-textobj-tree-sitter-get-textobj '("conditional.outer" "loop.outer")))
-  (define-key evil-inner-text-objects-map "a" (evil-textobj-tree-sitter-get-textobj '("conditional.inner" "loop.inner"))))
+  (define-key evil-outer-text-objects-map "a" (evil-textobj-tree-sitter-get-textobj ("conditional.outer" "loop.outer")))
+  (define-key evil-inner-text-objects-map "a" (evil-textobj-tree-sitter-get-textobj ("conditional.inner" "loop.inner"))))
 
 ;; Set default font
 (unless (eq my/config-machine 'phone)
