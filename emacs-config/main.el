@@ -1136,27 +1136,38 @@
   :defer
   :straight (:type git :host sourcehut :repo "meow_king/ts-query-highlight"))
 
-(use-package treesit-jump
-  :straight (:host github :repo "dmille56/treesit-jump" :files ("*.el" "treesit-queries"))
-  ;; :load-path "~/Desktop/prog/treesit-jump/"
-  :after treesit
-  :init
-  (global-set-key (kbd "<f9>") 'treesit-jump-jump)
-  :config
-  (setq-default treesit-jump-queries-filter-list '("inner" "test" "param")))
+;; My packages... Define them twice to allow loading local version if available first...
+(defvar treesit-jump-path "~/Desktop/prog/treesit-jump/")
+(defvar powershell-ts-mode-path "~/Desktop/prog/powershell-ts-mode/")
 
+(use-package treesit-jump
+  :after treesit
+  :load-path treesit-jump-path
+  :if (file-directory-p treesit-jump-path))
+
+(use-package treesit-jump
+  :after treesit
+  :straight (:host github :repo "dmille56/treesit-jump" :files ("*.el" "treesit-queries"))
+  :if (not (file-directory-p treesit-jump-path)))
+
+(global-set-key (kbd "<f9>") 'treesit-jump-jump)
+(setq-default treesit-jump-queries-filter-list '("inner" "test" "param"))
 ;; (add-to-list 'treesit-jump-queries-extra-alist (cons 'powershell-ts-mode '("(flow_control_statement (_)) @flow")))
 ;; (add-to-list 'treesit-jump-queries-extra-alist (cons 'python-ts-mode '("(return_statement (_)) @return")))
 
 (use-package powershell-ts-mode
+  :load-path powershell-ts-mode-path
+  :if (file-directory-p powershell-ts-mode-path))
+
+(use-package powershell-ts-mode
   :straight (:host github :repo "dmille56/powershell-ts-mode")
-  ;; :load-path "~/Desktop/prog/powershell-ts-mode/"
-  :init
-  ;; Associate .ps1 files with powershell-ts-mode
-  (add-to-list 'auto-mode-alist '("\\.ps1\\'" . powershell-ts-mode))
-  (add-to-list 'auto-mode-alist '("\\.psm1\\'" . powershell-ts-mode))
-  (add-to-list 'auto-mode-alist '("\\.psd1\\'" . powershell-ts-mode))
-  (setq powershell-ts-enable-imenu-top-level-vars nil))
+  :if (not (file-directory-p powershell-ts-mode-path)))
+
+;; Associate .ps1 files with powershell-ts-mode
+(add-to-list 'auto-mode-alist '("\\.ps1\\'" . powershell-ts-mode))
+(add-to-list 'auto-mode-alist '("\\.psm1\\'" . powershell-ts-mode))
+(add-to-list 'auto-mode-alist '("\\.psd1\\'" . powershell-ts-mode))
+(setq-default powershell-ts-enable-imenu-top-level-vars nil)
 
 (use-package imenu-list
   :functions imenu-list-smart-toggle
