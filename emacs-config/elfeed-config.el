@@ -57,8 +57,6 @@
       (append elfeed-feeds-blogs elfeed-feeds-yt elfeed-feeds-podcasts elfeed-feeds-misc))
 
 (use-package elfeed
-  :bind
-  ("C-x w" . elfeed)
   :init
   (evil-define-key 'normal elfeed-search-mode-map
     (kbd "g c") 'elfeed-browsecomments-wrapper
@@ -118,7 +116,7 @@
   (add-hook 'elfeed-new-entry-hook #'elfeed-tag-yt-short)
   )
 
-(use-package mpv :defer)
+(use-package mpv)
 
 (use-package elfeed-tube
   :ensure t

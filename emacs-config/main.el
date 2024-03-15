@@ -1146,7 +1146,8 @@
 (setq elfeed-config-path (concat my/main-dir "elfeed-config.el"))
 (setq eshell-extensions-path (concat my/main-dir "eshell-extensions.el"))
 
-(load-file elfeed-config-path)
+(global-set-key (kbd "C-x w") 'elfeed)
+(autoload 'elfeed elfeed-config-path nil t)
 
 (autoload 'eshell-extensions-send-string-to-eshell eshell-extensions-path nil t)
 (autoload 'eshell-extensions-send-cur-line-to-eshell eshell-extensions-path nil t)
