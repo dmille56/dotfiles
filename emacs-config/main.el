@@ -83,7 +83,9 @@
              (t 'pc) ;; fall-back to pc
              ))
 
-(use-package hydra :defer)
+(use-package hydra
+  :functions defhydra
+)
 (use-package posframe :defer)
 
 ;; (use-package helm-posframe
@@ -350,6 +352,7 @@
 
 ;; install evil-surround
 (use-package evil-surround
+  :functions global-evil-surround-mode
   :after evil
   :ensure t
   :config
@@ -359,6 +362,8 @@
 
 ;; :TODO: figure out how to use this package effectively
 (use-package evil-textobj-tree-sitter
+  :functions evil-textobj-tree-sitter-get-textobj
+  :defines evil-outer-text-objects-map evil-inner-text-objects-map
   :after treesit)
 
 ;; bind `function.outer`(entire function block) to `f` for use in things like `vaf`, `yaf`
@@ -371,8 +376,8 @@
   (define-key evil-inner-text-objects-map "c" (evil-textobj-tree-sitter-get-textobj "class.inner"))
 
   ;; You can also bind multiple items and we will match the first one we can find
-  (define-key evil-outer-text-objects-map "a" (evil-textobj-tree-sitter-get-textobj ("conditional.outer" "loop.outer")))
-  (define-key evil-inner-text-objects-map "a" (evil-textobj-tree-sitter-get-textobj ("conditional.inner" "loop.inner"))))
+  (define-key evil-outer-text-objects-map "a" (evil-textobj-tree-sitter-get-textobj '("conditional.outer" "loop.outer")))
+  (define-key evil-inner-text-objects-map "a" (evil-textobj-tree-sitter-get-textobj '("conditional.inner" "loop.inner"))))
 
 ;; Set default font
 (unless (eq my/config-machine 'phone)
@@ -383,11 +388,13 @@
 (fset 'yes-or-no-p 'y-or-n-p)
 
 (with-eval-after-load 'dired
+  (defvar dired-mode-map)
   (define-key dired-mode-map (kbd "/") 'dired-narrow-fuzzy)
   (evil-define-key 'normal dired-mode-map ";" 'evil-ex))
 
 ;; install flycheck
 (use-package flycheck
+  :functions global-flycheck-mode flycheck-add-next-checker
   :defines (flycheck-add-next-checker)
   :init
   (global-flycheck-mode))
@@ -445,7 +452,7 @@
 
 (use-package lsp-mode
   :defer
-  :defines (lsp-keymap-prefix lsp-completion-provider lsp-disabled-clients)
+  :defines lsp-keymap-prefix lsp-completion-provider lsp-disabled-clients lsp-log-io lsp-mode-map
   :init
   (setq lsp-keymap-prefix "C-l")
   (setq lsp-completion-provider :capf)
@@ -462,6 +469,7 @@
   :commands lsp)
 
 (use-package lsp-haskell
+ :defines lsp-haskell-process-path-hie
  :defer
  :ensure t
  :config
@@ -473,6 +481,7 @@
 
 ;; lsp-mode optional add ons
 (use-package lsp-ui
+  :defines lsp-ui-doc-enable
   :commands lsp-ui-mode
   :bind
   (:map lsp-mode-map
@@ -660,7 +669,7 @@
 (setq-default org-return-follows-link t)
 
 ;; :TODO: add more org-roam-capture-templates and figure out how they work correctly
-(setq org-roam-capture-templates
+(setq-default org-roam-capture-templates
         '(
           ("d" "default" plain "%?"
             :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
@@ -703,7 +712,7 @@
 ;; :TODO: learn how to use org-roam package for notes
 ;; :TODO: also look up org-drill
 (use-package org-roam
-  :defines (org-roam-capture-templates org-roam-node-display-template)
+  :defines org-roam-capture-templates org-roam-node-display-template
   :functions (org-roam-node-create org-roam-capture- org-roam-db-autosync-mode)
   :defer
   :custom
@@ -964,6 +973,12 @@
 ;; enable tab-bar-mode
 (tab-bar-mode)
 (setq tab-bar-tab-hints t)
+
+;; To repress eshell functions/varabiles not being found errors
+(defvar eshell-mode-map)
+(declare-function eshell/cd "esh-cmd")
+(declare-function eshell-send-input "esh-cmd")
+(declare-function eshell/alias "esh-cmd")
 
 (evil-define-key 'normal eshell-mode-map
   (kbd "C-r") 'helm-eshell-history)
