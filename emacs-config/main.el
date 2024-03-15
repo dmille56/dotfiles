@@ -19,7 +19,7 @@
 ;; (electric-pair-mode 1)
 ;; (global-display-line-numbers-mode 1)
 (global-visual-line-mode t)
-(setq org-edit-src-content-indentation 0)
+(setq-default org-edit-src-content-indentation 0)
 
 ;; Workaround to make org-tempo work with electric-pair-mode
 ;; (add-hook 'org-mode-hook (lambda ()
@@ -50,6 +50,8 @@
 (use-package esup :defer)
 
 (use-package auto-package-update
+  :defines (auto-package-update-delete-old-versions auto-package-update-hide-results)
+  :functions (auto-package-update-maybe)
   :config
   (setq auto-package-update-delete-old-versions t)
   (setq auto-package-update-hide-results t)
@@ -73,7 +75,7 @@
 ;; (if (eq system-type 'gnu/linux)
 ;; (if (eq system-type 'windows-nt)
 
-(setq my/config-machine
+(defvar my/config-machine
       (cond
              ((string-equal (system-name) "van") 'pc)
              ((string-equal (system-name) "localhost") 'phone)
@@ -94,7 +96,7 @@
 ;;   :straight (:host github :repo "ladicle/hydra-posframe" :files ("*.el"))
 ;;   :hook (after-init . hydra-posframe-mode))
 
-(setq evil-want-keybinding nil)
+(setq-default evil-want-keybinding nil)
 
 (defhydra hydra-tab-management (:exit t)
   "tabs"
@@ -243,9 +245,12 @@
   ("j" org-roam-dailies-capture-today "capture today"))
 
 (use-package evil-leader
+  :defines (evil-leader/in-all-states)
+  :functions (evil-leader/set-leader evil-leader/set-key evil-leader/set-key-for-mode global-evil-leader-mode)
   :init
   (setq evil-leader/in-all-states t) ;; allows evil leader via "C-<leader>" in other states
   :config
+  (require 'evil-leader)
   (evil-leader/set-leader "<SPC>")
   (evil-leader/set-key
    "p" 'helm-find-files
@@ -312,6 +317,8 @@
 
 ;; note: "c-z" to toggle to/from emacs state
 (use-package evil
+  :functions (evil-define-key evil-mode evil-set-initial-state)
+  :defines (evil-normal-state-map evil-visual-state-map evil-motion-state-map)
   ;; :init
   ;; (setq evil-want-integration t) ;; This is optional since it's already set to t by default.
   ;; (setq evil-want-keybinding nil)
@@ -320,6 +327,7 @@
   (evil-mode 1))
 
 (use-package evil-collection
+  :functions (evil-collection-init)
   :after evil
   :ensure t
   :config
@@ -380,6 +388,7 @@
 
 ;; install flycheck
 (use-package flycheck
+  :defines (flycheck-add-next-checker)
   :init
   (global-flycheck-mode))
 
@@ -391,11 +400,16 @@
 (use-package treemacs-projectile :defer)
 (use-package treemacs-evil :defer)
 
+(use-package haskell-mode
+  :defines (haskell-mode-map)
+)
+
 ;; Install Dante
 (use-package dante
   :ensure t
   :after haskell-mode
   :commands 'dante-mode
+  :defines (dante-mode-map)
   :bind
   (:map dante-mode-map
 	("M->" . xref-find-definitions)
@@ -408,15 +422,16 @@
 
 ;; Add Haskell linting on-the-fly to dante
 (add-hook 'dante-mode-hook
-   '(lambda () (flycheck-add-next-checker 'haskell-dante
+   #'(lambda () (flycheck-add-next-checker 'haskell-dante
 					  '(warning . haskell-hlint))))
 
 ;; add attrap - for Dante mode
 (use-package attrap
+  :after dante
   :ensure t
   :bind (("C-x /" . attrap-attrap)))
 
-(use-package reformatter) ;; needed for ormolu
+(use-package reformatter :after ormolu) ;; needed for ormolu
 
 ;; Add auto formatting for Haskell code via Ormolu (requires ormolu exe to be installed)
 (use-package ormolu
@@ -427,10 +442,16 @@
 
 ;; install lsp-mode
 ;; set prefix for lsp-command-keymap (few alternatives - "s-l", "C-l", "C-c l")
-(setq lsp-keymap-prefix "C-l")
 
 (use-package lsp-mode
   :defer
+  :defines (lsp-keymap-prefix lsp-completion-provider lsp-disabled-clients)
+  :init
+  (setq lsp-keymap-prefix "C-l")
+  (setq lsp-completion-provider :capf)
+  (setq lsp-disabled-clients '(omnisharp))
+  ;; lsp-mode performance settings
+  (setq read-process-output-max (* 1024 1024)) ;; 1mb
   :hook (;; replace X-mode with concrete major-mode(e. g. python-mode)
          ;; (haskell-mode . lsp)
          ;; (powershell-mode . lsp)
@@ -439,8 +460,6 @@
 	 (lsp-mode . lsp-enable-which-key-integration)
 	 )
   :commands lsp)
-
-(setq lsp-disabled-clients '(omnisharp))
 
 (use-package lsp-haskell
  :defer
@@ -473,6 +492,7 @@
 (add-to-list 'auto-mode-alist '("\\.*axaml\\'" . xml-mode))
 
 (use-package which-key
+  :functions (which-key-show-keymap which-key-mode)
   :defer
   :init
   (which-key-mode))
@@ -488,6 +508,7 @@
 ;; install markdown-mode and set it to use pandoc
 ;; make sure you have pandoc installed!
 (use-package markdown-mode
+  :defines markdown-command
   :defer
   :ensure t
   :commands (markdown-mode gfm-mode)
@@ -498,6 +519,8 @@
 
 ;; install helm
 (use-package helm
+  :defines helm-map
+  :functions (helm-M-x helm-mode)
   :defer
   :bind
   ("<f4>" . helm-occur)
@@ -541,6 +564,8 @@
 
 ;; install/setup emms
 (use-package emms
+  :defines (emms-playlist-mode-map emms-player-list emms-source-file-default-directory emms-stream-default-action)
+  :functions (emms-all emms-default-players)
   :defer
   :bind
   ("C-x e" . emms)
@@ -558,6 +583,7 @@
   (evil-set-initial-state 'emms-playlist-mode 'emacs))
 
 (use-package rg
+  :functions rg-enable-default-bindings
   :defer
   :config
   (rg-enable-default-bindings))
@@ -570,6 +596,7 @@
 (use-package erc :defer)
 
 (use-package md4rd
+  :defines (md4rd-mode-map md4rd-subs-active)
   :defer
   :bind (
 	 :map md4rd-mode-map
@@ -590,6 +617,8 @@
 (global-set-key (kbd "<f8>") 'keyboard-quit) ;; alias Ctl-g to f8 (to save your pinky)
 
 (use-package spaceline
+  :defines spaceline-highlight-face-func
+  :functions (spaceline-emacs-theme spaceline-helm-mode spaceline-toggle-minor-modes-off)
   :defer
   :init
   (spaceline-emacs-theme)
@@ -599,6 +628,7 @@
   (setq spaceline-highlight-face-func 'spaceline-highlight-face-evil-state))
 
 (use-package evil-org
+  :functions (evil-org-agenda-set-keys evil-org-set-key-theme)
   :ensure t
   :after org
   :config
@@ -608,14 +638,14 @@
               (evil-org-set-key-theme)))
   (require 'evil-org-agenda)
   (evil-org-agenda-set-keys)
-  (setq org-startup-folded "overview"))
+  (setq-default org-startup-folded "overview"))
 
 (global-set-key "\C-xa" 'org-agenda)
 (global-set-key "\M-x" 'evil-ex)
 
-(setq org-agenda-span 14
-      org-agenda-start-on-weekday nil
-      org-agenda-start-day "-3d")
+(setq-default org-agenda-span 14
+              org-agenda-start-on-weekday nil
+              org-agenda-start-day "-3d")
 
 ;; (use-package org-modern
 ;;   ;; :config
@@ -627,7 +657,7 @@
   (define-key evil-motion-state-map (kbd "RET") nil)
   (define-key evil-motion-state-map (kbd "TAB") nil)
   )
-(setq org-return-follows-link t)
+(setq-default org-return-follows-link t)
 
 ;; :TODO: add more org-roam-capture-templates and figure out how they work correctly
 (setq org-roam-capture-templates
@@ -663,7 +693,7 @@
                      :templates '(("h" "hype" plain "* %<%Y-%m-%d> %?"
                                   :if-new (file+head "hype-doc.org" "#+title: hype doc\n#+filetags: :hype:career:")))))
 
-(setq my-org-roam-directory
+(defvar my-org-roam-directory
       (cond
        ((eq my/config-machine 'work) "~\\OneDrive - Microsoft\\Desktop\\roam-notes")
        ((eq my/config-machine 'phone) "/data/data/com.termux/files/home/storage/shared/roam-notes")
@@ -673,6 +703,8 @@
 ;; :TODO: learn how to use org-roam package for notes
 ;; :TODO: also look up org-drill
 (use-package org-roam
+  :defines (org-roam-capture-templates org-roam-node-display-template)
+  :functions (org-roam-node-create org-roam-capture- org-roam-db-autosync-mode)
   :defer
   :custom
   (org-roam-directory my-org-roam-directory)
@@ -692,6 +724,8 @@
   (org-roam-db-autosync-mode))
 
 (use-package org-make-toc
+  :defines org-make-toc-insert-custom-ids
+  :functions org-make-toc-mode
   :after org
   :config
   (add-hook 'org-mode-hook #'org-make-toc-mode)
@@ -708,6 +742,7 @@
 ;;   (all-the-icons-completion-mode))
 
 (use-package ranger
+  :defines ranger-mode-map ranger-cleanup-on-disable ranger-cleanup-eagerly
   :defer
   :bind
   ("C-x t" . ranger)
@@ -719,6 +754,8 @@
   (setq ranger-cleanup-eagerly t))
 
 (use-package nyan-mode
+  :defines nyan-animate-nyancat nyan-wavy-trail
+  :functions nyan-mode
   :init
   (setq nyan-animate-nyancat t)
   (setq nyan-wavy-trail t)
@@ -727,6 +764,8 @@
 (use-package zone-nyan :defer)
 
 (use-package projectile
+  :defines projectile-mode-map projectile-switch-project-action projectile-sort-order
+  :functions projectile-mode
   :defer
   :bind
   (:map projectile-mode-map
@@ -737,6 +776,7 @@
   (projectile-mode +1))
 
 (use-package helm-projectile
+  :functions helm-projectile-on
   :after projectile
   :config
   (helm-projectile-on))
@@ -767,6 +807,7 @@
 (advice-add 'avy-goto-line :after #'my/goto-first-non-whitespace)
 
 (use-package diff-hl
+  :functions global-diff-hl-mode
   :init
   (global-diff-hl-mode)
   (add-hook 'magit-pre-refresh-hook 'diff-hl-magit-pre-refresh)
@@ -789,6 +830,8 @@
 (use-package page-break-lines) ;; needed for dashboard
 
 (use-package dashboard
+  :defines dashboard-projects-backend dashboard-center-content dashboard-items
+  :functions dashboard-setup-startup-hook
   :ensure t
   :config
   (dashboard-setup-startup-hook)
@@ -803,6 +846,7 @@
 ;; (use-package dashboard-hackernews)
 
 (use-package golden-ratio
+  :functions golden-ratio-mode
   :init
   (golden-ratio-mode 1))
 
@@ -828,6 +872,7 @@
 ;; :TODO: add more svg-tag tags
 ;; :NOTE: svg-tag-mode example
 (use-package svg-tag-mode
+  :defines svg-tag-tags
   :init
   (setq svg-tag-tags
         '(
@@ -841,6 +886,7 @@
 (use-package hl-todo)
 
 (use-package flycheck-hl-todo
+  :functions flycheck-hl-todo-setup
   :ensure t
   :defer 5 ; Need to be initialized after the rest of checkers
   :config
@@ -854,6 +900,7 @@
 
 (unless (eq my/config-machine 'work)
   (use-package beacon
+    :functions beacon-mode
     :init
     (beacon-mode 1)))
 
@@ -865,6 +912,7 @@
 (use-package harpoon :defer)
 
 (use-package chatgpt-shell
+  :defines chatgpt-shell-model-version
   :defer
   :ensure t
   :config
@@ -909,6 +957,7 @@
 (use-package consult :defer)
 
 (with-eval-after-load 'transient
+  (defvar transient-map)
   (define-key transient-map (kbd "<f8>") 'transient-quit-all)
   (define-key transient-map (kbd "<escape>") 'transient-quit-all))
  
@@ -940,12 +989,14 @@
   (kbd "C-l") 'eshell-go-up-one-dir)
 
 (use-package eshell-syntax-highlighting
+  :functions eshell-syntax-highlighting-global-mode
   :after eshell
   :config
   ;; Enable in all Eshell buffers.
   (eshell-syntax-highlighting-global-mode +1))
 
 (use-package eshell-toggle
+  :defines eshell-toggle-window-side eshell-toggle-use-projectile-root
   :init
   (setq eshell-toggle-window-side 'right)
   (setq eshell-toggle-use-projectile-root t)
@@ -970,6 +1021,7 @@
 (use-package 2048-game :defer)
 
 (use-package sudoku
+  :defines sudoku-mode-map
   :defer
   :init
   (evil-set-initial-state 'sudoku-mode 'emacs)
@@ -990,6 +1042,7 @@
 (use-package link-hint :defer)
 
 (use-package treesit-auto
+  :functions global-treesit-auto-mode
   :custom
   (setq treesit-auto-install 'prompt)
   :config
@@ -1001,15 +1054,18 @@
 (add-hook 'python-ts-mode-hook 'eglot-ensure)
 (add-hook 'yaml-mode-hook 'eglot-ensure)
 (add-hook 'nix-mode-hook 'eglot-ensure)
-(with-eval-after-load 'eglot (add-to-list 'eglot-server-programs '(nix-mode . ("rnix-lsp"))))
+(with-eval-after-load 'eglot
+  (defvar eglot-server-programs)
+  (add-to-list 'eglot-server-programs '(nix-mode . ("rnix-lsp"))))
 
 (use-package flycheck-eglot
+  :functions global-flycheck-eglot-mode
   :ensure t
   :after (flycheck eglot)
   :config
   (global-flycheck-eglot-mode 1))
 
-(setq compilation-scroll-output 'first-error)
+(setq-default compilation-scroll-output 'first-error)
 
 (use-package fireplace :defer)
 
@@ -1027,6 +1083,7 @@
 (evil-set-initial-state 'eat-mode 'emacs)
 
 (use-package perspective
+  :functions persp-mode
   :defer
   :bind
   ("C-x C-b" . persp-list-buffers)         ; or use a nicer switcher, see below
@@ -1048,7 +1105,9 @@
   (require 'smartparens-config))
 
 ;; :TODO: figure out how to either integrate zoxide or eshell-z
-(use-package zoxide :defer)
+(use-package zoxide
+  :defer
+  :functions zoxide-open-with)
 
 (defun eshell-cd-with-zoxide (&optional query)
    (interactive)
@@ -1067,7 +1126,7 @@
   :init
   (global-set-key (kbd "<f9>") 'treesit-jump-jump)
   :config
-  (setq treesit-jump-queries-filter-list '("inner" "test" "param")))
+  (setq-default treesit-jump-queries-filter-list '("inner" "test" "param")))
 
 ;; (add-to-list 'treesit-jump-queries-extra-alist (cons 'powershell-ts-mode '("(flow_control_statement (_)) @flow")))
 ;; (add-to-list 'treesit-jump-queries-extra-alist (cons 'python-ts-mode '("(return_statement (_)) @return")))
@@ -1083,11 +1142,12 @@
   (setq powershell-ts-enable-imenu-top-level-vars nil))
 
 (use-package imenu-list
+  :functions imenu-list-smart-toggle
   :defer
   :config
   (global-set-key (kbd "C-'") #'imenu-list-smart-toggle))
 
-(use-package paredit :defer)
+(use-package paredit :after elisp-mode)
 
 (use-package ebuku :defer)
 
@@ -1101,11 +1161,7 @@
   :defer
   :straight (:host github :repo "dmille56/zone-matrix"))
 
-(setq zone-programs [zone-nyan zone-matrix])
-
-;; lsp-mode performance settings
-(setq read-process-output-max (* 1024 1024)) ;; 1mb
-(setq lsp-completion-provider :capf)
+(setq-default zone-programs [zone-nyan zone-matrix])
 
 ;; disable backup files
 (setq make-backup-files nil)
@@ -1124,14 +1180,14 @@
 
 (global-set-key [escape] 'keyboard-escape-quit)
 
-(setq my/main-dir
+(defvar my/main-dir
       (cond
        ((eq my/config-machine 'pc) "~/dotfiles/emacs-config/")
        ((eq my/config-machine 'work) "~\\scratch\\dotfiles\\emacs-config\\")
        (t "~/dotfiles/emacs-config/")
        ))
 
-(setq org-clock-sound (concat my/main-dir "timer.wav"))
+(setq-default org-clock-sound (concat my/main-dir "timer.wav"))
 
 ;; (load-file
 ;;  (concat my/main-dir "twitchy.el"))
@@ -1143,8 +1199,8 @@
 
 ;; (global-set-key (kbd "M-y") 'youtube)
 
-(setq elfeed-config-path (concat my/main-dir "elfeed-config.el"))
-(setq eshell-extensions-path (concat my/main-dir "eshell-extensions.el"))
+(defvar elfeed-config-path (concat my/main-dir "elfeed-config.el"))
+(defvar eshell-extensions-path (concat my/main-dir "eshell-extensions.el"))
 
 (global-set-key (kbd "C-x w") 'elfeed)
 (autoload 'elfeed elfeed-config-path nil t)
