@@ -259,11 +259,11 @@
    "d" 'pop-global-mark ;; go back where you were before a jump with say... avy
    "j" 'avy-goto-word-1
    "f" 'avy-goto-line
-   "x" 'compile
    "E" 'hydra-shell-run/body
-   "X" 'recompile
-   "c" 'flycheck-list-errors
-   "C" 'hydra-hl-todo/body
+   "c" 'compile
+   "C" 'recompile
+   "x" 'flycheck-list-errors
+   "X" 'hydra-hl-todo/body
    ;; "l" 'run-lsp-command-map
    "g" 'magit
    "R" 'query-replace-regexp
@@ -310,14 +310,13 @@
   (interactive)
   (which-key-show-keymap 'lsp-command-map))
 
-;; add evil
 ;; note: "c-z" to toggle to/from emacs state
 (use-package evil
-  :init
+  ;; :init
   ;; (setq evil-want-integration t) ;; This is optional since it's already set to t by default.
   ;; (setq evil-want-keybinding nil)
   ;; (setq evil-search-module 'evil-search)
-  :config
+  :init
   (evil-mode 1))
 
 (use-package evil-collection
@@ -348,7 +347,7 @@
   :config
   (global-evil-surround-mode 1))
 
-(use-package evil-tutor)
+(use-package evil-tutor :defer)
 
 ;; :TODO: figure out how to use this package effectively
 (use-package evil-textobj-tree-sitter
