@@ -98,53 +98,57 @@
 
 (setq-default evil-want-keybinding nil)
 
-(defhydra hydra-tab-management (:exit t)
-  "tabs"
-  ("n" tab-new "new")
-  ("w" tab-bar-switch-to-tab "switch")
-  ("1" (lambda () (interactive) (tab-bar-select-tab 1)) "1")
-  ("2" (lambda () (interactive) (tab-bar-select-tab 2)) "2")
-  ("3" (lambda () (interactive) (tab-bar-select-tab 3)) "3")
-  ("4" (lambda () (interactive) (tab-bar-select-tab 4)) "4")
-  ("5" (lambda () (interactive) (tab-bar-select-tab 5)) "5")
-  ("6" (lambda () (interactive) (tab-bar-select-tab 6)) "6")
-  ("7" (lambda () (interactive) (tab-bar-select-tab 7)) "7")
-  ("8" (lambda () (interactive) (tab-bar-select-tab 8)) "8")
-  ("9" (lambda () (interactive) (tab-bar-select-tab 9)) "9")
-  ("0" (lambda () (interactive) (tab-bar-select-tab 10)) "10")
-  ("m1" (lambda () (interactive) (tab-bar-move-tab-to 1)) "move 1")
-  ("m2" (lambda () (interactive) (tab-bar-move-tab-to 2)) "move 2")
-  ("m3" (lambda () (interactive) (tab-bar-move-tab-to 3)) "move 3")
-  ("m4" (lambda () (interactive) (tab-bar-move-tab-to 4)) "move 4")
-  ("m5" (lambda () (interactive) (tab-bar-move-tab-to 5)) "move 5")
-  ("m6" (lambda () (interactive) (tab-bar-move-tab-to 6)) "move 6")
-  ("m7" (lambda () (interactive) (tab-bar-move-tab-to 7)) "move 7")
-  ("m8" (lambda () (interactive) (tab-bar-move-tab-to 8)) "move 8")
-  ("m9" (lambda () (interactive) (tab-bar-move-tab-to 9)) "move 9")
-  ("m0" (lambda () (interactive) (tab-bar-move-tab-to 10)) "move 10"))
+(transient-define-prefix my/transient-tab-management ()
+  "Transient for tab management."
+  [["Tabs"
+    ("n" "new" tab-new "new")
+    ("w" "switch" tab-bar-switch-to-tab "switch")]
+   ["Switch"
+    ("1" "1" (lambda () (interactive) (tab-bar-select-tab 1)))
+    ("2" "2" (lambda () (interactive) (tab-bar-select-tab 2)))
+    ("3" "3" (lambda () (interactive) (tab-bar-select-tab 3)))
+    ("4" "4" (lambda () (interactive) (tab-bar-select-tab 4)))
+    ("5" "5" (lambda () (interactive) (tab-bar-select-tab 5)))
+    ("6" "6" (lambda () (interactive) (tab-bar-select-tab 6)))
+    ("7" "7" (lambda () (interactive) (tab-bar-select-tab 7)))
+    ("8" "8" (lambda () (interactive) (tab-bar-select-tab 8)))
+    ("9" "9" (lambda () (interactive) (tab-bar-select-tab 9)))
+    ("0" "0" (lambda () (interactive) (tab-bar-select-tab 10)))]
+   ["Move"
+    ("m1" "move 1" (lambda () (interactive) (tab-bar-move-tab-to 1)))
+    ("m2" "move 2" (lambda () (interactive) (tab-bar-move-tab-to 2)))
+    ("m3" "move 3" (lambda () (interactive) (tab-bar-move-tab-to 3)))
+    ("m4" "move 4" (lambda () (interactive) (tab-bar-move-tab-to 4)))
+    ("m5" "move 5" (lambda () (interactive) (tab-bar-move-tab-to 5)))
+    ("m6" "move 6" (lambda () (interactive) (tab-bar-move-tab-to 6)))
+    ("m7" "move 7" (lambda () (interactive) (tab-bar-move-tab-to 7)))
+    ("m8" "move 8" (lambda () (interactive) (tab-bar-move-tab-to 8)))
+    ("m9" "move 9" (lambda () (interactive) (tab-bar-move-tab-to 9)))
+    ("m0" "move 10" (lambda () (interactive) (tab-bar-move-tab-to 10)))]])
 
-(defhydra hydra-leader-misc (:exit t)
-  "misc"
-  ("d" ddg "ddg search" )
-  ("D" dired "dired" )
-  ("s" rg-menu "rg search")
-  ("g" chatgpt-shell "chatgpt")
-  ("b" helm-bookmarks "bookmarks")
-  ("B" bookmark-set "set bookmark")
-  ("t" ranger "ranger")
-  ("T" my/transient-org-timer "timers")
-  ("y" treemacs "tree")
-  ("w" elfeed "elfeed")
-  ("r" helm-recentf "recent")
-  ("a" org-agenda "agenda")
-  ("P" spacious-padding-mode "padding toggle")
-  ("S" selectric-mode "typewriter toggle")
-  ("G" my/transient-game "game")
-  ("c" calc "calculator" )
-  ("h" help-for-help "emacs help")
-  ("." clippy-describe-function "clippy func")
-  (">" clippy-describe-variable "clippy var")
-  ("e" revert-buffer "revert buffer"))
+(transient-define-prefix my/transient-leader-misc ()
+  "Transient for leader misc."
+  ["Misc"
+   ("d" "ddg search" ddg)
+   ("D" "dired" dired)
+   ("s" "rg search" rg-menu)
+   ("g" "chatgpt" chatgpt-shell)
+   ("b" "bookmarks" helm-bookmarks)
+   ("B" "set bookmark" bookmark-set)
+   ("t" "ranger" ranger)
+   ("T" "timers" my/transient-org-timer)
+   ("y" "tree" treemacs)
+   ("w" "elfeed" elfeed)
+   ("r" "recent" helm-recentf)
+   ("a" "agenda" org-agenda)
+   ("P" "padding toggle" spacious-padding-mode)
+   ("S" "typewriter toggle" selectric-mode)
+   ("G" "game" my/transient-game)
+   ("c" "calculator" calc )
+   ("h" "emacs help" help-for-help)
+   ("." "clippy func" clippy-describe-function)
+   (">" "clippy var" clippy-describe-variable)
+   ("e" "revert buffer" revert-buffer)])
 
 (transient-define-prefix my/transient-game ()
   "Transient for selecting a game."
@@ -299,7 +303,7 @@
    "3" 'split-window-right
 
    ;; tab management
-   "t" 'hydra-tab-management/body
+   "t" 'my/transient-tab-management
 
    ;; harpoon
    "h" 'harpoon-toggle-quick-menu
@@ -307,7 +311,7 @@
    "H <return>" 'harpoon-add-file
 
    ;; u submenu
-   "u" 'hydra-leader-misc/body
+   "u" 'my/transient-leader-misc
 
    ;; leave r for mode specific keymaps
    )
