@@ -81,8 +81,8 @@ myScratchPads = [btm, term, fileManager, lazygit, music, volumeControl]
   where
     btm = NS "btm" spawn' find manage'
       where
-        spawn' = "xterm -name btm_term -fs 14 -e btm"
-        find = resource =? "btm_term"
+        spawn' = "nixGL alacritty --class btm_term -e btm"
+        find = className =? "btm_term"
         manage' = customFloating $ rectCentered 0.9
     volumeControl = NS "volumeControl" spawn' find manage'
       where
@@ -91,8 +91,8 @@ myScratchPads = [btm, term, fileManager, lazygit, music, volumeControl]
         manage' = customFloating $ rectCentered 0.9
     term = NS "term" spawn' find manage'
       where
-        spawn' = "xterm -name scratchpad_term -fs 14"
-        find = resource =? "scratchpad_term"
+        spawn' = "nixGL alacritty --class scratchpad_term"
+        find = className =? "scratchpad_term"
         manage' = customFloating $ rectCentered 0.9
     fileManager = NS "fileManager" spawn' find manage'
       where
@@ -101,8 +101,8 @@ myScratchPads = [btm, term, fileManager, lazygit, music, volumeControl]
         manage' = customFloating $ rectCentered 0.9
     lazygit = NS "lazygit" spawn' find manage'
       where
-        spawn' = "xterm -name lazygit_term -fs 14 -e lazygit"
-        find = resource =? "lazygit_term"
+        spawn' = "nixGL alacritty --class lazygit_term -e lazygit"
+        find = className =? "lazygit_term"
         manage' = customFloating $ rectCentered 0.95
     music = NS "music" spawn' find manage'
       where

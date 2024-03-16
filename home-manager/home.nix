@@ -18,7 +18,6 @@
 #   - export QT_QPA_PLATFORMTHEME=qt5ct # for KDE themes to work... in .profile
 
 # Non nix:
-# - install spotify
 # - install steam
 # - install nix
 # - install kdeconnect
@@ -183,6 +182,8 @@ in
     dolphinEmu
     mupen64plus
     keepassxc
+    spotify
+    spotify-qt
 
     vscode
     blueman
@@ -522,6 +523,29 @@ in
     theme = "dracula"
   '';
 
+  home.file.".config/alacritty/alacritty.toml".text = ''
+    import = ["~/.config/alacritty/dracula.toml"]
+
+    [font]
+    size = 13.0
+    
+    [font.bold]
+    family = "DejaVu Sans Mono"
+    style = "Bold"
+    
+    [font.bold_italic]
+    family = "DejaVu Sans Mono"
+    style = "Bold Italic"
+    
+    [font.italic]
+    family = "DejaVu Sans Mono"
+    style = "Italic"
+    
+    [font.normal]
+    family = "DejaVu Sans Mono"
+    style = "Regular"
+  '';
+
   home.file.".vimrc".source = "${my-dotfile-dir}/vim/vim/vimrc";
   home.file.".Xresources".source = "${my-dotfile-dir}/Xresources";
   home.file.".xmobarrc".source = "${my-dotfile-dir}/xmobarrc";
@@ -557,6 +581,11 @@ in
     url = "https://github.com/catppuccin/lazygit";
     rev = "a544cef9a18c3a94e0344281e0ddcf99a18a8ede";
   };
+
+  home.file.".config/alacritty/dracula.toml".text = builtins.readFile(builtins.fetchurl {
+    url = "https://raw.githubusercontent.com/dracula/alacritty/master/dracula.toml";
+    sha256 = "e9de3a792548c8112168c1dd18b5651d1ebee2893975cda4ccd9c4c0430c87b8";
+  });
 
   home.sessionVariables = {
     OPENAI_API_KEY = builtins.readFile "${my-dotfile-dir}/.openai_api_key";
