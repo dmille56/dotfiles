@@ -83,11 +83,7 @@
              (t 'pc) ;; fall-back to pc
              ))
 
-(use-package hydra
-  :demand t
-  :init
-  (require 'hydra))
-
+(use-package hydra :defer)
 (use-package posframe :defer)
 
 ;; (use-package helm-posframe
@@ -136,117 +132,131 @@
   ("b" helm-bookmarks "bookmarks")
   ("B" bookmark-set "set bookmark")
   ("t" ranger "ranger")
-  ("T" hydra-org-timer/body "timers")
+  ("T" my/transient-org-timer "timers")
   ("y" treemacs "tree")
   ("w" elfeed "elfeed")
   ("r" helm-recentf "recent")
   ("a" org-agenda "agenda")
   ("P" spacious-padding-mode "padding toggle")
   ("S" selectric-mode "typewriter toggle")
-  ("G" hydra-game/body "game")
+  ("G" my/transient-game "game")
   ("c" calc "calculator" )
   ("h" help-for-help "emacs help")
   ("." clippy-describe-function "clippy func")
   (">" clippy-describe-variable "clippy var")
   ("e" revert-buffer "revert buffer"))
 
-(defhydra hydra-game (:exit t)
-  "game"
-  ("2" 2048-game "2048")
-  ("t" tetris "tetris")
-  ("d" doctor "doctor")
-  ("s" sudoku "sudoku")
-  ("p" pacmacs-start "pacmacs"))
+(transient-define-prefix my/transient-game ()
+  "Transient for selecting a game."
+  ["Game"
+   ("2" "2048" 2048-game)
+   ("t" "tetris" tetris)
+   ("d" "doctor" doctor)
+   ("s" "sudoku" sudoku)
+   ("p" "pacmacs" pacmacs-start)])
 
-(defhydra hydra-elisp-mode (:exit t)
-  "elisp"
-  ("r" eval-region "eval region")
-  ("B" eval-buffer "eval buffer")
-  ("l" (lambda () (interactive) (load-file (buffer-file-name (window-buffer)))) "load current file")
-  ("L" load-file "load file")
-  ("d" eval-defun "eval defun")
-  ("e" eval-last-sexp "eval last sexp")
-  ("D" edebug-defun "edebug function")
-  ("s" paredit-forward-slurp-sexp "slurp")
-  ("b" paredit-forward-barf-sexp "barf"))
+(transient-define-prefix my/transient-elisp-mode ()
+  "Transient for elisp mode."
+  [["Eval"
+    ("r" "eval region" eval-region)
+    ("B" "eval buffer" eval-buffer)
+    ("d" "eval defun "eval-defun)
+    ("e" "eval last sexp" eval-last-sexp)]
+   ["Load"
+    ("l" "load cur file" (lambda () (interactive) (load-file (buffer-file-name (window-buffer)))))
+    ("L" "load file" load-file)]
+   ["Edit"
+    ("D" "edebug func" edebug-defun)
+    ("s" "slurp" paredit-forward-slurp-sexp)
+    ("b" "barf" paredit-forward-barf-sexp)]])
 
-(defhydra hydra-doc-view-mode (:exit t)
-  "doc-view"
-  ("g" doc-view-goto-page "go to page")
-  ("n" doc-view-next-page "next page")
-  ("p" doc-view-previous-page "prev page"))
+(transient-define-prefix my/transient-doc-view-mode ()
+  "Transient for doc-view mode."
+  ["Doc View"
+   ("g" "go to page" doc-view-goto-page)
+   ("n" "next page" doc-view-next-page)
+   ("p" "prev page" doc-view-previous-page)])
 
-(defhydra hydra-org-mode (:exit t)
-  "org"
-  ("o" org-open-at-point "open")
-  ("l" org-insert-link "insert link")
-  ("j" avy-org-goto-heading-timer "go to heading")
-  ("r" avy-org-refile-as-child "avy refile child")
-  ("c" org-make-toc-insert "insert table of contents")
-  ("C" org-make-toc-set "edit table of contents")
-  ("s" org-schedule "schedule")
-  ("S" org-insert-structure-template "structure template")
-  ("t" org-todo "todo")
-  ("T" org-set-tags-command "set tags")
-  ("e" org-export-dispatch "org export")
-  ("b" org-toggle-checkbox "checkbox"))
+(transient-define-prefix my/transient-org-mode ()
+  "Transient for org mode."
+  ["Org"
+   ("o" "open" org-open-at-point)
+   ("l" "insert link" org-insert-link)
+   ("j" "goto heading" avy-org-goto-heading-timer)
+   ("r" "avy refile child" avy-org-refile-as-child)
+   ("c" "insert toc" org-make-toc-insert)
+   ("C" "edit toc" org-make-toc-set)
+   ("s" "schedule" org-schedule)
+   ("S" "structure template" org-insert-structure-template)
+   ("t" "todo" org-todo)
+   ("T" "set tags" org-set-tags-command)
+   ("e" "org export" org-export-dispatch)
+   ("b" "checkbox" org-toggle-checkbox)])
 
-(defhydra hydra-python-mode (:exit t)
-  "python"
-  ("f" python-shell-send-file "run file")
-  ("b" python-shell-send-buffer "run buffer")
-  ("l" python-shell-send-statement "run statement")
-  ("p" run-python "start python shell")
-  ("r" python-shell-send-region "run region")
-  ("z" python-shell-switch-to-shell "switch to shell"))
+(transient-define-prefix my/transient-python-mode ()
+  "Transient for python mode."
+  ["Python"
+   ("f" "run file" python-shell-send-file)
+   ("b" "run buffer" python-shell-send-buffer)
+   ("l" "run statement" python-shell-send-statement)
+   ("p" "start python shell" run-python)
+   ("r" "run region" python-shell-send-region)
+   ("z" "switch to shell" python-shell-switch-to-shell)])
 
- (defhydra hydra-org-timer (:exit t)
-  "timer"
-  ("t" org-timer-set-timer "set timer")
-  ("s" org-timer-stop "stop")
-  ("r" org-timer-start "start")
-  ("p" org-timer-pause-or-continue "pause/continue"))
+(transient-define-prefix my/transient-org-timer ()
+  "Transient for org-timer."
+  ["Timers"
+   ("t" "set timer" org-timer-set-timer)
+   ("s" "stop" org-timer-stop)
+   ("r" "start" org-timer-start)
+   ("p" "pause/continue" org-timer-pause-or-continue)])
 
- (defhydra hydra-shell-run (:exit t)
-   "run shell commands"
-  ("R" shell-command-on-region "run region")
-  ("x" async-shell-command "async run command")
-  ("X" shell-command "run command")
-  ("l" eshell-extensions-send-cur-line-to-eshell "run cur line in eshell")
-  ("r" eshell-extensions-send-cur-region-to-eshell "run region in eshell")
-  ("e" eshell-extensions-send-string-to-eshell "run command in eshell"))
+(transient-define-prefix my/transient-shell-run ()
+  "Transient for running shell commands."
+  ["Shell Run"
+   ("R" "run region" shell-command-on-region)
+   ("x" "async run command" async-shell-command)
+   ("X" "run command" shell-command)
+   ("l" "run cur line in eshell" eshell-extensions-send-cur-line-to-eshell)
+   ("r" "run region in eshell" eshell-extensions-send-cur-region-to-eshell)
+   ("e" "run command in eshell" eshell-extensions-send-string-to-eshell)])
 
- (defhydra hydra-emms-mode (:exit t)
-   "emms"
-  ("e" emms "emms")
-  ("s" emms-streams "emms streams"))
+(transient-define-prefix my/transient-emms ()
+  "Transient for emms."
+  ["Emms"
+   ("e" "emms" emms)
+   ("s" "emms streams" emms-streams)])
 
- (defhydra hydra-evil-macros (:exit t)
-   "macros"
-  ("r" evil-record-macro "record macro") ;; traditionally q in vim/evil
-  ("x" evil-execute-macro "execute macro") ;; also @ followed by macro register in vim/evil
-  ("l" evil-execute-last-recorded-macro "execute last macro")) ;; also @@ in vim/evil
+(transient-define-prefix my/transient-evil-macros ()
+  "Transient for evil macros."
+  ["Evil macros"
+   ("r" "record macro" evil-record-macro) ;; traditionally q in vim/evil
+   ("x" "execute macro" evil-execute-macro) ;; also @ followed by macro register in vim/evil
+   ("l" "execute last macro" evil-execute-last-recorded-macro)]) ;; also @@ in vim/evil
 
- (defhydra hydra-hl-todo (:exit t)
-   "hl-todo"
-  ("p" hl-todo-previous "previous")
-  ("n" hl-todo-next "next")
-  ("o" hl-todo-occur "occur")
-  ("i" hl-todo-insert "insert todo")
-  ("r" hl-todo-rgrep "rgrep"))
+(transient-define-prefix my/transient-hl-todo ()
+  "Transient for hl-todo."
+  ["Hl-Todo"
+   ("p" "previous" hl-todo-previous)
+   ("n" "next" hl-todo-next)
+   ("o" "occur" hl-todo-occur)
+   ("i" "insert todo" hl-todo-insert)
+   ("r" "rgrep" hl-todo-rgrep)])
 
- (defhydra hydra-org-roam (:exit t)
-   "org-roam"
-  ("l" org-roam-buffer-toggle "buf toggle")
-  ("f" org-roam-node-find "find")
-  ("g" org-roam-graph "graph")
-  ("i" org-roam-node-insert "node insert")
-  ("c" org-roam-capture "capture")
-  ("b" my/org-roam-capture-inbox "capture inbox")
-  ("1" my/org-roam-capture-1-on-1 "capture 1-on-1")
-  ("m" my/org-roam-capture-meeting "capture meeting")
-  ("h" my/org-roam-capture-hype-doc "capture hype doc")
-  ("j" org-roam-dailies-capture-today "capture today"))
+(transient-define-prefix my/transient-org-roam ()
+  "Transient for org-roam."
+  [["Org-Roam"
+    ("l" "buf toggle" org-roam-buffer-toggle)
+    ("f" "find" org-roam-node-find)
+    ("g" "graph" org-roam-graph)
+    ("i" "node insert" org-roam-node-insert)]
+   ["Capture"
+    ("c" "capture" org-roam-capture)
+    ("b" "capture inbox" my/org-roam-capture-inbox)
+    ("1" "capture 1-on-1" my/org-roam-capture-1-on-1)
+    ("m" "capture meeting" my/org-roam-capture-meeting)
+    ("h" "capture hype doc" my/org-roam-capture-hype-doc)
+    ("j" "capture today" org-roam-dailies-capture-today)]])
 
 (use-package evil-leader
   :defines (evil-leader/in-all-states)
@@ -268,19 +278,19 @@
    "d" 'pop-global-mark ;; go back where you were before a jump with say... avy
    "j" 'avy-goto-word-1
    "f" 'avy-goto-line
-   "E" 'hydra-shell-run/body
+   "E" 'my/transient-shell-run
    "c" 'compile
    "C" 'recompile
    "x" 'flycheck-list-errors
-   "X" 'hydra-hl-todo/body
+   "X" 'my/transient-hl-todo
    ;; "l" 'run-lsp-command-map
    "g" 'magit
    "R" 'query-replace-regexp
    "v" 'helm-semantic-or-imenu
    "a" 'link-hint-open-link
-   "M" 'hydra-emms-mode/body
-   "m" 'hydra-evil-macros/body
-   "O" 'hydra-org-roam/body
+   "M" 'my/transient-emms
+   "m" 'my/transient-evil-macros
+   "O" 'my/transient-org-roam
 
    ;; window management
    "o" 'other-window
@@ -306,12 +316,12 @@
   ;; (evil-define-minor-mode-key 'normal lsp-mode (kbd "SPC l") lsp-command-map)
   ;; (evil-leader/set-key-for-mode 'lsp-mode "L" 'lsp-command-map)
   (evil-leader/set-key-for-mode 'lsp-mode "l" 'lsp-command-map)
-  (evil-leader/set-key-for-mode 'emacs-lisp-mode "r" 'hydra-elisp-mode/body)
-  (evil-leader/set-key-for-mode 'lisp-interaction-mode "r" 'hydra-elisp-mode/body)
-  (evil-leader/set-key-for-mode 'doc-view-mode "r" 'hydra-doc-view-mode/body)
-  (evil-leader/set-key-for-mode 'org-mode "r" 'hydra-org-mode/body)
-  (evil-leader/set-key-for-mode 'python-mode "r" 'hydra-python-mode/body)
-  (evil-leader/set-key-for-mode 'python-ts-mode "r" 'hydra-python-mode/body)
+  (evil-leader/set-key-for-mode 'emacs-lisp-mode "r" 'my/transient-elisp-mode)
+  (evil-leader/set-key-for-mode 'lisp-interaction-mode "r" 'my/transient-elisp-mode)
+  (evil-leader/set-key-for-mode 'doc-view-mode "r" 'my/transient-doc-view-mode)
+  (evil-leader/set-key-for-mode 'org-mode "r" 'my/transient-org-mode)
+  (evil-leader/set-key-for-mode 'python-mode "r" 'my/transient-python-mode)
+  (evil-leader/set-key-for-mode 'python-ts-mode "r" 'my/transient-python-mode)
   (global-evil-leader-mode))
 
 (defun run-lsp-command-map ()
