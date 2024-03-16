@@ -1,5 +1,45 @@
 {pkgs, ...}: 
 
+# How to upgrade nix pkgs:
+# nix-channel --update
+# nix-env --upgrade
+# home-manager switch
+
+# Upgrade ubuntu:
+# sudo apt-get update
+# sudo apt-get upgrade
+
+# Garbage collect nix:
+# nix-collect-garbage -d
+
+# Theme help:
+#   - install qt5ct & kvantum for KDE themes with ubuntu
+#   - xfsettingsd #has to be run at startup for xfce theme setting to work
+#   - export QT_QPA_PLATFORMTHEME=qt5ct # for KDE themes to work... in .profile
+
+# Non nix:
+# - install spotify
+# - install steam
+# - install nix
+# - install kdeconnect
+# - add to /etc/default/keyboard (to remap caps lock)... might have to edit using sudo (and vi or nano).. In windows use power toys to remap caps lock
+#   - XKBOPTIONS = "ctrl:nocaps" # remap caps lock to control
+# - to switch Pause Break and Insert keys (for kinesis freestyle 2 keyboard)
+#   - xmodmap -e "keycode 127 = Insert"
+#   - xmodmap -e "keycode 118 = Pause"
+# - other possible solution: edit the file pc in /usr/share/X11/xkb/symbols/
+#   - ex: nano /usr/share/X11/xkb/symbols/pc
+# add to .profile to fix locale issue:
+# export LOCALE_ARCHIVE=$(nix-build '<nixpkgs>' -A glibcLocales)/lib/locale/locale-archive
+
+# to fix issue: 'home-manager: line 73: NIX_PATH: unbound variable'
+# export NIX_PATH=$HOME/.nix-defexpr/channels${NIX_PATH:+:}$NIX_PATH
+
+# export NIX_PATH=${NIX_PATH:+$NIX_PATH:}$HOME/.nix-defexpr/channels
+
+# command to start webcam:
+# cvlc v4l2:///dev/video3
+
 # Still need to add overlays, add old notes, etc.
 
 let
@@ -10,7 +50,7 @@ in
 {
   home.username = "${username}";
   home.homeDirectory = "${my-home-dir}";
-  home.stateVersion = "22.11"; # To figure this out you can comment out the line and see what version it expected.
+  home.stateVersion = "23.11"; # To figure this out you can comment out the line and see what version it expected.
   programs.home-manager.enable = true;
   fonts.fontconfig.enable = true;
   nixpkgs.config.allowUnfree = true;
@@ -73,6 +113,14 @@ in
     lazygit
 
     nix-prefetch-git
+    # (import ../nix/twitchy.nix) # :TODO: fix 
+    (import ../nix/twitchy-rofi-script.nix)
+    (import ../nix/search-ddg-script.nix)
+    (import ../nix/twitchy-play-emacs.nix)
+    (import ../nix/ChatGPT/ChatGPT-CLI.nix)
+    (import ../nix/play-yt-script.nix)
+    (import ../nix/play-yt-script-format.nix)
+    (import ../nix/rofi-buku.nix)
 
     cmatrix
     snowmachine
