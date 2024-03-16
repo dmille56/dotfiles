@@ -1,83 +1,23 @@
-{ pkgs, ... }:
+{pkgs, ...}: 
 
-# How to upgrade nix pkgs:
-# nix-channel --update
-# nix-env --upgrade
-# home-manager switch
-
-# Upgrade ubuntu:
-# sudo apt-get update
-# sudo apt-get upgrade
-
-# Garbage collect nix:
-# nix-collect-garbage -d
-
-# Theme help:
-#   - install qt5ct & kvantum for KDE themes with ubuntu
-#   - xfsettingsd #has to be run at startup for xfce theme setting to work
-#   - export QT_QPA_PLATFORMTHEME=qt5ct # for KDE themes to work... in .profile
-
-# Non nix:
-# - install spotify
-# - install steam
-# - install nix
-# - install kdeconnect
-# - add to /etc/default/keyboard (to remap caps lock)... might have to edit using sudo (and vi or nano).. In windows use power toys to remap caps lock
-#   - XKBOPTIONS = "ctrl:nocaps" # remap caps lock to control
-# - to switch Pause Break and Insert keys (for kinesis freestyle 2 keyboard)
-#   - xmodmap -e "keycode 127 = Insert"
-#   - xmodmap -e "keycode 118 = Pause"
-# - other possible solution: edit the file pc in /usr/share/X11/xkb/symbols/
-#   - ex: nano /usr/share/X11/xkb/symbols/pc
-# add to .profile to fix locale issue:
-# export LOCALE_ARCHIVE=$(nix-build '<nixpkgs>' -A glibcLocales)/lib/locale/locale-archive
-
-# to fix issue: 'home-manager: line 73: NIX_PATH: unbound variable'
-# export NIX_PATH=$HOME/.nix-defexpr/channels${NIX_PATH:+:}$NIX_PATH
-
-# export NIX_PATH=${NIX_PATH:+$NIX_PATH:}$HOME/.nix-defexpr/channels
-
-# command to start webcam:
-# cvlc v4l2:///dev/video3
+# Still need to add overlays, add old notes, etc.
 
 let
-  my-dotfile-dir = "/home/dono/dotfiles";
-  my-home-dir = "/home/dono";
-in {
+  username = "dono";
+  my-dotfile-dir = "/home/${username}/dotfiles";
+  my-home-dir = "/home/${username}";
+in
+{
+  home.username = "${username}";
+  home.homeDirectory = "${my-home-dir}";
+  home.stateVersion = "22.11"; # To figure this out you can comment out the line and see what version it expected.
+  programs.home-manager.enable = true;
+  fonts.fontconfig.enable = true;
   nixpkgs.config.allowUnfree = true;
   nixpkgs.config.pulseaudio = true;
 
-  nixpkgs.overlays = [
-    (import (builtins.fetchGit {
-      url = "https://github.com/nix-community/emacs-overlay.git";
-      rev = "e962b871a0b0984569506a576543eff8926d478f";
-    }))
-
-    (self: super: {
-      mpv = super.mpv.override {
-       scripts = [ self.mpvScripts.quality-menu ];
-      };
-
-      realvnc-vnc-viewer = super.realvnc-vnc-viewer.overrideAttrs (old: {
-        version = "7.1.0";
-        src = {
-          "x86_64-linux" = super.fetchurl {
-            url = "https://downloads.realvnc.com/download/file/viewer.files/VNC-Viewer-7.1.0-Linux-x64.rpm";
-            sha256 = "327e0ad872022bba301dc5c7f39209527727a4f679eb33726e41d9362a989076";
-          };
-        }.${super.stdenv.system} or (throw "Unsupported system: ${super.stdenv.hostPlatform.system}");
-        buildInputs = old.buildInputs ++ [
-          super.stdenv.cc.cc.libgcc
-        ];
-      });
-
-   })
-  ];
-
   home.packages = with pkgs; [
-
     #terminal
-
     wget
     nano
     kakoune
@@ -86,27 +26,22 @@ in {
     vimgolf
     curl
     git
-    # ((emacsPackagesFor emacsGit).emacsWithPackages # for emacs overlay
     ((emacsPackagesFor emacs).emacsWithPackages
       (epkgs: [ epkgs.vterm epkgs.w3m ]))
     emacs-all-the-icons-fonts
     nerdfonts
     zsh
     networkmanager
-    cachix
     lorri
 
     powershell
-
     tmux
-    zellij
     ranger
     fzf
     ripgrep
 
     stack
     cargo
-    sbcl
 
     gnupg
     pass
@@ -116,7 +51,6 @@ in {
     fd
     bottom
     delta
-    thefuck
 
     cmus
     pandoc
@@ -126,7 +60,6 @@ in {
 
     warpd
 
-    gptcommit
     ollama
 
     tuir # rtv
@@ -137,29 +70,15 @@ in {
     ytfzf
     csvtool
     ueberzugpp 
-    gitui
     lazygit
 
     nix-prefetch-git
-    dropbox
-    # (import ../nix/twitchy.nix) # :TODO: fix 
-    (import ../nix/twitchy-rofi-script.nix)
-    (import ../nix/search-ddg-script.nix)
-    (import ../nix/twitchy-play-emacs.nix)
-    (import ../nix/ChatGPT/ChatGPT-CLI.nix)
-    (import ../nix/play-yt-script.nix)
-    (import ../nix/play-yt-script-format.nix)
-    (import ../nix/rofi-buku.nix)
 
     cmatrix
     snowmachine
     lolcat
     ormolu
     nixfmt
-    rnix-lsp
-    closurecompiler
-    nodejs
-    cmake
     libvterm
     libtool
     # rdrview
@@ -169,14 +88,16 @@ in {
     (haskellPackages.greenclip)
     bluez
     bluez-tools
+    
+    nixgl.auto.nixGLDefault # allows running OpenGL applications via nix on non nix-os systems
 
     #graphical
-
-    # kdeconnect
 
     firefox-bin
     xterm
     termonad
+    alacritty
+    neovide
     gparted
     chromium
     google-chrome
@@ -197,21 +118,17 @@ in {
 
     gmrun
     dmenu
-    conky
 
-    guvcview
     realvnc-vnc-viewer
 
     xscreensaver
     feh
 
     lite-xl
-    gedit
     gnome3.gnome-system-monitor
     pkgs.meld
     xfce.thunar
     pcmanfm
-    dolphin
 
     streamlink
 
@@ -220,16 +137,9 @@ in {
     keepassxc
 
     vscode
-    protontricks
-
     blueman
-
     darktable
-
-    # android-studio
     scrcpy
-    flameshot
-
     redshift
   ];
 
@@ -238,46 +148,46 @@ in {
     enableZshIntegration = true;
   };
 
- programs.zsh = {
-   enable = true;
-   enableAutosuggestions = true;
+  programs.zsh = {
+    enable = true;
+    #autosuggestion.enable = true;
 
-   initExtra = ''
+    initExtra = ''
      if [ -e ~/.nix-profile/etc/profile.d/nix.sh ]; then . ~/.nix-profile/etc/profile.d/nix.sh; fi
      source ${pkgs.zsh-syntax-highlighting}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
    '';
 
-   oh-my-zsh = {
-     enable = true;
-     theme = "agnoster";
-     plugins = [ "git" ];
-   };
+    oh-my-zsh = {
+      enable = true;
+      theme = "agnoster";
+      plugins = [ "git" ];
+    };
 
-   shellAliases = {
-     cls = "clear";
-     r = "ranger";
-     nv = "nvim";
-     lg = "lazygit";
-     e = "emacs";
-   };
+    shellAliases = {
+      cls = "clear";
+      r = "ranger";
+      nv = "nvim";
+      lg = "lazygit";
+      e = "emacs";
+    };
 
-   plugins = [
-     {
-       name = "fzf-tab";
-       src = pkgs.fetchFromGitHub {
-         owner = "Aloxaf";
-         repo = "fzf-tab";
-         rev = "c2b4aa5ad2532cca91f23908ac7f00efb7ff09c9";
-         sha256 = "1b4pksrc573aklk71dn2zikiymsvq19bgvamrdffpf7azpq6kxl2";
-       };
-     }
-   ];
+    plugins = [
+      {
+        name = "fzf-tab";
+        src = pkgs.fetchFromGitHub {
+          owner = "Aloxaf";
+          repo = "fzf-tab";
+          rev = "c2b4aa5ad2532cca91f23908ac7f00efb7ff09c9";
+          sha256 = "1b4pksrc573aklk71dn2zikiymsvq19bgvamrdffpf7azpq6kxl2";
+        };
+      }
+    ];
 
-   localVariables = {
-     ZSH_DISABLE_COMPFIX = "true"; # for syntax highlighting to work
-   };
-   # sessionVariables = { RIPGREP_CONFIG_PATH = "${my-home-dir}/.ripgreprc"; };
- };
+    localVariables = {
+      ZSH_DISABLE_COMPFIX = "true"; # for syntax highlighting to work
+    };
+    # sessionVariables = { RIPGREP_CONFIG_PATH = "${my-home-dir}/.ripgreprc"; };
+  };
 
   programs.direnv = {
     enable = true;
@@ -323,19 +233,19 @@ in {
     enable = true;
     clock24 = true;
     plugins = with pkgs.tmuxPlugins; [
-        sensible
-        yank
-        tmux-fzf
-        jump
-        urlview
-        {
+      sensible
+      yank
+      tmux-fzf
+      jump
+      urlview
+      {
         plugin = dracula;
         extraConfig = ''
             set -g @dracula-show-battery false
             set -g @dracula-show-powerline true
             set -g @dracula-refresh-rate 10
         '';
-        }
+      }
     ];
 
     extraConfig = ''
@@ -554,11 +464,7 @@ in {
     '';
   };
 
-  services.syncthing = {
-    enable = true;
-  };
-
-  programs.home-manager = { enable = true; };
+  services.syncthing.enable = true;
 
   home.file.".config/kak/kakrc".text = ''
     colorscheme dracula
@@ -604,10 +510,6 @@ in {
     rev = "a544cef9a18c3a94e0344281e0ddcf99a18a8ede";
   };
 
-  home.stateVersion = "18.09"; # one of "18.09", "19.03", "19.09", "20.03", "20.09", "21.03", "21.05", "21.11", "22.05", "22.11", "23.05", "23.11"
-
-  fonts.fontconfig.enable = true;
-  
   home.sessionVariables = {
     OPENAI_API_KEY = builtins.readFile "${my-dotfile-dir}/.openai_api_key";
     # OPENAI_API_KEY = builtins.extraBuiltins.pass "OPENAI_API_KEY"; #try to get working via: https://elvishjerricco.github.io/2018/06/24/secure-declarative-key-management.html
@@ -615,7 +517,7 @@ in {
     RIPGREP_CONFIG_PATH = "${my-home-dir}/.ripgreprc";
     LG_CONFIG_FILE= "${my-home-dir}/.config/lazygit/config.yml,${my-home-dir}/.config/lazygit/theme/lazygit/themes-mergable/mocha/blue.yml";
     BROWSER = "sensible-browser";
+    NIXPKGS_ALLOW_UNFREE = "1";
   };
 
-  manual.manpages.enable = false; # :TODO: reenable man pages eventually... they wouldn't update correctly
 }

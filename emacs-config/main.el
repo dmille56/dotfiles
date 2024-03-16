@@ -396,7 +396,7 @@
 
 ;; Set default font
 (unless (eq my/config-machine 'phone)
-  (set-frame-font "DejaVu Sans Mono for Powerline-12" nil t))
+  (set-frame-font "DejaVu Sans Mono for Powerline-13" nil t))
 ;; (semantic-mode 1) ;; use semantic :TODO: re-enable when figure out why it kept throwing error
 
 ;; ask y/n instead of yes/no
