@@ -131,6 +131,8 @@ in
     # rdrview
 
     awscli
+    steam-tui
+    steamPackages.steamcmd
 
     (haskellPackages.greenclip)
     bluez
@@ -183,7 +185,6 @@ in
     mupen64plus
     keepassxc
     spotify
-    spotify-qt
 
     vscode
     blueman

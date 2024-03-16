@@ -63,6 +63,7 @@ myManageHook =
       className =? "Chromium-browser" --> doShift "2:vid",
       className =? "Emacs" --> doShift "9:dev",
       className =? "Termonad-linux-x86_64" --> doShift "8:term",
+      className =? "Alacritty" --> doShift "8:term",
       title =? "Mozilla Firefox" --> doShift "1:web",
       (isFullscreen --> doFullFloat),
       manageDocks,
@@ -81,7 +82,7 @@ myScratchPads = [btm, term, fileManager, lazygit, music, volumeControl]
   where
     btm = NS "btm" spawn' find manage'
       where
-        spawn' = "nixGL alacritty --class btm_term -e btm"
+        spawn' = glWrapper "alacritty --class btm_term -e btm"
         find = className =? "btm_term"
         manage' = customFloating $ rectCentered 0.9
     volumeControl = NS "volumeControl" spawn' find manage'
@@ -91,7 +92,7 @@ myScratchPads = [btm, term, fileManager, lazygit, music, volumeControl]
         manage' = customFloating $ rectCentered 0.9
     term = NS "term" spawn' find manage'
       where
-        spawn' = "nixGL alacritty --class scratchpad_term"
+        spawn' = glWrapper "alacritty --class scratchpad_term"
         find = className =? "scratchpad_term"
         manage' = customFloating $ rectCentered 0.9
     fileManager = NS "fileManager" spawn' find manage'
@@ -101,7 +102,7 @@ myScratchPads = [btm, term, fileManager, lazygit, music, volumeControl]
         manage' = customFloating $ rectCentered 0.9
     lazygit = NS "lazygit" spawn' find manage'
       where
-        spawn' = "nixGL alacritty --class lazygit_term -e lazygit"
+        spawn' = glWrapper "alacritty --class lazygit_term -e lazygit"
         find = className =? "lazygit_term"
         manage' = customFloating $ rectCentered 0.95
     music = NS "music" spawn' find manage'
@@ -168,7 +169,7 @@ main = do
                            ((myModMask, xK_s), promptSearch myXPConfig duckduckgo),
                            ((myModMask .|. shiftMask, xK_s), selectSearch duckduckgo),
                            ((myModMask, xK_v), shellPrompt myXPConfig),
-                           ((myModMask .|. shiftMask, xK_v), prompt ("xterm" ++ " -e") myXPConfig),
+                           ((myModMask .|. shiftMask, xK_v), prompt (glWrapper "alacritty" ++ " -e") myXPConfig),
                            ((myModMask, xK_g), windowPrompt myXPConfig Goto allWindows),
                            ((myModMask .|. shiftMask, xK_g), windowPrompt myXPConfig Bring allWindows),
                            ((myModMask, xK_c), spawn "rofi -modi 'clipboard:greenclip print' -show clipboard -run-command '{cmd}'"),
@@ -198,15 +199,15 @@ main = do
                                [ ((0, xK_f), notifySpawn "sensible-browser"),
                                  ((0, xK_c), notifySpawn "chromium"),
                                  ((0, xK_v), notifySpawn "rofi-bluetooth"),
-                                 ((0, xK_b), notifySpawn "xterm -e bluetoothctl"),
+                                 ((0, xK_b), notifySpawn $ glWrapper "alacritty -e bluetoothctl"),
                                  ((0, xK_s), notifySpawn "spotify"),
                                  ((0, xK_a), notifySpawn "steam"),
                                  ((0, xK_p), notifySpawn "pavucontrol"),
                                  ((0, xK_m), notifySpawn "gnome-system-monitor"),
-                                 ((0, xK_r), notifySpawn "xterm -e ranger"),
+                                 ((0, xK_r), notifySpawn $ glWrapper "alacritty -e ranger"),
                                  ((0, xK_t), notifySpawn "thunar"),
-                                 ((0, xK_d), notifySpawn "xterm -e dropbox"),
-                                 ((0, xK_x), notifySpawn "termonad"),
+                                 ((0, xK_d), notifySpawn $ glWrapper "alacritty -e dropbox"),
+                                 ((0, xK_x), notifySpawn $ glWrapper "alacritty"),
                                  ((0, xK_e), notifySpawn "emacsclient -n -c"),
                                  ((shiftMask, xK_e), notifySpawn "emacs"),
                                  ((0, xK_i), spawn "rofi -modi emoji -show emoji -font 'Noto Color Emoji 12'")
@@ -217,3 +218,5 @@ main = do
 notifySpawn s = do
   spawn ("notify-send -t 3000 'Launching " ++ s ++ "'")
   spawn s
+
+glWrapper s = "nixGL " ++ s
