@@ -95,7 +95,6 @@
 ;;   (helm-posframe-enable))
 
 ;; (use-package hydra-posframe
-;; ;; :NOTE: not recommended way to install... but I didn't want to install el-get
 ;; ;; https://github.com/Ladicle/hydra-posframe
 ;;   :straight (:host github :repo "ladicle/hydra-posframe" :files ("*.el"))
 ;;   :hook (after-init . hydra-posframe-mode))
@@ -103,7 +102,7 @@
 (setq-default evil-want-keybinding nil)
 
 (defmacro define-tab-management-transient ()
-  "Define tab-management transient."
+  "Define a macro for tab-management transient."
   `(transient-define-prefix my/transient-tab-management ()
      "Transient for tab management."
      [["Tabs"
@@ -389,11 +388,11 @@
   (define-key evil-inner-text-objects-map "f" (evil-textobj-tree-sitter-get-textobj "function.inner"))
 
   (define-key evil-outer-text-objects-map "c" (evil-textobj-tree-sitter-get-textobj "class.outer"))
-  (define-key evil-inner-text-objects-map "c" (evil-textobj-tree-sitter-get-textobj "class.inner"))
+  (define-key evil-inner-text-objects-map "c" (evil-textobj-tree-sitter-get-textobj "class.inner")))
 
   ;; You can also bind multiple items and we will match the first one we can find
-  (define-key evil-outer-text-objects-map "a" (evil-textobj-tree-sitter-get-textobj ("conditional.outer" "loop.outer")))
-  (define-key evil-inner-text-objects-map "a" (evil-textobj-tree-sitter-get-textobj ("conditional.inner" "loop.inner"))))
+;;  (define-key evil-outer-text-objects-map "a" (evil-textobj-tree-sitter-get-textobj ("conditional.outer" "loop.outer")))
+;;  (define-key evil-inner-text-objects-map "a" (evil-textobj-tree-sitter-get-textobj ("conditional.inner" "loop.inner"))))
 
 ;; Set default font
 (unless (eq my/config-machine 'phone)
@@ -695,24 +694,28 @@
 )
 
 (defun my/org-roam-capture-inbox ()
+  "Org roam capture inbox."
   (interactive)
   (org-roam-capture- :node (org-roam-node-create)
                      :templates '(("i" "inbox" plain "* %?"
                                   :if-new (file+head "inbox.org" "#+title: inbox\n#+filetags: :inbox:")))))
 
 (defun my/org-roam-capture-meeting ()
+  "Org roam capture meeting."
   (interactive)
   (org-roam-capture- :node (org-roam-node-create)
                      :templates '(("m" "meeting" plain "* %<%Y-%m-%d> %?"
                                   :if-new (file+head "meetings.org" "#+title: meetings\n#+filetags: :meetings:")))))
 
 (defun my/org-roam-capture-1-on-1 ()
+  "Org roam capture 1-on-1 meeting."
   (interactive)
   (org-roam-capture- :node (org-roam-node-create)
                      :templates '(("o" "1-on-1" plain "* %<%Y-%m-%d> %?"
                                   :if-new (file+head "1-on-1.org" "#+title: 1-on-1\n#+filetags: :1-on-1:meetings:career:")))))
 
 (defun my/org-roam-capture-hype-doc ()
+  "Org roam capture for hype doc."
   (interactive)
   (org-roam-capture- :node (org-roam-node-create)
                      :templates '(("h" "hype" plain "* %<%Y-%m-%d> %?"
@@ -1141,8 +1144,9 @@
   :functions zoxide-open-with)
 
 (defun eshell-cd-with-zoxide (&optional query)
-   (interactive)
-   (zoxide-open-with query 'eshell-my-cd))
+  "Eshell cd using zoxide and a QUERY."
+  (interactive)
+  (zoxide-open-with query 'eshell-my-cd))
 
 (use-package eshell-z :after eshell)
 
