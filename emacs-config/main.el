@@ -86,6 +86,10 @@
 (use-package hydra :defer)
 (use-package posframe :defer)
 
+;; (use-package transient-posframe
+;;   :config
+;;   (transient-posframe-mode))
+
 ;; (use-package helm-posframe
 ;;   :config
 ;;   (helm-posframe-enable))
@@ -98,33 +102,29 @@
 
 (setq-default evil-want-keybinding nil)
 
-(transient-define-prefix my/transient-tab-management ()
-  "Transient for tab management."
-  [["Tabs"
-    ("n" "new" tab-new "new")
-    ("w" "switch" tab-bar-switch-to-tab "switch")]
-   ["Switch"
-    ("1" "1" (lambda () (interactive) (tab-bar-select-tab 1)))
-    ("2" "2" (lambda () (interactive) (tab-bar-select-tab 2)))
-    ("3" "3" (lambda () (interactive) (tab-bar-select-tab 3)))
-    ("4" "4" (lambda () (interactive) (tab-bar-select-tab 4)))
-    ("5" "5" (lambda () (interactive) (tab-bar-select-tab 5)))
-    ("6" "6" (lambda () (interactive) (tab-bar-select-tab 6)))
-    ("7" "7" (lambda () (interactive) (tab-bar-select-tab 7)))
-    ("8" "8" (lambda () (interactive) (tab-bar-select-tab 8)))
-    ("9" "9" (lambda () (interactive) (tab-bar-select-tab 9)))
-    ("0" "0" (lambda () (interactive) (tab-bar-select-tab 10)))]
-   ["Move"
-    ("m1" "move 1" (lambda () (interactive) (tab-bar-move-tab-to 1)))
-    ("m2" "move 2" (lambda () (interactive) (tab-bar-move-tab-to 2)))
-    ("m3" "move 3" (lambda () (interactive) (tab-bar-move-tab-to 3)))
-    ("m4" "move 4" (lambda () (interactive) (tab-bar-move-tab-to 4)))
-    ("m5" "move 5" (lambda () (interactive) (tab-bar-move-tab-to 5)))
-    ("m6" "move 6" (lambda () (interactive) (tab-bar-move-tab-to 6)))
-    ("m7" "move 7" (lambda () (interactive) (tab-bar-move-tab-to 7)))
-    ("m8" "move 8" (lambda () (interactive) (tab-bar-move-tab-to 8)))
-    ("m9" "move 9" (lambda () (interactive) (tab-bar-move-tab-to 9)))
-    ("m0" "move 10" (lambda () (interactive) (tab-bar-move-tab-to 10)))]])
+(defmacro define-tab-management-transient ()
+  "Define tab-management transient."
+  `(transient-define-prefix my/transient-tab-management ()
+     "Transient for tab management."
+     [["Tabs"
+       ("n" "new" tab-new "new")
+       ("w" "switch" tab-bar-switch-to-tab "switch")]
+      ["Switch"
+       ,@(cl-loop for i from 1 to 9
+                  collect (let ((key (number-to-string i))
+                                (name (number-to-string i))
+                                (doc (format "Select tab %d" i)))
+                            `(,key ,name (lambda () (interactive) (tab-bar-select-tab ,i)) ,doc)))
+       ("0" "0" (lambda () (interactive) (tab-bar-select-tab 10)) "Select tab 10")]
+      ["Move"
+       ,@(cl-loop for i from 1 to 9
+                  collect (let ((key (format "m%d" i))
+                                (name (format "move %d" i))
+                                (doc (format "Move tab to %d" i)))
+                            `(,key ,name (lambda () (interactive) (tab-bar-move-tab-to ,i)) ,doc)))
+       ("m0" "move 10" (lambda () (interactive) (tab-bar-move-tab-to 10)) "Move tab to 10")]]))
+
+(define-tab-management-transient)
 
 (transient-define-prefix my/transient-leader-misc ()
   "Transient for leader misc."
@@ -144,7 +144,7 @@
    ("P" "padding toggle" spacious-padding-mode)
    ("S" "typewriter toggle" selectric-mode)
    ("G" "game" my/transient-game)
-   ("c" "calculator" calc )
+   ("c" "calculator" calc)
    ("h" "emacs help" help-for-help)
    ("." "clippy func" clippy-describe-function)
    (">" "clippy var" clippy-describe-variable)
@@ -424,8 +424,8 @@
 (use-package treemacs-evil :defer)
 
 (use-package haskell-mode
-  :defines (haskell-mode-map)
-)
+  :defer
+  :defines (haskell-mode-map))
 
 ;; Install Dante
 (use-package dante
