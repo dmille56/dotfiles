@@ -683,7 +683,6 @@
   )
 (setq-default org-return-follows-link t)
 
-;; :TODO: add more org-roam-capture-templates and figure out how they work correctly
 (setq-default org-roam-capture-templates
         '(
           ("d" "default" plain "%?"
@@ -728,8 +727,6 @@
        (t "~/roam-notes")
        ))
 
-;; :TODO: learn how to use org-roam package for notes
-;; :TODO: also look up org-drill
 (use-package org-roam
   :defines org-roam-capture-templates org-roam-node-display-template
   :functions (org-roam-node-create org-roam-capture- org-roam-db-autosync-mode)
@@ -750,6 +747,9 @@
   ;; :TODO: look into org-roam-protocol at some point
   ;; (require 'org-roam-protocol)
   (org-roam-db-autosync-mode))
+
+;; :TODO: learn how to use this package (org-drill)
+(use-package org-drill :defer)
 
 (use-package org-make-toc
   :defines org-make-toc-insert-custom-ids
@@ -897,8 +897,6 @@
   "A custom face for note tags using svg-tag-mode."
   :group 'emacs)
 
-;; :TODO: add more svg-tag tags
-;; :NOTE: svg-tag-mode example
 (use-package svg-tag-mode
   :defines svg-tag-tags
   :init
@@ -908,8 +906,7 @@
           (":NOTE:" . ((lambda (tag) (svg-tag-make "NOTE" :face 'svg-tag-note-face))))
           )
         )
-  (add-hook 'prog-mode-hook 'svg-tag-mode)
-  )
+  (add-hook 'prog-mode-hook 'svg-tag-mode))
 
 (use-package hl-todo)
 
@@ -957,16 +954,15 @@
   :ensure t
   :bind (("C-M-\\" . copilot-accept-completion)))
 
-;; :TODO: figure out how to configure these packages (dumb-jump, corfu, and orderless)
 (use-package dumb-jump
   :straight (:host github :repo "dmille56/dumb-jump" :files ("dumb-jump.el"))
   :config
-  (add-hook 'xref-backend-functions #'dumb-jump-xref-activate)
-  )
+  (add-hook 'xref-backend-functions #'dumb-jump-xref-activate))
 
 (use-package helm-xref :defer)
 (use-package helm-swoop :defer)
 
+;; :TODO: figure out how to use corfu and orderless
 (use-package corfu
   ;; :init
   ;; (global-corfu-mode)
@@ -1138,7 +1134,7 @@
   ;; load default config
   (require 'smartparens-config))
 
-;; :TODO: figure out how to either integrate zoxide or eshell-z
+;; :TODO: figure out how to get zoxide to work better with eshell
 (use-package zoxide
   :defer
   :functions zoxide-open-with)
