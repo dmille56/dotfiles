@@ -3,7 +3,7 @@
 # How to upgrade nix pkgs:
 # nix-channel --update
 # nix-env --upgrade
-# home-manager switch
+# home-manager switch --impure
 
 # Upgrade ubuntu:
 # sudo apt-get update
