@@ -1,5 +1,5 @@
 (
  (nil . (
-         (eval . (setq-local projectile-project-compilation-cmd "home-manager switch"))
+         (eval . (setq-local projectile-project-compilation-cmd "home-manager switch --impure"))
          ))
  )
