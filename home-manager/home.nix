@@ -111,6 +111,7 @@ in
     ueberzugpp 
     lazygit
     gitu
+    git-repo-updater #gitup
 
     nix-prefetch-git
     # (import ../nix/twitchy.nix) # :TODO: fix 
