@@ -598,6 +598,7 @@ in
     LG_CONFIG_FILE= "${my-home-dir}/.config/lazygit/config.yml,${my-home-dir}/.config/lazygit/theme/lazygit/themes-mergable/mocha/blue.yml";
     BROWSER = "sensible-browser";
     NIXPKGS_ALLOW_UNFREE = "1";
+    EDITOR = "nvim";
   };
 
 }
