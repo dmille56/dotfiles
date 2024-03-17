@@ -110,6 +110,7 @@ in
     csvtool
     ueberzugpp 
     lazygit
+    gitu
 
     nix-prefetch-git
     # (import ../nix/twitchy.nix) # :TODO: fix 
@@ -154,6 +155,7 @@ in
     mplayer
     alsaLib
     ffmpeg-full
+    byzanz
     # mpv
     vlc
     pavucontrol
