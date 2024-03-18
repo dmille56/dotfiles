@@ -107,6 +107,7 @@ in
     w3m
     yt-dlp
     ytfzf
+    piper-tts
     csvtool
     ueberzugpp 
     lazygit
@@ -133,8 +134,6 @@ in
     # rdrview
 
     awscli
-    steam-tui
-    steamPackages.steamcmd
 
     (haskellPackages.greenclip)
     bluez
