@@ -147,7 +147,7 @@
    ("h" "emacs help" help-for-help)
    ("." "clippy func" clippy-describe-function)
    (">" "clippy var" clippy-describe-variable)
-   ;; ("j" "treesit-jump" treesit-jump-transient)
+   ("j" "treesit-jump" treesit-jump-transient)
    ("e" "revert buffer" revert-buffer)])
 
 (transient-define-prefix my/transient-game ()
