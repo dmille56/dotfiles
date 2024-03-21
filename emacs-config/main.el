@@ -820,7 +820,7 @@
 (use-package restart-emacs :defer)
 
 (use-package avy
-  :defer
+  :ensure t
   :init
   (global-set-key (kbd "C-:") 'avy-goto-line)
   (global-set-key (kbd "C-;") 'avy-goto-char))
@@ -1164,7 +1164,8 @@
   :straight (:host github :repo "dmille56/treesit-jump" :files ("*.el" "treesit-queries"))
   :if (not (file-directory-p treesit-jump-path)))
 
-(global-set-key (kbd "<f9>") 'treesit-jump-jump)
+;;(global-set-key (kbd "<f9>") 'treesit-jump-jump)
+(global-set-key (kbd "<f9>") 'treesit-jump-transient)
 (setq-default treesit-jump-queries-filter-list '("inner" "test" "param"))
 ;; (add-to-list 'treesit-jump-queries-extra-alist (cons 'powershell-ts-mode '("(flow_control_statement (_)) @flow")))
 ;; (add-to-list 'treesit-jump-queries-extra-alist (cons 'python-ts-mode '("(return_statement (_)) @return")))
@@ -1198,6 +1199,8 @@
   :init
   ;; setup key bindings
   (setopt ellama-keymap-prefix "C-c e"))
+
+(use-package package-lint)
 
 (use-package zone-matrix
   :defer

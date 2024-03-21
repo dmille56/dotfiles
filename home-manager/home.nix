@@ -171,6 +171,8 @@ in
     dmenu
 
     realvnc-vnc-viewer
+    kdenlive
+    flameshot
 
     xscreensaver
     feh
