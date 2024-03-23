@@ -139,6 +139,7 @@
    ("y" "tree" treemacs)
    ("w" "elfeed" elfeed)
    ("r" "recent" helm-recentf)
+   ("R" "query replace regex" query-replace-regexp)
    ("a" "agenda" org-agenda)
    ("P" "padding toggle" spacious-padding-mode)
    ("S" "typewriter toggle" selectric-mode)
@@ -289,7 +290,6 @@
    "X" 'my/transient-hl-todo
    ;; "l" 'run-lsp-command-map
    "g" 'magit
-   "R" 'query-replace-regexp
    "v" 'helm-semantic-or-imenu
    "a" 'link-hint-open-link
    "M" 'my/transient-emms
