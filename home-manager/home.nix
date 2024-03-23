@@ -59,6 +59,7 @@ in
     #terminal
     wget
     nano
+    micro
     kakoune
     helix
     vim
@@ -72,6 +73,7 @@ in
     zsh
     networkmanager
     lorri
+    python311Packages.python-lsp-server
 
     powershell
     tmux

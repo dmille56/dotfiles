@@ -1202,6 +1202,16 @@
 
 (use-package package-lint)
 
+(use-package atomic-chrome
+  :demand t
+  :straight (atomic-chrome
+             :repo "KarimAziev/atomic-chrome"
+             :type git
+             :flavor nil
+             :host github)
+  :commands (atomic-chrome-start-server)
+  :config (atomic-chrome-start-server))
+
 (use-package zone-matrix
   :defer
   :straight (:host github :repo "dmille56/zone-matrix"))
