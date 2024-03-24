@@ -304,6 +304,7 @@
 
    ;; tab management
    "t" 'my/transient-tab-management
+   "T" 'eshell-toggle
 
    ;; harpoon
    "h" 'harpoon-toggle-quick-menu

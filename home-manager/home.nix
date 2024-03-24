@@ -175,6 +175,7 @@ in
     realvnc-vnc-viewer
     kdenlive
     flameshot
+    obs-studio
 
     xscreensaver
     feh
