@@ -531,6 +531,8 @@ in
       username = "donovanm56";
       password_cmd = "pass spotify";
       backend = "pulseaudio";
+      cache_path = "${my-home-dir}/.cache/spotifyd";
+      max_cache_size = 2000000000;
     };
   };
 
@@ -570,6 +572,8 @@ in
     username = "donovanm56"
     password_cmd = "pass spotify"
     backend = "pulseaudio"
+    cache_path = "${my-home-dir}/.cache/spotifyd"
+    max_cache_size = 2000000000
   '';
 
   home.file.".vimrc".source = "${my-dotfile-dir}/vim/vim/vimrc";
