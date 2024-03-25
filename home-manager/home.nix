@@ -193,7 +193,6 @@ in
     keepassxc
     spotify
     spotify-player
-    (spotifyd.override { withPulseAudio = true; withMpris = true; })
 
     vscode
     blueman
@@ -525,6 +524,15 @@ in
   };
 
   services.syncthing.enable = true;
+  services.spotifyd = {
+    enable = true;
+    package = (pkgs.spotifyd.override { withPulseAudio = true; withMpris = true; });
+    settings.global = {
+      username = "donovanm56";
+      password_cmd = "pass spotify";
+      backend = "pulseaudio";
+    };
+  };
 
   home.file.".config/kak/kakrc".text = ''
     colorscheme dracula
@@ -555,6 +563,13 @@ in
     [font.normal]
     family = "DejaVu Sans Mono"
     style = "Regular"
+  '';
+  
+  home.file.".config/spotifyd/spotifyd.conf".text = ''
+    [global]
+    username = "donovanm56"
+    password_cmd = "pass spotify"
+    backend = "pulseaudio"
   '';
 
   home.file.".vimrc".source = "${my-dotfile-dir}/vim/vim/vimrc";
