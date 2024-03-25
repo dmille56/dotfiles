@@ -555,7 +555,11 @@
 
 (use-package forge :after magit)
 
-(use-package git-link :defer)
+(use-package git-link
+  :defines git-link-open-in-browser
+  :defer
+  :init
+  (setq git-link-open-in-browser t))
 
 ;; Set the files that are searched for writing tokens
 ;; by default ~/.authinfo will be used
