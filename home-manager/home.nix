@@ -192,6 +192,8 @@ in
     mupen64plus
     keepassxc
     spotify
+    spotify-player
+    (spotifyd.override { withPulseAudio = true; withMpris = true; })
 
     vscode
     blueman

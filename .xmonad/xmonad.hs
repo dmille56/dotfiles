@@ -107,9 +107,15 @@ myScratchPads = [btm, term, fileManager, lazygit, music, volumeControl]
         manage' = customFloating $ rectCentered 0.95
     music = NS "music" spawn' find manage'
       where
-        spawn' = "spotify"
-        find = className =? "Spotify"
+        spawn' = glWrapper "alacritty --class spotify_term -e spotify_player"
+        find = className =? "spotify_term"
         manage' = customFloating $ rectCentered 0.9
+
+-- music = NS "music" spawn' find manage'
+--   where
+--     spawn' = "spotify"
+--     find = className =? "Spotify"
+--     manage' = customFloating $ rectCentered 0.9
 
 openScratchPad :: String -> X ()
 openScratchPad = namedScratchpadAction myScratchPads

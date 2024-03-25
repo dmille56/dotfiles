@@ -531,6 +531,8 @@
 ;; install maggit
 (use-package magit :defer)
 
+(use-package forge :after magit)
+
 ;; install markdown-mode and set it to use pandoc
 ;; make sure you have pandoc installed!
 (use-package markdown-mode
