@@ -367,6 +367,14 @@
   :init
   (evil-mode 1))
 
+(use-package evil-snipe
+  :functions (evil-snipe-mode evil-snipe-override-mode)
+  :after evil
+  :init
+  (add-hook 'magit-mode-hook 'turn-off-evil-snipe-override-mode)
+  (evil-snipe-mode +1)
+  (evil-snipe-override-mode +1))
+
 (use-package evil-collection
   :functions (evil-collection-init)
   :after evil
