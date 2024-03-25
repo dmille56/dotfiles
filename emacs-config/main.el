@@ -149,7 +149,15 @@
    ("." "clippy func" clippy-describe-function)
    (">" "clippy var" clippy-describe-variable)
    ("j" "treesit-jump" treesit-jump-transient)
+   ("l" "git-link" my/transient-git-link)
    ("e" "revert buffer" revert-buffer)])
+
+(transient-define-prefix my/transient-git-link ()
+  "Transient for git-link."
+  ["Git-link"
+   ("g" "link" git-link)
+   ("c" "commit" git-link-commit)
+   ("h" "homepage" git-link-homepage)])
 
 (transient-define-prefix my/transient-game ()
   "Transient for selecting a game."
@@ -546,6 +554,8 @@
 (use-package magit :defer)
 
 (use-package forge :after magit)
+
+(use-package git-link :defer)
 
 ;; Set the files that are searched for writing tokens
 ;; by default ~/.authinfo will be used
