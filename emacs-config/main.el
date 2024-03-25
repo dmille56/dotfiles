@@ -263,6 +263,19 @@
     ("h" "capture hype doc" my/org-roam-capture-hype-doc)
     ("j" "capture today" org-roam-dailies-capture-today)]])
 
+(transient-define-prefix my/transient-forge ()
+  "Transient for magit forge."
+  ["Forge"
+   ("y" "pull" forge-pull)
+   ("f" "fork" forge-fork)
+   ("n" "pull notifications" forge-pull-notifications)
+   ("N" "list notifications" forge-list-notifications)
+   ("cp" "create pull request" forge-create-pullreq)
+   ("cP" "create post" forge-create-post)
+   ("ci" "create issue" forge-create-issue)
+   ("cI" "create pull request from issue" forge-create-pullreq-from-issue)
+   ("b" "browse" forge-browse)])
+
 (use-package evil-leader
   :defines (evil-leader/in-all-states)
   :functions (evil-leader/set-leader evil-leader/set-key evil-leader/set-key-for-mode global-evil-leader-mode)
@@ -290,6 +303,7 @@
    "X" 'my/transient-hl-todo
    ;; "l" 'run-lsp-command-map
    "g" 'magit
+   "F" 'my/transient-forge
    "v" 'helm-semantic-or-imenu
    "a" 'link-hint-open-link
    "M" 'my/transient-emms
@@ -532,6 +546,10 @@
 (use-package magit :defer)
 
 (use-package forge :after magit)
+
+;; Set the files that are searched for writing tokens
+;; by default ~/.authinfo will be used
+(setq auth-sources '("~/.authinfo.gpg"))
 
 ;; install markdown-mode and set it to use pandoc
 ;; make sure you have pandoc installed!

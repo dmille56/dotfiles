@@ -282,6 +282,7 @@ in
       co = "checkout";
     };
     extraConfig = {
+      github.user = "dmille56";
       color = {
         ui = "always";
       };
