@@ -863,8 +863,10 @@
 (use-package restart-emacs :defer)
 
 (use-package avy
+  :defines avy-background
   :ensure t
   :init
+  (setq avy-background t) ;; set background to black and grey when using avy
   (global-set-key (kbd "C-:") 'avy-goto-line)
   (global-set-key (kbd "C-;") 'avy-goto-char))
 
@@ -872,8 +874,7 @@
   "Move the cursor to the first non-whitespace character on the current line."
   (interactive)
   (beginning-of-line)  ; Move to the beginning of the current line
-  (skip-chars-forward " \t")  ; Skip forward over spaces and tabs
-  )
+  (skip-chars-forward " \t"))  ; Skip forward over spaces and tabs
 
 (advice-add 'avy-goto-line :after #'my/goto-first-non-whitespace)
 
