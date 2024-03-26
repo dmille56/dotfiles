@@ -150,6 +150,8 @@
    (">" "clippy var" clippy-describe-variable)
    ("j" "treesit-jump" treesit-jump-transient)
    ("l" "git-link" my/transient-git-link)
+   ("Ll" "leetcode" leetcode)
+   ("Ld" "leetcode daily" leetcode-daily)
    ("e" "revert buffer" revert-buffer)])
 
 (transient-define-prefix my/transient-git-link ()
@@ -1255,6 +1257,12 @@
              :host github)
   :commands (atomic-chrome-start-server)
   :config (atomic-chrome-start-server))
+
+(use-package leetcode
+  :defines leetcode-prefer-language
+  :defer
+  :config
+  (setq leetcode-prefer-language "python3"))
 
 (use-package zone-matrix
   :defer
