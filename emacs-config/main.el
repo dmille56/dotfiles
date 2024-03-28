@@ -561,7 +561,11 @@
 (global-set-key (kbd "<f6>") 'other-window)
 
 ;; install maggit
-(use-package magit :defer)
+(use-package magit
+  :defines forge-add-default-bindings
+  :defer
+  :init
+  (setq forge-add-default-bindings t))
 
 (use-package forge :after magit)
 

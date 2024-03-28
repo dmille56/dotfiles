@@ -67,9 +67,9 @@ myManageHook =
       title =? "Mozilla Firefox" --> doShift "1:web",
       (isFullscreen --> doFullFloat),
       manageDocks,
+      namedScratchpadManageHook myScratchPads,
       manageHook def
     ]
-    <+> namedScratchpadManageHook myScratchPads
 
 rectCentered :: Rational -> W.RationalRect
 rectCentered percentage = W.RationalRect offset offset percentage percentage
@@ -136,6 +136,7 @@ myStartupHook :: X ()
 myStartupHook = do
   spawnOnce "xfsettingsd"
   spawnOnce "start-pulseaudio-x1ll"
+  spawnOnce "trayer --edge bottom --align right --widthtype request --expand true --SetDockType true --SetPartialStrut true --transparent true --alpha 0 --tint 0x282A36 --expand true"
   spawn "xrdb ~/.XResources"
   greenclipDaemon <- spawnPipe "greenclip daemon"
   spawn "xmodmap -e 'keycode 127 = Insert'"

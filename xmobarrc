@@ -18,6 +18,7 @@ Config {
                         , Run Swap ["-t", "<usedratio>%"] 10
                         , Run Date "%a %b %d %Y %H:%M" "date" 10
                         , Run StdinReader
+                        , Run Com "trayer-padding-icon.sh" [] "trayerpad" 10
                         -- , Run BatteryP ["BAT0"]
                         -- [
                         -- "-t"
@@ -34,5 +35,5 @@ Config {
                         ]
         , sepChar = "%"
         , alignSep = "}{"
-        , template = "%StdinReader% }{ <fc=#BD93F9>%cpu_icon% %cpu%</fc> | <fc=#8BE9FD>%mem_icon% %memory%</fc> | <fc=#50FA7B>%swap_icon% %swap%</fc> | <fc=#FF79C6>%date%</fc>"
+        , template = "%StdinReader% }{ <fc=#BD93F9>%cpu_icon% %cpu%</fc> | <fc=#8BE9FD>%mem_icon% %memory%</fc> | <fc=#50FA7B>%swap_icon% %swap%</fc> | <fc=#FF79C6>%date%</fc> %trayerpad%"
         }

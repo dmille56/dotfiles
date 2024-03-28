@@ -125,6 +125,7 @@ in
     (import ../nix/play-yt-script.nix)
     (import ../nix/play-yt-script-format.nix)
     (import ../nix/rofi-buku.nix)
+    (import ../nix/trayer-padding-icon.nix { inherit stdenv; })
 
     cmatrix
     snowmachine
@@ -162,6 +163,7 @@ in
     vlc
     pavucontrol
     pasystray
+    trayer
     playerctl
 
     # rofi
