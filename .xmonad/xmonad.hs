@@ -137,6 +137,7 @@ myStartupHook = do
   spawnOnce "xfsettingsd"
   spawnOnce "start-pulseaudio-x1ll"
   spawnOnce "trayer --edge bottom --align right --widthtype request --expand true --SetDockType true --SetPartialStrut true --transparent true --alpha 0 --tint 0x282A36 --expand true"
+  spawnOnce "redshift-gtk"
   spawn "xrdb ~/.XResources"
   greenclipDaemon <- spawnPipe "greenclip daemon"
   spawn "xmodmap -e 'keycode 127 = Insert'"
