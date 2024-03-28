@@ -590,6 +590,7 @@ in
   home.file.".config/mpv/mpv.conf".source = "${my-dotfile-dir}/mpv.conf";
   home.file.".config/ytfzf/conf.sh".source = "${my-dotfile-dir}/ytfzf-conf.sh";
   home.file.".config/termonad/termonad.hs".source = "${my-dotfile-dir}/.termonad/termonad.hs";
+  home.file.".config/redshift.conf".source = "${my-dotfile-dir}/redshift.conf";
  
   home.file.".config/rofi/themes/dracula-theme.rasi".text = builtins.readFile(builtins.fetchurl {
     url = "https://raw.githubusercontent.com/dracula/rofi/48a024639fbf25e3237766f0dcef4af75a2df908/theme/config1.rasi";
