@@ -562,9 +562,10 @@
 
 ;; install maggit
 (use-package magit
-  :defines forge-add-default-bindings
+  :defines forge-add-default-bindings magit-pull-or-fetch
   :defer
   :init
+  (setq magit-pull-or-fetch t)
   (setq forge-add-default-bindings t))
 
 (use-package forge :after magit)
