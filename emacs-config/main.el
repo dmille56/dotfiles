@@ -1229,10 +1229,6 @@
   :straight (:host github :repo "dmille56/powershell-ts-mode")
   :if (not (file-directory-p powershell-ts-mode-path)))
 
-;; Associate .ps1 files with powershell-ts-mode
-(add-to-list 'auto-mode-alist '("\\.ps1\\'" . powershell-ts-mode))
-(add-to-list 'auto-mode-alist '("\\.psm1\\'" . powershell-ts-mode))
-(add-to-list 'auto-mode-alist '("\\.psd1\\'" . powershell-ts-mode))
 (setq-default powershell-ts-enable-imenu-top-level-vars nil)
 
 (use-package imenu-list
