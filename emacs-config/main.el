@@ -127,32 +127,41 @@
 
 (transient-define-prefix my/transient-leader-misc ()
   "Transient for leader misc."
-  ["Misc"
-   ("d" "ddg search" ddg)
-   ("D" "dired" dired)
-   ("s" "rg search" rg-menu)
-   ("g" "chatgpt" chatgpt-shell)
-   ("b" "bookmarks" helm-bookmarks)
-   ("B" "set bookmark" bookmark-set)
-   ("t" "ranger" ranger)
-   ("T" "timers" my/transient-org-timer)
-   ("y" "tree" treemacs)
-   ("w" "elfeed" elfeed)
-   ("r" "recent" helm-recentf)
-   ("R" "query replace regex" query-replace-regexp)
-   ("a" "agenda" org-agenda)
-   ("P" "padding toggle" spacious-padding-mode)
-   ("S" "typewriter toggle" selectric-mode)
-   ("G" "game" my/transient-game)
-   ("c" "calculator" calc)
-   ("h" "emacs help" help-for-help)
-   ("." "clippy func" clippy-describe-function)
-   (">" "clippy var" clippy-describe-variable)
-   ("j" "treesit-jump" treesit-jump-transient)
-   ("l" "git-link" my/transient-git-link)
-   ("Ll" "leetcode" leetcode)
-   ("Ld" "leetcode daily" leetcode-daily)
-   ("e" "revert buffer" revert-buffer)])
+  [["Misc"
+    ("d" "ddg search" ddg)
+    ("D" "dired" dired)
+    ("s" "rg search" rg-menu)
+    ("b" "bookmarks" helm-bookmarks)
+    ("B" "set bookmark" bookmark-set)
+    ("t" "ranger" ranger)
+    ("T" "timers" my/transient-org-timer)
+    ("y" "tree" treemacs)
+    ("w" "elfeed" elfeed)
+    ("r" "recent" helm-recentf)
+    ("R" "query replace regex" query-replace-regexp)
+    ("a" "agenda" org-agenda)
+    ("p" "game" my/transient-game)
+    ("P" "padding toggle" spacious-padding-mode)
+    ("S" "typewriter toggle" selectric-mode)
+    ("c" "calculator" calc)
+    ("j" "treesit-jump" treesit-jump-transient)
+    ("l" "git-link" my/transient-git-link)
+    ("Ll" "leetcode" leetcode)
+    ("Ld" "leetcode daily" leetcode-daily)
+    ("e" "revert buffer" revert-buffer)]
+   ["Ai"
+    ("g" "chatgpt" chatgpt-shell)
+    ("Gr" "chatgpt send and review" chatgpt-shell-send-and-review-region)
+    ("GR" "chatgpt refactor code" chatgpt-shell-refactor-code)
+    ("Gd" "chatgpt describe code" chatgpt-shell-describe-code)
+    ("Gc" "chatgpt write git commit" chatgpt-shell-write-git-commit)
+    ]
+   ["Help"
+    ("h" "emacs help" help-for-help)
+    ("." "clippy func" clippy-describe-function)
+    (">" "clippy var" clippy-describe-variable)
+    ]
+   ])
 
 (transient-define-prefix my/transient-git-link ()
   "Transient for git-link."
@@ -987,12 +996,14 @@
 
 (use-package harpoon)
 
+(use-package pcsv :defer)
+
 (use-package chatgpt-shell
   :defines chatgpt-shell-model-version
   :defer
   :ensure t
   :config
-  (setq chatgpt-shell-model-version 3)
+  (setq chatgpt-shell-model-version "gpt-3.5-turbo-16k-0613")
   :custom
   ((chatgpt-shell-openai-key
     (lambda ()

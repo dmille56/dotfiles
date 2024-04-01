@@ -12,7 +12,6 @@
   :group 'emacs)
 
 (defcustom region-select-faces
-  ;; :TODO: implement me
   '(
     (:background "red" :foreground "white")
     (:background "blue" :foreground "white")
@@ -26,11 +25,6 @@
   "List of faces to use when selecting regions."
   :type '(repeat face)
   :group 'region-select)
-
-;; (defface region-select-buffer-blackout-face
-;;   '((t :foreground "grey" :background "black"))
-;;   "This is a custom face for special highlighting."
-;;   :group 'region-select)
 
 (setq-default region-select-buffer-blackout-face '(:background "black" :foreground "grey"))
 
@@ -53,16 +47,16 @@
         (setq result (reverse result))))
     result))
 
-
 (defun select-region-adjust-list-length (input-list target-length)
   "Adjust the length of INPUT-LIST to TARGET-LENGTH.
-By repeating or truncating elements."
-  (let ((result '())  ;; Initialize an empty list to store the result.
+  By repeating or truncating elements."
+  (let ((result ())  ;; Initialize an empty list to store the result.
         (current-list input-list))  ;; Start with the initial list.
+    ;; Loop and construct the list with the required elements.
     (cl-loop for i from 0 below target-length
-             do (setq result (append result (list (nth (mod i (length input-list)) input-list)))))
-    ;; Return the adjusted list.
-    result))
+             do (push (nth (mod i (length input-list)) input-list) result))
+    ;; Reverse the list to maintain the original order and return.
+    (nreverse result)))
 
 (defun start-dynamic-overlay-session (strings positions)
   "Start a session to dynamically overlay strings and jump to the match."
