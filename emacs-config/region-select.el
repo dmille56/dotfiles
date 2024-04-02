@@ -49,7 +49,7 @@
 
 (defun select-region-adjust-list-length (input-list target-length)
   "Adjust the length of INPUT-LIST to TARGET-LENGTH.
-  By repeating or truncating elements."
+By repeating or truncating elements."
   (let ((result ())  ;; Initialize an empty list to store the result.
         (current-list input-list))  ;; Start with the initial list.
     ;; Loop and construct the list with the required elements.
@@ -59,10 +59,11 @@
     (nreverse result)))
 
 (defun select-region-dynamic-overlay-session (strings positions)
-  "Start a session to dynamically overlay strings and jump to the match."
+  "Start a session to dynamically overlay POSITIONS and jump to the match."
   (interactive)
   ;; Example data: List of strings and their start positions in the buffer
   (let* ((input "")
+         (abort 'nil)
          (res 'nil)
          (overlays (mapcar (lambda (pos) (make-overlay pos (+ pos (length (car strings))))) positions)))
     ;; Initial overlay setup
@@ -71,13 +72,13 @@
              do (overlay-put ov 'display str)
                 (overlay-put ov 'face '(:background "red" :foreground "white")))
     ;; User input loop
-    (setq res
+    (setq abort
           (catch 'exit
             (while t
-              (let ((char (read-char-exclusive "Type next character (RET to finish): ")))
-                ;; Exit on RET
-                (if (or (eq char 'RET) (eq char 13))
-                    (throw 'exit 'abort)
+              (let ((char (read-char-exclusive "Type next character (RET or ESC to abort): ")))
+                ;; Exit on RET or ESC
+                (if (or (eq char 13) (eq char 27)) ;; 13 = Return, 27 = Escape
+                    (throw 'exit t)
                   (setq input (concat input (char-to-string char))))
                 ;; Update or clear overlays based on input
                 (cl-loop for ov in overlays
@@ -91,12 +92,12 @@
                     (let ((final-pos (nth (cl-position (car remaining) strings :test 'equal) positions)))
                       (message "Jumping to: %s" (car remaining))
                       (goto-char final-pos)
+                      (setq res final-pos)
                       (mapc 'delete-overlay overlays)
                       (throw 'exit 'nil))))))))
-    (if (eq res 'abort)
-        (message "Aborted!")
-        (cl-loop for ov in overlays
-                 do (delete-overlay ov)))))
+    (if (eq abort t)
+        (mapc 'delete-overlay overlays))
+    res))
 
 (defun generate-random-visible-buffer-positions ()
   "Generate 5 random positions within the visible part of the current buffer."
