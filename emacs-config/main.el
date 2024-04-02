@@ -128,22 +128,14 @@
 (transient-define-prefix my/transient-leader-misc ()
   "Transient for leader misc."
   [["Misc"
-    ("d" "ddg search" ddg)
-    ("D" "dired" dired)
     ("s" "rg search" rg-menu)
     ("b" "bookmarks" helm-bookmarks)
     ("B" "set bookmark" bookmark-set)
-    ("t" "ranger" ranger)
     ("T" "timers" my/transient-org-timer)
-    ("y" "tree" treemacs)
     ("w" "elfeed" elfeed)
     ("r" "recent" helm-recentf)
     ("R" "query replace regex" query-replace-regexp)
     ("a" "agenda" org-agenda)
-    ("p" "game" my/transient-game)
-    ("P" "padding toggle" spacious-padding-mode)
-    ("S" "typewriter toggle" selectric-mode)
-    ("c" "calculator" calc)
     ("j" "treesit-jump" treesit-jump-transient)
     ("l" "git-link" my/transient-git-link)
     ("Ll" "leetcode" leetcode)
@@ -160,6 +152,16 @@
     ("h" "emacs help" help-for-help)
     ("." "clippy func" clippy-describe-function)
     (">" "clippy var" clippy-describe-variable)
+    ]
+   ["Random"
+    ("p" "game" my/transient-game)
+    ("P" "padding toggle" spacious-padding-mode)
+    ("S" "typewriter toggle" selectric-mode)
+    ("c" "calculator" calc)
+    ("t" "ranger" ranger)
+    ("d" "ddg search" ddg)
+    ("D" "dired" dired)
+    ("y" "tree" treemacs)
     ]
    ])
 
