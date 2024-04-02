@@ -45,8 +45,15 @@
 
 (setq-default region-select-keyboard-characters-list '("a" "s" "d" "f" "g" "h" "j" "k" "l" "q" "w" "e" "r" "t" "y" "u" "i" "o" "p" ";" "'" "z" "x" "c" "v" "b" "n" "m" "," "." "[" "]"))
 
-(defun region-select-expand-keyboard-characters (characters list-length)
-  "Expand CHARACTERS into a list of strings equal to LIST-LENGTH."
+(defun region-select-pad-string (str pad-length)
+"Pad STR with spaces so that it is at least PAD-LENGTH characters long."
+  (if (< (length str) pad-length)
+      (concat str (make-string (- pad-length (length str)) ?\s))
+    str))
+
+(defun region-select-expand-keyboard-characters (characters list-length padding-length)
+"Expand CHARACTERS into a list of strings equal to LIST-LENGTH.
+Pad the strings to atleast PADDING-LENGTH."
   (let ((result '())
         (current-string ""))
     (if (< list-length (length characters))
@@ -60,7 +67,7 @@
               (push current-string result)
               (if (>= (length result) list-length) (throw 'done t)))))
         (setq result (reverse result))))
-    result))
+    (mapcar (lambda (x) (region-select-pad-string x padding-length)) result)))
 
 (defun region-select-adjust-list-length (input-list target-length)
   "Adjust the length of INPUT-LIST to TARGET-LENGTH.
@@ -78,7 +85,7 @@ By repeating or truncating elements."
   "Start a session to dynamically overlay REGIONS and jump to the match."
   (interactive)
   (let* ((input "")
-         (strings (region-select-expand-keyboard-characters region-select-keyboard-characters-list (length regions)))
+         (strings (region-select-expand-keyboard-characters region-select-keyboard-characters-list (length regions) 4))
          (faces (region-select-adjust-list-length region-select-faces (length regions)))
          (abort 'nil)
          (res 'nil)
