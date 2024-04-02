@@ -58,11 +58,12 @@
     ;; Reverse the list to maintain the original order and return.
     (nreverse result)))
 
-(defun start-dynamic-overlay-session (strings positions)
+(defun select-region-dynamic-overlay-session (strings positions)
   "Start a session to dynamically overlay strings and jump to the match."
   (interactive)
   ;; Example data: List of strings and their start positions in the buffer
   (let* ((input "")
+         (res 'nil)
          (overlays (mapcar (lambda (pos) (make-overlay pos (+ pos (length (car strings))))) positions)))
     ;; Initial overlay setup
     (cl-loop for ov in overlays
@@ -70,27 +71,32 @@
              do (overlay-put ov 'display str)
                 (overlay-put ov 'face '(:background "red" :foreground "white")))
     ;; User input loop
-    (catch 'exit
-      (while t
-        (let ((char (read-char-exclusive "Type next character (RET to finish): ")))
-          ;; Exit on RET
-          (if (or (eq char 'RET) (eq char 13))
-              (throw 'exit t)
-            (setq input (concat input (char-to-string char))))
-          ;; Update or clear overlays based on input
-          (cl-loop for ov in overlays
-                   for str in strings
-                   if (string-prefix-p input str)
-                   do (overlay-put ov 'display (substring str (length input)))
-                   else do (delete-overlay ov))
-          ;; Check for completion
-          (let ((remaining (cl-remove-if-not (lambda (s) (string-prefix-p input s)) strings)))
-            (when (= (length remaining) 1)
-              (let ((final-pos (nth (cl-position (car remaining) strings :test 'equal) positions)))
-                (message "Jumping to: %s" (car remaining))
-                (goto-char final-pos)
-                (mapc 'delete-overlay overlays)
-                (throw 'exit t)))))))))
+    (setq res
+          (catch 'exit
+            (while t
+              (let ((char (read-char-exclusive "Type next character (RET to finish): ")))
+                ;; Exit on RET
+                (if (or (eq char 'RET) (eq char 13))
+                    (throw 'exit 'abort)
+                  (setq input (concat input (char-to-string char))))
+                ;; Update or clear overlays based on input
+                (cl-loop for ov in overlays
+                         for str in strings
+                         if (string-prefix-p input str)
+                         do (overlay-put ov 'display (substring str (length input)))
+                         else do (delete-overlay ov))
+                ;; Check for completion
+                (let ((remaining (cl-remove-if-not (lambda (s) (string-prefix-p input s)) strings)))
+                  (when (= (length remaining) 1)
+                    (let ((final-pos (nth (cl-position (car remaining) strings :test 'equal) positions)))
+                      (message "Jumping to: %s" (car remaining))
+                      (goto-char final-pos)
+                      (mapc 'delete-overlay overlays)
+                      (throw 'exit 'nil))))))))
+    (if (eq res 'abort)
+        (message "Aborted!")
+        (cl-loop for ov in overlays
+                 do (delete-overlay ov)))))
 
 (defun generate-random-visible-buffer-positions ()
   "Generate 5 random positions within the visible part of the current buffer."
@@ -104,8 +110,7 @@
 
 (defun test-overlay ()
   (interactive)
-  ;;(dynamic-overlay-filter-and-jump '("ab" "cd" "ef" "gh" "jk") (sort (generate-random-visible-buffer-positions) #'<)))
-  (start-dynamic-overlay-session '("ab" "ac" "ad" "gh" "jk") (sort (generate-random-visible-buffer-positions) #'<)))
+  (select-region-dynamic-overlay-session '("ab" "ac" "ad" "gh" "jk") (sort (generate-random-visible-buffer-positions) #'<)))
 
 (global-set-key (kbd "<f8>") 'test-overlay)
 
