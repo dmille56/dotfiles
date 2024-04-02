@@ -47,7 +47,7 @@
         (setq result (reverse result))))
     result))
 
-(defun select-region-adjust-list-length (input-list target-length)
+(defun region-select-adjust-list-length (input-list target-length)
   "Adjust the length of INPUT-LIST to TARGET-LENGTH.
 By repeating or truncating elements."
   (let ((result ())  ;; Initialize an empty list to store the result.
@@ -58,19 +58,21 @@ By repeating or truncating elements."
     ;; Reverse the list to maintain the original order and return.
     (nreverse result)))
 
-(defun select-region-dynamic-overlay-session (strings positions)
+(defun region-select-dynamic-overlay-session (positions)
   "Start a session to dynamically overlay POSITIONS and jump to the match."
   (interactive)
-  ;; Example data: List of strings and their start positions in the buffer
   (let* ((input "")
+         (strings (region-select-expand-keyboard-characters region-select-keyboard-characters-list (length positions)))
+         (faces (region-select-adjust-list-length region-select-faces (length positions)))
          (abort 'nil)
          (res 'nil)
          (overlays (mapcar (lambda (pos) (make-overlay pos (+ pos (length (car strings))))) positions)))
     ;; Initial overlay setup
     (cl-loop for ov in overlays
              for str in strings
+             for face in faces
              do (overlay-put ov 'display str)
-                (overlay-put ov 'face '(:background "red" :foreground "white")))
+                (overlay-put ov 'face face))
     ;; User input loop
     (setq abort
           (catch 'exit
@@ -111,7 +113,7 @@ By repeating or truncating elements."
 
 (defun test-overlay ()
   (interactive)
-  (let ((pos (select-region-dynamic-overlay-session '("ab" "ac" "ad" "gh" "jk") (sort (generate-random-visible-buffer-positions) #'<))))
+  (let ((pos (region-select-dynamic-overlay-session (sort (generate-random-visible-buffer-positions) #'<))))
     (if pos (goto-char pos))))
 
 (global-set-key (kbd "<f8>") 'test-overlay)
