@@ -90,13 +90,13 @@ By repeating or truncating elements."
                 (let ((remaining (cl-remove-if-not (lambda (s) (string-prefix-p input s)) strings)))
                   (when (= (length remaining) 1)
                     (let ((final-pos (nth (cl-position (car remaining) strings :test 'equal) positions)))
-                      (message "Jumping to: %s" (car remaining))
-                      (goto-char final-pos)
                       (setq res final-pos)
                       (mapc 'delete-overlay overlays)
                       (throw 'exit 'nil))))))))
     (if (eq abort t)
-        (mapc 'delete-overlay overlays))
+        (progn
+          (message "Aborted.")
+          (mapc 'delete-overlay overlays)))
     res))
 
 (defun generate-random-visible-buffer-positions ()
@@ -111,7 +111,8 @@ By repeating or truncating elements."
 
 (defun test-overlay ()
   (interactive)
-  (select-region-dynamic-overlay-session '("ab" "ac" "ad" "gh" "jk") (sort (generate-random-visible-buffer-positions) #'<)))
+  (let ((pos (select-region-dynamic-overlay-session '("ab" "ac" "ad" "gh" "jk") (sort (generate-random-visible-buffer-positions) #'<))))
+    (if pos (goto-char pos))))
 
 (global-set-key (kbd "<f8>") 'test-overlay)
 
