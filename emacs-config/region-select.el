@@ -11,7 +11,7 @@
   "Customize group for region-select.el."
   :group 'emacs)
 
-(defcustom region-select-faces
+(defcustom region-select-faces-old
   '(
     (:background "red" :foreground "white")
     (:background "blue" :foreground "white")
@@ -21,6 +21,21 @@
     (:background "orange" :foreground "white")
     (:background "brown" :foreground "white")
     (:background "pink" :foreground "white")
+    )
+  "List of faces to use when selecting regions."
+  :type '(repeat face)
+  :group 'region-select)
+
+;; Dracula theme colors
+(defcustom region-select-faces
+  '(
+    (:background "#8be9fd" :foreground "#282a36")
+    (:background "#50fa7b" :foreground "#282a36")
+    (:background "#ffb86c" :foreground "#282a36")
+    (:background "#ff79c6" :foreground "#282a36")
+    (:background "#bd93f9" :foreground "#282a36")
+    (:background "#ff5555" :foreground "#282a36")
+    (:background "#f1fa8c" :foreground "#282a36")
     )
   "List of faces to use when selecting regions."
   :type '(repeat face)
@@ -58,6 +73,7 @@ By repeating or truncating elements."
     ;; Reverse the list to maintain the original order and return.
     (nreverse result)))
 
+;; :TODO: make it work with beginning and end of region
 (defun region-select-dynamic-overlay-session (regions)
   "Start a session to dynamically overlay REGIONS and jump to the match."
   (interactive)
@@ -70,13 +86,21 @@ By repeating or truncating elements."
                              (let* ((start (car region))
                                     (end (cdr region)))
                                (make-overlay start (+ start (length (car strings))))))
+                           regions))
+         (overlays2 (mapcar (lambda (region)
+                             (let* ((start (car region))
+                                    (end (cdr region)))
+                               (make-overlay end (+ end (length (car strings))))))
                            regions)))
     ;; Initial overlay setup
     (cl-loop for ov in overlays
+             for ov2 in overlays2
              for str in strings
              for face in faces
              do (overlay-put ov 'display str)
-                (overlay-put ov 'face face))
+                (overlay-put ov2 'display str)
+                (overlay-put ov 'face face)
+                (overlay-put ov2 'face face))
     ;; User input loop
     (setq abort
           (catch 'exit
@@ -88,22 +112,27 @@ By repeating or truncating elements."
                   (setq input (concat input (char-to-string char))))
                 ;; Update or clear overlays based on input
                 (cl-loop for ov in overlays
+                         for ov2 in overlays2
                          for str in strings
                          if (string-prefix-p input str)
                          do (overlay-put ov 'display (substring str (length input)))
-                         else do (delete-overlay ov))
+                            (overlay-put ov2 'display (substring str (length input)))
+                         else do (delete-overlay ov)
+                                 (delete-overlay ov2))
                 ;; Check for completion
                 (let ((remaining (cl-remove-if-not (lambda (s) (string-prefix-p input s)) strings)))
                   (when (= (length remaining) 1)
                     (let ((final-pos (nth (cl-position (car remaining) strings :test 'equal) regions)))
                       (setq res final-pos)
                       (mapc 'delete-overlay overlays)
+                      (mapc 'delete-overlay overlays2)
                       (throw 'exit 'nil))))))))
     ;; Remove overlays if aborted
     (if (eq abort t)
         (progn
           (message "Aborted.")
-          (mapc 'delete-overlay overlays)))
+          (mapc 'delete-overlay overlays)
+          (mapc 'delete-overlay overlays2)))
     res))
 
 (defun generate-random-visible-buffer-regions ()
