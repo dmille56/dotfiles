@@ -11,6 +11,11 @@
   "Customize group for region-select.el."
   :group 'emacs)
 
+(defcustom region-select-blackout-buffer-enable t
+"Enable blacking out buffer background when selecting."
+  :type 'boolean
+  :group 'region-select)
+
 (defcustom region-select-faces-old
   '(
     (:background "red" :foreground "white")
@@ -41,7 +46,7 @@
   :type '(repeat face)
   :group 'region-select)
 
-(setq-default region-select-buffer-blackout-face '(:background "black" :foreground "grey"))
+(setq-default region-select-buffer-blackout-face '(:background "#282a36" :foreground "#6272a4"))
 
 (setq-default region-select-keyboard-characters-list '("a" "s" "d" "f" "g" "h" "j" "k" "l" "q" "w" "e" "r" "t" "y" "u" "i" "o" "p" ";" "'" "z" "x" "c" "v" "b" "n" "m" "," "." "[" "]"))
 
@@ -80,7 +85,6 @@ By repeating or truncating elements."
     ;; Reverse the list to maintain the original order and return.
     (nreverse result)))
 
-;; :TODO: make it work with beginning and end of region
 (defun region-select-dynamic-overlay-session (regions)
   "Start a session to dynamically overlay REGIONS and jump to the match."
   (interactive)
@@ -89,25 +93,29 @@ By repeating or truncating elements."
          (faces (region-select-adjust-list-length region-select-faces (length regions)))
          (abort 'nil)
          (res 'nil)
+         (blackout-overlay 'nil)
          (overlays (mapcar (lambda (region)
                              (let* ((start (car region))
                                     (end (cdr region)))
                                (make-overlay start (+ start (length (car strings))))))
                            regions))
          (overlays2 (mapcar (lambda (region)
-                             (let* ((start (car region))
-                                    (end (cdr region)))
-                               (make-overlay end (+ end (length (car strings))))))
-                           regions)))
+                              (let* ((start (car region))
+                                     (end (cdr region)))
+                                (make-overlay end (+ end (length (car strings))))))
+                            regions)))
+    (if region-select-blackout-buffer-enable (progn
+                                               (setq blackout-overlay (make-overlay (window-start) (window-end)))
+                                               (overlay-put blackout-overlay 'face region-select-buffer-blackout-face)))
     ;; Initial overlay setup
     (cl-loop for ov in overlays
              for ov2 in overlays2
              for str in strings
              for face in faces
              do (overlay-put ov 'display str)
-                (overlay-put ov2 'display str)
-                (overlay-put ov 'face face)
-                (overlay-put ov2 'face face))
+             (overlay-put ov2 'display str)
+             (overlay-put ov 'face face)
+             (overlay-put ov2 'face face))
     ;; User input loop
     (setq abort
           (catch 'exit
@@ -123,9 +131,9 @@ By repeating or truncating elements."
                          for str in strings
                          if (string-prefix-p input str)
                          do (overlay-put ov 'display (substring str (length input)))
-                            (overlay-put ov2 'display (substring str (length input)))
+                         (overlay-put ov2 'display (substring str (length input)))
                          else do (delete-overlay ov)
-                                 (delete-overlay ov2))
+                         (delete-overlay ov2))
                 ;; Check for completion
                 (let ((remaining (cl-remove-if-not (lambda (s) (string-prefix-p input s)) strings)))
                   (when (= (length remaining) 1)
@@ -140,6 +148,7 @@ By repeating or truncating elements."
           (message "Aborted.")
           (mapc 'delete-overlay overlays)
           (mapc 'delete-overlay overlays2)))
+    (if region-select-blackout-buffer-enable (delete-overlay blackout-overlay))
     res))
 
 (defun generate-random-visible-buffer-regions ()
