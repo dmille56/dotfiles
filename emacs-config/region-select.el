@@ -58,15 +58,19 @@ By repeating or truncating elements."
     ;; Reverse the list to maintain the original order and return.
     (nreverse result)))
 
-(defun region-select-dynamic-overlay-session (positions)
-  "Start a session to dynamically overlay POSITIONS and jump to the match."
+(defun region-select-dynamic-overlay-session (regions)
+  "Start a session to dynamically overlay REGIONS and jump to the match."
   (interactive)
   (let* ((input "")
-         (strings (region-select-expand-keyboard-characters region-select-keyboard-characters-list (length positions)))
-         (faces (region-select-adjust-list-length region-select-faces (length positions)))
+         (strings (region-select-expand-keyboard-characters region-select-keyboard-characters-list (length regions)))
+         (faces (region-select-adjust-list-length region-select-faces (length regions)))
          (abort 'nil)
          (res 'nil)
-         (overlays (mapcar (lambda (pos) (make-overlay pos (+ pos (length (car strings))))) positions)))
+         (overlays (mapcar (lambda (region)
+                             (let* ((start (car region))
+                                    (end (cdr region)))
+                               (make-overlay start (+ start (length (car strings))))))
+                           regions)))
     ;; Initial overlay setup
     (cl-loop for ov in overlays
              for str in strings
@@ -91,30 +95,33 @@ By repeating or truncating elements."
                 ;; Check for completion
                 (let ((remaining (cl-remove-if-not (lambda (s) (string-prefix-p input s)) strings)))
                   (when (= (length remaining) 1)
-                    (let ((final-pos (nth (cl-position (car remaining) strings :test 'equal) positions)))
+                    (let ((final-pos (nth (cl-position (car remaining) strings :test 'equal) regions)))
                       (setq res final-pos)
                       (mapc 'delete-overlay overlays)
                       (throw 'exit 'nil))))))))
+    ;; Remove overlays if aborted
     (if (eq abort t)
         (progn
           (message "Aborted.")
           (mapc 'delete-overlay overlays)))
     res))
 
-(defun generate-random-visible-buffer-positions ()
-  "Generate 5 random positions within the visible part of the current buffer."
+(defun generate-random-visible-buffer-regions ()
+  "Generate 5 random regions within the visible part of the current buffer."
   (interactive)
-  (let ((positions '())
+  (let ((regions '())
         (start (window-start))
         (end (window-end)))
-    (dotimes (i 5 positions)
-      (push (+ start (random (1+ (- end start)))) positions))
-    positions))
+    (dotimes (i 5 regions)
+      (let* ((region-start (+ start (random (1+ (- end start)))))
+             (region-end (+ region-start (random (1+ (- end region-start))))))
+        (push (cons region-start region-end) regions)))
+    regions))
 
 (defun test-overlay ()
   (interactive)
-  (let ((pos (region-select-dynamic-overlay-session (sort (generate-random-visible-buffer-positions) #'<))))
-    (if pos (goto-char pos))))
+  (let ((pos (region-select-dynamic-overlay-session (sort (generate-random-visible-buffer-regions) (lambda (a b) (< (car a) (car b)))))))
+    (if pos (goto-char (car pos)))))
 
 (global-set-key (kbd "<f8>") 'test-overlay)
 
