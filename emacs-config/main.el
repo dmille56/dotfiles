@@ -737,6 +737,8 @@
 ;;   ;; (with-eval-after-load 'org (global-org-modern-mode))
 ;;   )
 
+(use-package org-present)
+
 (with-eval-after-load 'evil-maps
   (define-key evil-motion-state-map (kbd "SPC") nil)
   (define-key evil-motion-state-map (kbd "RET") nil)

@@ -569,6 +569,9 @@ in
     [font.normal]
     family = "DejaVu Sans Mono"
     style = "Regular"
+
+    [window]
+    opacity = 0.8
   '';
   
   home.file.".config/spotifyd/spotifyd.conf".text = ''

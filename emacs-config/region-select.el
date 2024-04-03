@@ -16,19 +16,15 @@
   :type 'boolean
   :group 'region-select)
 
-(defcustom region-select-faces-old
-  '(
-    (:background "red" :foreground "white")
-    (:background "blue" :foreground "white")
-    (:background "green" :foreground "white")
-    (:background "yellow" :foreground "white")
-    (:background "purple" :foreground "white")
-    (:background "orange" :foreground "white")
-    (:background "brown" :foreground "white")
-    (:background "pink" :foreground "white")
-    )
-  "List of faces to use when selecting regions."
-  :type '(repeat face)
+(defcustom region-select-padding-amount 4
+"Amount to pad each select entry."
+  :type 'integer
+  :group 'region-select)
+
+;; 32 = space, 45 = -
+(defcustom region-select-padding-character 32
+"Character to pad each select entry with."
+  :type 'character
   :group 'region-select)
 
 ;; Dracula theme colors
@@ -46,14 +42,20 @@
   :type '(repeat face)
   :group 'region-select)
 
-(setq-default region-select-buffer-blackout-face '(:background "#282a36" :foreground "#6272a4"))
+(defcustom region-select-buffer-blackout-face '(:background "#282a36" :foreground "#6272a4")
+"Face to use when blacking out the background when selecting."
+  :type 'face
+  :group 'region-select)
 
-(setq-default region-select-keyboard-characters-list '("a" "s" "d" "f" "g" "h" "j" "k" "l" "q" "w" "e" "r" "t" "y" "u" "i" "o" "p" ";" "'" "z" "x" "c" "v" "b" "n" "m" "," "." "[" "]"))
+(defcustom region-select-keyboard-characters-list '("a" "s" "d" "f" "g" "h" "j" "k" "l" "q" "w" "e" "r" "t" "y" "u" "i" "o" "p" ";" "'" "z" "x" "c" "v" "b" "n" "m" "," "." "[" "]")
+"Character strings to use for selecting."
+  :type '(repeat string)
+  :group 'region-select)
 
 (defun region-select-pad-string (str pad-length)
 "Pad STR with spaces so that it is at least PAD-LENGTH characters long."
   (if (< (length str) pad-length)
-      (concat str (make-string (- pad-length (length str)) ?\s))
+      (concat str (make-string (- pad-length (length str)) region-select-padding-character))
     str))
 
 (defun region-select-expand-keyboard-characters (characters list-length padding-length)
@@ -89,7 +91,7 @@ By repeating or truncating elements."
   "Start a session to dynamically overlay REGIONS and jump to the match."
   (interactive)
   (let* ((input "")
-         (strings (region-select-expand-keyboard-characters region-select-keyboard-characters-list (length regions) 4))
+         (strings (region-select-expand-keyboard-characters region-select-keyboard-characters-list (length regions) region-select-padding-amount))
          (faces (region-select-adjust-list-length region-select-faces (length regions)))
          (abort 'nil)
          (res 'nil)
@@ -151,7 +153,7 @@ By repeating or truncating elements."
     (if region-select-blackout-buffer-enable (delete-overlay blackout-overlay))
     res))
 
-(defun generate-random-visible-buffer-regions ()
+(defun region-select-generate-random-visible-buffer-regions ()
   "Generate 5 random regions within the visible part of the current buffer."
   (interactive)
   (let ((regions '())
@@ -163,34 +165,12 @@ By repeating or truncating elements."
         (push (cons region-start region-end) regions)))
     regions))
 
-(defun test-overlay ()
+(defun region-select-test-overlay ()
   (interactive)
-  (let ((pos (region-select-dynamic-overlay-session (sort (generate-random-visible-buffer-regions) (lambda (a b) (< (car a) (car b)))))))
+  (let ((pos (region-select-dynamic-overlay-session (sort (region-select-generate-random-visible-buffer-regions) (lambda (a b) (< (car a) (car b)))))))
     (if pos (goto-char (car pos)))))
 
-(global-set-key (kbd "<f8>") 'test-overlay)
-
-;; :TODO: figure out performance issue with this function (it causes emacs to lag super slow when evaluated)
-;; (defun overlay-buffer (face)
-;;   "Overlay the entire buffer with a face that has a black background and grey foreground."
-;;   (interactive)
-;;   ;; Create an overlay that spans the entire buffer
-;;   (let ((buffer-overlay (make-overlay (window-start) (window-end))))
-;;     ;; Set the overlay's face property
-;;     (overlay-put buffer-overlay 'face face)
-;;     ;; Optionally, store the overlay in a buffer-local variable if you need to remove it later
-;;     (setq-local buffer-local-overlay buffer-overlay)))
-;; 
-;; (defun overlay-buffer-black-and-grey ()
-;;   (interactive)
-;;   (overlay-buffer region-select-buffer-blackout-face))
-;; 
-;; (defun remove-buffer-overlay ()
-;;   "Remove the overlay from the buffer, if it exists."
-;;   (interactive)
-;;   (when (and (boundp 'buffer-local-overlay) buffer-local-overlay)
-;;     (delete-overlay buffer-local-overlay)
-;;     (setq buffer-local-overlay nil)))
+(global-set-key (kbd "<f8>") 'region-select-test-overlay)
 
 (provide 'region-select)
 ;;; region-select.el ends here
