@@ -23,9 +23,9 @@
         ("https://www.youtube.com/feeds/videos.xml?channel_id=UCfQgsKhHjSyRLOp9mnffqVg" yt fitness) ;; Renaissance Periodization
 	("https://www.youtube.com/feeds/videos.xml?channel_id=UCkZjTZNvuxq1CYMS3cwZa1Q" yt i) ;; Huberman Lab Clips
 	("https://www.youtube.com/feeds/videos.xml?playlist_id=PLkL7BvJXiqSTWYYJtqjo-cKEcHd9g4g5J" yt i) ;; Chris Williamson Clips
-	("https://www.youtube.com/feeds/videos.xml?channel_id=UCV_zy48AlwwGpdJEka1ay7w" yt fitness) ;; Garage Gym Reviews
-        ("https://www.youtube.com/feeds/videos.xml?channel_id=UCXR5UyxWQdZ50pWyNn5FyoQ" yt fitness) ;; Connect The Watts
-        ("https://www.youtube.com/feeds/videos.xml?channel_id=UCFGCfbYPyFpITa0mbwbTmhA" yt fitness i) ;; Kaizen DIY Gym
+	;; ("https://www.youtube.com/feeds/videos.xml?channel_id=UCV_zy48AlwwGpdJEka1ay7w" yt fitness) ;; Garage Gym Reviews
+        ;; ("https://www.youtube.com/feeds/videos.xml?channel_id=UCXR5UyxWQdZ50pWyNn5FyoQ" yt fitness) ;; Connect The Watts
+        ;; ("https://www.youtube.com/feeds/videos.xml?channel_id=UCFGCfbYPyFpITa0mbwbTmhA" yt fitness i) ;; Kaizen DIY Gym
 	("https://www.youtube.com/feeds/videos.xml?channel_id=UCzN7S0O87X-Q1CJqyWnJ9mw" yt i)
         ("https://www.youtube.com/feeds/videso.xml?channel_id=UCsEPI9OwGEw5Lm0E7Paq62g" yt i)
         ("https://www.youtube.com/feeds/videos.xml?channel_id=UCl8hzdP5wVlhuzNG3WCJa1w" yt nba nuggets sports) ;; Denver Nuggets yt channel
@@ -55,6 +55,8 @@
 
 (setq-default elfeed-all-the-feeds
       (append elfeed-feeds-blogs elfeed-feeds-yt elfeed-feeds-podcasts elfeed-feeds-misc))
+
+(setq-default elfeed-banned-keywords '("gaza" "israel" "hamas" "palestine"))
 
 (use-package elfeed
   :init
@@ -112,9 +114,11 @@
                                 :add 'junk
                                 :remove 'unread))
 
+  ;; Add junk tag to banned keywords
+  (add-hook 'elfeed-new-entry-hook #'elfeed-tag-banned-keywords)
+
   ;; Add short tag to youtube shorts
-  (add-hook 'elfeed-new-entry-hook #'elfeed-tag-yt-short)
-  )
+  (add-hook 'elfeed-new-entry-hook #'elfeed-tag-yt-short))
 
 (use-package mpv)
 
@@ -315,15 +319,18 @@
   )
 
 (defun elfeed-tag-yt-short (entry)
-  (let*
-      (
-       (link (elfeed-entry-link entry))
+  (let* ((link (elfeed-entry-link entry))
        (is-youtube-link (string-match-p "youtube\\.com" link))
-       (is-short (if is-youtube-link (yt-video-is-short link) nil))
-       )
-    (if is-short (elfeed-tag entry 'short))
-    )
-  )
+       (is-short (if is-youtube-link (yt-video-is-short link) nil)))
+    (if is-short (elfeed-tag entry 'short))))
+
+(defun elfeed-tag-banned-keywords (entry)
+  (let* ((title (elfeed-entry-title entry))
+         (is-banned (cl-some (lambda (substring)
+                               (if (string-match-p (concat "(?i:" (regexp-quote substring) ")") title)
+                                   t))
+                             elfeed-banned-keywords)))
+    (if is-banned (elfeed-tag entry 'junk 'banned))))
 
 (provide 'elfeed-config)
 ;;; elfeed-config.el ends here

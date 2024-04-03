@@ -591,6 +591,20 @@
 ;; by default ~/.authinfo will be used
 (setq auth-sources '("~/.authinfo.gpg"))
 
+(use-package blamer
+  :ensure t
+  :bind (("s-i" . blamer-show-commit-info)
+         ("C-c i" . blamer-show-posframe-commit-info))
+  :defer 20
+  :custom
+  (blamer-idle-time 0.3)
+  (blamer-min-offset 70)
+  :custom-face
+  (blamer-face ((t :foreground "#7a88cf"
+                    :background nil
+                    :height 140
+                    :italic t)))))
+
 ;; install markdown-mode and set it to use pandoc
 ;; make sure you have pandoc installed!
 (use-package markdown-mode

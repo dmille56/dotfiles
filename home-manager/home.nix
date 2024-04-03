@@ -68,6 +68,8 @@ in
     git
     ((emacsPackagesFor emacs).emacsWithPackages
       (epkgs: [ epkgs.vterm epkgs.w3m ]))
+    cask #emacs cask
+    eask #emacs eask
     emacs-all-the-icons-fonts
     nerdfonts
     zsh
