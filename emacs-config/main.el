@@ -1013,6 +1013,18 @@
     (lambda ()
         (auth-source-pass-get 'secret "OPENAI_API_KEY")))))
 
+;; :TODO: fix this function
+(defun my/ollama-write-git-commit ()
+  "Generate a git commit using ollama.
+Make sure to run \='ollama serve\=' and have zephyr model."
+  (interactive)
+  (let* ((diff (shell-command-to-string "git diff --cached --color=never"))
+         (prompt-header "Please help me write a git commit message (limit to 50 characters) for the following commit:")
+         (str-to-send (concat prompt-header "\n\n" diff))
+         (ollama-cmd (concat "ollama run zephyr " (shell-quote-argument str-to-send))))
+    (message ollama-cmd)
+    (if diff (insert (shell-command-to-string ollama-cmd)))))
+
 (use-package editorconfig) ;; dependency for copilot
 
 (use-package copilot
