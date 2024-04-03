@@ -603,7 +603,7 @@
   (blamer-face ((t :foreground "#7a88cf"
                     :background nil
                     :height 140
-                    :italic t)))))
+                    :italic t))))
 
 ;; install markdown-mode and set it to use pandoc
 ;; make sure you have pandoc installed!
