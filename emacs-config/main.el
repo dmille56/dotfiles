@@ -358,6 +358,7 @@
   (evil-leader/set-key-for-mode 'lsp-mode "l" 'lsp-command-map)
   (evil-leader/set-key-for-mode 'emacs-lisp-mode "r" 'my/transient-elisp-mode)
   (evil-leader/set-key-for-mode 'lisp-interaction-mode "r" 'my/transient-elisp-mode)
+  (evil-leader/set-key-for-mode 'eask-mode "r" 'my/transient-elisp-mode)
   (evil-leader/set-key-for-mode 'doc-view-mode "r" 'my/transient-doc-view-mode)
   (evil-leader/set-key-for-mode 'org-mode "r" 'my/transient-org-mode)
   (evil-leader/set-key-for-mode 'python-mode "r" 'my/transient-python-mode)
@@ -656,11 +657,11 @@
   )
 
 ;; install yaml-mode
-;; (use-package yaml-mode)
+(use-package yaml-mode :defer)
 
-(use-package yaml :defer)
+;;(use-package yaml :defer)
 
-(use-package yaml-pro :defer)
+;;(use-package yaml-pro :defer)
 
 ;; install/setup emms
 (use-package emms
@@ -1245,6 +1246,7 @@ Make sure to run \='ollama serve\=' and have zephyr model."
 ;; My packages... Define them twice to allow loading local version if available first...
 (defvar treesit-jump-path "~/Desktop/prog/treesit-jump/")
 (defvar powershell-ts-mode-path "~/Desktop/prog/powershell-ts-mode/")
+(defvar ufo-catcher-path "~/Desktop/prog/ufo-catcher/")
 
 (use-package treesit-jump
   :after treesit
@@ -1271,6 +1273,14 @@ Make sure to run \='ollama serve\=' and have zephyr model."
   :if (not (file-directory-p powershell-ts-mode-path)))
 
 (setq-default powershell-ts-enable-imenu-top-level-vars nil)
+
+(use-package ufo-catcher
+  :load-path ufo-catcher-path
+  :if (file-directory-p ufo-catcher-path))
+
+(use-package ufo-catcher
+  :straight (:host github :repo "dmille56/ufo-catcher")
+  :if (not (file-directory-p ufo-catcher-path)))
 
 (use-package imenu-list
   :functions imenu-list-smart-toggle
@@ -1305,6 +1315,8 @@ Make sure to run \='ollama serve\=' and have zephyr model."
   :defer
   :config
   (setq leetcode-prefer-language "python3"))
+
+(use-package eask-mode)
 
 (use-package zone-matrix
   :defer

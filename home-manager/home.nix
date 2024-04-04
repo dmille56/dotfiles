@@ -76,6 +76,7 @@ in
     networkmanager
     lorri
     python311Packages.python-lsp-server
+    yaml-language-server
 
     powershell
     tmux
