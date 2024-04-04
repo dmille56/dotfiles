@@ -1248,6 +1248,14 @@ Make sure to run \='ollama serve\=' and have zephyr model."
 (defvar powershell-ts-mode-path "~/Desktop/prog/powershell-ts-mode/")
 (defvar ufo-catcher-path "~/Desktop/prog/ufo-catcher/")
 
+(use-package ufo-catcher
+  :load-path ufo-catcher-path
+  :if (file-directory-p ufo-catcher-path))
+
+(use-package ufo-catcher
+  :straight (:host github :repo "dmille56/ufo-catcher")
+  :if (not (file-directory-p ufo-catcher-path)))
+
 (use-package treesit-jump
   :after treesit
   :load-path treesit-jump-path
@@ -1273,14 +1281,6 @@ Make sure to run \='ollama serve\=' and have zephyr model."
   :if (not (file-directory-p powershell-ts-mode-path)))
 
 (setq-default powershell-ts-enable-imenu-top-level-vars nil)
-
-(use-package ufo-catcher
-  :load-path ufo-catcher-path
-  :if (file-directory-p ufo-catcher-path))
-
-(use-package ufo-catcher
-  :straight (:host github :repo "dmille56/ufo-catcher")
-  :if (not (file-directory-p ufo-catcher-path)))
 
 (use-package imenu-list
   :functions imenu-list-smart-toggle
