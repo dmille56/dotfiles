@@ -690,6 +690,8 @@
 
 (use-package helm-rg :defer)
 
+(use-package wgrep)
+
 (use-package powershell :defer)
 (use-package koopa-mode :defer)
 
