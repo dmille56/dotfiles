@@ -170,7 +170,8 @@
   "Transient for eaf."
   ["Eaf"
    ("b" "browse" (lambda () (interactive) (browse-web "https://duckduckgo.com")))
-   ("t" "open this buffer" eaf-open-this-buffer)
+   ("p" "open this buffer" eaf-open-this-buffer)
+   ("t" "terminal" eaf-open-pyqterminal)
    ("g" "git" eaf-open-git)])
 
 (transient-define-prefix my/transient-git-link ()
@@ -1347,6 +1348,8 @@ Make sure to run \='ollama serve\=' and have zephyr model."
   (require 'eaf-git)
   (require 'eaf-org-previewer)
   (require 'eaf-file-sender)
+  (require 'eaf-pyqterminal)
+  (setq eaf-pyqterminal-font-family "DejaVuSansM Nerd Font")
   (evil-set-initial-state 'eaf-mode 'emacs)
   (defalias 'browse-web #'eaf-open-browser)
   ;; (eaf-bind-key scroll_up "C-n" eaf-pdf-viewer-keybinding)
