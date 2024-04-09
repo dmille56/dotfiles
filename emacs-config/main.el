@@ -140,8 +140,8 @@
     ("l" "git-link" my/transient-git-link)
     ("Ll" "leetcode" leetcode)
     ("Ld" "leetcode daily" leetcode-daily)
-    ("o" "browse web" browse-web)
-    ("e" "revert buffer" revert-buffer)]
+    ("e" "eaf" my/transient-eaf)
+    ("E" "revert buffer" revert-buffer)]
    ["Ai"
     ("g" "chatgpt" chatgpt-shell)
     ("Gr" "chatgpt send and review" chatgpt-shell-send-and-review-region)
@@ -165,6 +165,13 @@
     ("y" "tree" treemacs)
     ]
    ])
+
+(transient-define-prefix my/transient-eaf ()
+  "Transient for eaf."
+  ["Eaf"
+   ("b" "browse" (lambda () (interactive) (browse-web "https://duckduckgo.com")))
+   ("t" "open this buffer" eaf-open-this-buffer)
+   ("g" "git" eaf-open-git)])
 
 (transient-define-prefix my/transient-git-link ()
   "Transient for git-link."
@@ -1319,7 +1326,7 @@ Make sure to run \='ollama serve\=' and have zephyr model."
   :config
   (setq leetcode-prefer-language "python3"))
 
-(use-package eask-mode)
+(use-package eask-mode :defer)
 
 (setq-default eaf-install-path "~/.emacs.d/site-lisp/emacs-application-framework")
 
@@ -1339,6 +1346,7 @@ Make sure to run \='ollama serve\=' and have zephyr model."
   (require 'eaf-browser)
   (require 'eaf-git)
   (require 'eaf-org-previewer)
+  (require 'eaf-file-sender)
   (evil-set-initial-state 'eaf-mode 'emacs)
   (defalias 'browse-web #'eaf-open-browser)
   ;; (eaf-bind-key scroll_up "C-n" eaf-pdf-viewer-keybinding)
@@ -1347,6 +1355,7 @@ Make sure to run \='ollama serve\=' and have zephyr model."
   (eaf-bind-key nil "M-q" eaf-browser-keybinding)) ;; unbind, see more in the Wiki
 
 (use-package gptel
+  :defer
   :straight t
   :init
   (setq gptel-api-key (lambda () (auth-source-pass-get 'secret "OPENAI_API_KEY"))))
