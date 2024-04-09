@@ -140,6 +140,7 @@
     ("l" "git-link" my/transient-git-link)
     ("Ll" "leetcode" leetcode)
     ("Ld" "leetcode daily" leetcode-daily)
+    ("o" "browse web" browse-web)
     ("e" "revert buffer" revert-buffer)]
    ["Ai"
     ("g" "chatgpt" chatgpt-shell)
@@ -1336,6 +1337,7 @@ Make sure to run \='ollama serve\=' and have zephyr model."
   (evil-set-initial-state 'eaf-mode 'emacs)
   :config
   (require 'eaf-browser)
+  (require 'eaf-git)
   (require 'eaf-org-previewer)
   (evil-set-initial-state 'eaf-mode 'emacs)
   (defalias 'browse-web #'eaf-open-browser)
