@@ -66,7 +66,7 @@ in
     vimgolf
     curl
     git
-    ((emacsPackagesFor emacs).emacsWithPackages
+    ((emacsPackagesFor emacs-gtk).emacsWithPackages
       (epkgs: [ epkgs.vterm epkgs.w3m ]))
     eask #emacs eask
     emacs-all-the-icons-fonts

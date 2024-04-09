@@ -1320,6 +1320,51 @@ Make sure to run \='ollama serve\=' and have zephyr model."
 
 (use-package eask-mode)
 
+(setq-default eaf-install-path "~/.emacs.d/site-lisp/emacs-application-framework")
+
+;; URL: https://github.com/emacs-eaf/emacs-application-framework
+;; have to install with git and then run M-x eaf-install-and-update
+(use-package eaf
+  :if (file-directory-p eaf-install-path)
+  :load-path eaf-install-path
+  :custom
+  ; See https://github.com/emacs-eaf/emacs-application-framework/wiki/Customization
+  (eaf-browser-continue-where-left-off t)
+  (eaf-browser-enable-adblocker t)
+  (browse-url-browser-function 'eaf-open-browser)
+  :init
+  (evil-set-initial-state 'eaf-mode 'emacs)
+  :config
+  (require 'eaf-browser)
+  (require 'eaf-org-previewer)
+  (evil-set-initial-state 'eaf-mode 'emacs)
+  (defalias 'browse-web #'eaf-open-browser)
+  ;; (eaf-bind-key scroll_up "C-n" eaf-pdf-viewer-keybinding)
+  ;; (eaf-bind-key scroll_down "C-p" eaf-pdf-viewer-keybinding)
+  (eaf-bind-key insert_or_open_link "a" eaf-browser-keybinding)
+  (eaf-bind-key nil "M-q" eaf-browser-keybinding)) ;; unbind, see more in the Wiki
+
+(use-package gptel
+  :straight t
+  :init
+  (setq gptel-api-key (lambda () (auth-source-pass-get 'secret "OPENAI_API_KEY"))))
+
+(use-package magit-gptcommit
+  :straight t
+  :after gptel magit
+  :config
+
+  ;; Enable magit-gptcommit-mode to watch staged changes and generate commit message automatically in magit status buffer
+  ;; This mode is optional, you can also use `magit-gptcommit-generate' to generate commit message manually
+  ;; `magit-gptcommit-generate' should only execute on magit status buffer currently
+  ;; (magit-gptcommit-mode 1)
+
+  ;; Add gptcommit transient commands to `magit-commit'
+  ;; Eval (transient-remove-suffix 'magit-commit '(1 -1)) to remove gptcommit transient commands
+  (magit-gptcommit-status-buffer-setup)
+  :bind (:map git-commit-mode-map
+              ("C-c C-g" . magit-gptcommit-commit-accept)))
+
 (use-package zone-matrix
   :defer
   :straight (:host github :repo "dmille56/zone-matrix"))
