@@ -64,6 +64,7 @@ in
     helix
     vim
     vimgolf
+    pacvim
     curl
     git
     ((emacsPackagesFor emacs-gtk).emacsWithPackages
