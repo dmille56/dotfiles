@@ -336,6 +336,7 @@
    "F" 'my/transient-forge
    "v" 'helm-semantic-or-imenu
    "a" 'link-hint-open-link
+   "A" 'link-hint-copy-link
    "M" 'my/transient-emms
    "m" 'my/transient-evil-macros
    "O" 'my/transient-org-roam
@@ -1340,9 +1341,9 @@ Make sure to run \='ollama serve\=' and have zephyr model."
   ; See https://github.com/emacs-eaf/emacs-application-framework/wiki/Customization
   (eaf-browser-continue-where-left-off t)
   (eaf-browser-enable-adblocker t)
-  (browse-url-browser-function 'eaf-open-browser)
   :init
   (evil-set-initial-state 'eaf-mode 'emacs)
+  (if (eq my/config-machine 'pc) (setq browse-url-browser-function 'eaf-open-browser))
   :config
   (require 'eaf-browser)
   (require 'eaf-git)
