@@ -1012,7 +1012,7 @@
 ;;   :after magit
 ;;   :config (magit-todos-mode 1))
 
-(use-package csv-mode :defer)
+(use-package csv-mode)
 
 (unless (eq my/config-machine 'work)
   (use-package beacon
