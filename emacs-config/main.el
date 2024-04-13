@@ -1014,6 +1014,12 @@
 
 (use-package csv-mode)
 
+(use-package rainbow-csv
+  :straight (:host github :repo "emacs-vs/rainbow-csv")
+  :after csv-mode
+  :init
+  (add-hook 'csv-mode-hook #'rainbow-csv-mode))
+
 (unless (eq my/config-machine 'work)
   (use-package beacon
     :functions beacon-mode
