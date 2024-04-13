@@ -169,7 +169,7 @@
 (transient-define-prefix my/transient-eaf ()
   "Transient for eaf."
   ["Eaf"
-   ("b" "browse" (lambda () (interactive) (browse-web "https://duckduckgo.com")))
+   ("b" "browse" (lambda () (interactive) (browse-web "https://online.bonjourr.fr/")))
    ("p" "open this buffer" eaf-open-this-buffer)
    ("t" "terminal" eaf-open-pyqterminal)
    ("g" "git" eaf-open-git)])
@@ -725,6 +725,13 @@
   (let (
 	(terms (read-string "Enter duckduckgo search terms: ")))
     (browse-url (concat "https://duckduckgo.com/?q=" terms))))
+
+(defun ddg-eaf ()
+  "Search duck duck go using eaf."
+  (interactive)
+  (let (
+	(terms (read-string "Enter duckduckgo search terms: ")))
+    (browse-web (concat "https://duckduckgo.com/?q=" terms))))
 
 (global-set-key (kbd "<f8>") 'keyboard-quit) ;; alias Ctl-g to f8 (to save your pinky)
 
@@ -1362,7 +1369,9 @@ Make sure to run \='ollama serve\=' and have zephyr model."
   ;; (eaf-bind-key scroll_up "C-n" eaf-pdf-viewer-keybinding)
   ;; (eaf-bind-key scroll_down "C-p" eaf-pdf-viewer-keybinding)
   (eaf-bind-key evil-ex ";" eaf-browser-keybinding)
-  (eaf-bind-key ddg "s" eaf-browser-keybinding)
+  (eaf-bind-key ddg-eaf "s" eaf-browser-keybinding)
+  (eaf-bind-key insert_or_open_browser "C-o" eaf-browser-keybinding)
+  (eaf-bind-key insert_or_edit_url "C-l" eaf-browser-keybinding)
   (eaf-bind-key insert_or_open_link "a" eaf-browser-keybinding)
   (eaf-bind-key nil "M-q" eaf-browser-keybinding)) ;; unbind, see more in the Wiki
 
