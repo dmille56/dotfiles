@@ -1354,6 +1354,8 @@ Make sure to run \='ollama serve\=' and have zephyr model."
   ; See https://github.com/emacs-eaf/emacs-application-framework/wiki/Customization
   (eaf-browser-continue-where-left-off t)
   (eaf-browser-enable-adblocker t)
+  (eaf-browser-default-search-engine "duckduckgo")
+  (eaf-browse-blank-page-url "https://online.bonjourr.fr/")
   :init
   (evil-set-initial-state 'eaf-mode 'emacs)
   (if (eq my/config-machine 'pc) (setq browse-url-browser-function 'eaf-open-browser))
