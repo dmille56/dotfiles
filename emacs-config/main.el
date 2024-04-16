@@ -1377,11 +1377,11 @@ Make sure to run \='ollama serve\=' and have zephyr model."
   (eaf-bind-key insert_or_open_link "a" eaf-browser-keybinding)
   (eaf-bind-key nil "M-q" eaf-browser-keybinding)) ;; unbind, see more in the Wiki
 
-  (use-package gptel
-    :defer
-    :straight t
-    :init
-    (setq gptel-api-key (lambda () (auth-source-pass-get 'secret "OPENAI_API_KEY"))))
+(use-package gptel
+  :defer
+  :straight t
+  :init
+  (setq gptel-api-key (lambda () (auth-source-pass-get 'secret "OPENAI_API_KEY"))))
 
 (use-package magit-gptcommit
   :straight t

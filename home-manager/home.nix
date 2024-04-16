@@ -110,6 +110,7 @@ in
     ddgr
     buku
     w3m
+    readability-cli
     yt-dlp
     ytfzf
     piper-tts
