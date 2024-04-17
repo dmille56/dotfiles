@@ -62,7 +62,9 @@
   :init
   (evil-define-key 'normal elfeed-search-mode-map
     (kbd "g c") 'elfeed-browsecomments-wrapper
+    (kbd "g C") 'elfeed-browsecomments-wrapper-generic
     (kbd "g d") 'elfeed-open-in-chromium
+    (kbd "g D") 'elfeed-open-in-generic
     (kbd "g p") 'elfeed-play-mpv
     (kbd "g y") 'elfeed-download-yt
     (kbd "g e") 'elfeed-download-ytaudio
@@ -73,7 +75,9 @@
     )
   (evil-define-key 'normal elfeed-show-mode-map
     (kbd "g c") 'elfeed-browsecomments-wrapper
+    (kbd "g C") 'elfeed-browsecomments-wrapper-firefox
     (kbd "g d") 'elfeed-open-in-chromium
+    (kbd "g D") 'elfeed-open-in-firefox
     (kbd "g p") 'elfeed-play-mpv
     )
   (setq elfeed-feeds elfeed-all-the-feeds)
@@ -146,16 +150,23 @@
 (defun elfeed-cur-entry ()
   (if (eq major-mode 'elfeed-show-mode) elfeed-show-entry (elfeed-search-selected :single)))
 
+(defun elfeed-open-in-generic ()
+  (interactive)
+  (elfeed-open-in #'browse-url-generic))
+
 (defun elfeed-open-in-chromium ()
   (interactive)
-  "Opens the selected elfeed entry in chromium."
+  (elfeed-open-in #'browse-url-chromium))
+
+(defun elfeed-open-in (browse-url-fun)
+  "Opens the selected elfeed entry."
   (let* (
         (entry (elfeed-cur-entry))
         (link (elfeed-entry-link entry))
         )
     (elfeed-untag entry 'unread)
     (elfeed-search-update-entry entry)
-    (browse-url-chromium link)))
+    (funcall browse-url-fun link)))
 
 (defun mpv-play-yt (link &optional format)
   (interactive)
@@ -223,9 +234,14 @@
 (defun elfeed-browsecomments-wrapper ()
   "Open the comments link from the currently selected elfeed entry."
   (interactive)
-  (elfeed-browsecomments (elfeed-cur-entry)))
+  (elfeed-browsecomments (elfeed-cur-entry) #'browse-url))
 
-(defun elfeed-browsecomments (entry)
+(defun elfeed-browsecomments-wrapper-generic ()
+  "Open the comments link from the currently selected elfeed entry using browse-url-generic."
+  (interactive)
+  (elfeed-browsecomments (elfeed-cur-entry) #'browse-url-generic))
+
+(defun elfeed-browsecomments (entry browse-url-fun)
   "Open the comments link from a feed ENTRY with 'browse-url'."
    (let* (
 	 (content (elfeed-deref (elfeed-entry-content entry)))
@@ -235,7 +251,7 @@
 	 (commentNode (elfeed-getcommentnode root))
 	 )
      (if commentNode (progn
-		       (browse-url (dom-attr commentNode 'href))
+		       (funcall browse-url-fun (dom-attr commentNode 'href))
 		       (elfeed-untag entry 'unread)
 		       (elfeed-search-update-entry entry))
        (message "Unable to load comments"))))

@@ -3,7 +3,7 @@
 
 ;; uncomment this to go back to using firefox instead of eaf-browser
 ;; (setq browse-url-browser-function 'browse-url-generic)
-;; (setq browse-url-generic-program "sensible-browser")
+(setq-default browse-url-generic-program "sensible-browser")
 
 (if (eq my/config-machine 'pc)
     (setq org-agenda-files (list "~/Dropbox/org/todo.org"
