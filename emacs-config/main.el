@@ -1201,7 +1201,6 @@ Make sure to run \='ollama serve\=' and have zephyr model."
 (setq warning-suppress-log-types '((emacs :events-buffer-scrollback-size)))
 (setq warning-suppress-types '((emacs :events-buffer-scrollback-size)))
 
-
 ;; Add-hooks for eglot
 (add-hook 'python-mode-hook 'eglot-ensure)
 (add-hook 'python-ts-mode-hook 'eglot-ensure)
@@ -1218,13 +1217,13 @@ Make sure to run \='ollama serve\=' and have zephyr model."
       (setq-default powershell-editor-services-log-path "~/bin/PowerShellEditorServices/logfile.log")
       (setq-default powershell-editor-services-command "~/bin/PowerShellEditorServices/PowerShellEditorServices/Start-EditorServices.ps1")
       (add-to-list 'eglot-server-programs
-                   '(powershell-ts-mode . ("pwsh" "-NoLogo" "-NoProfile" "-NonInteractive" "-Command" powershell-editor-services-command
+                   '(powershell-ts-mode . ("pwsh" "-NoLogo" "-NoProfile" "-NonInteractive" "-Command" ,powershell-editor-services-command
                                            "-HostName" "Emacs"
                                            "-HostVersion" "1.0.0"
                                            "-HostProfileId" "emacs"
                                            "-HostId" "emacs"
                                            "-Stdio"
-                                           "-LogPath" powershell-editor-services-log-path
+                                           "-LogPath" ,powershell-editor-services-log-path
                                            "-LogLevel" "Normal")))
       (add-hook 'powershell-ts-mode-hook 'eglot-ensure)))
 
