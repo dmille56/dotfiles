@@ -1212,6 +1212,7 @@ Make sure to run \='ollama serve\=' and have zephyr model."
 
 (if (eq my/config-machine 'work)
     (progn
+      (require 'eglot)
       (setq-default powershell-editor-services-log-path "~/bin/PowerShellEditorServices/logfile.log")
       (setq-default powershell-editor-services-command "~/bin/PowerShellEditorServices/PowerShellEditorServices/Start-EditorServices.ps1")
       (add-to-list 'eglot-server-programs
