@@ -1210,6 +1210,21 @@ Make sure to run \='ollama serve\=' and have zephyr model."
 ;;   (defvar eglot-server-programs)
 ;;   (add-to-list 'eglot-server-programs '(nix-mode . ("rnix-lsp"))))
 
+(if (eq my/config-machine 'work)
+    (progn
+      (setq-default powershell-editor-services-log-path "~/bin/PowerShellEditorServices/logfile.log")
+      (setq-default powershell-editor-services-command "~/bin/PowerShellEditorServices/PowerShellEditorServices/Start-EditorServices.ps1")
+      (add-to-list 'eglot-server-programs
+                   '(powershell-ts-mode . ("pwsh" "-NoLogo" "-NoProfile" "-NonInteractive" "-Command" powershell-editor-services-command
+                                           "-HostName" "Emacs"
+                                           "-HostVersion" "1.0.0"
+                                           "-HostProfileId" "emacs"
+                                           "-HostId" "emacs"
+                                           "-Stdio"
+                                           "-LogPath" powershell-editor-services-log-path
+                                           "-LogLevel" "Normal")))
+      (add-hook 'powershell-ts-mode-hook 'eglot-ensure)))
+
 (use-package flycheck-eglot
   :functions global-flycheck-eglot-mode
   :ensure t
