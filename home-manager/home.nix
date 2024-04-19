@@ -130,6 +130,7 @@ in
     (import ../nix/play-yt-script.nix)
     (import ../nix/play-yt-script-format.nix)
     (import ../nix/rofi-buku.nix)
+    (import ../nix/my-tts.nix)
     (import ../nix/trayer-padding-icon.nix { inherit stdenv; })
 
     cmatrix
@@ -139,7 +140,6 @@ in
     nixfmt
     libvterm
     libtool
-    # rdrview
 
     awscli
 
@@ -628,6 +628,16 @@ in
   home.file.".config/alacritty/dracula.toml".text = builtins.readFile(builtins.fetchurl {
     url = "https://raw.githubusercontent.com/dracula/alacritty/master/dracula.toml";
     sha256 = "e9de3a792548c8112168c1dd18b5651d1ebee2893975cda4ccd9c4c0430c87b8";
+  });
+
+  home.file."piper/models/en_US-lessac-high.onnx".source = builtins.fetchurl {
+    url = "https://huggingface.co/rhasspy/piper-voices/resolve/main/en/en_US/lessac/high/en_US-lessac-high.onnx?download=true";
+    sha256 = "4cabf7c3a638017137f34a1516522032d4fe3f38228a843cc9b764ddcbcd9e09";
+  };
+
+  home.file."piper/models/en_US-lessac-high.onnx.json".text = builtins.readFile(builtins.fetchurl {
+    url = "https://huggingface.co/rhasspy/piper-voices/raw/main/en/en_US/lessac/high/en_US-lessac-high.onnx.json";
+    sha256 = "0bs1j8d97v6bsvfp82h50a23kckz1scfvf312ny5gwjrk1yvjhnv";
   });
 
   home.sessionVariables = {
