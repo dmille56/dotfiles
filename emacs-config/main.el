@@ -1197,14 +1197,17 @@ Make sure to run \='ollama serve\=' and have zephyr model."
   (global-treesit-auto-mode)
   )
 
+;; :TODO: remove warning supression for eglot eventually
+(setq warning-suppress-log-types '((emacs :events-buffer-scrollback-size)))
+
 ;; Add-hooks for eglot
 (add-hook 'python-mode-hook 'eglot-ensure)
 (add-hook 'python-ts-mode-hook 'eglot-ensure)
 (add-hook 'yaml-mode-hook 'eglot-ensure)
-(add-hook 'nix-mode-hook 'eglot-ensure)
-(with-eval-after-load 'eglot
-  (defvar eglot-server-programs)
-  (add-to-list 'eglot-server-programs '(nix-mode . ("rnix-lsp"))))
+;; (add-hook 'nix-mode-hook 'eglot-ensure)
+;; (with-eval-after-load 'eglot
+;;   (defvar eglot-server-programs)
+;;   (add-to-list 'eglot-server-programs '(nix-mode . ("rnix-lsp"))))
 
 (use-package flycheck-eglot
   :functions global-flycheck-eglot-mode
