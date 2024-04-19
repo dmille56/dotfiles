@@ -1217,7 +1217,7 @@ Make sure to run \='ollama serve\=' and have zephyr model."
       (setq-default powershell-editor-services-log-path "~/bin/PowerShellEditorServices/logfile.log")
       (setq-default powershell-editor-services-command "~/bin/PowerShellEditorServices/PowerShellEditorServices/Start-EditorServices.ps1")
       (add-to-list 'eglot-server-programs
-                   '(powershell-ts-mode . ("pwsh" "-NoLogo" "-NoProfile" "-NonInteractive" "-Command" ,powershell-editor-services-command
+                   `(powershell-ts-mode . ("pwsh" "-NoLogo" "-NoProfile" "-NonInteractive" "-Command" ,powershell-editor-services-command
                                            "-HostName" "Emacs"
                                            "-HostVersion" "1.0.0"
                                            "-HostProfileId" "emacs"
