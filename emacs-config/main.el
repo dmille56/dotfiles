@@ -1211,17 +1211,21 @@ Make sure to run \='ollama serve\=' and have zephyr model."
 ;;   (defvar eglot-server-programs)
 ;;   (add-to-list 'eglot-server-programs '(nix-mode . ("rnix-lsp"))))
 
+;; :TODO: make elgot with with powershell correctly
 (if (eq my/config-machine 'work)
     (progn
       (require 'eglot)
-      (setq-default powershell-editor-services-log-path "~/bin/PowerShellEditorServices/logfile.log")
-      (setq-default powershell-editor-services-command "~/bin/PowerShellEditorServices/PowerShellEditorServices/Start-EditorServices.ps1")
+      (setq-default powershell-editor-services-bundled-modules-path "~/bin/PowerShellEditorServices")
+      (setq-default powershell-editor-services-log-path (concat powershell-editor-services-bundled-modules-path "/logs"))
+      (setq-default powershell-editor-services-command (concat powershell-editor-services-bundled-modules-path "/PowerShellEditorServices/Start-EditorServices.ps1"))
       (add-to-list 'eglot-server-programs
                    `(powershell-ts-mode . ("pwsh" "-NoLogo" "-NoProfile" "-NonInteractive" "-Command" ,powershell-editor-services-command
+                                           "-BundledModulesPath" ,powershell-editor-services-bundled-modules-path
+                                           "-FeatureFlags @()"
+                                           "-AdditionalModules @()"
                                            "-HostName" "Emacs"
                                            "-HostVersion" "1.0.0"
                                            "-HostProfileId" "emacs"
-                                           "-HostId" "emacs"
                                            "-Stdio"
                                            "-LogPath" ,powershell-editor-services-log-path
                                            "-LogLevel" "Normal")))
