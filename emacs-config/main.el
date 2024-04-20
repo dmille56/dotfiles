@@ -565,7 +565,12 @@
 
 (use-package helm-lsp :commands helm-lsp-workspace-symbol :defer)
 (use-package lsp-treemacs :commands lsp-treemacs-errors-list :defer)
-(use-package yasnippet :defer)
+
+(use-package yasnippet
+  :init
+  (yas-global-mode 1))
+
+(use-package yasnippet-snippets :after yasnippet)
 
 ;; For C#
 (use-package csproj-mode :defer)
