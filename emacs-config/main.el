@@ -1197,12 +1197,9 @@ Make sure to run \='ollama serve\=' and have zephyr model."
   (global-treesit-auto-mode)
   )
 
-;; :TODO: remove warning supression for eglot eventually
-;; (setq warning-suppress-log-types '((emacs :events-buffer-scrollback-size)))
-(setq warning-suppress-types '((emacs events-buffer-scrollback-size)
-                               (bytecomp buffer-substring)))
-
-;; ⛔ Warning (emacs): ‘:events-buffer-scrollback-size’ deprecated. Use ‘events-buffer-config’.
+;; :TODO: remove warning supression for eglot/bytecomp eventually
+(setq warning-suppress-types '((emacs)
+                               (bytecomp)))
 
 ;; Add-hooks for eglot
 (add-hook 'python-mode-hook 'eglot-ensure)
