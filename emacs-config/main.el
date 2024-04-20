@@ -1198,8 +1198,7 @@ Make sure to run \='ollama serve\=' and have zephyr model."
   )
 
 ;; :TODO: remove warning supression for eglot/bytecomp eventually
-(setq warning-suppress-types '((emacs)
-                               (bytecomp)))
+(setq warning-suppress-type '((deprecated)))
 
 ;; Add-hooks for eglot
 (add-hook 'python-mode-hook 'eglot-ensure)
