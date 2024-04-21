@@ -1,3 +1,7 @@
+;;; linux-specific --- linux specfic emacs config
+;;; Commentary:
+;;; Code:
+
 (use-package w3m :defer)
 (use-package vterm :defer)
 
@@ -11,6 +15,15 @@
                                  "~/Dropbox/org/notes.org")))
 
 (use-package direnv
+ :functions direnv-mode
  :defer
  :init
  (direnv-mode))
+
+;; configure text to speech (tts)
+(with-eval-after-load 'read-aloud
+  (plist-put read-aloud-engines "my-tts" '(cmd "my-tts" args nil))
+  (setq-default read-aloud-engine "my-tts"))
+
+(provide 'linux-specific)
+;;; linux-specific.el ends here

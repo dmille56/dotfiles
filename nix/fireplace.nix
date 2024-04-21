@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     # sha256 = lib.fakeSha256;
   };
 
-  buildInputs = [ ncurses5 ];  # Add dependencies needed for building, if any
+  buildInputs = [ ncurses5 ];
 
   buildPhase = ''
     make all
@@ -25,6 +25,6 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A cozy fireplace in your terminal";
     homepage = "https://github.com/Wyatt915/fireplace";
-    license = lib.licenses.mit;  # Change the license accordingly
+    license = lib.licenses.mit;
   };
 }

@@ -136,6 +136,7 @@
     ("r" "recent" helm-recentf)
     ("R" "query replace regex" query-replace-regexp)
     ("a" "agenda" org-agenda)
+    ("A" "read aloud" my/transient-read-aloud)
     ("j" "treesit-jump" treesit-jump-transient)
     ("l" "git-link" my/transient-git-link)
     ("Ll" "leetcode" leetcode)
@@ -305,6 +306,14 @@
    ("ci" "create issue" forge-create-issue)
    ("cI" "create pull request from issue" forge-create-pullreq-from-issue)
    ("b" "browse" forge-browse)])
+
+(transient-define-prefix my/transient-read-aloud ()
+  "Transient for read aloud."
+  ["Read Aloud"
+   ("b" "read buffer" read-aloud-buf)
+   ("t" "read this" read-aloud-this)
+   ("c" "change engine" read-aloud-change-engine)
+   ("s" "stop" read-aloud-stop)])
 
 (use-package evil-leader
   :defines (evil-leader/in-all-states)
