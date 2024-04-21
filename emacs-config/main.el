@@ -1217,23 +1217,24 @@ Make sure to run \='ollama serve\=' and have zephyr model."
 
 ;; :TODO: make elgot with with powershell correctly
 (if (eq my/config-machine 'work)
-    (progn
-      (require 'eglot)
       (setq-default powershell-editor-services-bundled-modules-path "~/bin/PowerShellEditorServices")
-      (setq-default powershell-editor-services-log-path (concat powershell-editor-services-bundled-modules-path "/logs"))
-      (setq-default powershell-editor-services-command (concat powershell-editor-services-bundled-modules-path "/PowerShellEditorServices/Start-EditorServices.ps1"))
-      (add-to-list 'eglot-server-programs
-                   `(powershell-ts-mode . ("pwsh" "-NoLogo" "-NoProfile" "-NonInteractive" "-Command" ,powershell-editor-services-command
-                                           "-BundledModulesPath" ,powershell-editor-services-bundled-modules-path
-                                           "-FeatureFlags @()"
-                                           "-AdditionalModules @()"
-                                           "-HostName" "Emacs"
-                                           "-HostVersion" "1.0.0"
-                                           "-HostProfileId" "emacs"
-                                           "-Stdio"
-                                           "-LogPath" ,powershell-editor-services-log-path
-                                           "-LogLevel" "Normal")))
-      (add-hook 'powershell-ts-mode-hook 'eglot-ensure)))
+  (setq-default powershell-editor-services-bundled-modules-path "~/.PowershellEditorServices"))
+
+(require 'eglot)
+(setq-default powershell-editor-services-log-path (concat powershell-editor-services-bundled-modules-path "/logs"))
+(setq-default powershell-editor-services-command (concat powershell-editor-services-bundled-modules-path "/PowerShellEditorServices/Start-EditorServices.ps1"))
+(add-to-list 'eglot-server-programs
+            `(powershell-ts-mode . ("pwsh" "-NoLogo" "-NoProfile" "-NonInteractive" "-Command" ,powershell-editor-services-command
+                                    "-BundledModulesPath" ,powershell-editor-services-bundled-modules-path
+                                    "-FeatureFlags @()"
+                                    "-AdditionalModules @()"
+                                    "-HostName" "Emacs"
+                                    "-HostVersion" "1.0.0"
+                                    "-HostProfileId" "emacs"
+                                    "-Stdio"
+                                    "-LogPath" ,powershell-editor-services-log-path
+                                    "-LogLevel" "Normal")))
+(add-hook 'powershell-ts-mode-hook 'eglot-ensure)
 
 (use-package flycheck-eglot
   :functions global-flycheck-eglot-mode
