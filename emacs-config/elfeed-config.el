@@ -9,18 +9,18 @@
 (setq-default elfeed-feeds-blogs
       '(
         ("https://stratechery.com/feed" blog tech)
-        ("http://www.paulgraham.com/rss.html" blog) ;; Paul Graham (Ycombinator founder)
+        ;; ("http://www.paulgraham.com/rss.html" blog) ;; Paul Graham (Ycombinator founder)
         ("https://www.overcomingbias.com/feed" blog) ;; Robin Hanson (economist)
         ("https://betonit.substack.com/feed" blog) ;; Bryan Caplan (economist)
         ("https://astralcodexten.substack.com/feed" blog) ;; Scott Alexander
         ("https://daviddfriedman.substack.com/feed" blog) ;; David Friedman (economist)
-        ("http://feeds.feedburner.com/MeltingAsphalt" blog) ;; Kevin Simler (Elephant in the Brain)
+        ;; ("http://feeds.feedburner.com/MeltingAsphalt" blog) ;; Kevin Simler (Elephant in the Brain)
         ("https://graymirror.substack.com/feed" blog) ;; Curtis Yarvin
         ))
 
 (setq-default elfeed-feeds-yt
       '(
-        ("https://www.youtube.com/feeds/videos.xml?channel_id=UCfQgsKhHjSyRLOp9mnffqVg" yt fitness) ;; Renaissance Periodization
+        ;; ("https://www.youtube.com/feeds/videos.xml?channel_id=UCfQgsKhHjSyRLOp9mnffqVg" yt fitness) ;; Renaissance Periodization
 	("https://www.youtube.com/feeds/videos.xml?channel_id=UCkZjTZNvuxq1CYMS3cwZa1Q" yt i) ;; Huberman Lab Clips
 	("https://www.youtube.com/feeds/videos.xml?playlist_id=PLkL7BvJXiqSTWYYJtqjo-cKEcHd9g4g5J" yt i) ;; Chris Williamson Clips
 	;; ("https://www.youtube.com/feeds/videos.xml?channel_id=UCV_zy48AlwwGpdJEka1ay7w" yt fitness) ;; Garage Gym Reviews
@@ -28,14 +28,14 @@
         ;; ("https://www.youtube.com/feeds/videos.xml?channel_id=UCFGCfbYPyFpITa0mbwbTmhA" yt fitness i) ;; Kaizen DIY Gym
 	("https://www.youtube.com/feeds/videos.xml?channel_id=UCzN7S0O87X-Q1CJqyWnJ9mw" yt i)
         ("https://www.youtube.com/feeds/videso.xml?channel_id=UCsEPI9OwGEw5Lm0E7Paq62g" yt i)
-        ("https://www.youtube.com/feeds/videos.xml?channel_id=UCl8hzdP5wVlhuzNG3WCJa1w" yt nba nuggets sports) ;; Denver Nuggets yt channel
-        ("https://www.youtube.com/feeds/videos.xml?channel_id=UCDfVqMBTxstChZ5YVrrXPPQ" yt nba nuggets sports) ;; Locked on Nuggets
-        ("https://www.youtube.com/feeds/videos.xml?channel_id=UCew5br5cO1ZKO7Z_F1WA8Bg" yt nfl broncos sports) ;; That's Good Sports
+        ;; ("https://www.youtube.com/feeds/videos.xml?channel_id=UCl8hzdP5wVlhuzNG3WCJa1w" yt nba nuggets sports) ;; Denver Nuggets yt channel
+        ;; ("https://www.youtube.com/feeds/videos.xml?channel_id=UCDfVqMBTxstChZ5YVrrXPPQ" yt nba nuggets sports) ;; Locked on Nuggets
+        ;; ("https://www.youtube.com/feeds/videos.xml?channel_id=UCew5br5cO1ZKO7Z_F1WA8Bg" yt nfl broncos sports) ;; That's Good Sports
         ("https://www.youtube.com/feeds/videos.xml?channel_id=UCsy9I56PY3IngCf_VGjunMQ" yt) ;; Peter Zeihan
-        ("https://www.youtube.com/feeds/videos.xml?channel_id=UCkh_BQ1i34Y0Ij7QxCRwzrw" yt) ;; Boyscast Clips
+        ;; ("https://www.youtube.com/feeds/videos.xml?channel_id=UCkh_BQ1i34Y0Ij7QxCRwzrw" yt) ;; Boyscast Clips
         ("https://www.youtube.com/feeds/videos.xml?channel_id=UCSduXBjCHkLoo_y9ss2xzXw" yt) ;; PsycHacks
-        ("https://www.youtube.com/feeds/videos.xml?channel_id=UCVls1GmFKf6WlTraIb_IaJg" yt emacs linux) ;; DistroTube (linux/emacs tips)
-        ("https://www.youtube.com/feeds/videos.xml?channel_id=UCCRdRbI93UGW0AZttVH3SbA" yt emacs) ;; Gopar (emacs tips)
+        ;; ("https://www.youtube.com/feeds/videos.xml?channel_id=UCVls1GmFKf6WlTraIb_IaJg" yt emacs linux) ;; DistroTube (linux/emacs tips)
+        ;; ("https://www.youtube.com/feeds/videos.xml?channel_id=UCCRdRbI93UGW0AZttVH3SbA" yt emacs) ;; Gopar (emacs tips)
         ))
 
 (setq-default elfeed-feeds-podcasts
@@ -49,8 +49,8 @@
         ;; ("https://news.ycombinator.com/rss" hn hacker-news)
         ("https://hnrss.org/frontpage?points=50&comments=20" hn hacker-news)
         ;; ("https://www.reddit.com/r/haskell.rss" r programming haskell)
-        ("https://www.reddit.com/r/Vitruvian_Form.rss" r fitness)
-        ("https://ihrss.io/top/month" indiehackers)
+        ;; ("https://www.reddit.com/r/Vitruvian_Form.rss" r fitness)
+        ;; ("https://ihrss.io/top/month" indiehackers)
         ))
 
 (setq-default elfeed-all-the-feeds

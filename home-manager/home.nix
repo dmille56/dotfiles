@@ -132,6 +132,7 @@ in
     (import ../nix/rofi-buku.nix)
     (import ../nix/my-tts.nix)
     (import ../nix/trayer-padding-icon.nix { inherit stdenv; })
+    (import ../nix/fireplace.nix { inherit lib stdenv fetchgit ncurses5; })
 
     cmatrix
     snowmachine
@@ -200,6 +201,7 @@ in
     keepassxc
     spotify
     spotify-player
+    blanket
 
     vscode
     blueman
