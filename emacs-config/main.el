@@ -953,12 +953,7 @@
   (add-hook 'magit-pre-refresh-hook 'diff-hl-magit-pre-refresh)
   (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh))
 
-(use-package read-aloud
-  :defer
-  :init
-  (global-set-key (kbd "C-C r p") 'read-aloud-buf)
-  (global-set-key (kbd "C-C r s") 'read-aloud-stop)
-  (global-set-key (kbd "C-C r t") 'read-aloud-this))
+(use-package read-aloud :defer)
 
 (use-package company)
 
