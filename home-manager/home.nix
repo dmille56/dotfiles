@@ -640,6 +640,12 @@ in
     sha256 = "0bs1j8d97v6bsvfp82h50a23kckz1scfvf312ny5gwjrk1yvjhnv";
   });
 
+  home.file.".PowershellEditorServices".source = pkgs.fetchzip {
+    url = "https://github.com/PowerShell/PowerShellEditorServices/releases/download/v3.20.0/PowerShellEditorServices.zip";
+    sha256 = "XzyspX6U9FWglDA8VIZE4JamGsFvARQX7iCcQ/blbUE=";
+    stripRoot = false;
+  };
+
   home.sessionVariables = {
     OPENAI_API_KEY = builtins.readFile "${my-dotfile-dir}/.openai_api_key";
     # OPENAI_API_KEY = builtins.extraBuiltins.pass "OPENAI_API_KEY"; #try to get working via: https://elvishjerricco.github.io/2018/06/24/secure-declarative-key-management.html
