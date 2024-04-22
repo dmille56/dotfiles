@@ -1221,12 +1221,12 @@ Make sure to run \='ollama serve\=' and have zephyr model."
 
 ;; :TODO: make elgot with with powershell correctly
 (if (eq my/config-machine 'work)
-      (setq-default powershell-editor-services-bundled-modules-path "~/bin/PowerShellEditorServices")
-  (setq-default powershell-editor-services-bundled-modules-path "~/.PowershellEditorServices"))
+    (setq-default powershell-editor-services-bundled-modules-path (expand-file-name "~/bin/PowerShellEditorServices"))
+  (setq-default powershell-editor-services-bundled-modules-path (expand-file-name "~/.PowershellEditorServices")))
 
 (require 'eglot)
-(setq-default powershell-editor-services-log-path (concat powershell-editor-services-bundled-modules-path "/logs"))
-(setq-default powershell-editor-services-command (concat powershell-editor-services-bundled-modules-path "/PowerShellEditorServices/Start-EditorServices.ps1"))
+(setq-default powershell-editor-services-log-path (expand-file-name (concat powershell-editor-services-bundled-modules-path "/logs")))
+(setq-default powershell-editor-services-command (expand-file-name (concat powershell-editor-services-bundled-modules-path "/PowerShellEditorServices/Start-EditorServices.ps1")))
 (add-to-list 'eglot-server-programs
             `(powershell-ts-mode . ("pwsh" "-NoLogo" "-NoProfile" "-NonInteractive" "-Command" ,powershell-editor-services-command
                                     "-BundledModulesPath" ,powershell-editor-services-bundled-modules-path
