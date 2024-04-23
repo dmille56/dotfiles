@@ -333,8 +333,8 @@
    "e" 'projectile-command-map
    ;; "j" 'avy-goto-char
    "d" 'pop-global-mark ;; go back where you were before a jump with say... avy
-   "j" 'avy-goto-word-1
-   "f" 'avy-goto-line
+   "f" 'avy-goto-word-1
+   "j" 'avy-goto-line
    "E" 'my/transient-shell-run
    "c" 'compile
    "C" 'recompile
