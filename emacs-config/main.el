@@ -164,6 +164,7 @@
     ("d" "ddg search" ddg)
     ("D" "dired" dired)
     ("y" "tree" treemacs)
+    ("z" "zoxide" zoxide-find-file)
     ]
    ])
 
@@ -1207,7 +1208,7 @@ Make sure to run \='ollama serve\=' and have zephyr model."
   )
 
 ;; :TODO: remove warning supression for eglot/bytecomp eventually
-(setq warning-suppress-type '((deprecated)))
+(setq warning-suppress-types '((deprecated)))
 
 ;; Add-hooks for eglot
 (add-hook 'python-mode-hook 'eglot-ensure)
