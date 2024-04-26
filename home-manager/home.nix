@@ -413,12 +413,12 @@ in
     " <Leader>j{char} to move to {char}
     map  <Leader>J <Plug>(easymotion-bd-f)
     nmap <Leader>J <Plug>(easymotion-overwin-f)
-    map  <Leader>j <Plug>(easymotion-bd-f)
-    nmap <Leader>j <Plug>(easymotion-overwin-f)
+    map  <Leader>f <Plug>(easymotion-bd-f)
+    nmap <Leader>f <Plug>(easymotion-overwin-f)
 
     " Move to line
-    map <Leader>f <Plug>(easymotion-bd-jk)
-    nmap <Leader>f <Plug>(easymotion-overwin-line)
+    map <Leader>j <Plug>(easymotion-bd-jk)
+    nmap <Leader>j <Plug>(easymotion-overwin-line)
 
     " CTRL-Tab is next tab
     noremap <C-Tab> :<C-U>tabnext<CR>
