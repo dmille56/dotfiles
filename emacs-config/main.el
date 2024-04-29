@@ -473,6 +473,14 @@
   (define-key dired-mode-map (kbd "/") 'dired-narrow-fuzzy)
   (evil-define-key 'normal dired-mode-map ";" 'evil-ex))
 
+(use-package undo-tree
+  :ensure t
+  :after evil
+  :diminish
+  :config
+  (evil-set-undo-system 'undo-tree)
+  (global-undo-tree-mode 1))
+
 ;; install flycheck
 (use-package flycheck
   :functions global-flycheck-mode flycheck-add-next-checker
