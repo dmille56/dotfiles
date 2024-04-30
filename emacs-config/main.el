@@ -799,12 +799,15 @@
 ;;   ;; (with-eval-after-load 'org (global-org-modern-mode))
 ;;   )
 
+(use-package ob-powershell)
+
 (setq-default org-babel-python-command "python3")
 
 (eval-after-load "org"
   '(org-babel-do-load-languages
     'org-babel-load-languages
     '((python . t)
+      (powershell . t)
       (emacs-lisp . t))))
 
 (use-package org-present)
