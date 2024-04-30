@@ -49,7 +49,10 @@
 ;; run esup to benchmark startup code
 (use-package esup :defer)
 
-(use-package no-littering)
+(use-package no-littering
+  :functions no-littering-theme-backups
+  :config
+  (no-littering-theme-backups))
 
 (use-package auto-package-update
   :defines (auto-package-update-delete-old-versions auto-package-update-hide-results)
