@@ -799,6 +799,14 @@
 ;;   ;; (with-eval-after-load 'org (global-org-modern-mode))
 ;;   )
 
+(setq-default org-babel-python-command "python3")
+
+(eval-after-load "org"
+  '(org-babel-do-load-languages
+    'org-babel-load-languages
+    '((python . t)
+      (emacs-lisp . t))))
+
 (use-package org-present)
 
 (with-eval-after-load 'evil-maps
