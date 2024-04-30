@@ -49,6 +49,8 @@
 ;; run esup to benchmark startup code
 (use-package esup :defer)
 
+(use-package no-littering)
+
 (use-package auto-package-update
   :defines (auto-package-update-delete-old-versions auto-package-update-hide-results)
   :functions (auto-package-update-maybe)
@@ -1217,6 +1219,7 @@ Make sure to run \='ollama serve\=' and have zephyr model."
 
 ;; :TODO: remove warning supression for eglot/bytecomp eventually
 (setq warning-suppress-types '((deprecated)))
+(setq warning-suppress-log-types '((deprecated)))
 
 ;; Add-hooks for eglot
 (add-hook 'python-mode-hook 'eglot-ensure)
