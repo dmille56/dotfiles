@@ -478,6 +478,9 @@
   (define-key dired-mode-map (kbd "/") 'dired-narrow-fuzzy)
   (evil-define-key 'normal dired-mode-map ";" 'evil-ex))
 
+(eval-after-load "dired-aux"
+  '(add-to-list 'dired-compress-file-suffixes '("\\.nupkg\\'" ".nupkg" "unzip -o -d %o %i")))
+
 (use-package undo-tree
   :ensure t
   :after evil
