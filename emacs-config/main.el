@@ -478,8 +478,16 @@
   (define-key dired-mode-map (kbd "/") 'dired-narrow-fuzzy)
   (evil-define-key 'normal dired-mode-map ";" 'evil-ex))
 
+(defun uncompress-nupkg (file)
+  "Uncompress a nupkg file."
+  (let ((default-directory (file-name-directory file)))
+    (shell-command (concat "unzip -d " 
+                           (shell-quote-argument (file-name-sans-extension file)) 
+                           " " 
+                           (shell-quote-argument file)))))
+
 (eval-after-load "dired-aux"
-  '(add-to-list 'dired-compress-file-suffixes '("\\.nupkg\\'" ".nupkg" "unzip -o -d %o %i")))
+  '(add-to-list 'dired-compress-file-suffixes '("\\.nupkg\\'" ".nupkg" dired-uncompress-nupkg)))
 
 (use-package undo-tree
   :ensure t
