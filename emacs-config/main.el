@@ -465,6 +465,9 @@
   (define-key evil-outer-text-objects-map ";" (evil-textobj-tree-sitter-get-textobj "comment.outer"))
   (define-key evil-inner-text-objects-map ";" (evil-textobj-tree-sitter-get-textobj "comment.inner"))
 
+  (define-key evil-outer-text-objects-map "p" (evil-textobj-tree-sitter-get-textobj "parameter.outer"))
+  (define-key evil-inner-text-objects-map "p" (evil-textobj-tree-sitter-get-textobj "parameter.inner"))
+
   (define-key evil-outer-text-objects-map "c" (evil-textobj-tree-sitter-get-textobj "class.outer"))
   (define-key evil-inner-text-objects-map "c" (evil-textobj-tree-sitter-get-textobj "class.inner")))
 
