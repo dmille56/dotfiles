@@ -1336,37 +1336,26 @@ Make sure to run \='ollama serve\=' and have zephyr model."
 (defvar powershell-ts-mode-path "~/Desktop/prog/powershell-ts-mode/")
 (defvar ufo-catcher-path "~/Desktop/prog/ufo-catcher/")
 
-(use-package ufo-catcher
-  :load-path ufo-catcher-path
-  :if (file-directory-p ufo-catcher-path))
+(if (file-directory-p ufo-catcher-path)
+    (use-package ufo-catcher :load-path ufo-catcher-path)
+  (use-package ufo-catcher :straight (:host github :repo "dmille56/ufo-catcher")))
 
-(use-package ufo-catcher
-  :straight (:host github :repo "dmille56/ufo-catcher")
-  :if (not (file-directory-p ufo-catcher-path)))
+(if (file-directory-p treesit-jump-path)
+    (use-package treesit-jump
+      :after treesit
+      :load-path treesit-jump-path)
+  (use-package treesit-jump
+    :after treesit
+    :straight (:host github :repo "dmille56/treesit-jump" :files ("*.el" "treesit-queries"))))
 
-(use-package treesit-jump
-  :after treesit
-  :load-path treesit-jump-path
-  :if (file-directory-p treesit-jump-path))
-
-(use-package treesit-jump
-  :after treesit
-  :straight (:host github :repo "dmille56/treesit-jump" :files ("*.el" "treesit-queries"))
-  :if (not (file-directory-p treesit-jump-path)))
-
-;;(global-set-key (kbd "<f9>") 'treesit-jump-jump)
 (global-set-key (kbd "<f9>") 'treesit-jump-transient)
 (setq-default treesit-jump-queries-filter-list '("inner" "test" "param"))
 ;; (add-to-list 'treesit-jump-queries-extra-alist (cons 'powershell-ts-mode '("(flow_control_statement (_)) @flow")))
 ;; (add-to-list 'treesit-jump-queries-extra-alist (cons 'python-ts-mode '("(return_statement (_)) @return")))
 
-(use-package powershell-ts-mode
-  :load-path powershell-ts-mode-path
-  :if (file-directory-p powershell-ts-mode-path))
-
-(use-package powershell-ts-mode
-  :straight (:host github :repo "dmille56/powershell-ts-mode")
-  :if (not (file-directory-p powershell-ts-mode-path)))
+(if (file-directory-p powershell-ts-mode-path)
+    (use-package powershell-ts-mode :load-path powershell-ts-mode-path)
+  (use-package powershell-ts-mode :straight (:host github :repo "dmille56/powershell-ts-mode")))
 
 (setq-default powershell-ts-enable-imenu-top-level-vars nil)
 
