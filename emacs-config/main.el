@@ -799,7 +799,10 @@
 ;;   ;; (with-eval-after-load 'org (global-org-modern-mode))
 ;;   )
 
-(use-package ob-powershell)
+(use-package ob-powershell
+  :defines ob-powershell-powershell-command
+  :init
+  (setq ob-powershell-powershell-command "pwsh"))
 
 (setq-default org-babel-python-command "python3")
 
