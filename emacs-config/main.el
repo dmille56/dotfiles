@@ -478,7 +478,7 @@
   (define-key dired-mode-map (kbd "/") 'dired-narrow-fuzzy)
   (evil-define-key 'normal dired-mode-map ";" 'evil-ex))
 
-(defun uncompress-nupkg (file)
+(defun dired-uncompress-nupkg (file)
   "Uncompress a nupkg file."
   (let ((default-directory (file-name-directory file)))
     (shell-command (concat "unzip -d " 
