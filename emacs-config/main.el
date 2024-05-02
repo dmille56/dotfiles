@@ -354,7 +354,7 @@
    "A" 'link-hint-copy-link
    "M" 'my/transient-emms
    "m" 'my/transient-evil-macros
-   "O" 'my/transient-org-roam
+   "w" 'my/transient-org-roam
 
    ;; window management
    "o" 'other-window
