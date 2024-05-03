@@ -1431,8 +1431,10 @@ Make sure to run \='ollama serve\=' and have zephyr model."
   (defalias 'browse-web #'eaf-open-browser)
   ;; (eaf-bind-key scroll_up "C-n" eaf-pdf-viewer-keybinding)
   ;; (eaf-bind-key scroll_down "C-p" eaf-pdf-viewer-keybinding)
-  (eaf-bind-key evil-ex ";" eaf-browser-keybinding)
-  (eaf-bind-key ddg-eaf "s" eaf-browser-keybinding)
+
+  ;; :TODO: figure out how to get ; and s to work in insert mode
+  ;; (eaf-bind-key evil-ex ";" eaf-browser-keybinding)
+  ;; (eaf-bind-key ddg-eaf "s" eaf-browser-keybinding)
   (eaf-bind-key insert_or_open_browser "C-o" eaf-browser-keybinding)
   (eaf-bind-key insert_or_edit_url "C-l" eaf-browser-keybinding)
   (eaf-bind-key insert_or_open_link "a" eaf-browser-keybinding)
