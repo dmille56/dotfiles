@@ -147,6 +147,7 @@
     ("Ll" "leetcode" leetcode)
     ("Ld" "leetcode daily" leetcode-daily)
     ("e" "eaf" my/transient-eaf)
+    ("A" "casual avy" casual-avy-tmenu)
     ("E" "revert buffer" revert-buffer)]
    ["Ai"
     ("g" "chatgpt" chatgpt-shell)
@@ -1461,6 +1462,8 @@ Make sure to run \='ollama serve\=' and have zephyr model."
   (magit-gptcommit-status-buffer-setup)
   :bind (:map git-commit-mode-map
               ("C-c C-g" . magit-gptcommit-commit-accept)))
+
+(use-package casual-avy)
 
 (use-package zone-matrix
   :defer
