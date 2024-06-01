@@ -68,7 +68,7 @@ in
     curl
     git
     ((emacsPackagesFor emacs-gtk).emacsWithPackages
-      (epkgs: [ epkgs.vterm epkgs.w3m ]))
+      (epkgs: [ epkgs.vterm epkgs.w3m epkgs.jinx ]))
     eask #emacs eask
     emacs-all-the-icons-fonts
     nerdfonts

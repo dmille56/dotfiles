@@ -9,7 +9,7 @@
 
 ;; Some same defaults to start:
 
-;; disable toolbar, scrollbars, & menubar
+;; disable toolbar, scroll-bars, & menu-bar
 (if (require 'tool-bar nil 'noerror) (tool-bar-mode -1))
 (if (require 'scroll-bar nil 'noerror) (scroll-bar-mode -1))
 (menu-bar-mode -1)
@@ -148,6 +148,7 @@
     ("Ld" "leetcode daily" leetcode-daily)
     ("e" "eaf" my/transient-eaf)
     ("A" "casual avy" casual-avy-tmenu)
+    ("C" "jinx" my/transient-jinx)
     ("E" "revert buffer" revert-buffer)]
    ["Ai"
     ("g" "chatgpt" chatgpt-shell)
@@ -188,6 +189,12 @@
    ("g" "link" git-link)
    ("c" "commit" git-link-commit)
    ("h" "homepage" git-link-homepage)])
+
+(transient-define-prefix my/transient-jinx ()
+  "Transient for jinx."
+  ["Jinx"
+   ("c" "jinx-correct" jinx-correct)
+   ("a" "jinx-correct-all" jinx-correct-all)])
 
 (transient-define-prefix my/transient-game ()
   "Transient for selecting a game."
@@ -620,7 +627,7 @@
 ;; use f6 to move to the next window
 (global-set-key (kbd "<f6>") 'other-window)
 
-;; install maggit
+;; install magit
 (use-package magit
   :defines forge-add-default-bindings magit-pull-or-fetch
   :defer
@@ -1464,6 +1471,11 @@ Make sure to run \='ollama serve\=' and have zephyr model."
               ("C-c C-g" . magit-gptcommit-commit-accept)))
 
 (use-package casual-avy)
+
+(use-package jinx
+  ;; requires the following library to be installed: https://github.com/AbiWord/enchant
+  :config
+  (add-hook 'emacs-startup-hook #'global-jinx-mode))
 
 (use-package zone-matrix
   :defer
