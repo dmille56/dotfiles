@@ -1472,11 +1472,6 @@ Make sure to run \='ollama serve\=' and have zephyr model."
 
 (use-package casual-avy)
 
-(use-package jinx
-  ;; requires the following library to be installed: https://github.com/AbiWord/enchant
-  :config
-  (add-hook 'emacs-startup-hook #'global-jinx-mode))
-
 (use-package zone-matrix
   :defer
   :straight (:host github :repo "dmille56/zone-matrix"))
