@@ -171,6 +171,7 @@
     ("d" "ddg search" ddg)
     ("D" "dired" dired)
     ("y" "tree" treemacs)
+    ("Y" "imenu-list toggle" imenu-list-smart-toggle)
     ("z" "zoxide" zoxide-find-file)
     ]
    ])
@@ -241,6 +242,7 @@
    ("t" "todo" org-todo)
    ("T" "set tags" org-set-tags-command)
    ("e" "org export" org-export-dispatch)
+   ("n" "org narrow toggle" org-toggle-narrow-to-subtree)
    ("b" "checkbox" org-toggle-checkbox)])
 
 (transient-define-prefix my/transient-python-mode ()
@@ -1471,6 +1473,13 @@ Make sure to run \='ollama serve\=' and have zephyr model."
               ("C-c C-g" . magit-gptcommit-commit-accept)))
 
 (use-package casual-avy)
+
+(use-package imenu-list
+  :bind
+  ("C-c i" . 'imenu-list-smart-toggle)
+  :custom
+  (imenu-list-focus-after-activation t)
+  (imenu-list-auto-resize t))
 
 (use-package zone-matrix
   :defer
