@@ -5,10 +5,11 @@
 (use-package w3m :defer)
 (use-package vterm :defer)
 
-(use-package jinx
-  ;; requires the following library to be installed: https://github.com/AbiWord/enchant
-  :config
-  (add-hook 'emacs-startup-hook #'global-jinx-mode))
+;; :TODO: figure out how to get jinx working with nix
+;; (use-package jinx
+;;   ;; requires the following library to be installed: https://github.com/AbiWord/enchant
+;;   :config
+;;   (add-hook 'emacs-startup-hook #'global-jinx-mode))
 
 ;; uncomment this to go back to using firefox instead of eaf-browser
 ;; (setq browse-url-browser-function 'browse-url-generic)
