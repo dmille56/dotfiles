@@ -720,6 +720,27 @@
 
 ;;(use-package yaml-pro :defer)
 
+(use-package outline-yaml
+  :ensure t
+  :straight (outline-yaml
+             :type git
+             :host github
+             :repo "jamescherti/outline-yaml.el")
+  :hook
+  ((yaml-mode . outline-yaml-minor-mode)
+   (yaml-ts-mode . outline-yaml-minor-mode)))
+
+(defun my-outline-set-global-ellipsis (ellipsis)
+  "Apply the ellipsis ELLIPSIS to outline mode globally."
+  (let* ((face-offset (* (face-id 'shadow) (ash 1 22)))
+         (value (vconcat (mapcar (lambda (c) (+ face-offset c)) ellipsis))))
+    (set-display-table-slot standard-display-table 'selective-display value)))
+
+(my-outline-set-global-ellipsis " ▼ ")
+
+;; Add to default to horizontal not vertical splits (who likes vertical splits anyways?)
+(setq split-height-threshold 999)
+
 ;; install/setup emms
 (use-package emms
   :defines (emms-playlist-mode-map emms-player-list emms-source-file-default-directory emms-stream-default-action)
