@@ -172,9 +172,17 @@
     ("D" "dired" dired)
     ("y" "tree" treemacs)
     ("Y" "imenu-list toggle" imenu-list-smart-toggle)
+    ("W" "ediff" my/transient-ediff)
     ("z" "zoxide" zoxide-find-file)
     ]
    ])
+
+(transient-define-prefix my/transient-ediff ()
+  "Transient for ediff."
+  ["Ediff"
+   ("e" "ediff" ediff)
+   ("w" "ediff wordwise" ediff-regions-wordwise)
+   ("l" "ediff linewise" ediff-regions-linewise)])
 
 (transient-define-prefix my/transient-eaf ()
   "Transient for eaf."
