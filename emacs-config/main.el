@@ -1057,8 +1057,10 @@
 ;; (use-package dashboard-hackernews)
 
 (use-package golden-ratio
+  :defines golden-ratio-exclude-modes
   :functions golden-ratio-mode
   :init
+  (setq golden-ratio-exclude-modes '("ediff-mode"))
   (golden-ratio-mode 1))
 
 ;; (use-package solaire-mode
