@@ -1069,7 +1069,7 @@
 
 (use-package spacious-padding
   ;; reenable hook when the bug gets fixed...
-  ;; :hook (emacs-startup . spacious-padding-mode) ;; prevents bug (where there's a white line between frames) by having it init at emacs-startup instead of after-init (which runs before emacs-startup)
+  :hook (emacs-startup . spacious-padding-mode) ;; prevents bug (where there's a white line between frames) by having it init at emacs-startup instead of after-init (which runs before emacs-startup)
   )
 
 (defface svg-tag-todo-face
