@@ -1159,6 +1159,9 @@ Make sure to run \='ollama serve\=' and have zephyr model."
   :ensure t
   :bind (("C-M-\\" . copilot-accept-completion)))
 
+(use-package copilot-chat
+  :straight (:host github :repo "chep/copilot-chat.el" :files ("*.el")))
+
 (use-package dumb-jump
   :straight (:host github :repo "dmille56/dumb-jump" :files ("dumb-jump.el"))
   :config
