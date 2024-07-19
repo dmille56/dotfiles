@@ -142,7 +142,7 @@
     ("R" "query replace regex" query-replace-regexp)
     ("a" "agenda" org-agenda)
     ("A" "read aloud" my/transient-read-aloud)
-    ("j" "treesit-jump" treesit-jump-transient)
+    ;; ("j" "treesit-jump" treesit-jump-transient)
     ("l" "git-link" my/transient-git-link)
     ("Ll" "leetcode" leetcode)
     ("Ld" "leetcode daily" leetcode-daily)
