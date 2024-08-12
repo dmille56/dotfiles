@@ -711,6 +711,10 @@
 ;; (if (or (display-graphic-p) (daemonp))
 ;;     (load-theme 'dracula t))
 
+;; set mouse colors
+(set-face-attribute 'mouse nil :foreground (face-attribute 'default :foreground))
+(set-face-attribute 'mouse nil :background (face-attribute 'default :background))
+
 ;; install nix-mode
 (use-package nix-mode :mode "\\.nix\\'" :defer)
 
