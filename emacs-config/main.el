@@ -712,6 +712,7 @@
 ;;     (load-theme 'dracula t))
 
 ;; set mouse colors
+;; :TODO: make sure this works
 (set-face-attribute 'mouse nil :foreground (face-attribute 'default :foreground))
 (set-face-attribute 'mouse nil :background (face-attribute 'default :background))
 
