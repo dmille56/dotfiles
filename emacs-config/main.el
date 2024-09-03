@@ -501,6 +501,7 @@
 (with-eval-after-load 'dired
   (defvar dired-mode-map)
   (define-key dired-mode-map (kbd "/") 'dired-narrow-fuzzy)
+  (define-key dired-mode-map (kbd "C-l") 'dired-up-directory)
   (evil-define-key 'normal dired-mode-map ";" 'evil-ex))
 
 (eval-after-load "dired-aux"
