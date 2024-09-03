@@ -159,6 +159,7 @@
     ]
    ["Help"
     ("h" "emacs help" help-for-help)
+    ("H" "ddg search" ddg)
     ("." "clippy func" clippy-describe-function)
     (">" "clippy var" clippy-describe-variable)
     ]
@@ -168,7 +169,7 @@
     ("S" "typewriter toggle" selectric-mode)
     ("c" "calculator" calc)
     ("t" "ranger" ranger)
-    ("d" "ddg search" ddg)
+    ("d" "dired-jump" dired-jump)
     ("D" "dired" dired)
     ("y" "tree" treemacs)
     ("Y" "imenu-list toggle" imenu-list-smart-toggle)
