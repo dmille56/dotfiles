@@ -509,6 +509,17 @@
 (eval-after-load "dired-aux"
   '(add-to-list 'dired-compress-file-suffixes '("\\.nupkg\\'" "" "unzip -o -d %o %i")))
 
+(use-package casual-dired
+  :ensure t
+  :config
+  (evil-define-key 'normal dired-mode-map "o" 'casual-dired-tmenu)
+  (evil-define-key 'normal dired-mode-map "s" 'casual-dired-sort-by-tmenu)
+  (evil-define-key 'normal dired-mode-map "/" 'casual-dired-search-replace-tmenu)
+  :bind (:map dired-mode-map
+              ("C-o" . #'casual-dired-tmenu)
+              ("s" . #'casual-dired-sort-by-tmenu)
+              ("/" . #'casual-dired-search-replace-tmenu)))
+
 (use-package undo-tree
   :ensure t
   :after evil
