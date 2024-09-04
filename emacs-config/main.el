@@ -403,6 +403,8 @@
   ;; (evil-leader/set-key-for-mode 'lsp-mode "L" 'lsp-command-map)
   (evil-leader/set-key-for-mode 'lsp-mode "l" 'lsp-command-map)
   (evil-leader/set-key-for-mode 'emacs-lisp-mode "r" 'my/transient-elisp-mode)
+  (evil-leader/set-key-for-mode 'reb-mode "r" 'casual-re-builder-tmenu)
+  (evil-leader/set-key-for-mode 'reb-lisp-mode "r" 'casual-re-builder-tmenu)
   (evil-leader/set-key-for-mode 'lisp-interaction-mode "r" 'my/transient-elisp-mode)
   (evil-leader/set-key-for-mode 'eask-mode "r" 'my/transient-elisp-mode)
   (evil-leader/set-key-for-mode 'doc-view-mode "r" 'my/transient-doc-view-mode)
@@ -519,6 +521,16 @@
               ("C-o" . #'casual-dired-tmenu)
               ("s" . #'casual-dired-sort-by-tmenu)
               ("/" . #'casual-dired-search-replace-tmenu)))
+
+(use-package re-builder
+  :defer t)
+
+(use-package casual-re-builder
+  :bind (:map
+         reb-mode-map ("C-o" . casual-re-builder-tmenu)
+         :map
+         reb-lisp-mode-map ("C-o" . casual-re-builder-tmenu))
+  :after (re-builder))
 
 (use-package undo-tree
   :ensure t
@@ -1088,7 +1100,7 @@
   :defines golden-ratio-exclude-modes
   :functions golden-ratio-mode
   :init
-  (setq golden-ratio-exclude-modes '("ediff-mode"))
+  (setq golden-ratio-exclude-modes '("ediff-mode" "reb-mode" "reb-lisp-mode"))
   (golden-ratio-mode 1))
 
 ;; (use-package solaire-mode
