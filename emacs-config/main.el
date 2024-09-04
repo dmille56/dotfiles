@@ -45,6 +45,7 @@
 (package-install 'use-package)
 (require 'use-package)
 (setq use-package-always-ensure t)
+(setq package-install-upgrade-built-in t)
 
 ;; run esup to benchmark startup code
 (use-package esup :defer)
@@ -140,14 +141,15 @@
     ("w" "elfeed" elfeed)
     ("r" "recent" helm-recentf)
     ("R" "query replace regex" query-replace-regexp)
-    ("a" "agenda" org-agenda)
+    ;; ("a" "agenda" org-agenda)
+    ("a" "casual agenda" casual-agenda-tmenu)
     ("A" "read aloud" my/transient-read-aloud)
     ("j" "treesit-jump" treesit-jump-transient)
     ("l" "git-link" my/transient-git-link)
     ("Ll" "leetcode" leetcode)
     ("Ld" "leetcode daily" leetcode-daily)
     ("e" "eaf" my/transient-eaf)
-    ("A" "casual avy" casual-avy-tmenu)
+    ;; ("A" "casual avy" casual-avy-tmenu)
     ("C" "jinx" my/transient-jinx)
     ("E" "revert buffer" revert-buffer)]
    ["Ai"
@@ -848,6 +850,14 @@
 (setq-default org-agenda-span 14
               org-agenda-start-on-weekday nil
               org-agenda-start-day "-3d")
+
+(use-package casual-agenda
+  ;; :ensure nil
+  :bind (:map
+         org-agenda-mode-map
+         ("C-o" . casual-agenda-tmenu)
+         ("M-j" . org-agenda-clock-goto) ; optional
+         ("J" . bookmark-jump))) ; optional
 
 ;; (use-package org-modern
 ;;   ;; :config
