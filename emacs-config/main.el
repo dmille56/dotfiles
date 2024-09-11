@@ -45,7 +45,7 @@
 (package-install 'use-package)
 (require 'use-package)
 (setq use-package-always-ensure t)
-(setq package-install-upgrade-built-in t)
+;; (setq package-install-upgrade-built-in t)
 
 ;; run esup to benchmark startup code
 (use-package esup :defer)
@@ -1529,21 +1529,21 @@ Make sure to run \='ollama serve\=' and have zephyr model."
   :init
   (setq gptel-api-key (lambda () (auth-source-pass-get 'secret "OPENAI_API_KEY"))))
 
-(use-package magit-gptcommit
-  :straight t
-  :after gptel magit
-  :config
-
-  ;; Enable magit-gptcommit-mode to watch staged changes and generate commit message automatically in magit status buffer
-  ;; This mode is optional, you can also use `magit-gptcommit-generate' to generate commit message manually
-  ;; `magit-gptcommit-generate' should only execute on magit status buffer currently
-  ;; (magit-gptcommit-mode 1)
-
-  ;; Add gptcommit transient commands to `magit-commit'
-  ;; Eval (transient-remove-suffix 'magit-commit '(1 -1)) to remove gptcommit transient commands
-  (magit-gptcommit-status-buffer-setup)
-  :bind (:map git-commit-mode-map
-              ("C-c C-g" . magit-gptcommit-commit-accept)))
+;; (use-package magit-gptcommit
+;;   :straight t
+;;   :after gptel magit
+;;   :config
+;; 
+;;   ;; Enable magit-gptcommit-mode to watch staged changes and generate commit message automatically in magit status buffer
+;;   ;; This mode is optional, you can also use `magit-gptcommit-generate' to generate commit message manually
+;;   ;; `magit-gptcommit-generate' should only execute on magit status buffer currently
+;;   ;; (magit-gptcommit-mode 1)
+;; 
+;;   ;; Add gptcommit transient commands to `magit-commit'
+;;   ;; Eval (transient-remove-suffix 'magit-commit '(1 -1)) to remove gptcommit transient commands
+;;   (magit-gptcommit-status-buffer-setup)
+;;   :bind (:map git-commit-mode-map
+;;               ("C-c C-g" . magit-gptcommit-commit-accept)))
 
 (use-package casual-avy)
 
