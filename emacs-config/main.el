@@ -369,6 +369,7 @@
    "X" 'my/transient-hl-todo
    ;; "l" 'run-lsp-command-map
    "g" 'magit
+   "G" 'ee-lazygit
    "F" 'my/transient-forge
    "v" 'helm-semantic-or-imenu
    "a" 'link-hint-open-link
@@ -1523,6 +1524,24 @@ Make sure to run \='ollama serve\=' and have zephyr model."
   (eaf-bind-key insert_or_edit_url "C-l" eaf-browser-keybinding)
   (eaf-bind-key insert_or_open_link "a" eaf-browser-keybinding)
   (eaf-bind-key nil "M-q" eaf-browser-keybinding)) ;; unbind, see more in the Wiki
+
+(use-package eee
+  ;; :load-path "~/Projects/github.com/eval-exec/eee.el/"
+  ;; :straight (:host github :repo "eval-exec/eee.el")
+  :straight (:host github :repo "eval-exec/eee.el" :files ("*.el" "*.sh"))
+
+  :config
+  ;; Should have wezterm or alacritty installed, more terminal application is supporting...
+  (setq ee-terminal-command "alacritty")
+
+  ;; (general-evil-define-key 'normal 'global "M-g" 'ee-lazygit)
+  ;; (global-definer "f" 'ee-find)
+  ;; (global-definer "g" 'ee-lazygit)
+  ;; (global-definer "y" 'ee-yazi-project)
+  ;; (general-def "C-x C-f" 'ee-yazi)
+  ;; (general-def "C-S-f" 'ee-rg)
+  ;; (general-evil-define-key 'normal 'global "M-f" 'ee-line)
+  )
 
 (use-package gptel
   :defer
