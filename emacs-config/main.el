@@ -1102,6 +1102,7 @@
   :functions golden-ratio-mode
   :init
   (setq golden-ratio-exclude-modes '("ediff-mode" "reb-mode" "reb-lisp-mode"))
+  (setq golden-ratio-exclude-buffer-names '("*Ilist*"))
   (golden-ratio-mode 1))
 
 ;; (use-package solaire-mode
