@@ -1532,7 +1532,8 @@ Make sure to run \='ollama serve\=' and have zephyr model."
 
   :config
   ;; Should have wezterm or alacritty installed, more terminal application is supporting...
-  (setq ee-terminal-command "alacritty")
+  ;; (setq ee-terminal-command "alacritty")
+  (setq ee-terminal-command "nixGL alacritty --class ee_term")
 
   ;; (general-evil-define-key 'normal 'global "M-g" 'ee-lazygit)
   ;; (global-definer "f" 'ee-find)

@@ -64,6 +64,7 @@ myManageHook =
       className =? "Emacs" --> doShift "9:dev",
       className =? "Termonad-linux-x86_64" --> doShift "8:term",
       className =? "Alacritty" --> doShift "8:term",
+      className =? "ee_term" --> doRectFloat (W.RationalRect 0.01 0.01 0.98 0.98),
       title =? "Mozilla Firefox" --> doShift "1:web",
       (isFullscreen --> doFullFloat),
       manageDocks,
