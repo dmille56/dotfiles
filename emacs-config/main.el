@@ -1532,7 +1532,7 @@ Make sure to run \='ollama serve\=' and have zephyr model."
   ;; Should have wezterm or alacritty installed, more terminal application is supporting...
   (if (eq my/config-machine 'pc)
       (setq ee-terminal-command "nixGL alacritty --class ee_term")
-    (setq ee-terminal-cmmonad "alacritty"))
+    (setq ee-terminal-command "alacritty"))
   )
 
 (use-package gptel
