@@ -369,7 +369,7 @@
    "X" 'my/transient-hl-todo
    ;; "l" 'run-lsp-command-map
    "g" 'magit
-   "G" 'ee-lazygit
+   "G" 'launch-lazygit
    "F" 'my/transient-forge
    "v" 'helm-semantic-or-imenu
    "a" 'link-hint-open-link
@@ -1525,6 +1525,13 @@ Make sure to run \='ollama serve\=' and have zephyr model."
   (eaf-bind-key insert_or_edit_url "C-l" eaf-browser-keybinding)
   (eaf-bind-key insert_or_open_link "a" eaf-browser-keybinding)
   (eaf-bind-key nil "M-q" eaf-browser-keybinding)) ;; unbind, see more in the Wiki
+
+(defun launch-lazygit ()
+  "Launch lazygit in external terminal."
+  (interactive)
+  (if (eq my/config-machine 'pc)
+      (ee-lazygit)
+    (start-process "lazygit-process" "*lazygit-buffer" "alacritty" "-e" "lazygit")) )
 
 (use-package eee
   :straight (:host github :repo "eval-exec/eee.el" :files ("*.el" "*.sh"))
