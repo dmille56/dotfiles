@@ -9,6 +9,7 @@
 
 ;; Some same defaults to start:
 
+(setq-default coding-system-for-write 'utf-8)
 ;; disable toolbar, scroll-bars, & menu-bar
 (if (require 'tool-bar nil 'noerror) (tool-bar-mode -1))
 (if (require 'scroll-bar nil 'noerror) (scroll-bar-mode -1))
