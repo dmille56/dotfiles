@@ -884,7 +884,15 @@
          ("M-j" . org-agenda-clock-goto) ; optional
          ("J" . bookmark-jump))) ; optional
 
-(use-package org-alert)
+(use-package org-alert
+  :config
+  (cond
+   ((eq my/config-machine 'work) (setq-default alert-default-style 'libnotify))
+   ((eq my/config-machine 'phone) (setq-default alert-default-style 'termux))
+   (t (setq-default alert-default-style 'message)))
+  (setq-default org-alert-interval 300
+                org-alert-notify-cutoff 10
+                org-alert-notify-after-event-cutoff 10))
 
 ;; (use-package org-modern
 ;;   ;; :config
