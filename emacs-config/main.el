@@ -142,8 +142,8 @@
     ("w" "elfeed" elfeed)
     ("r" "recent" helm-recentf)
     ("R" "query replace regex" query-replace-regexp)
-    ;; ("a" "agenda" org-agenda)
-    ("a" "casual agenda" casual-agenda-tmenu)
+    ("a" "agenda" org-agenda)
+    ;; ("a" "casual agenda" casual-agenda-tmenu)
     ("A" "read aloud" my/transient-read-aloud)
     ("j" "treesit-jump" treesit-jump-transient)
     ("l" "git-link" my/transient-git-link)
@@ -884,6 +884,8 @@
          ("M-j" . org-agenda-clock-goto) ; optional
          ("J" . bookmark-jump))) ; optional
 
+(use-package org-alert)
+
 ;; (use-package org-modern
 ;;   ;; :config
 ;;   ;; (with-eval-after-load 'org (global-org-modern-mode))
@@ -955,6 +957,8 @@
        ((eq my/config-machine 'phone) "/data/data/com.termux/files/home/storage/shared/roam-notes")
        (t "~/roam-notes")
        ))
+
+(setq-default org-agenda-files (list my-org-roam-directory))
 
 (use-package org-roam
   :defines org-roam-capture-templates org-roam-node-display-template
