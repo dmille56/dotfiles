@@ -1189,7 +1189,7 @@
   :defer
   :ensure t
   :config
-  (setq chatgpt-shell-model-version "gpt-3.5-turbo-16k-0613")
+  (setq chatgpt-shell-model-version "gpt-3.5-turbo")
   :custom
   ((chatgpt-shell-openai-key
     (lambda ()
