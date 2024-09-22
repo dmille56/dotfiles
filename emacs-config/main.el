@@ -496,6 +496,9 @@
   (define-key evil-outer-text-objects-map "c" (evil-textobj-tree-sitter-get-textobj "class.outer"))
   (define-key evil-inner-text-objects-map "c" (evil-textobj-tree-sitter-get-textobj "class.inner")))
 
+(use-package indent-bars
+  :hook ((python-mode yaml-mode powershell-ts-mode) . indent-bars-mode))
+
 ;; Set default font
 (unless (eq my/config-machine 'phone)
   (set-frame-font "DejaVu Sans Mono for Powerline-13" nil t))
