@@ -81,6 +81,7 @@ in
     powershell
     tmux
     ranger
+    yazi
     fzf
     ripgrep
 
