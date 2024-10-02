@@ -1345,6 +1345,11 @@ Make sure to run \='ollama serve\=' and have zephyr model."
   (global-treesit-auto-mode)
   )
 
+(use-package treesit-fold
+  :straight (treesit-fold :type git :host github :repo "emacs-tree-sitter/treesit-fold")
+  :config
+  (global-treesit-fold-mode 1))
+
 ;; :TODO: remove warning supression for eglot/bytecomp eventually
 (setq warning-suppress-types '((deprecated)))
 (setq warning-suppress-log-types '((deprecated)))
