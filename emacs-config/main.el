@@ -108,29 +108,59 @@
 
 (setq-default evil-want-keybinding nil)
 
-(defmacro define-tab-management-transient ()
-  "Define a macro for tab-management transient."
-  `(transient-define-prefix my/transient-tab-management ()
-     "Transient for tab management."
-     [["Tabs"
-       ("n" "new" tab-new "new")
-       ("w" "switch" tab-bar-switch-to-tab "switch")]
-      ["Switch"
-       ,@(cl-loop for i from 1 to 9
-                  collect (let ((key (number-to-string i))
-                                (name (number-to-string i))
-                                (doc (format "Select tab %d" i)))
-                            `(,key ,name (lambda () (interactive) (tab-bar-select-tab ,i)) ,doc)))
-       ("0" "0" (lambda () (interactive) (tab-bar-select-tab 10)) "Select tab 10")]
-      ["Move"
-       ,@(cl-loop for i from 1 to 9
-                  collect (let ((key (format "m%d" i))
-                                (name (format "move %d" i))
-                                (doc (format "Move tab to %d" i)))
-                            `(,key ,name (lambda () (interactive) (tab-bar-move-tab-to ,i)) ,doc)))
-       ("m0" "move 10" (lambda () (interactive) (tab-bar-move-tab-to 10)) "Move tab to 10")]]))
+;; :TODO: eventually fix tab management transient... It caused issue so I went back to manually defining it
 
-(define-tab-management-transient)
+;; (defmacro define-tab-management-transient ()
+;;   "Define a macro for tab-management transient."
+;;   `(transient-define-prefix my/transient-tab-management ()
+;;      "Transient for tab management."
+;;      [["Tabs"
+;;        ("n" "new" tab-new "new")
+;;        ("w" "switch" tab-bar-switch-to-tab "switch")]
+;;       ["Switch"
+;;        ,@(cl-loop for i from 1 to 9
+;;                   collect (let ((key (number-to-string i))
+;;                                 (name (number-to-string i))
+;;                                 (doc (format "Select tab %d" i)))
+;;                             `(,key ,name (lambda () (interactive) (tab-bar-select-tab ,i)) ,doc)))
+;;        ("0" "0" (lambda () (interactive) (tab-bar-select-tab 10)) "Select tab 10")]
+;;       ["Move"
+;;        ,@(cl-loop for i from 1 to 9
+;;                   collect (let ((key (format "m%d" i))
+;;                                 (name (format "move %d" i))
+;;                                 (doc (format "Move tab to %d" i)))
+;;                             `(,key ,name (lambda () (interactive) (tab-bar-move-tab-to ,i)) ,doc)))
+;;        ("m0" "move 10" (lambda () (interactive) (tab-bar-move-tab-to 10)) "Move tab to 10")]]))
+;; 
+;; (define-tab-management-transient)
+
+(transient-define-prefix my/tab-management-transient ()
+  "Transient for tab management."
+  [["Tabs"
+    ("n" "new" tab-new)
+    ("w" "switch" tab-bar-switch-to-tab)]
+   ["Switch"
+    ("1" "Select tab 1" (lambda () (interactive) (tab-bar-select-tab 1)))
+    ("2" "Select tab 2" (lambda () (interactive) (tab-bar-select-tab 2)))
+    ("3" "Select tab 3" (lambda () (interactive) (tab-bar-select-tab 3)))
+    ("4" "Select tab 4" (lambda () (interactive) (tab-bar-select-tab 4)))
+    ("5" "Select tab 5" (lambda () (interactive) (tab-bar-select-tab 5)))
+    ("6" "Select tab 6" (lambda () (interactive) (tab-bar-select-tab 6)))
+    ("7" "Select tab 7" (lambda () (interactive) (tab-bar-select-tab 7)))
+    ("8" "Select tab 8" (lambda () (interactive) (tab-bar-select-tab 8)))
+    ("9" "Select tab 9" (lambda () (interactive) (tab-bar-select-tab 9)))
+    ("0" "Select tab 0" (lambda () (interactive) (tab-bar-select-tab 0)))]
+   ["Move"
+    ("m1" "Move tab to 1" (lambda () (interactive) (tab-bar-move-tab-to 1)))
+    ("m2" "Move tab to 2" (lambda () (interactive) (tab-bar-move-tab-to 2)))
+    ("m3" "Move tab to 3" (lambda () (interactive) (tab-bar-move-tab-to 3)))
+    ("m4" "Move tab to 4" (lambda () (interactive) (tab-bar-move-tab-to 4)))
+    ("m5" "Move tab to 5" (lambda () (interactive) (tab-bar-move-tab-to 5)))
+    ("m6" "Move tab to 6" (lambda () (interactive) (tab-bar-move-tab-to 6)))
+    ("m7" "Move tab to 7" (lambda () (interactive) (tab-bar-move-tab-to 7)))
+    ("m8" "Move tab to 8" (lambda () (interactive) (tab-bar-move-tab-to 8)))
+    ("m9" "Move tab to 9" (lambda () (interactive) (tab-bar-move-tab-to 9)))
+    ("m0" "Move tab to 0" (lambda () (interactive) (tab-bar-move-tab-to 0)))]])
 
 (transient-define-prefix my/transient-leader-misc ()
   "Transient for leader misc."
