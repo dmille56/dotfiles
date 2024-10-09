@@ -134,7 +134,7 @@
 ;; 
 ;; (define-tab-management-transient)
 
-(transient-define-prefix my/tab-management-transient ()
+(transient-define-prefix my/transient-tab-management ()
   "Transient for tab management."
   [["Tabs"
     ("n" "new" tab-new)
