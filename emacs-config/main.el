@@ -1453,7 +1453,7 @@ Make sure to run \='ollama serve\=' and have zephyr model."
 
 (use-package command-log-mode :defer)
 
-(use-package smartparens-mode
+(use-package smartparens
   :defer
   :ensure smartparens  ;; install the package
   :hook (prog-mode text-mode markdown-mode) ;; add `smartparens-mode` to these hooks
