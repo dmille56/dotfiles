@@ -166,19 +166,19 @@
   "Transient for leader misc."
   [["Misc"
     ("s" "rg search" rg-menu)
-    ("b" "bookmarks" helm-bookmarks)
+    ;; ("b" "bookmarks" helm-bookmarks) ;; :TODO: fix this on windows
     ("B" "set bookmark" bookmark-set)
     ("T" "timers" my/transient-org-timer)
     ("w" "elfeed" elfeed)
-    ("r" "recent" helm-recentf)
+    ;; ("r" "recent" helm-recentf) ;; :TODO: fix this on windows
     ("R" "query replace regex" query-replace-regexp)
     ("a" "agenda" org-agenda)
     ;; ("a" "casual agenda" casual-agenda-tmenu)
     ("A" "read aloud" my/transient-read-aloud)
     ("j" "treesit-jump" treesit-jump-transient)
     ("l" "git-link" my/transient-git-link)
-    ("Ll" "leetcode" leetcode)
-    ("Ld" "leetcode daily" leetcode-daily)
+    ;; ("Ll" "leetcode" leetcode) :TODO: fix this on windows
+    ;; ("Ld" "leetcode daily" leetcode-daily) :TODO: fix this on windows
     ("e" "eaf" my/transient-eaf)
     ;; ("A" "casual avy" casual-avy-tmenu)
     ("C" "jinx" my/transient-jinx)
@@ -193,8 +193,8 @@
    ["Help"
     ("h" "emacs help" help-for-help)
     ("H" "ddg search" ddg)
-    ("." "clippy func" clippy-describe-function)
-    (">" "clippy var" clippy-describe-variable)
+    ;; ("." "clippy func" clippy-describe-function) ;; :TODO: fix this on windows
+    ;; (">" "clippy var" clippy-describe-variable) ;; :TODO: fix this on windows
     ]
    ["Random"
     ("p" "game" my/transient-game)
@@ -207,7 +207,7 @@
     ("y" "tree" treemacs)
     ("Y" "imenu-list toggle" imenu-list-smart-toggle)
     ("W" "ediff" my/transient-ediff)
-    ("z" "zoxide" zoxide-find-file)
+    ;; ("z" "zoxide" zoxide-find-file) ;; :TODO: fix this on windows
     ]
    ])
 
