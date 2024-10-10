@@ -1412,7 +1412,7 @@ Make sure to run \='ollama serve\=' and have zephyr model."
 (use-package emojify
   :hook (after-init . global-emojify-mode))
 
-(use-package link-hint :defer)
+(use-package link-hint)
 
 (use-package treesit-auto
   :functions global-treesit-auto-mode
