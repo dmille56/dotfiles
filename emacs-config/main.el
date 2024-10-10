@@ -167,10 +167,12 @@
   [["Misc"
     ("s" "rg search" rg-menu)
     ;; ("b" "bookmarks" helm-bookmarks) ;; :TODO: fix this on windows
+    ("b" "bookmarks" consult-bookmark)
     ("B" "set bookmark" bookmark-set)
     ("T" "timers" my/transient-org-timer)
     ("w" "elfeed" elfeed)
     ;; ("r" "recent" helm-recentf) ;; :TODO: fix this on windows
+    ("r" "recent" consult-recent-file)
     ("R" "query replace regex" query-replace-regexp)
     ("a" "agenda" org-agenda)
     ;; ("a" "casual agenda" casual-agenda-tmenu)
@@ -483,13 +485,13 @@
 (with-eval-after-load 'evil-maps
    ;; (define-key evil-normal-state-map (kbd ":") 'evil-repeat-find-char) ;; uncomment if you still want to be able to use the original ';' key
    (define-key evil-normal-state-map (kbd ";") 'evil-ex)
-   (define-key evil-normal-state-map (kbd "M-x") 'helm-M-x)
+   ;; (define-key evil-normal-state-map (kbd "M-x") 'helm-M-x)
    (define-key evil-normal-state-map (kbd "Q") 'evil-record-macro)
    (define-key evil-normal-state-map (kbd "gZ") 'zoxide-find-file)
    (define-key evil-normal-state-map (kbd "gb") 'evil-jump-backward)
    ;; (define-key evil-visual-state-map (kbd ":") 'evil-repeat-find-char)
    (define-key evil-visual-state-map (kbd ";") 'evil-ex)
-   (define-key evil-visual-state-map (kbd "M-x") 'helm-M-x)
+   ;; (define-key evil-visual-state-map (kbd "M-x") 'helm-M-x)
    (define-key evil-normal-state-map (kbd "q") 'quit-window))
 
 ;; install evil-surround
@@ -756,11 +758,11 @@
   ("<f7>" . helm-find-files)
   ("C-x c i" . helm-semantic-or-imenu)
   :init
-  (global-set-key (kbd "M-x") #'helm-M-x)
+  ;; (global-set-key (kbd "M-x") #'helm-M-x) ;; :TODO: figure out why this doesn't work on windows
   :config
   (define-key helm-map (kbd "ESC") 'helm-keyboard-quit)
   (define-key helm-map (kbd "<f8>") 'helm-keyboard-quit)
-  (helm-mode 1)
+  ;; (helm-mode 1) ;; :TODO: figure out why this doesn't work on windows
   )
 
 ;; install themes
@@ -1272,12 +1274,32 @@ Make sure to run \='ollama serve\=' and have zephyr model."
   (corfu-separator ?\s) ;; Orderless field separator
   ) ;; dumb code completion
 
-;; (use-package orderless
-;;   :custom
-;;   (completion-styles '(basic partial-completion orderless))
-;;  )
+(use-package orderless
+  :custom
+  (completion-styles '(basic partial-completion orderless))
+ )
 
-(use-package consult :defer)
+;; Enable vertico
+(use-package vertico
+  :custom
+  (vertico-scroll-margin 0) ;; Different scroll margin
+  (vertico-count 20) ;; Show more candidates
+  (vertico-resize t) ;; Grow and shrink the Vertico minibuffer
+  (vertico-cycle t) ;; Enable cycling for `vertico-next/previous'
+  :config
+  (vertico-mode))
+
+(use-package savehist
+  :config
+  (savehist-mode))
+
+(use-package marginalia
+  :bind (:map minibuffer-local-map
+         ("M-A" . marginalia-cycle))
+  :init
+  (marginalia-mode))
+
+(use-package consult)
 
 (with-eval-after-load 'transient
   (defvar transient-map)
