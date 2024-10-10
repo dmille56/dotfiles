@@ -103,6 +103,12 @@ lua <<EOF
   -- Setup neogit
   local neogit = require'neogit'
   neogit.setup()
+  
+  -- Setup orgmode
+  require('orgmode').setup({
+    org_agenda_files = {'~/Dropbox/org/*', '~/my-orgs/**/*'},
+    org_default_notes_file = '~/Dropbox/org/refile.org',
+  })
 
   -- Setup nvim-cmp.
   local cmp = require'cmp'
