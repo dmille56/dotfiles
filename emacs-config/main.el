@@ -1061,6 +1061,7 @@
   :init
   (setq nyan-animate-nyancat t)
   (setq nyan-wavy-trail t)
+  :config
   (nyan-mode))
 
 (use-package zone-nyan :defer)
