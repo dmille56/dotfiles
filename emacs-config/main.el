@@ -1296,7 +1296,7 @@ Make sure to run \='ollama serve\=' and have zephyr model."
 (use-package marginalia
   :bind (:map minibuffer-local-map
          ("M-A" . marginalia-cycle))
-  :init
+  :config
   (marginalia-mode))
 
 (use-package consult)
