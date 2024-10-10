@@ -885,10 +885,18 @@
   :defines spaceline-highlight-face-func
   :functions (spaceline-emacs-theme spaceline-helm-mode spaceline-toggle-minor-modes-off)
   :config
-  (spaceline-emacs-theme)
-  (spaceline-helm-mode)
-  (spaceline-toggle-minor-modes-off) ;; helps reduce modeline clutter
+  ;; (spaceline-emacs-theme)
+  ;; (spaceline-helm-mode)
+  ;; (spaceline-toggle-minor-modes-off) ;; helps reduce modeline clutter
   (setq spaceline-highlight-face-func 'spaceline-highlight-face-evil-state))
+
+(use-package smart-mode-line-powerline-theme)
+
+(use-package smart-mode-line
+  :config
+  (setq sml/no-confirm-load-theme t)
+  (setq sml/theme 'respectful)
+  (sml/setup))
 
 (use-package evil-org
   :functions (evil-org-agenda-set-keys evil-org-set-key-theme)
