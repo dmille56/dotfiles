@@ -466,6 +466,7 @@
   :after evil
   :init
   (add-hook 'magit-mode-hook 'turn-off-evil-snipe-override-mode)
+  :config
   (evil-snipe-mode +1)
   (evil-snipe-override-mode +1))
 
@@ -579,7 +580,7 @@
 (use-package flycheck
   :functions global-flycheck-mode flycheck-add-next-checker
   :defines (flycheck-add-next-checker)
-  :init
+  :config
   (global-flycheck-mode))
 
 (use-package treemacs
@@ -679,7 +680,7 @@
 (use-package lsp-treemacs :commands lsp-treemacs-errors-list :defer)
 
 (use-package yasnippet
-  :init
+  :config
   (yas-global-mode 1))
 
 (use-package yasnippet-snippets :after yasnippet)
@@ -691,7 +692,7 @@
 (use-package which-key
   :functions (which-key-show-keymap which-key-mode)
   :defer
-  :init
+  :config
   (which-key-mode))
 
 ;; use f5 to move to the next tab
@@ -882,9 +883,8 @@
   :defines spaceline-highlight-face-func
   :functions (spaceline-emacs-theme spaceline-helm-mode spaceline-toggle-minor-modes-off)
   :defer
-  :init
-  (spaceline-emacs-theme)
   :config
+  (spaceline-emacs-theme)
   (spaceline-helm-mode)
   (spaceline-toggle-minor-modes-off) ;; helps reduce modeline clutter
   (setq spaceline-highlight-face-func 'spaceline-highlight-face-evil-state))
@@ -1075,6 +1075,7 @@
   :init
   (setq projectile-switch-project-action 'projectile-dired)
   (setq projectile-sort-order 'recently-active)
+  :config
   (projectile-mode +1))
 
 (use-package helm-projectile
@@ -1112,9 +1113,10 @@
 (use-package diff-hl
   :functions global-diff-hl-mode
   :init
-  (global-diff-hl-mode)
   (add-hook 'magit-pre-refresh-hook 'diff-hl-magit-pre-refresh)
-  (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh))
+  (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh)
+  :config
+  (global-diff-hl-mode))
 
 (use-package read-aloud :defer)
 
@@ -1149,6 +1151,7 @@
   :init
   (setq golden-ratio-exclude-modes '("ediff-mode" "reb-mode" "reb-lisp-mode"))
   (setq golden-ratio-exclude-buffer-names '("*Ilist*"))
+  :config
   (golden-ratio-mode 1))
 
 ;; (use-package solaire-mode
@@ -1446,7 +1449,7 @@ Make sure to run \='ollama serve\=' and have zephyr model."
   ("C-x C-b" . persp-list-buffers)         ; or use a nicer switcher, see below
   :custom
   (persp-mode-prefix-key (kbd "C-c M-p"))  ; pick your own prefix key here
-  :init
+  :config
   (persp-mode))
 
 (use-package clippy :defer)
