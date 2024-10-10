@@ -209,7 +209,7 @@
     ("y" "tree" treemacs)
     ("Y" "imenu-list toggle" imenu-list-smart-toggle)
     ("W" "ediff" my/transient-ediff)
-    ;; ("z" "zoxide" zoxide-find-file) ;; :TODO: fix this on windows
+    ("z" "zoxide" zoxide-find-file)
     ]
    ])
 
@@ -1510,7 +1510,6 @@ Make sure to run \='ollama serve\=' and have zephyr model."
 
 ;; :TODO: figure out how to get zoxide to work better with eshell
 (use-package zoxide
-  :defer
   :functions zoxide-open-with)
 
 (defun eshell-cd-with-zoxide (&optional query)
