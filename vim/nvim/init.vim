@@ -18,6 +18,7 @@ call plug#begin('~/AppData/Local/nvim/plugged')
     Plug 'jvgrootveld/telescope-zoxide'
     Plug 'roman/golden-ratio'
     Plug 'kdheepak/lazygit.nvim'
+    Plug 'nvim-orgmode/orgmode'
     
     "Neogit + dependencies
     Plug 'nvim-lua/popup.nvim'

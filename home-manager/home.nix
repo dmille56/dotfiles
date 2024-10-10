@@ -357,6 +357,7 @@ in
       neogit
       golden-ratio
       lazygit-nvim
+      orgmode
 
       # completion
       cmp-nvim-lsp
