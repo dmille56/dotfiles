@@ -1299,7 +1299,10 @@ Make sure to run \='ollama serve\=' and have zephyr model."
   :config
   (marginalia-mode))
 
-(use-package consult)
+(use-package consult
+  :config
+  (setq completion-in-region-function 'consult-completion-in-region)
+  )
 
 (with-eval-after-load 'transient
   (defvar transient-map)
