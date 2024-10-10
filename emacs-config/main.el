@@ -882,7 +882,6 @@
 (use-package spaceline
   :defines spaceline-highlight-face-func
   :functions (spaceline-emacs-theme spaceline-helm-mode spaceline-toggle-minor-modes-off)
-  :defer
   :config
   (spaceline-emacs-theme)
   (spaceline-helm-mode)
