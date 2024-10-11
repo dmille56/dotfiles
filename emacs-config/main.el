@@ -693,7 +693,6 @@
 
 (use-package which-key
   :functions (which-key-show-keymap which-key-mode)
-  :defer
   :config
   (which-key-mode))
 
