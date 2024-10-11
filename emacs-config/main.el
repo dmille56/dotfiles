@@ -896,7 +896,12 @@
   :config
   (setq sml/no-confirm-load-theme t)
   (setq sml/theme 'respectful)
-  (sml/setup))
+  ;; (sml/setup)
+  )
+
+(use-package doom-modeline
+  :config
+  (doom-modeline-mode 1))
 
 (use-package evil-org
   :functions (evil-org-agenda-set-keys evil-org-set-key-theme)
