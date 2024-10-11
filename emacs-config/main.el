@@ -1197,7 +1197,8 @@
           (":NOTE:" . ((lambda (tag) (svg-tag-make "NOTE" :face 'svg-tag-note-face))))
           )
         )
-  (add-hook 'prog-mode-hook 'svg-tag-mode))
+  (add-hook 'prog-mode-hook 'svg-tag-mode)
+  (add-hook 'yaml-ts-mode-hook 'svg-tag-mode))
 
 (use-package hl-todo)
 
