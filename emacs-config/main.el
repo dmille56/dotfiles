@@ -792,7 +792,7 @@
   )
 
 ;; install yaml-mode
-(use-package yaml-mode :defer)
+(use-package yaml-mode)
 
 ;;(use-package yaml :defer)
 
