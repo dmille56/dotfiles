@@ -386,8 +386,8 @@
   (evil-leader/set-key
    "p" 'helm-find-files
    "P" 'check-parens
-   "i" 'helm-occur
-   "I" 'consult-line
+   "I" 'helm-occur
+   "i" 'consult-line
    "b" 'switch-to-buffer
    "k" 'kill-buffer
    "e" 'projectile-command-map
