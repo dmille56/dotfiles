@@ -86,6 +86,7 @@
       (cond
              ((string-equal (system-name) "van") 'pc)
              ((string-equal (system-name) "localhost") 'phone)
+             ((string-equal (system-name) "tablet") 'tablet)
              ((string-equal (system-name) "LOCAL-D31D4TRU3") 'work)
              (t 'pc) ;; fall-back to pc
              ))
@@ -534,7 +535,7 @@
   :hook ((python-mode yaml-mode powershell-ts-mode) . indent-bars-mode))
 
 ;; Set default font
-(unless (eq my/config-machine 'phone)
+(unless (or (eq my/config-machine 'phone) (eq my/config-machine 'tablet))
   (set-frame-font "DejaVu Sans Mono for Powerline-13" nil t))
 ;; (semantic-mode 1) ;; use semantic :TODO: re-enable when figure out why it kept throwing error
 
@@ -936,6 +937,7 @@
   (cond
    ((eq my/config-machine 'work) (setq-default alert-default-style 'libnotify))
    ((eq my/config-machine 'phone) (setq-default alert-default-style 'termux))
+   ((eq my/config-machine 'tablet) (setq-default alert-default-style 'termux))
    (t (setq-default alert-default-style 'message)))
   (setq-default org-alert-interval 300
                 org-alert-notify-cutoff 10
@@ -1009,8 +1011,8 @@
 (defvar my-org-roam-directory
       (cond
        ((eq my/config-machine 'work) "~\\OneDrive - Microsoft\\Desktop\\roam-notes")
-       ((eq my/config-machine 'phone) "/data/data/com.termux/files/home/storage/shared/roam-notes")
-       (t "~/roam-notes")
+       ((eq my/config-machine 'pc) "~\roam-notes")
+       (t "/data/data/com.termux/files/home/storage/shared/roam-notes")
        ))
 
 (setq-default org-agenda-files (list my-org-roam-directory))
@@ -1709,7 +1711,6 @@ Make sure to run \='ollama serve\=' and have zephyr model."
 
 (defvar my/main-dir
       (cond
-       ((eq my/config-machine 'pc) "~/dotfiles/emacs-config/")
        ((eq my/config-machine 'work) "~\\scratch\\dotfiles\\emacs-config\\")
        (t "~/dotfiles/emacs-config/")
        ))
