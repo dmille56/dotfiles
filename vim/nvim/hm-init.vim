@@ -93,6 +93,8 @@ nnoremap <leader>G :LazyGit<CR>
 
 nnoremap <leader>z :Telescope zoxide list<CR>
 
+nnoremap gb <C-w>w<CR>
+
 let g:airline_powerline_fonts = 1
 let g:airline_theme= 'dracula'
 
