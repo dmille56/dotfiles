@@ -1331,6 +1331,7 @@ Make sure to run \='ollama serve\=' and have zephyr model."
   :hook
   (embark-collect-mode . consult-preview-at-point-mode))
 
+;; Install consult
 (use-package consult
   :config
   (setq completion-in-region-function 'consult-completion-in-region)
