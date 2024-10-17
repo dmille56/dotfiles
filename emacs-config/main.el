@@ -1011,8 +1011,8 @@
 (defvar my-org-roam-directory
       (cond
        ((eq my/config-machine 'work) "~\\OneDrive - Microsoft\\Desktop\\roam-notes")
-       ((eq my/config-machine 'pc) "~\roam-notes")
-       (t "/data/data/com.termux/files/home/storage/shared/roam-notes") ;; :TODO: fix this not working in termux correctly
+       (t "~/roam-notes")
+       ;; :TODO: fix termux roam-notes directory not working correctly
        ))
 
 (setq-default org-agenda-files (list my-org-roam-directory))
