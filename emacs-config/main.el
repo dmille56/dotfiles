@@ -286,7 +286,7 @@
    ("S" "structure template" org-insert-structure-template)
    ("t" "todo" org-todo)
    ("T" "set tags" org-set-tags-command)
-   ("e" "org export" org-export-dispatch)
+   ;; ("e" "org export" org-export-dispatch) ;; :TODO: fix in windows
    ("n" "org narrow toggle" org-toggle-narrow-to-subtree)
    ("b" "checkbox" org-toggle-checkbox)])
 
