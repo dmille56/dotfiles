@@ -326,7 +326,7 @@ _p_rev       _U_pper              _=_: upper/lower       _r_esolve
    ("S" "structure template" org-insert-structure-template)
    ("t" "todo" org-todo)
    ("T" "set tags" org-set-tags-command)
-   ("e" "org export" org-export-dispatch)
+   ;; ("e" "org export" org-export-dispatch) ;; :TODO: fix in windows
    ("n" "org narrow toggle" org-toggle-narrow-to-subtree)
    ("b" "checkbox" org-toggle-checkbox)])
 
@@ -1052,8 +1052,8 @@ _p_rev       _U_pper              _=_: upper/lower       _r_esolve
 (defvar my-org-roam-directory
       (cond
        ((eq my/config-machine 'work) "~\\OneDrive - Microsoft\\Desktop\\roam-notes")
-       ((eq my/config-machine 'pc) "~\roam-notes")
-       (t "/data/data/com.termux/files/home/storage/shared/roam-notes") ;; :TODO: fix this not working in termux correctly
+       (t "~/roam-notes")
+       ;; :TODO: fix termux roam-notes directory not working correctly
        ))
 
 (setq-default org-agenda-files (list my-org-roam-directory))
