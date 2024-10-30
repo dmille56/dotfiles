@@ -91,7 +91,7 @@
              (t 'pc) ;; fall-back to pc
              ))
 
-(use-package hydra :defer)
+(use-package hydra)
 
 (use-package smerge-mode
   :config
