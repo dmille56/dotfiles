@@ -466,6 +466,7 @@ _p_rev       _U_pper              _=_: upper/lower       _r_esolve
    "1" 'delete-other-windows
    "2" 'split-window-below
    "3" 'split-window-right
+   "4" 'toggle-maximize-buffer
 
    ;; tab management
    "t" 'my/transient-tab-management
@@ -928,6 +929,22 @@ _p_rev       _U_pper              _=_: upper/lower       _r_esolve
   (let (
 	(terms (read-string "Enter duckduckgo search terms: ")))
     (browse-web (concat "https://duckduckgo.com/?q=" terms))))
+
+(defun toggle-maximize-buffer ()
+  "Maximize buffer."
+  (interactive)
+  (save-excursion
+    (if (and (= 1 (length (cl-remove-if
+                           (lambda (w)
+                             (or (and (fboundp 'treemacs-is-treemacs-window?)
+                                      (treemacs-is-treemacs-window? w))
+                                 (and (bound-and-true-p neo-global--window)
+                                      (eq neo-global--window w))))
+                           (window-list))))
+             (assoc ?_ register-alist))
+        (jump-to-register ?_)
+      (window-configuration-to-register ?_)
+      (delete-other-windows))))
 
 (global-set-key (kbd "<f8>") 'keyboard-quit) ;; alias Ctl-g to f8 (to save your pinky)
 
