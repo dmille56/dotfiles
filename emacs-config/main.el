@@ -601,26 +601,38 @@ _p_rev       _U_pper              _=_: upper/lower       _r_esolve
 (eval-after-load "dired-aux"
   '(add-to-list 'dired-compress-file-suffixes '("\\.nupkg\\'" "" "unzip -o -d %o %i")))
 
-(use-package casual-dired
-  :ensure t
-  :config
-  (evil-define-key 'normal dired-mode-map "o" 'casual-dired-tmenu)
-  (evil-define-key 'normal dired-mode-map "s" 'casual-dired-sort-by-tmenu)
-  (evil-define-key 'normal dired-mode-map "/" 'casual-dired-search-replace-tmenu)
-  :bind (:map dired-mode-map
-              ("C-o" . #'casual-dired-tmenu)
-              ("s" . #'casual-dired-sort-by-tmenu)
-              ("/" . #'casual-dired-search-replace-tmenu)))
-
 (use-package re-builder
   :defer t)
 
-(use-package casual-re-builder
-  :bind (:map
-         reb-mode-map ("C-o" . casual-re-builder-tmenu)
-         :map
-         reb-lisp-mode-map ("C-o" . casual-re-builder-tmenu))
-  :after (re-builder))
+;; :TODO: remove these (they're in casual-suite now) and add bindings to casual-suite
+
+;; (use-package casual-agenda
+;;   ;; :ensure nil
+;;   :bind (:map
+;;          org-agenda-mode-map
+;;          ("C-o" . casual-agenda-tmenu)
+;;          ("M-j" . org-agenda-clock-goto) ; optional
+;;          ("J" . bookmark-jump))) ; optional
+
+;; (use-package casual-dired
+;;   :ensure t
+;;   :config
+;;   (evil-define-key 'normal dired-mode-map "o" 'casual-dired-tmenu)
+;;   (evil-define-key 'normal dired-mode-map "s" 'casual-dired-sort-by-tmenu)
+;;   (evil-define-key 'normal dired-mode-map "/" 'casual-dired-search-replace-tmenu)
+;;   :bind (:map dired-mode-map
+;;               ("C-o" . #'casual-dired-tmenu)
+;;               ("s" . #'casual-dired-sort-by-tmenu)
+;;               ("/" . #'casual-dired-search-replace-tmenu)))
+
+;; (use-package casual-re-builder
+;;   :bind (:map
+;;          reb-mode-map ("C-o" . casual-re-builder-tmenu)
+;;          :map
+;;          reb-lisp-mode-map ("C-o" . casual-re-builder-tmenu))
+;;   :after (re-builder))
+
+(use-package casual-suite)
 
 (use-package undo-tree
   :ensure t
@@ -989,14 +1001,6 @@ _p_rev       _U_pper              _=_: upper/lower       _r_esolve
 (setq-default org-agenda-span 14
               org-agenda-start-on-weekday nil
               org-agenda-start-day "-3d")
-
-(use-package casual-agenda
-  ;; :ensure nil
-  :bind (:map
-         org-agenda-mode-map
-         ("C-o" . casual-agenda-tmenu)
-         ("M-j" . org-agenda-clock-goto) ; optional
-         ("J" . bookmark-jump))) ; optional
 
 (use-package org-alert
   :config
