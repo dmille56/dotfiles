@@ -1033,6 +1033,7 @@ _p_rev       _U_pper              _=_: upper/lower       _r_esolve
       (emacs-lisp . t))))
 
 (use-package org-present)
+(use-package org-timeblock)
 
 (with-eval-after-load 'evil-maps
   (define-key evil-motion-state-map (kbd "SPC") nil)

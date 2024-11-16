@@ -183,6 +183,7 @@ main = do
                            ((myModMask .|. shiftMask, xK_g), windowPrompt myXPConfig Bring allWindows),
                            ((myModMask, xK_c), spawn "rofi -modi 'clipboard:greenclip print' -show clipboard -run-command '{cmd}'"),
                            ((myModMask, xK_y), spawn "ytfzf -D"),
+                           ((myModMask, xK_r), spawn "xrandr --output DP-4 --auto --right-of DP-0"), -- Set Monitors to Extend Mode (instead of mirror mode)
                            ((myModMask, xK_backslash), openScratchPad "term"),
                            ((myModMask .|. shiftMask, xK_backslash), openScratchPad "lazygit"),
                            ((myModMask, xK_bracketright), openScratchPad "btm"),
