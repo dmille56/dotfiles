@@ -604,6 +604,7 @@ _p_rev       _U_pper              _=_: upper/lower       _r_esolve
 (use-package ready-player
   :ensure t
   :config
+  (evil-set-initial-state 'ready-player-major-mode 'emacs)
   (ready-player-mode +1))
 
 (use-package re-builder
