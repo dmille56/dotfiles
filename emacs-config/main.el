@@ -601,6 +601,11 @@ _p_rev       _U_pper              _=_: upper/lower       _r_esolve
 (eval-after-load "dired-aux"
   '(add-to-list 'dired-compress-file-suffixes '("\\.nupkg\\'" "" "unzip -o -d %o %i")))
 
+(use-package ready-player
+  :ensure t
+  :config
+  (ready-player-mode +1))
+
 (use-package re-builder
   :defer t)
 
