@@ -126,7 +126,7 @@ in
     (import ../nix/twitchy-rofi-script.nix)
     (import ../nix/search-ddg-script.nix)
     (import ../nix/twitchy-play-emacs.nix)
-    (import ../nix/ChatGPT/ChatGPT-CLI.nix)
+    # (import ../nix/ChatGPT/ChatGPT-CLI.nix)
     (import ../nix/play-yt-script.nix)
     (import ../nix/play-yt-script-format.nix)
     (import ../nix/rofi-buku.nix)

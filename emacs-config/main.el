@@ -1677,7 +1677,8 @@ Make sure to run \='ollama serve\=' and have zephyr model."
   :defines leetcode-prefer-language
   :defer
   :config
-  (setq leetcode-prefer-language "python3"))
+  (setq leetcode-prefer-language "python3")
+  (evil-define-key 'normal leetcode--problems-mode-map (kbd "gr") 'leetcode-refresh))
 
 (use-package eask-mode :defer)
 
