@@ -1673,12 +1673,26 @@ Make sure to run \='ollama serve\=' and have zephyr model."
   :commands (atomic-chrome-start-server)
   :config (atomic-chrome-start-server))
 
+(defun select-random-line ()
+  (interactive)
+  (goto-char (point-min))
+  (forward-line (random (count-lines (point-min) (point-max))))
+  (set-mark (point))
+  (end-of-line))
+
 (use-package leetcode
   :defines leetcode-prefer-language
   :defer
   :config
   (setq leetcode-prefer-language "python3")
-  (evil-define-key 'normal leetcode--problems-mode-map (kbd "gr") 'leetcode-refresh-fetch)
+  (evil-define-key 'normal leetcode--problems-mode-map (kbd "gsd") 'leetcode-set-filter-difficulty)
+  (evil-define-key 'normal leetcode--problems-mode-map (kbd "gst") 'leetcode-set-filter-tag)
+  (evil-define-key 'normal leetcode--problems-mode-map (kbd "gsr") 'leetcode-set-filter-regex)
+  (evil-define-key 'normal leetcode--problems-mode-map (kbd "gS") 'leetcode-reset-filter-and-refresh)
+  (evil-define-key 'normal leetcode--problems-mode-map (kbd "gd") 'leetcode-daily)
+  (evil-define-key 'normal leetcode--problems-mode-map (kbd "gr") 'leetcode-refresh)
+  (evil-define-key 'normal leetcode--problems-mode-map (kbd "gR") 'leetcode-refresh-fetch)
+  (evil-define-key 'normal leetcode--problems-mode-map (kbd "gt") 'select-random-line)
 )
 
 (use-package eask-mode :defer)
@@ -1807,6 +1821,13 @@ shell exits, the buffer is killed."
   :straight (:host github :repo "dmille56/zone-matrix"))
 
 (setq-default zone-programs [zone-nyan zone-matrix])
+
+;; enable auto save desktop mode
+(setq desktop-restore-eager 20)
+(cond
+ ((eq my/config-machine 'work) (desktop-save-mode t))
+ (t (desktop-save-mode t))
+ )
 
 ;; disable backup files
 (setq make-backup-files nil)
