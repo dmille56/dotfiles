@@ -1692,7 +1692,7 @@ Make sure to run \='ollama serve\=' and have zephyr model."
   (evil-define-key 'normal leetcode--problems-mode-map (kbd "gd") 'leetcode-daily)
   (evil-define-key 'normal leetcode--problems-mode-map (kbd "gr") 'leetcode-refresh)
   (evil-define-key 'normal leetcode--problems-mode-map (kbd "gR") 'leetcode-refresh-fetch)
-  (evil-define-key 'normal leetcode--problems-mode-map (kbd "gt") 'select-random-line)
+  (evil-define-key 'normal leetcode--problems-mode-map (kbd "gl") 'select-random-line)
 )
 
 (use-package eask-mode :defer)
