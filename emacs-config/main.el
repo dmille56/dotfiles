@@ -1369,7 +1369,8 @@ Make sure to run \='ollama serve\=' and have zephyr model."
 
 (use-package orderless
   :custom
-  (completion-styles '(basic partial-completion orderless))
+  ;; (completion-styles '(basic partial-completion orderless))
+  (completion-styles '(orderless basic))
  )
 
 ;; Enable vertico
