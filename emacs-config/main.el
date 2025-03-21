@@ -215,12 +215,10 @@ _p_rev       _U_pper              _=_: upper/lower       _r_esolve
   "Transient for leader misc."
   [["Misc"
     ("s" "rg search" rg-menu)
-    ;; ("b" "bookmarks" helm-bookmarks) ;; :TODO: fix this on windows
     ("b" "bookmarks" consult-bookmark)
     ("B" "set bookmark" bookmark-set)
     ("T" "timers" my/transient-org-timer)
     ("w" "elfeed" elfeed)
-    ;; ("r" "recent" helm-recentf) ;; :TODO: fix this on windows
     ("r" "recent" consult-recent-file)
     ("R" "query replace regex" query-replace-regexp)
     ("a" "agenda" org-agenda)
@@ -228,8 +226,8 @@ _p_rev       _U_pper              _=_: upper/lower       _r_esolve
     ("A" "read aloud" my/transient-read-aloud)
     ("j" "treesit-jump" treesit-jump-transient)
     ("l" "git-link" my/transient-git-link)
-    ;; ("Ll" "leetcode" leetcode) :TODO: fix this on windows
-    ;; ("Ld" "leetcode daily" leetcode-daily) :TODO: fix this on windows
+    ("Ll" "leetcode" leetcode)
+    ("Ld" "leetcode daily" leetcode-daily)
     ("e" "eaf" my/transient-eaf)
     ;; ("A" "casual avy" casual-avy-tmenu)
     ("C" "jinx" my/transient-jinx)
@@ -244,8 +242,8 @@ _p_rev       _U_pper              _=_: upper/lower       _r_esolve
    ["Help"
     ("h" "emacs help" help-for-help)
     ("H" "ddg search" ddg)
-    ;; ("." "clippy func" clippy-describe-function) ;; :TODO: fix this on windows
-    ;; (">" "clippy var" clippy-describe-variable) ;; :TODO: fix this on windows
+    ("." "clippy func" clippy-describe-function)
+    (">" "clippy var" clippy-describe-variable)
     ]
    ["Random"
     ("p" "game" my/transient-game)
