@@ -157,6 +157,8 @@ _p_rev       _U_pper              _=_: upper/lower       _r_esolve
 
 (setq-default evil-want-keybinding nil)
 
+(use-package transient)
+
 ;; :TODO: eventually fix tab management transient... It caused issue so I went back to manually defining it
 
 ;; (defmacro define-tab-management-transient ()
