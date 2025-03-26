@@ -326,6 +326,7 @@ _p_rev       _U_pper              _=_: upper/lower       _r_esolve
   ["Org"
    ("o" "open" org-open-at-point)
    ("l" "insert link" org-insert-link)
+   ("i" "insert timestamp" my-org-insert-timestamp)
    ("j" "goto heading" avy-org-goto-heading-timer)
    ("r" "avy refile child" avy-org-refile-as-child)
    ("c" "insert toc" org-make-toc-insert)
@@ -1093,6 +1094,12 @@ _p_rev       _U_pper              _=_: upper/lower       _r_esolve
        ))
 
 (setq-default org-agenda-files (list my-org-roam-directory))
+
+(defun my-org-insert-timestamp ()
+  "Insert the current date in the format * YEAR-MONTH-DAY."
+  (interactive)
+  (end-of-line)
+  (insert (concat "\n* " (format-time-string "%Y-%m-%d"))))
 
 (use-package org-roam
   :defines org-roam-capture-templates org-roam-node-display-template
