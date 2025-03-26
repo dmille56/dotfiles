@@ -1680,10 +1680,11 @@ Make sure to run \='ollama serve\=' and have zephyr model."
   (end-of-line))
 
 (use-package leetcode
-  :defines leetcode-prefer-language
+  :defines leetcode-prefer-language leetcode-prefer-tag-display
   :defer
   :config
   (setq leetcode-prefer-language "python3")
+  (setq leetcode-prefer-tag-display 'nil)
   (evil-define-key 'normal leetcode--problems-mode-map (kbd "gsd") 'leetcode-set-filter-difficulty)
   (evil-define-key 'normal leetcode--problems-mode-map (kbd "gst") 'leetcode-set-filter-tag)
   (evil-define-key 'normal leetcode--problems-mode-map (kbd "gsr") 'leetcode-set-filter-regex)
