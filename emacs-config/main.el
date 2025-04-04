@@ -239,7 +239,8 @@ _p_rev       _U_pper              _=_: upper/lower       _r_esolve
     ("Gr" "chatgpt send and review" chatgpt-shell-send-and-review-region)
     ("GR" "chatgpt refactor code" chatgpt-shell-refactor-code)
     ("Gd" "chatgpt describe code" chatgpt-shell-describe-code)
-    ("Gc" "chatgpt write git commit" chatgpt-shell-write-git-commit)
+    ("GC" "chatgpt write git commit" chatgpt-shell-write-git-commit)
+    ("Gc" "copilot chat" copilot-chat-display)
     ]
    ["Help"
     ("h" "emacs help" help-for-help)
