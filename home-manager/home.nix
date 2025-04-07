@@ -76,7 +76,7 @@ in
     zsh
     networkmanager
     lorri
-    python312Packages.python-lsp-server # :TODO: figure out how to get this working
+    python312Packages.python-lsp-server
     yaml-language-server
     
     # fonts
@@ -577,7 +577,7 @@ in
   '';
 
   home.file.".config/alacritty/alacritty.toml".text = ''
-    import = ["~/.config/alacritty/dracula.toml"]
+    general.import = ["~/.config/alacritty/dracula.toml"]
 
     [font]
     size = 13.0
