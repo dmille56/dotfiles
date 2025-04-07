@@ -105,6 +105,7 @@ in
 
     warpd
 
+    # ai
     ollama
 
     tuir # rtv
