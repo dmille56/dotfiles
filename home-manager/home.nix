@@ -76,7 +76,7 @@ in
     zsh
     networkmanager
     lorri
-    # python311Packages.python-lsp-server # :TODO: figure out how to get this working
+    python312Packages.python-lsp-server # :TODO: figure out how to get this working
     yaml-language-server
     
     # fonts
