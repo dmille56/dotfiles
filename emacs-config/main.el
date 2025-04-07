@@ -260,6 +260,7 @@ _p_rev       _U_pper              _=_: upper/lower       _r_esolve
     ("Y" "imenu-list toggle" imenu-list-smart-toggle)
     ("W" "ediff" my/transient-ediff)
     ("z" "zoxide" zoxide-find-file)
+    ("Z" "go to downloads" my-go-to-downloads)
     ]
    ])
 
@@ -602,6 +603,11 @@ _p_rev       _U_pper              _=_: upper/lower       _r_esolve
 
 (eval-after-load "dired-aux"
   '(add-to-list 'dired-compress-file-suffixes '("\\.nupkg\\'" "" "unzip -o -d %o %i")))
+
+(defun my-go-to-downloads ()
+  "Open the downloads folder in DIRED."
+  (interactive)
+  (dired "~/Downloads"))
 
 (use-package ready-player
   :ensure t
