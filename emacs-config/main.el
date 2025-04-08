@@ -1660,6 +1660,12 @@ Make sure to run \='ollama serve\=' and have zephyr model."
 
 (setq-default powershell-ts-enable-imenu-top-level-vars nil)
 
+(use-package gdscript-mode
+    :straight (gdscript-mode
+               :type git
+               :host github
+               :repo "godotengine/emacs-gdscript-mode"))
+
 (use-package imenu-list
   :functions imenu-list-smart-toggle
   :defer
