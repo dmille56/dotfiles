@@ -1336,9 +1336,13 @@ _p_rev       _U_pper              _=_: upper/lower       _r_esolve
   :config
   (setq chatgpt-shell-model-version "gpt-3.5-turbo")
   :custom
-  ((chatgpt-shell-openai-key
+  (
+   (chatgpt-shell-openai-key
     (lambda ()
-        (auth-source-pass-get 'secret "OPENAI_API_KEY")))))
+        (auth-source-pass-get 'secret "OPENAI_API_KEY")))
+   (chatgpt-shell-google-key
+    (lambda ()
+        (auth-source-pass-get 'secret "GOOGLE_GEMINI_KEY")))))
 
 ;; :TODO: fix this function
 (defun my/ollama-write-git-commit ()
