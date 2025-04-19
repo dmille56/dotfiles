@@ -1344,6 +1344,27 @@ _p_rev       _U_pper              _=_: upper/lower       _r_esolve
     (lambda ()
         (auth-source-pass-get 'secret "GOOGLE_GEMINI_KEY")))))
 
+(use-package aider
+  :straight (:host github :repo "tninja/aider.el")
+  :config
+  ;; For latest claude sonnet model
+  ;; (setq aider-args '("--model" "sonnet" "--no-auto-accept-architect"))
+  ;; (setenv "ANTHROPIC_API_KEY" anthropic-api-key)
+  ;; Or chatgpt model
+  (setq aider-args '("--model" "o4-mini"))
+  (setenv "OPENAI_API_KEY"
+          (funcall
+           (lambda ()
+             (auth-source-pass-get 'secret "OPENAI_API_KEY"))))
+  ;; Or gemini model
+  ;; (setq aider-args '("--model" "gemini-exp"))
+  ;; (setenv "GEMINI_API_KEY" <your-gemini-api-key>)
+  ;; Or use your personal config file
+  ;; (setq aider-args `("--config" ,(expand-file-name "~/.aider.conf.yml")))
+  ;; ;;
+  ;; Optional: Set a key binding for the transient menu
+  (global-set-key (kbd "C-c a") 'aider-transient-menu))
+
 ;; :TODO: fix this function
 (defun my/ollama-write-git-commit ()
   "Generate a git commit using ollama.
