@@ -1334,7 +1334,7 @@ _p_rev       _U_pper              _=_: upper/lower       _r_esolve
   :defer
   :ensure t
   :config
-  (setq chatgpt-shell-model-version "gpt-3.5-turbo")
+  (setq chatgpt-shell-model-version "gpt-4o-mini")
   :custom
   (
    (chatgpt-shell-openai-key
