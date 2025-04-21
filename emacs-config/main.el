@@ -1344,6 +1344,22 @@ _p_rev       _U_pper              _=_: upper/lower       _r_esolve
     (lambda ()
         (auth-source-pass-get 'secret "GOOGLE_GEMINI_KEY")))))
 
+(use-package org-ai
+  :straight (:type git :host github :repo "rksm/org-ai" :local-repo "org-ai" :files ("*.el" "README.md" "snippets"))
+  :ensure t
+  :commands (org-ai-mode
+             org-ai-global-mode)
+  :init
+  (add-hook 'org-mode-hook #'org-ai-mode) ; enable org-ai in org-mode
+  (org-ai-global-mode) ; installs global keybindings on C-c M-a
+  (setq org-ai-openai-api-token
+        (funcall
+         (lambda ()
+           (auth-source-pass-get 'secret "OPENAI_API_KEY"))))
+  :config
+  (setq org-ai-default-chat-model "gpt-4o-mini") ; if you are on the gpt-4 beta:
+  (org-ai-install-yasnippets)) ; if you are using yasnippet and want `ai` snippets
+
 (use-package aider
   :straight (:host github :repo "tninja/aider.el")
   :config
