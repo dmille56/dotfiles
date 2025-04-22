@@ -441,6 +441,7 @@ _p_rev       _U_pper              _=_: upper/lower       _r_esolve
    "I" 'helm-occur
    "i" 'consult-line
    "b" 'switch-to-buffer
+   "B" 'my-switch-to-scratch-buffer
    "k" 'kill-buffer
    "e" 'projectile-command-map
    ;; "j" 'avy-goto-char
@@ -608,6 +609,11 @@ _p_rev       _U_pper              _=_: upper/lower       _r_esolve
   "Open the downloads folder in DIRED."
   (interactive)
   (dired "~/Downloads"))
+
+(defun my-switch-to-scratch-buffer ()
+  "Switch to the *scratch* buffer."
+  (interactive)
+  (switch-to-buffer "*scratch*"))
 
 (use-package ready-player
   :ensure t
