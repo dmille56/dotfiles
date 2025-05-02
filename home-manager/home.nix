@@ -129,6 +129,7 @@ in
     lazygit
     gitu
     git-repo-updater #gitup
+    neofetch
 
     nix-prefetch-git
     # (import ../nix/twitchy.nix) # :TODO: fix 

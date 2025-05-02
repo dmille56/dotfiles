@@ -90,6 +90,7 @@ function Fzf-VSCode
 
 Set-Alias weath Get-Weather
 Set-Alias cwd Copy-WorkingDirectoryToClipboard
+Set-Alias lg lazygit
 
 Set-PSReadLineOption -EditMode Windows
 Set-PSReadLineKeyHandler -Chord Shift+Insert -Function Paste
