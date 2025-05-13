@@ -189,9 +189,13 @@ in
 
     gmrun
     dmenu
+    
+    #video editing
+    shotcut
+    # kdePackages.kdenlive
+    # davinci-resolve
 
     realvnc-vnc-viewer
-    kdePackages.kdenlive
     gimp-with-plugins
     flameshot
     obs-studio
