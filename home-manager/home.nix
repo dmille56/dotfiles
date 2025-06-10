@@ -177,7 +177,7 @@ in
     alsa-lib
     ffmpeg-full
     byzanz
-    # mpv
+    mpv
     vlc
     pavucontrol
     pasystray
