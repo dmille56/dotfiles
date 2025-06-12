@@ -33,6 +33,9 @@
 #   - ex: nano /usr/share/X11/xkb/symbols/pc
 # add to .profile to fix locale issue:
 # export LOCALE_ARCHIVE=$(nix-build '<nixpkgs>' -A glibcLocales)/lib/locale/locale-archive
+# - install x11vnc via ubuntu
+#   - vncpasswd (configure a vnc password)
+#   - x11vnc -usepw -display :0
 
 # to fix issue: 'home-manager: line 73: NIX_PATH: unbound variable'
 # export NIX_PATH=$HOME/.nix-defexpr/channels${NIX_PATH:+:}$NIX_PATH
