@@ -436,7 +436,7 @@ _p_rev       _U_pper              _=_: upper/lower       _r_esolve
   (require 'evil-leader)
   (evil-leader/set-leader "<SPC>")
   (evil-leader/set-key
-   "p" 'helm-find-files
+   "p" 'find-file
    "P" 'check-parens
    "I" 'helm-occur
    "i" 'consult-line
@@ -457,7 +457,8 @@ _p_rev       _U_pper              _=_: upper/lower       _r_esolve
    "g" 'magit
    "G" 'launch-lazygit
    "F" 'my/transient-forge
-   "v" 'helm-semantic-or-imenu
+   ;; "v" 'helm-semantic-or-imenu
+   "v" 'consult-imenu ;; :TODO: make sure this works correctly
    "a" 'link-hint-open-link
    "A" 'link-hint-copy-link
    "M" 'my/transient-emms
@@ -927,7 +928,7 @@ _p_rev       _U_pper              _=_: upper/lower       _r_esolve
   :config
   (rg-enable-default-bindings))
 
-(use-package helm-rg :defer)
+;; (use-package helm-rg :defer)
 
 (use-package wgrep)
 
@@ -1192,11 +1193,11 @@ _p_rev       _U_pper              _=_: upper/lower       _r_esolve
   :config
   (projectile-mode +1))
 
-(use-package helm-projectile
-  :functions helm-projectile-on
-  :after projectile
-  :config
-  (helm-projectile-on))
+;; (use-package helm-projectile
+;;   :functions helm-projectile-on
+;;   :after projectile
+;;   :config
+;;   (helm-projectile-on))
 
 (use-package cheat-sh
   :ensure t
@@ -1414,8 +1415,8 @@ Make sure to run \='ollama serve\=' and have zephyr model."
   :config
   (add-hook 'xref-backend-functions #'dumb-jump-xref-activate))
 
-(use-package helm-xref :defer)
-(use-package helm-swoop :defer)
+;; (use-package helm-xref :defer)
+;; (use-package helm-swoop :defer)
 
 ;; :TODO: figure out how to use corfu and orderless
 (use-package corfu
@@ -1430,9 +1431,12 @@ Make sure to run \='ollama serve\=' and have zephyr model."
 
 (use-package orderless
   :custom
-  ;; (completion-styles '(basic partial-completion orderless))
+  ;; Configure a custom style dispatcher (see the Consult wiki)
+  ;; (orderless-style-dispatchers '(+orderless-consult-dispatch orderless-affix-dispatch))
+  ;; (orderless-component-separator #'orderless-escapable-split-on-space)
   (completion-styles '(orderless basic))
- )
+  (completion-category-defaults nil)
+  (completion-category-overrides '((file (styles partial-completion)))))
 
 ;; Enable vertico
 (use-package vertico
@@ -1443,6 +1447,18 @@ Make sure to run \='ollama serve\=' and have zephyr model."
   (vertico-cycle t) ;; Enable cycling for `vertico-next/previous'
   :config
   (vertico-mode))
+
+(use-package vertico-directory
+  :after vertico
+  :ensure nil
+  ;; More convenient directory navigation commands
+  :bind (:map vertico-map
+              ("C-l" . vertico-directory-up)
+              ("RET" . vertico-directory-enter)
+              ("DEL" . vertico-directory-delete-char)
+              ("M-DEL" . vertico-directory-delete-word))
+  ;; Tidy shadowed file names
+  :hook (rfn-eshadow-update-overlay . vertico-directory-tidy))
 
 (use-package savehist
   :config
