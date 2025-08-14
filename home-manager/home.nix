@@ -1,9 +1,13 @@
 {pkgs, ...}: 
 
-## # How to upgrade nix pkgs:
+## :NOTE: How to upgrade nix pkgs:
 # nix-channel --update
-# nix-env --upgrade
 # home-manager switch --impure
+
+## :NOTE: How to upgrade nix itself:
+# nix-env --upgrade # used to use to upgrade nix
+# now use to upgrade nix
+# nix profile upgrade --all # now use to upgrade nix
 
 # how to update nix flakes:
 # cd ~/.config/home-manager && nix flake update
@@ -561,6 +565,9 @@ in
     EOF
     '';
   };
+  
+
+  services.kdeconnect.enable = true;
 
   services.syncthing.enable = true;
   services.spotifyd = {
