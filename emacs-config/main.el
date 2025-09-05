@@ -233,6 +233,7 @@ _p_rev       _U_pper              _=_: upper/lower       _r_esolve
     ("ls" "leetcode submit" leetcode-submit)
     ("lt" "leetcode try" leetcode-try)
     ("lr" "leetcode restore layout" leetcode-restore-layout)
+    ("lR" "leetcode refresh" leetcode-refresh)
     ("e" "eaf" my/transient-eaf)
     ;; ("A" "casual avy" casual-avy-tmenu)
     ("C" "jinx" my/transient-jinx)
@@ -1345,7 +1346,7 @@ _p_rev       _U_pper              _=_: upper/lower       _r_esolve
   :defer
   :ensure t
   :config
-  (setq chatgpt-shell-model-version "gpt-4o-mini")
+  (setq chatgpt-shell-model-version "gpt-5-mini")
   :custom
   (
    (chatgpt-shell-openai-key
@@ -1368,7 +1369,7 @@ _p_rev       _U_pper              _=_: upper/lower       _r_esolve
          (lambda ()
            (auth-source-pass-get 'secret "OPENAI_API_KEY"))))
   :config
-  (setq org-ai-default-chat-model "gpt-4o-mini") ; if you are on the gpt-4 beta:
+  (setq org-ai-default-chat-model "gpt-5-mini")
   (org-ai-install-yasnippets)) ; if you are using yasnippet and want `ai` snippets
 
 (use-package aider

@@ -232,6 +232,9 @@ in
     darktable
     scrcpy
     redshift
+    
+    # resume stuff
+    resumed
   ];
 
   programs.fzf = {
@@ -688,7 +691,8 @@ in
   home.sessionVariables = {
     OPENAI_API_KEY = builtins.readFile "${my-dotfile-dir}/.openai_api_key";
     # OPENAI_API_KEY = builtins.extraBuiltins.pass "OPENAI_API_KEY"; #try to get working via: https://elvishjerricco.github.io/2018/06/24/secure-declarative-key-management.html
-    OPENAI_API_MODEL = "gpt-3.5-turbo"; # options: gpt-3.5-turbo, gpt-4
+    # OPENAI_API_MODEL = "gpt-3.5-turbo"; # options: gpt-3.5-turbo, gpt-4
+    OPENAI_API_MODEL = "gpt-5-mini";
     RIPGREP_CONFIG_PATH = "${my-home-dir}/.ripgreprc";
     LG_CONFIG_FILE= "${my-home-dir}/.config/lazygit/config.yml,${my-home-dir}/.config/lazygit/theme/lazygit/themes-mergable/mocha/blue.yml";
     BROWSER = "sensible-browser";
