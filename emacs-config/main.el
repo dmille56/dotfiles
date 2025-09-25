@@ -1618,6 +1618,11 @@ Make sure to run \='ollama serve\=' and have zephyr model."
 ;;   (defvar eglot-server-programs)
 ;;   (add-to-list 'eglot-server-programs '(nix-mode . ("rnix-lsp"))))
 
+(use-package ruff-format
+  :hook
+  (python-mode . ruff-format-on-save-mode)
+  (python-ts-mode . ruff-format-on-save-mode))
+
 ;; :TODO: make elgot with with powershell correctly
 (if (eq my/config-machine 'work)
     (setq-default powershell-editor-services-bundled-modules-path (expand-file-name "~/bin/PowerShellEditorServices"))
@@ -1645,6 +1650,13 @@ Make sure to run \='ollama serve\=' and have zephyr model."
   :after (flycheck eglot)
   :config
   (global-flycheck-eglot-mode 1))
+
+;; :NOTE: figure out to how configure this package correctly
+;; (use-package fancy-compilation
+;;   :commands (fancy-compilation-mode))
+;; 
+;; (with-eval-after-load 'compile
+;;   (fancy-compilation-mode))
 
 (setq-default compilation-scroll-output 'first-error)
 

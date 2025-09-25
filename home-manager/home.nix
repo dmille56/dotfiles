@@ -83,7 +83,8 @@ in
     zsh
     networkmanager
     lorri
-    python312Packages.python-lsp-server
+    python313Packages.python-lsp-server
+    python313Packages.ruff
     yaml-language-server
     
     # fonts
@@ -559,6 +560,8 @@ in
       -- Replace <YOUR_LSP_SERVER> with each lsp server you've enabled.
       local lspconfig = require('lspconfig')
       lspconfig.pylsp.setup { capabilities = capabilities }
+      lspconfig.ruff.setup({})
+
       lspconfig.hls.setup {
         capabilities = capabilities,
         on_attach = function(client, bufnr)
@@ -691,8 +694,8 @@ in
   home.sessionVariables = {
     OPENAI_API_KEY = builtins.readFile "${my-dotfile-dir}/.openai_api_key";
     # OPENAI_API_KEY = builtins.extraBuiltins.pass "OPENAI_API_KEY"; #try to get working via: https://elvishjerricco.github.io/2018/06/24/secure-declarative-key-management.html
-    # OPENAI_API_MODEL = "gpt-3.5-turbo"; # options: gpt-3.5-turbo, gpt-4
     OPENAI_API_MODEL = "gpt-5-mini";
+    GOOGLE_API_KEY = builtins.readFile "${my-dotfile-dir}/.google_gemini_key";
     RIPGREP_CONFIG_PATH = "${my-home-dir}/.ripgreprc";
     LG_CONFIG_FILE= "${my-home-dir}/.config/lazygit/config.yml,${my-home-dir}/.config/lazygit/theme/lazygit/themes-mergable/mocha/blue.yml";
     BROWSER = "sensible-browser";
