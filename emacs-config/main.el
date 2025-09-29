@@ -1613,6 +1613,7 @@ Make sure to run \='ollama serve\=' and have zephyr model."
 (add-hook 'python-ts-mode-hook 'eglot-ensure)
 (add-hook 'yaml-mode-hook 'eglot-ensure)
 (add-hook 'yaml-ts-mode-hook 'eglot-ensure)
+(add-hook 'typescript-ts-mode 'eglot-ensure)
 ;; (add-hook 'nix-mode-hook 'eglot-ensure)
 ;; (with-eval-after-load 'eglot
 ;;   (defvar eglot-server-programs)
@@ -1622,6 +1623,12 @@ Make sure to run \='ollama serve\=' and have zephyr model."
   :hook
   (python-mode . ruff-format-on-save-mode)
   (python-ts-mode . ruff-format-on-save-mode))
+
+(use-package typescript-ts-mode
+  :ensure t
+  :after eglot
+  :config
+  (setq typescript-ts-mode-indent-offset 4))
 
 ;; :TODO: make elgot with with powershell correctly
 (if (eq my/config-machine 'work)

@@ -86,6 +86,7 @@ in
     python313Packages.python-lsp-server
     python313Packages.ruff
     yaml-language-server
+    typescript-language-server
     
     # fonts
     emacs-all-the-icons-fonts
@@ -562,6 +563,8 @@ in
       lspconfig.pylsp.setup { capabilities = capabilities }
       lspconfig.ruff.setup({})
 
+      lspconfig.ts_ls.setup {}
+
       lspconfig.hls.setup {
         capabilities = capabilities,
         on_attach = function(client, bufnr)
@@ -574,8 +577,8 @@ in
   
 
   services.kdeconnect.enable = true;
-
   services.syncthing.enable = true;
+
   services.spotifyd = {
     enable = true;
     package = (pkgs.spotifyd.override { withPulseAudio = true; withMpris = true; });
@@ -587,6 +590,11 @@ in
       max_cache_size = 2000000000;
       bitrate = 160;
     };
+  };
+
+  services.lorri = {
+    enable = true;
+    enableNotifications = true;
   };
 
   home.file.".config/kak/kakrc".text = ''

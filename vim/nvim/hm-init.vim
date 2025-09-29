@@ -154,6 +154,7 @@ lua <<EOF
   local lspconfig = require('lspconfig')
   lspconfig.pylsp.setup { capabilities = capabilities }
   lspconfig.ruff.setup({})
+  lspconfig.ts_ls.setup({})
   lspconfig.hls.setup {
     capabilities = capabilities,
     on_attach = function(client, bufnr)
