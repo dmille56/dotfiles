@@ -1614,6 +1614,7 @@ Make sure to run \='ollama serve\=' and have zephyr model."
 (add-hook 'yaml-mode-hook 'eglot-ensure)
 (add-hook 'yaml-ts-mode-hook 'eglot-ensure)
 (add-hook 'typescript-ts-mode 'eglot-ensure)
+(add-hook 'tsx-ts-mode 'eglot-ensure)
 ;; (add-hook 'nix-mode-hook 'eglot-ensure)
 ;; (with-eval-after-load 'eglot
 ;;   (defvar eglot-server-programs)

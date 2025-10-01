@@ -557,20 +557,10 @@ in
       }
 
       -- Setup lspconfig.
-      local capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
-      -- Replace <YOUR_LSP_SERVER> with each lsp server you've enabled.
-      local lspconfig = require('lspconfig')
-      lspconfig.pylsp.setup { capabilities = capabilities }
-      lspconfig.ruff.setup({})
-
-      lspconfig.ts_ls.setup {}
-
-      lspconfig.hls.setup {
-        capabilities = capabilities,
-        on_attach = function(client, bufnr)
-           vim.api.nvim_buf_set_keymap(bufnr, 'n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', { noremap=true, silent=true })
-        end,
-      }
+      vim.lsp.enable('pylsp')
+      vim.lsp.enable('ruff')
+      vim.lsp.enable('ts_ls')
+      vim.lsp.enable('hls')
     EOF
     '';
   };
@@ -640,6 +630,8 @@ in
     max_cache_size = 2000000000
     bitrate = 160
   '';
+  
+  home.file.".config/spotify-player/app.toml".source = "${my-dotfile-dir}/.config/spotify-player/app.toml";
 
   home.file.".vimrc".source = "${my-dotfile-dir}/vim/vim/vimrc";
   home.file.".Xresources".source = "${my-dotfile-dir}/Xresources";
@@ -703,6 +695,7 @@ in
     OPENAI_API_KEY = builtins.readFile "${my-dotfile-dir}/.openai_api_key";
     # OPENAI_API_KEY = builtins.extraBuiltins.pass "OPENAI_API_KEY"; #try to get working via: https://elvishjerricco.github.io/2018/06/24/secure-declarative-key-management.html
     OPENAI_API_MODEL = "gpt-5-mini";
+    AIDER_MODEL = "gpt-5-mini";
     GOOGLE_API_KEY = builtins.readFile "${my-dotfile-dir}/.google_gemini_key";
     RIPGREP_CONFIG_PATH = "${my-home-dir}/.ripgreprc";
     LG_CONFIG_FILE= "${my-home-dir}/.config/lazygit/config.yml,${my-home-dir}/.config/lazygit/theme/lazygit/themes-mergable/mocha/blue.yml";

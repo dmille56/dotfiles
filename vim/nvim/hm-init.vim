@@ -149,16 +149,9 @@ lua <<EOF
   }
 
   -- Setup lspconfig.
-  local capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
-  -- Replace <YOUR_LSP_SERVER> with each lsp server you've enabled.
-  local lspconfig = require('lspconfig')
-  lspconfig.pylsp.setup { capabilities = capabilities }
-  lspconfig.ruff.setup({})
-  lspconfig.ts_ls.setup({})
-  lspconfig.hls.setup {
-    capabilities = capabilities,
-    on_attach = function(client, bufnr)
-       vim.api.nvim_buf_set_keymap(bufnr, 'n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', { noremap=true, silent=true })
-    end,
+  vim.lsp.enable('pylsp')
+  vim.lsp.enable('ruff')
+  vim.lsp.enable('ts_ls')
+  vim.lsp.enable('hls')
   }
 EOF
