@@ -23,7 +23,7 @@ pkgs.writeShellScriptBin "play-yt-script" ''
   shift $((OPTIND-1))
 
   url=$@
-  regex="(twitch.tv|(youtube.com)/(watch|shorts))"
+  regex='(https?://)?(www\.)?(twitch\.tv|youtube\.com/(watch|shorts)|youtu\.be)'
 
   if [[ "$url" =~ $regex ]]; then
     echo "found regex in input arg"
