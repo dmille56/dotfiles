@@ -132,6 +132,7 @@ in
     buku
     w3m
     readability-cli
+    youtube-tui
     yt-dlp
     ytfzf
     piper-tts
@@ -188,6 +189,7 @@ in
     byzanz
     mpv
     vlc
+    freetube
     pavucontrol
     pasystray
     trayer

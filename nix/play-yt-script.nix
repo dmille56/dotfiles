@@ -34,7 +34,7 @@ pkgs.writeShellScriptBin "play-yt-script" ''
 
   if [[ -n $url ]]; then
      notify-send -t 3000 "Starting mpv: $url"
-     if [[ "$url" =~ youtube.com ]]; then
+     if [[ "$url" =~ (youtube\.com|youtu\.be) ]]; then
         # yt-dlp -f 18 -o - "$url" | vlc -
         mpv --ytdl-format=$ytformat "$url"
      else
