@@ -238,7 +238,7 @@ in
     redshift
     
     # resume stuff
-    resumed
+    # resumed
   ];
 
   programs.fzf = {
