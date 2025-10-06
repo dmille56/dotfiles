@@ -245,6 +245,7 @@ _p_rev       _U_pper              _=_: upper/lower       _r_esolve
     ("Gd" "chatgpt describe code" chatgpt-shell-describe-code)
     ("GC" "chatgpt write git commit" chatgpt-shell-write-git-commit)
     ("Gc" "copilot chat" copilot-chat-display)
+    ("Ga" "aider transient" aider-transient-menu)
     ]
    ["Help"
     ("h" "emacs help" help-for-help)
@@ -486,6 +487,9 @@ _p_rev       _U_pper              _=_: upper/lower       _r_esolve
    "h" 'harpoon-toggle-quick-menu
    "H a" 'harpoon-quick-menu-hydra
    "H <return>" 'harpoon-add-file
+   
+   ;; aider
+   "s" 'aider-transient-menu
 
    ;; u submenu
    "u" 'my/transient-leader-misc
@@ -1379,7 +1383,7 @@ _p_rev       _U_pper              _=_: upper/lower       _r_esolve
   ;; (setq aider-args '("--model" "sonnet" "--no-auto-accept-architect"))
   ;; (setenv "ANTHROPIC_API_KEY" anthropic-api-key)
   ;; Or chatgpt model
-  (setq aider-args '("--model" "o4-mini"))
+  (setq aider-args '("--model" "gpt-5-mini"))
   (setenv "OPENAI_API_KEY"
           (funcall
            (lambda ()
