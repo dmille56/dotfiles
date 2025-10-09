@@ -1520,10 +1520,10 @@ Make sure to run \='ollama serve\=' and have zephyr model."
 (declare-function eshell/alias "esh-cmd")
 
 (evil-define-key 'normal eshell-mode-map
-  (kbd "C-r") 'helm-eshell-history)
+  (kbd "C-r") 'consult-history)
 
 (evil-define-key 'insert eshell-mode-map
-  (kbd "C-r") 'helm-eshell-history)
+  (kbd "C-r") 'consult-history)
 
 (defun eshell-my-cd (dir)
   "Change DIR in eshell."
