@@ -67,14 +67,13 @@ in
 
   home.packages = with pkgs; [
     #terminal
-    wget
     nano
-    micro
+    #micro
     kakoune
     helix
     vim
-    vimgolf
-    pacvim
+    # vimgolf
+    # pacvim
     curl
     git
     ((emacsPackagesFor emacs-gtk).emacsWithPackages
@@ -90,9 +89,33 @@ in
     
     # fonts
     emacs-all-the-icons-fonts
-    nerd-fonts._3270 nerd-fonts.agave nerd-fonts.anonymice nerd-fonts.arimo nerd-fonts.aurulent-sans-mono nerd-fonts.bigblue-terminal nerd-fonts.bitstream-vera-sans-mono nerd-fonts.blex-mono nerd-fonts.caskaydia-cove nerd-fonts.caskaydia-mono nerd-fonts.code-new-roman nerd-fonts.comic-shanns-mono nerd-fonts.commit-mono nerd-fonts.cousine nerd-fonts.d2coding nerd-fonts.daddy-time-mono nerd-fonts.departure-mono nerd-fonts.dejavu-sans-mono nerd-fonts.droid-sans-mono nerd-fonts.envy-code-r nerd-fonts.fantasque-sans-mono nerd-fonts.fira-code nerd-fonts.fira-mono nerd-fonts.geist-mono nerd-fonts.go-mono nerd-fonts.gohufont nerd-fonts.hack nerd-fonts.hasklug nerd-fonts.heavy-data nerd-fonts.hurmit nerd-fonts.im-writing nerd-fonts.inconsolata nerd-fonts.inconsolata-go nerd-fonts.inconsolata-lgc nerd-fonts.intone-mono nerd-fonts.iosevka nerd-fonts.iosevka-term nerd-fonts.iosevka-term-slab nerd-fonts.jetbrains-mono nerd-fonts.lekton nerd-fonts.liberation nerd-fonts.lilex nerd-fonts.martian-mono nerd-fonts.meslo-lg nerd-fonts.monaspace nerd-fonts.monofur nerd-fonts.monoid nerd-fonts.mononoki nerd-fonts.noto nerd-fonts.open-dyslexic nerd-fonts.overpass nerd-fonts.profont nerd-fonts.proggy-clean-tt nerd-fonts.recursive-mono nerd-fonts.roboto-mono nerd-fonts.shure-tech-mono nerd-fonts.sauce-code-pro nerd-fonts.space-mono nerd-fonts.symbols-only nerd-fonts.terminess-ttf nerd-fonts.tinos nerd-fonts.ubuntu nerd-fonts.ubuntu-mono nerd-fonts.ubuntu-sans nerd-fonts.victor-mono nerd-fonts.zed-mono # since can't install all nerdfonts in one go now
     
-    #nerd-font.mplus
+    # all the nerd fonts:
+    # nerd-fonts._3270 nerd-fonts.agave nerd-fonts.anonymice nerd-fonts.arimo nerd-fonts.aurulent-sans-mono nerd-fonts.bigblue-terminal nerd-fonts.bitstream-vera-sans-mono nerd-fonts.blex-mono nerd-fonts.caskaydia-cove nerd-fonts.caskaydia-mono nerd-fonts.code-new-roman nerd-fonts.comic-shanns-mono nerd-fonts.commit-mono nerd-fonts.cousine nerd-fonts.d2coding nerd-fonts.daddy-time-mono nerd-fonts.departure-mono nerd-fonts.dejavu-sans-mono nerd-fonts.droid-sans-mono nerd-fonts.envy-code-r nerd-fonts.fantasque-sans-mono nerd-fonts.fira-code nerd-fonts.fira-mono nerd-fonts.geist-mono nerd-fonts.go-mono nerd-fonts.gohufont nerd-fonts.hack nerd-fonts.hasklug nerd-fonts.heavy-data nerd-fonts.hurmit nerd-fonts.im-writing nerd-fonts.inconsolata nerd-fonts.inconsolata-go nerd-fonts.inconsolata-lgc nerd-fonts.intone-mono nerd-fonts.iosevka nerd-fonts.iosevka-term nerd-fonts.iosevka-term-slab nerd-fonts.jetbrains-mono nerd-fonts.lekton nerd-fonts.liberation nerd-fonts.lilex nerd-fonts.martian-mono nerd-fonts.meslo-lg nerd-fonts.monaspace nerd-fonts.monofur nerd-fonts.monoid nerd-fonts.mononoki nerd-fonts.noto nerd-fonts.open-dyslexic nerd-fonts.overpass nerd-fonts.profont nerd-fonts.proggy-clean-tt nerd-fonts.recursive-mono nerd-fonts.roboto-mono nerd-fonts.shure-tech-mono nerd-fonts.sauce-code-pro nerd-fonts.space-mono nerd-fonts.symbols-only nerd-fonts.terminess-ttf nerd-fonts.tinos nerd-fonts.ubuntu nerd-fonts.ubuntu-mono nerd-fonts.ubuntu-sans nerd-fonts.victor-mono nerd-fonts.zed-mono
+    
+    # minimal nerd fonts
+    nerd-fonts.symbols-only
+    nerd-fonts.meslo-lg
+    nerd-fonts.fira-code
+    nerd-fonts.jetbrains-mono
+    nerd-fonts.iosevka
+    nerd-fonts.hack
+    nerd-fonts.dejavu-sans-mono
+    nerd-fonts.noto
+
+    # optional nerd fonts
+    nerd-fonts.caskaydia-mono
+    nerd-fonts.roboto-mono
+    nerd-fonts.ubuntu-mono
+    nerd-fonts.ubuntu
+    nerd-fonts.inconsolata
+    nerd-fonts.inconsolata-go
+    nerd-fonts.inconsolata-lgc
+    nerd-fonts.proggy-clean-tt
+    nerd-fonts.terminess-ttf
+    nerd-fonts.sauce-code-pro
+    nerd-fonts.iosevka-term-slab
+    nerd-fonts.fira-mono
     
     godot_4-mono
 
@@ -103,7 +126,11 @@ in
     fzf
     ripgrep
 
+    # haskell
     stack
+    ormolu
+    
+    # rust
     cargo
 
     gnupg
@@ -125,25 +152,22 @@ in
 
     # ai
     aider-chat
-    ollama
+    # ollama
 
     tuir # rtv
     ddgr
     buku
     w3m
-    readability-cli
     youtube-tui
     yt-dlp
     ytfzf
     piper-tts
-    csvtool
+    # csvtool
     ueberzugpp 
     lazygit
-    gitu
     git-repo-updater #gitup
     neofetch
 
-    nix-prefetch-git
     # (import ../nix/twitchy.nix) # :TODO: fix 
     (import ../nix/twitchy-rofi-script.nix)
     (import ../nix/search-ddg-script.nix)
@@ -159,7 +183,6 @@ in
     cmatrix
     snowmachine
     lolcat
-    ormolu
     nixfmt-classic
     libvterm
     libtool
@@ -179,14 +202,14 @@ in
     termonad
     alacritty
     neovide
-    gparted
+    # gparted
     chromium
     google-chrome
 
     mplayer
     alsa-lib
     ffmpeg-full
-    byzanz
+    # byzanz
     mpv
     vlc
     freetube
@@ -204,14 +227,12 @@ in
     dmenu
     
     #video editing
-    shotcut
-    # kdePackages.kdenlive
-    # davinci-resolve
+    # shotcut
 
     realvnc-vnc-viewer
     gimp-with-plugins
     flameshot
-    obs-studio
+    # obs-studio
 
     xscreensaver
     feh
@@ -224,8 +245,8 @@ in
 
     streamlink
 
-    dolphin-emu
-    mupen64plus
+    # dolphin-emu
+    # mupen64plus
     keepassxc
     spotify
     spotify-player
@@ -233,7 +254,7 @@ in
 
     vscode
     blueman
-    darktable
+    # darktable
     scrcpy
     redshift
     
@@ -275,8 +296,8 @@ in
         src = pkgs.fetchFromGitHub {
           owner = "Aloxaf";
           repo = "fzf-tab";
-          rev = "c2b4aa5ad2532cca91f23908ac7f00efb7ff09c9";
-          sha256 = "1b4pksrc573aklk71dn2zikiymsvq19bgvamrdffpf7azpq6kxl2";
+          rev = "fac145167f7ec1861233c54de0c8900b09c650fe";
+          sha256 = "1Ior+/9e+M+Fc1u0uq5HhknlGRS96q7tazhEE6rmx9Y=";
         };
       }
     ];
@@ -568,7 +589,7 @@ in
   };
   
 
-  services.kdeconnect.enable = true;
+  # services.kdeconnect.enable = true;
   services.syncthing.enable = true;
 
   services.spotifyd = {
