@@ -68,7 +68,7 @@ in
   home.packages = with pkgs; [
     #terminal
     nano
-    #micro
+    micro
     kakoune
     helix
     vim
@@ -158,6 +158,7 @@ in
     ddgr
     buku
     w3m
+    ncdu
     youtube-tui
     yt-dlp
     ytfzf
