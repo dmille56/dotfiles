@@ -444,7 +444,7 @@ _p_rev       _U_pper              _=_: upper/lower       _r_esolve
   (evil-leader/set-key
    "p" 'find-file
    "P" 'check-parens
-   "I" 'helm-occur
+   ;; "I" 'helm-occur
    "i" 'consult-line
    "b" 'switch-to-buffer
    "B" 'my-switch-to-scratch-buffer
@@ -555,6 +555,7 @@ _p_rev       _U_pper              _=_: upper/lower       _r_esolve
    (define-key evil-normal-state-map (kbd "gZ") 'zoxide-find-file)
    (define-key evil-normal-state-map (kbd "gb") 'other-window)
    (define-key evil-normal-state-map (kbd "gB") 'evil-jump-backward)
+   (define-key evil-normal-state-map (kbd "gcc") 'comment-line)
    ;; (define-key evil-visual-state-map (kbd ":") 'evil-repeat-find-char)
    (define-key evil-visual-state-map (kbd ";") 'evil-ex)
    ;; (define-key evil-visual-state-map (kbd "M-x") 'helm-M-x)
@@ -772,7 +773,7 @@ _p_rev       _U_pper              _=_: upper/lower       _r_esolve
   :config
   (setq lsp-ui-doc-enable nil))
 
-(use-package helm-lsp :commands helm-lsp-workspace-symbol :defer)
+;; (use-package helm-lsp :commands helm-lsp-workspace-symbol :defer)
 (use-package lsp-treemacs :commands lsp-treemacs-errors-list :defer)
 
 (use-package yasnippet
@@ -794,6 +795,8 @@ _p_rev       _U_pper              _=_: upper/lower       _r_esolve
 (global-set-key (kbd "<f5>") 'tab-bar-switch-to-next-tab)
 ;; use f6 to move to the next window
 (global-set-key (kbd "<f6>") 'other-window)
+;; use f7 to find files
+(global-set-key (kbd "<f7>") 'find-file)
 
 ;; install magit
 (use-package magit
@@ -842,21 +845,21 @@ _p_rev       _U_pper              _=_: upper/lower       _r_esolve
   :init (setq markdown-command "pandoc"))
 
 ;; install helm
-(use-package helm
-  :defines helm-map
-  :functions (helm-M-x helm-mode)
-  :defer
-  :bind
-  ("<f4>" . helm-occur)
-  ("<f7>" . helm-find-files)
-  ("C-x c i" . helm-semantic-or-imenu)
-  :init
-  ;; (global-set-key (kbd "M-x") #'helm-M-x) ;; :TODO: figure out why this doesn't work on windows
-  :config
-  (define-key helm-map (kbd "ESC") 'helm-keyboard-quit)
-  (define-key helm-map (kbd "<f8>") 'helm-keyboard-quit)
-  ;; (helm-mode 1) ;; :TODO: figure out why this doesn't work on windows
-  )
+;; (use-package helm
+;;   :defines helm-map
+;;   :functions (helm-M-x helm-mode)
+;;   :defer
+;;   :bind
+;;   ("<f4>" . helm-occur)
+;;   ("<f7>" . helm-find-files)
+;;   ("C-x c i" . helm-semantic-or-imenu)
+;;   :init
+;;   ;; (global-set-key (kbd "M-x") #'helm-M-x) ;; :TODO: figure out why this doesn't work on windows
+;;   :config
+;;   (define-key helm-map (kbd "ESC") 'helm-keyboard-quit)
+;;   (define-key helm-map (kbd "<f8>") 'helm-keyboard-quit)
+;;   ;; (helm-mode 1) ;; :TODO: figure out why this doesn't work on windows
+;;   )
 
 ;; install themes
 ;; :TODO: look into installing and using circadian.el (to switch between light/dark at sunset)
@@ -1500,6 +1503,8 @@ Make sure to run \='ollama serve\=' and have zephyr model."
 
 ;; Install consult
 (use-package consult
+  :bind
+  ("<f4>" . consult-line)
   :config
   (setq completion-in-region-function 'consult-completion-in-region)
   )
@@ -1634,6 +1639,17 @@ Make sure to run \='ollama serve\=' and have zephyr model."
   :after eglot
   :config
   (setq typescript-ts-mode-indent-offset 4))
+
+(use-package jtsx
+  :ensure t
+  :mode (("\\.jsx?\\'" . jtsx-jsx-mode)
+         ("\\.tsx\\'" . jtsx-tsx-mode)
+         ("\\.ts\\'" . jtsx-typescript-mode))
+  :commands jtsx-install-treesit-language
+  :hook ((jtsx-jsx-mode . hs-minor-mode)
+         (jtsx-tsx-mode . hs-minor-mode)
+         (jtsx-typescript-mode . hs-minor-mode))
+)
 
 ;; :TODO: make elgot with with powershell correctly
 (if (eq my/config-machine 'work)
