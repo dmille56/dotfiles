@@ -62,6 +62,7 @@ myManageHook =
       className =? "mpv" --> doShift "2:vid",
       className =? "vlc" --> doShift "2:vid",
       className =? "Chromium-browser" --> doShift "2:vid",
+      className =? "freetube" --> doShift "2:vid",
       className =? "Emacs" --> doShift "9:dev",
       className =? "Termonad-linux-x86_64" --> doShift "8:term",
       className =? "Alacritty" --> doShift "8:term",
@@ -90,7 +91,7 @@ myScratchPads = [btm, term, fileManager, lazygit, music, volumeControl]
     volumeControl = NS "volumeControl" spawn' find manage'
       where
         spawn' = "pavucontrol"
-        find = className =? "Pavucontrol"
+        find = className =? "pavucontrol"
         manage' = customFloating $ rectCentered 0.9
     term = NS "term" spawn' find manage'
       where
