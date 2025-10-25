@@ -1906,7 +1906,9 @@ shell exits, the buffer is killed."
   "Launch lazygit in external terminal."
   (interactive)
   (cond
-   ((eq my/config-machine 'pc) (ee-lazygit))
+   ;; :TODO: figure out why ee doesn't work with nixGL correctly anymore
+   ;; ((eq my/config-machine 'pc) (ee-lazygit))
+   ((eq my/config-machine 'pc) (start-process "lazygit-process" "*lazygit-buffer" "nixGL" "alacritty" "--class" "ee_term" "-e" "lazygit"))
    ((eq my/config-machine 'work) (start-process "lazygit-process" "*lazygit-buffer" "alacritty" "-e" "lazygit"))
    (t (run-in-vterm "lazygit"))
   ))

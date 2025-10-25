@@ -1,3 +1,4 @@
+# home-manager switch --impure
 {
 pkgs, ...}: 
 
@@ -155,6 +156,8 @@ in
     # ai
     aider-chat
     # ollama
+    
+    sqlite-interactive
 
     tuir # rtv
     ddgr
