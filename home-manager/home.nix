@@ -605,9 +605,12 @@ in
     # to output the public key: age-keygen -y ~/.config/sops/age/keys.txt
     # change the yaml config at .sops.yaml (when need to update the age key)
     age.keyFile = "${my-home-dir}/.config/sops/age/keys.txt"; # Path to your age key file
-    # to add/init a new secrets file: sops secrets.yaml
+    # :NOTE:
+    # to add/init a new secrets file: 
+    # sops secrets.yaml
     defaultSopsFile = ../secrets.yaml; # default secrets file
     
+    # :NOTE: need to add one of these entries for each secret added to the secrets file (so can be accessed in nix)
     secrets.OPENAI_API_KEY.path = "${config.sops.defaultSymlinkPath}/OPENAI_API_KEY";
     secrets.GOOGLE_API_KEY.path = "${config.sops.defaultSymlinkPath}/GOOGLE_API_KEY";
   };
