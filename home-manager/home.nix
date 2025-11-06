@@ -1,6 +1,6 @@
 # home-manager switch --impure
 {
-pkgs, ...}: 
+pkgs, config, ...}: 
 
 ## :NOTE: How to upgrade nix pkgs:
 # nix-channel --update
@@ -138,6 +138,8 @@ in
 
     gnupg
     pass
+    age
+    sops
 
     bat
     eza #exa
@@ -596,6 +598,21 @@ in
     '';
   };
   
+  sops = {
+    # :NOTE: generate key with age:
+    # mkdir -p ~/.config/sops/age
+    # age-keygen -o ~/.config/sops/age/keys.txt
+    # to output the public key: age-keygen -y ~/.config/sops/age/keys.txt
+    # change the yaml config at .sops.yaml (when need to update the age key)
+    age.keyFile = "${my-home-dir}/.config/sops/age/keys.txt"; # Path to your age key file
+    # to encrypt with sops the first time: sops -e secrets.yaml > secrets.yaml
+    # to add to the file: sops secrets.yaml
+    defaultSopsFile = ../secrets.yaml; # default secrets file
+    
+    secrets.OPENAI_API_KEY.path = "${config.sops.defaultSymlinkPath}/OPENAI_API_KEY";
+    secrets.GOOGLE_API_KEY.path = "${config.sops.defaultSymlinkPath}/GOOGLE_API_KEY";
+  };
+  
 
   # services.kdeconnect.enable = true;
   services.syncthing.enable = true;
@@ -721,13 +738,12 @@ in
     sha256 = "XzyspX6U9FWglDA8VIZE4JamGsFvARQX7iCcQ/blbUE=";
     stripRoot = false;
   };
-
+  
   home.sessionVariables = {
-    OPENAI_API_KEY = builtins.readFile "${my-dotfile-dir}/.openai_api_key";
-    # OPENAI_API_KEY = builtins.extraBuiltins.pass "OPENAI_API_KEY"; #try to get working via: https://elvishjerricco.github.io/2018/06/24/secure-declarative-key-management.html
+    OPENAI_API_KEY = "$(cat ${config.sops.secrets.OPENAI_API_KEY.path})";
+    GOOGLE_API_KEY = "$(cat ${config.sops.secrets.GOOGLE_API_KEY.path})";
     OPENAI_API_MODEL = "gpt-5-mini";
     AIDER_MODEL = "gpt-5-mini";
-    GOOGLE_API_KEY = builtins.readFile "${my-dotfile-dir}/.google_gemini_key";
     RIPGREP_CONFIG_PATH = "${my-home-dir}/.ripgreprc";
     LG_CONFIG_FILE= "${my-home-dir}/.config/lazygit/config.yml,${my-home-dir}/.config/lazygit/theme/lazygit/themes-mergable/mocha/blue.yml";
     BROWSER = "sensible-browser";

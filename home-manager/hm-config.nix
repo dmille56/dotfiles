@@ -1,6 +1,6 @@
 # copy this to: ~/.config/nixpkgs/home.nix
 # via: cp hm-config.nix ~/.config/nixpkgs/home.nix
-{ config, pkgs, ... }:
+{ config, pkgs, inputs, ... }:
 
 {
   imports = [

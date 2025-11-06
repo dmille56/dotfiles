@@ -1,5 +1,6 @@
 # copy this to: ~/.config/home-manager/flake.nix
-# via: cp flake.nix ~/.config/home-manager/flake.nix
+# via:
+# cp flake.nix ~/.config/home-manager/flake.nix
 # :TODO: figure out how to configure this without needing to copy it to the config/home-manager directory
 {
     description = "My Home Manager Flake";
@@ -11,9 +12,14 @@
             inputs.nixpkgs.follows = "nixpkgs";
         };
         nixgl.url = "github:nix-community/nixGL";
+        
+        sops-nix = {
+          url = "github:Mic92/sops-nix";
+          inputs.nixpkgs.follows = "nixpkgs";
+        };
     };
 
-    outputs = { nixgl, nixpkgs, home-manager, ...}: {
+    outputs = { nixgl, nixpkgs, home-manager, sops-nix, ...}: {
         homeConfigurations = {
             "dono" = home-manager.lib.homeManagerConfiguration {
                 pkgs = import nixpkgs {
@@ -34,7 +40,10 @@
                   ];
                 };
 
-                modules = [ ./home.nix ];
+                modules = [ 
+                  sops-nix.homeManagerModules.sops
+                  ./home.nix
+                ];
             };
         };
     };
