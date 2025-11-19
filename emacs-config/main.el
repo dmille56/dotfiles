@@ -1359,6 +1359,9 @@ _p_rev       _U_pper              _=_: upper/lower       _r_esolve
    (chatgpt-shell-openai-key
     (lambda ()
         (auth-source-pass-get 'secret "OPENAI_API_KEY")))
+   (chatgpt-shell-anthropic-key
+    (lambda ()
+        (auth-source-pass-get 'secret "ANTHROPIC_API_KEY")))
    (chatgpt-shell-google-key
     (lambda ()
         (auth-source-pass-get 'secret "GOOGLE_GEMINI_KEY")))))

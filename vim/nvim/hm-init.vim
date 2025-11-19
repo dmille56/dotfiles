@@ -23,6 +23,9 @@ vnoremap ; :
 
 let mapleader="\<SPACE>"
 
+" Use system clipboard for all yank/delete/put operations
+set clipboard+=unnamedplus
+
 "NERDTree
 "-------------------------
 nnoremap <leader>\ :NERDTreeToggle<CR>

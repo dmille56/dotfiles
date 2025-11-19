@@ -189,6 +189,7 @@ in
     (import ../nix/fireplace.nix { inherit lib stdenv fetchgit ncurses5; })
 
     cmatrix
+    neo
     snowmachine
     lolcat
     nixfmt-classic
@@ -454,6 +455,9 @@ in
     nnoremap ; :
     vnoremap : ;
     vnoremap ; :
+    
+    " Use system clipboard for all yank/delete/put operations
+    set clipboard+=unnamedplus
 
     let mapleader="\<SPACE>"
 
@@ -613,6 +617,7 @@ in
     # :NOTE: need to add one of these entries for each secret added to the secrets file (so can be accessed in nix)
     secrets.OPENAI_API_KEY.path = "${config.sops.defaultSymlinkPath}/OPENAI_API_KEY";
     secrets.GOOGLE_API_KEY.path = "${config.sops.defaultSymlinkPath}/GOOGLE_API_KEY";
+    secrets.ANTHROPIC_API_KEY.path = "${config.sops.defaultSymlinkPath}/ANTHROPIC_API_KEY";
   };
   
 
@@ -744,6 +749,7 @@ in
   home.sessionVariables = {
     OPENAI_API_KEY = "$(cat ${config.sops.secrets.OPENAI_API_KEY.path})";
     GOOGLE_API_KEY = "$(cat ${config.sops.secrets.GOOGLE_API_KEY.path})";
+    ANTHROPIC_API_KEY = "$(cat ${config.sops.secrets.ANTHROPIC_API_KEY.path})";
     OPENAI_API_MODEL = "gpt-5-mini";
     AIDER_MODEL = "gpt-5-mini";
     RIPGREP_CONFIG_PATH = "${my-home-dir}/.ripgreprc";
