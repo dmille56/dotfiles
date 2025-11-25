@@ -1,6 +1,5 @@
 # home-manager switch --impure
-{
-pkgs, config, ...}: 
+{ pkgs, config, ...}: 
 
 ## :NOTE: How to upgrade nix pkgs:
 # nix-channel --update
@@ -66,6 +65,15 @@ in
   fonts.fontconfig.enable = true;
   nixpkgs.config.allowUnfree = true;
   nixpkgs.config.pulseaudio = true;
+  
+  # :NOTE: enable automatic nix garbage collection
+  nix.gc = {
+    automatic = true;
+    # Optional: sets the frequency, e.g., "weekly", "daily", or a cron expression
+    frequency = "daily";
+    # Optional: options to pass to nix-collect-garbage, e.g., "--delete-older-than 30d"
+    options = "--delete-older-than 30d";
+  };
 
   home.packages = with pkgs; [
     #terminal
@@ -266,9 +274,6 @@ in
     # darktable
     scrcpy
     redshift
-    
-    # resume stuff
-    # resumed
   ];
 
   programs.fzf = {

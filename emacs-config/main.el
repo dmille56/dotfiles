@@ -1658,6 +1658,9 @@ Make sure to run \='ollama serve\=' and have zephyr model."
   :straight '(:type git :host codeberg :repo "meow_king/typst-ts-mode"))
 (add-to-list 'auto-mode-alist '("\\.typ\\'" . typst-ts-mode))
 
+(use-package grafana-alloy-mode
+  :straight '(:type git :host codeberg :repo "bgcartman/grafana-alloy-mode"))
+
 ;; :TODO: make elgot with with powershell correctly
 (if (eq my/config-machine 'work)
     (setq-default powershell-editor-services-bundled-modules-path (expand-file-name "~/bin/PowerShellEditorServices"))
