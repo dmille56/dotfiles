@@ -156,5 +156,14 @@ lua <<EOF
   vim.lsp.enable('ruff')
   vim.lsp.enable('ts_ls')
   vim.lsp.enable('hls')
-  }
+  
+  -- Setup AI codecompanion
+  require("codecompanion").setup({
+    strategies = {
+      chat = {
+        adapter = "openai",
+        model = "gpt-5-mini"
+      },
+    }
+  })
 EOF

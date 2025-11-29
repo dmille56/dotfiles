@@ -69,10 +69,9 @@ in
   # :NOTE: enable automatic nix garbage collection
   nix.gc = {
     automatic = true;
-    # Optional: sets the frequency, e.g., "weekly", "daily", or a cron expression
-    frequency = "daily";
+    dates = "daily";
     # Optional: options to pass to nix-collect-garbage, e.g., "--delete-older-than 30d"
-    options = "--delete-older-than 30d";
+    options = "--delete-older-than 7d";
   };
 
   home.packages = with pkgs; [
@@ -403,6 +402,10 @@ in
         # Start windows and panes at 1, not 0
         set -g base-index 1
         setw -g pane-base-index 1
+
+        # Make % (horizontal split) and " (vertical split) bindings split the window and cd to the current path
+        bind % split-window -h -c "#{pane_current_path}"
+        bind '"' split-window -v -c "#{pane_current_path}"
     '';
   };
 
@@ -433,6 +436,9 @@ in
       nvim-cmp
       cmp-vsnip
       vim-vsnip
+      
+      #ai
+      codecompanion-nvim
 
       vim-be-good
     ];
@@ -538,6 +544,8 @@ in
     nnoremap <leader>g :Neogit<CR>
     nnoremap <leader>G :LazyGit<CR>
 
+    nnoremap <leader>ug :CodeCompanionChat<CR>
+
     nnoremap <leader>z :Telescope zoxide list<CR>
 
     " Make terminal ESC work like you would expect it to
@@ -603,6 +611,16 @@ in
       vim.lsp.enable('ruff')
       vim.lsp.enable('ts_ls')
       vim.lsp.enable('hls')
+
+      -- Setup AI codecompanion
+      require("codecompanion").setup({
+        strategies = {
+          chat = {
+            adapter = "openai",
+            model = "gpt-5-mini"
+          },
+        }
+      })
     EOF
     '';
   };

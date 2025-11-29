@@ -1949,6 +1949,10 @@ shell exits, the buffer is killed."
 ;;   :bind (:map git-commit-mode-map
 ;;               ("C-c C-g" . magit-gptcommit-commit-accept)))
 
+(use-package good-scroll
+  :config
+  (good-scroll-mode 1))
+
 (use-package casual-avy)
 
 (use-package imenu-list

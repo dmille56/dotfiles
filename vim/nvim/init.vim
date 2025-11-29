@@ -34,6 +34,11 @@ call plug#begin('~/AppData/Local/nvim/plugged')
     Plug 'hrsh7th/cmp-vsnip'
     Plug 'hrsh7th/vim-vsnip'
 
+    "AI Codecompanion + dependencies
+    " :NOTE: The plugin requires the markdown and markdown_inline Tree-sitter parsers to be installed with :TSInstall markdown markdown_inline
+    Plug 'nvim-lua/plenary.nvim'
+    Plug 'olimorris/codecompanion'
+
 call plug#end()
 
 source ~/AppData/Local/nvim/hm-init.vim
