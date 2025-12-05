@@ -71,7 +71,7 @@ in
     automatic = true;
     dates = "daily";
     # Optional: options to pass to nix-collect-garbage, e.g., "--delete-older-than 30d"
-    options = "--delete-older-than 7d";
+    options = "--delete-older-than 14d";
   };
 
   home.packages = with pkgs; [
@@ -263,6 +263,7 @@ in
 
     # dolphin-emu
     # mupen64plus
+    snes9x-gtk
     keepassxc
     spotify
     spotify-player
