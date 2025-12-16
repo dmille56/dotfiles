@@ -87,7 +87,7 @@ in
     git
     ((emacsPackagesFor emacs-gtk).emacsWithPackages
       (epkgs: [ epkgs.vterm epkgs.w3m epkgs.jinx ]))
-    eask #emacs eask
+    eask-cli #emacs eask
     zsh
     networkmanager
     lorri
