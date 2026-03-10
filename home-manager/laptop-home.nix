@@ -674,9 +674,9 @@ in
 
   home.file.".vimrc".source = "${my-dotfile-dir}/vim/vim/vimrc";
   home.file.".Xresources".source = "${my-dotfile-dir}/Xresources";
-  # home.file.".xmobarrc".source = "${my-dotfile-dir}/xmobarrc";
-  # home.file.".xmonad/xmonad.hs".source = "${my-dotfile-dir}/.xmonad/xmonad.hs";
-  # home.file.".xmonad/lib/MyTheme.hs".source = "${my-dotfile-dir}/.xmonad/MyTheme.hs";
+  home.file.".xmobarrc".source = "${my-dotfile-dir}/xmobarrc";
+  home.file.".xmonad/xmonad.hs".source = "${my-dotfile-dir}/.xmonad/xmonad.hs";
+  home.file.".xmonad/lib/MyTheme.hs".source = "${my-dotfile-dir}/.xmonad/MyTheme.hs";
   home.file.".ghci".source = "${my-dotfile-dir}/.ghci";
   home.file.".ripgreprc".source = "${my-dotfile-dir}/.ripgreprc";
   home.file.".config/mpv/mpv.conf".source = "${my-dotfile-dir}/mpv.conf";
