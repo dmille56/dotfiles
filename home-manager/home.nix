@@ -163,7 +163,8 @@ in
     warpd
 
     # ai
-    aider-chat
+    # aider-chat
+    aider-chat-full
     # ollama
     
     sqlite-interactive
@@ -181,7 +182,7 @@ in
     ueberzugpp 
     lazygit
     git-repo-updater #gitup
-    neofetch
+    fastfetch
 
     # (import ../nix/twitchy.nix) # :TODO: fix 
     (import ../nix/twitchy-rofi-script.nix)
@@ -199,7 +200,8 @@ in
     neo
     snowmachine
     lolcat
-    nixfmt-classic
+    # nixfmt-classic
+    nixfmt
     libvterm
     libtool
 
@@ -248,7 +250,7 @@ in
     realvnc-vnc-viewer
     gimp-with-plugins
     flameshot
-    # obs-studio
+    obs-studio
 
     xscreensaver
     feh
@@ -263,7 +265,7 @@ in
 
     # dolphin-emu
     # mupen64plus
-    snes9x-gtk
+    # snes9x-gtk
     keepassxc
     spotify
     spotify-player
@@ -773,6 +775,7 @@ in
   home.sessionVariables = {
     OPENAI_API_KEY = "$(cat ${config.sops.secrets.OPENAI_API_KEY.path})";
     GOOGLE_API_KEY = "$(cat ${config.sops.secrets.GOOGLE_API_KEY.path})";
+    GEMINI_API_KEY = "$(cat ${config.sops.secrets.GOOGLE_API_KEY.path})";
     ANTHROPIC_API_KEY = "$(cat ${config.sops.secrets.ANTHROPIC_API_KEY.path})";
     OPENAI_API_MODEL = "gpt-5-mini";
     AIDER_MODEL = "gpt-5-mini";

@@ -1953,6 +1953,13 @@ shell exits, the buffer is killed."
   :config
   (good-scroll-mode 1))
 
+;; :NOTE: fix scrolling in comint-mode since it's so fucking annoying when it tries to keep the cursor at the prompt
+(add-hook 'comint-mode-hook
+          (lambda ()
+            (setq-local comint-scroll-to-bottom-on-output nil)
+            (setq-local comint-scroll-show-maximum-output nil)
+            (setq-local comint-move-point-for-output nil)))
+
 (use-package casual-avy)
 
 (use-package imenu-list
