@@ -217,7 +217,9 @@ in
     keepassxc
     spotify
     spotify-player
-    steam
+    steam # :NOTE: added
+    sensible-utils # :NOTE: added
+    xdg-utils # :NOTE: added
     blanket
 
     vscode
@@ -603,7 +605,6 @@ in
     secrets.GIT_EMAIL.path = "${config.sops.defaultSymlinkPath}/GIT_EMAIL";
     secrets.GITHUB_USER.path = "${config.sops.defaultSymlinkPath}/GITHUB_USER";
   };
-  
 
   # services.kdeconnect.enable = true;
   services.syncthing.enable = true;
@@ -740,9 +741,11 @@ in
     AIDER_MODEL = "gpt-5-mini";
     RIPGREP_CONFIG_PATH = "${my-home-dir}/.ripgreprc";
     LG_CONFIG_FILE= "${my-home-dir}/.config/lazygit/config.yml,${my-home-dir}/.config/lazygit/theme/lazygit/themes-mergable/mocha/blue.yml";
-    BROWSER = "sensible-browser";
-    NIXPKGS_ALLOW_UNFREE = "1";
+    BROWSER = "firefox";
+    PAGER = "less";
     EDITOR = "nvim";
+    VISUAL = "neovide";
+    NIXPKGS_ALLOW_UNFREE = "1";
   };
 
 }
