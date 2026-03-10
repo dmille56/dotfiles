@@ -1,8 +1,10 @@
 import Data.Char (toLower)
 import Data.Default (def)
+import Data.Maybe (isJust)
 import qualified Data.Map as M
 import Graphics.X11.ExtraTypes.XF86
 import MyTheme
+import System.Directory (findExecutable)
 import System.IO
 import XMonad
 import XMonad.Actions.Search
@@ -55,7 +57,7 @@ myLayoutHook = onWorkspace "9" ((smartBorders . avoidStruts) myLayout') $ ((smar
     ratio = 1 / 2
     delta = 3 / 100
 
-myManageHook =
+myManageHook hasNixGL =
   composeAll
     [ className =? "steam" --> doShift "3:game",
       className =? "Spotify" --> doShift "4:mus",
@@ -70,7 +72,7 @@ myManageHook =
       title =? "Mozilla Firefox" --> doShift "1:web",
       (isFullscreen --> doFullFloat),
       manageDocks,
-      namedScratchpadManageHook myScratchPads,
+      namedScratchpadManageHook (myScratchPads hasNixGL),
       manageHook def
     ]
 
@@ -80,12 +82,12 @@ rectCentered percentage = W.RationalRect offset offset percentage percentage
     offset = (1 - percentage) / 2
 
 -- Scratchpads
-myScratchPads :: [NamedScratchpad]
-myScratchPads = [btm, term, fileManager, lazygit, music, volumeControl]
+myScratchPads :: Bool -> [NamedScratchpad]
+myScratchPads hasNixGL = [btm, term, fileManager, lazygit, music, volumeControl]
   where
     btm = NS "btm" spawn' find manage'
       where
-        spawn' = glWrapper "alacritty --class btm_term -e btm"
+        spawn' = glWrapper hasNixGL "alacritty --class btm_term -e btm"
         find = className =? "btm_term"
         manage' = customFloating $ rectCentered 0.9
     volumeControl = NS "volumeControl" spawn' find manage'
@@ -95,7 +97,7 @@ myScratchPads = [btm, term, fileManager, lazygit, music, volumeControl]
         manage' = customFloating $ rectCentered 0.9
     term = NS "term" spawn' find manage'
       where
-        spawn' = glWrapper "alacritty --class scratchpad_term"
+        spawn' = glWrapper hasNixGL "alacritty --class scratchpad_term"
         find = className =? "scratchpad_term"
         manage' = customFloating $ rectCentered 0.9
     fileManager = NS "fileManager" spawn' find manage'
@@ -105,12 +107,12 @@ myScratchPads = [btm, term, fileManager, lazygit, music, volumeControl]
         manage' = customFloating $ rectCentered 0.9
     lazygit = NS "lazygit" spawn' find manage'
       where
-        spawn' = glWrapper "alacritty --class lazygit_term -e lazygit"
+        spawn' = glWrapper hasNixGL "alacritty --class lazygit_term -e lazygit"
         find = className =? "lazygit_term"
         manage' = customFloating $ rectCentered 0.95
     music = NS "music" spawn' find manage'
       where
-        spawn' = glWrapper "alacritty --class spotify_term -e spotify_player"
+        spawn' = glWrapper hasNixGL "alacritty --class spotify_term -e spotify_player"
         find = className =? "spotify_term"
         manage' = customFloating $ rectCentered 0.9
 
@@ -120,8 +122,8 @@ myScratchPads = [btm, term, fileManager, lazygit, music, volumeControl]
 --     find = className =? "Spotify"
 --     manage' = customFloating $ rectCentered 0.9
 
-openScratchPad :: String -> X ()
-openScratchPad = namedScratchpadAction myScratchPads
+openScratchPad :: Bool -> String -> X ()
+openScratchPad hasNixGL = namedScratchpadAction (myScratchPads hasNixGL)
 
 audioPlayPauseCommand = "playerctl play-pause -p spotifyd,spotify,chromium,firefox"
 
@@ -150,10 +152,11 @@ main = do
   xmproc <- spawnPipe "xmobar"
   -- spawn "redshift -l 47.608013:-122.335167 -t 6500:3500" -- causes issues when starting it this way for some reason... :TODO: figure out why
   -- emacsDaemon <- spawnPipe "emacs --daemon" -- maybe re-enable this at some point... :TODO: figure out why svg-tag-mode causes issues when started as a daemon
+  hasNixGL <- isJust <$> findExecutable "nixGL"
   xmonad $
     ewmh $
       def
-        { manageHook = myManageHook,
+        { manageHook = (myManageHook hasNixGL),
           layoutHook = myLayoutHook,
           startupHook = myStartupHook,
           logHook =
@@ -165,7 +168,7 @@ main = do
                   ppLayout = xmobarColor (_myTheme_ppLayoutColor myTheme) "",
                   ppSep = " | "
                 },
-          handleEventHook = handleEventHook def <+> XMonad.Hooks.EwmhDesktops.fullscreenEventHook <+> dynamicPropertyChange "WM_CLASS" myManageHook <+> docksEventHook,
+          handleEventHook = handleEventHook def <+> XMonad.Hooks.EwmhDesktops.fullscreenEventHook <+> dynamicPropertyChange "WM_CLASS" (myManageHook hasNixGL) <+> docksEventHook,
           modMask = myModMask,
           borderWidth = 2,
           normalBorderColor = (_myTheme_normalBorderColor myTheme),
@@ -180,18 +183,18 @@ main = do
                            ((myModMask, xK_s), promptSearch myXPConfig duckduckgo),
                            ((myModMask .|. shiftMask, xK_s), selectSearch duckduckgo),
                            ((myModMask, xK_v), shellPrompt myXPConfig),
-                           ((myModMask .|. shiftMask, xK_v), prompt (glWrapper "alacritty" ++ " -e") myXPConfig),
+                           ((myModMask .|. shiftMask, xK_v), prompt (glWrapper hasNixGL "alacritty" ++ " -e") myXPConfig),
                            ((myModMask, xK_g), windowPrompt myXPConfig Goto allWindows),
                            ((myModMask .|. shiftMask, xK_g), windowPrompt myXPConfig Bring allWindows),
                            ((myModMask, xK_c), spawn "rofi -modi 'clipboard:greenclip print' -show clipboard -run-command '{cmd}'"),
                            ((myModMask, xK_y), spawn "ytfzf -D"),
                            ((myModMask, xK_r), spawn "xrandr --output DP-4 --auto --right-of DP-0"), -- Set Monitors to Extend Mode (instead of mirror mode)
-                           ((myModMask, xK_backslash), openScratchPad "term"),
-                           ((myModMask .|. shiftMask, xK_backslash), openScratchPad "lazygit"),
-                           ((myModMask, xK_bracketright), openScratchPad "btm"),
-                           ((myModMask .|. shiftMask, xK_bracketright), openScratchPad "volumeControl"),
-                           ((myModMask, xK_bracketleft), openScratchPad "music"),
-                           ((myModMask .|. shiftMask, xK_bracketleft), openScratchPad "fileManager"),
+                           ((myModMask, xK_backslash), openScratchPad hasNixGL "term"),
+                           ((myModMask .|. shiftMask, xK_backslash), openScratchPad hasNixGL "lazygit"),
+                           ((myModMask, xK_bracketright), openScratchPad hasNixGL "btm"),
+                           ((myModMask .|. shiftMask, xK_bracketright), openScratchPad hasNixGL "volumeControl"),
+                           ((myModMask, xK_bracketleft), openScratchPad hasNixGL "music"),
+                           ((myModMask .|. shiftMask, xK_bracketleft), openScratchPad hasNixGL "fileManager"),
                            -- ((myModMask, xK_j), spawn "xdotool key Page_Down"), -- Remap mod+j, mod+k to page down / up
                            -- ((myModMask, xK_k), spawn "xdotool key Page_Up"),
                            ((myModMask, xK_d), spawn "export BROWSER=sensible-browser && rofi-buku"),
@@ -211,15 +214,15 @@ main = do
                                [ ((0, xK_f), notifySpawn "sensible-browser"),
                                  ((0, xK_c), notifySpawn "chromium"),
                                  ((0, xK_v), notifySpawn "rofi-bluetooth"),
-                                 ((0, xK_b), notifySpawn $ glWrapper "alacritty -e bluetoothctl"),
+                                 ((0, xK_b), notifySpawn $ glWrapper hasNixGL "alacritty -e bluetoothctl"),
                                  ((0, xK_s), notifySpawn "spotify"),
                                  ((0, xK_a), notifySpawn "steam"),
                                  ((0, xK_p), notifySpawn "pavucontrol"),
                                  ((0, xK_m), notifySpawn "gnome-system-monitor"),
-                                 ((0, xK_r), notifySpawn $ glWrapper "alacritty -e ranger"),
+                                 ((0, xK_r), notifySpawn $ glWrapper hasNixGL "alacritty -e ranger"),
                                  ((0, xK_t), notifySpawn "thunar"),
-                                 ((0, xK_d), notifySpawn $ glWrapper "alacritty -e dropbox"),
-                                 ((0, xK_x), notifySpawn $ glWrapper "alacritty"),
+                                 ((0, xK_d), notifySpawn $ glWrapper hasNixGL "alacritty -e dropbox"),
+                                 ((0, xK_x), notifySpawn $ glWrapper hasNixGL "alacritty"),
                                  ((0, xK_e), notifySpawn "emacsclient -n -c"),
                                  ((shiftMask, xK_e), notifySpawn "emacs"),
                                  ((0, xK_i), spawn "rofi -modi emoji -show emoji -font 'Noto Color Emoji 12'")
@@ -231,4 +234,7 @@ notifySpawn s = do
   spawn ("notify-send -t 3000 'Launching " ++ s ++ "'")
   spawn s
 
-glWrapper s = "nixGL " ++ s
+glWrapper hasNixGL s =
+  if hasNixGL 
+    then "nixGL " ++ s
+    else s
