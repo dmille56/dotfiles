@@ -122,7 +122,7 @@ in
     warpd
 
     # ai
-    aider-chat
+    aider-chat-full
     claude-code
     # ollama
     
