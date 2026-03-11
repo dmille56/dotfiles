@@ -16,6 +16,10 @@ let
     url = "https://github.com/EliverLara/Sweet-folders";
     rev = "40a5d36e50437901c7eaa1119bb9ae8006e2fe5c";
   };
+  draculaWallpaperRepo = builtins.fetchGit {
+    url = "https://github.com/dracula/wallpaper";
+    rev = "f2b8cc4223bcc2dfd5f165ab80f701bbb84e3303";
+  };
 in
 {
   home.username = "${username}";
@@ -119,6 +123,7 @@ in
 
     # ai
     aider-chat
+    claude-code
     # ollama
     
     sqlite-interactive
@@ -734,6 +739,11 @@ in
   home.file.".local/share/icons/Sweet-Rainbow" = {
     source = "${sweetIconsRepo}/Sweet-Rainbow";
     recursive = true;
+  };
+
+  # :NOTE: this sets the desktop wallpaper
+  home.file.".background-image" = {
+    source = "${draculaWallpaperRepo}/first-collection/nixos.png";
   };
   
   home.file.".config/lazygit/theme/lazygit".source = builtins.fetchGit {
