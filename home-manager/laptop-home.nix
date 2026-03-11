@@ -330,6 +330,7 @@ in
   programs.gh = {
     enable = true;
     extensions = [ pkgs.gh-dash ];
+    gitCredentialHelper.enable = true;
   };
 
   programs.tmux = {
