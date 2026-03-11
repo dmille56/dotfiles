@@ -224,6 +224,7 @@ in
     steam # :NOTE: added
     sensible-utils # :NOTE: added
     xdg-utils # :NOTE: added
+    libnotify # :NOTE: added
     blanket
 
     vscode
@@ -709,9 +710,14 @@ in
     rev = "f3c876d8c97f9bb504c98592a8d96770e70585bb";
   };
 
-  home.file.".themes/sweet".source = builtins.fetchGit {
-    url = "https://github.com/EliverLara/Sweet";
-    rev = "34d8131286baaaf2d6dcb3b3e66100f99008e61c";
+  home.file.".themes/sweet".source = builtins.fetchTarball {
+    url = "https://github.com/EliverLara/Sweet/releases/download/v6.0/Sweet.tar.xz";
+    sha256 = "sha256:012nc14vz31zq34pg5nv2ybzryhqpf6x0jh022nvgyhrf9q1zrn9";
+  };
+
+  home.file.".themes/sweet-dark".source = builtins.fetchTarball {
+    url = "https://github.com/EliverLara/Sweet/releases/download/v6.0/Sweet-Dark.tar.xz";
+    sha256 = "sha256:1j67jwpab7f13rgcxmzqqvjixp5j8mdpv6vpsf2ajnh5yyxzqxvj";
   };
 
   home.file.".local/share/icons/candy-icons".source = builtins.fetchGit {
