@@ -745,6 +745,10 @@ in
   home.file.".background-image" = {
     source = "${draculaWallpaperRepo}/first-collection/nixos.png";
   };
+
+  home.file.".local/share/xfce4/terminal/colorschemes/Dracula.theme".source = builtins.fetchurl {
+    url = "https://raw.githubusercontent.com/dracula/xfce4-terminal/refs/heads/master/Dracula.theme";
+  };
   
   home.file.".config/lazygit/theme/lazygit".source = builtins.fetchGit {
     url = "https://github.com/catppuccin/lazygit";
