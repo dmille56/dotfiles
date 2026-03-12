@@ -56,6 +56,10 @@ let
   username = "dono";
   my-dotfile-dir = "/home/${username}/dotfiles";
   my-home-dir = "/home/${username}";
+  sweetIconsRepo = builtins.fetchGit {
+    url = "https://github.com/EliverLara/Sweet-folders";
+    rev = "40a5d36e50437901c7eaa1119bb9ae8006e2fe5c";
+  };
 in
 {
   home.username = "${username}";
@@ -165,6 +169,7 @@ in
     # ai
     # aider-chat
     aider-chat-full
+    claude-code
     # ollama
     
     sqlite-interactive
@@ -744,6 +749,21 @@ in
   home.file.".themes/dracula".source = builtins.fetchGit {
     url = "https://github.com/dracula/gtk";
     rev = "f3c876d8c97f9bb504c98592a8d96770e70585bb";
+  };
+  
+  home.file.".local/share/icons/candy-icons".source = builtins.fetchGit {
+    url = "https://github.com/EliverLara/candy-icons";
+    rev = "83512fbcadcb7e1015ebbe1729a1894946b021be";
+  };
+
+  home.file.".local/share/icons/Sweet-Purple" = {
+    source = "${sweetIconsRepo}/Sweet-Purple";
+    recursive = true;
+  };
+
+  home.file.".local/share/icons/Sweet-Rainbow" = {
+    source = "${sweetIconsRepo}/Sweet-Rainbow";
+    recursive = true;
   };
   
   home.file.".config/lazygit/theme/lazygit".source = builtins.fetchGit {
