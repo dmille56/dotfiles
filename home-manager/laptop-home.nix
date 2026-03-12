@@ -230,7 +230,7 @@ in
     sensible-utils # :NOTE: added
     xdg-utils # :NOTE: added
     libnotify # :NOTE: added
-    wifitui
+    wifitui # :NOTE: added
     blanket
 
     vscode
