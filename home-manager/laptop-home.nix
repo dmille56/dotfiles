@@ -617,7 +617,7 @@ in
     secrets.GITHUB_USER.path = "${config.sops.defaultSymlinkPath}/GITHUB_USER";
   };
 
-  # services.kdeconnect.enable = true;
+  services.kdeconnect.enable = true;
   services.syncthing.enable = true;
 
   services.spotifyd = {
