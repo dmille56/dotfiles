@@ -226,11 +226,6 @@ in
     keepassxc
     spotify
     spotify-player
-    steam # :NOTE: added
-    sensible-utils # :NOTE: added
-    xdg-utils # :NOTE: added
-    libnotify # :NOTE: added
-    wifitui # :NOTE: added
     blanket
 
     vscode
@@ -238,6 +233,13 @@ in
     # darktable
     scrcpy
     redshift
+
+    steam # :NOTE: added
+    sensible-utils # :NOTE: added
+    xdg-utils # :NOTE: added
+    libnotify # :NOTE: added
+    wifitui # :NOTE: added
+    zoom-us # :NOTE: added
   ];
 
   programs.fzf = {
