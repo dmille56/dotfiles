@@ -263,7 +263,7 @@ in
     lite-xl
     gnome-system-monitor
     pkgs.meld
-    xfce.thunar
+    thunar
     pcmanfm
 
     streamlink
@@ -281,6 +281,8 @@ in
     # darktable
     scrcpy
     redshift
+    
+    zoom-us
   ];
 
   programs.fzf = {
