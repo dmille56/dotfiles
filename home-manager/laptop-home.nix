@@ -27,8 +27,9 @@ in
   home.stateVersion = "23.11"; # To figure this out you can comment out the line and see what version it expected.
   programs.home-manager.enable = true;
   fonts.fontconfig.enable = true;
-  nixpkgs.config.allowUnfree = true;
-  nixpkgs.config.pulseaudio = true;
+
+  # nixpkgs.config.allowUnfree = true;
+  # nixpkgs.config.pulseaudio = true;
   
   # :NOTE: enable automatic nix garbage collection
   nix.gc = {
@@ -195,6 +196,7 @@ in
 
     # rofi
     rofi-bluetooth 
+
     xdotool
     noto-fonts-color-emoji
 
@@ -241,6 +243,7 @@ in
     libnotify # :NOTE: added
     wifitui # :NOTE: added
     zoom-us # :NOTE: added
+    remmina # :NOTE: added
   ];
 
   programs.fzf = {
@@ -301,7 +304,11 @@ in
 
   programs.rofi = {
     enable = true;
-    plugins = [pkgs.rofi-emoji];
+    plugins = with pkgs; [ 
+      rofi-emoji
+      rofi-games
+      rofi-power-menu
+    ];
     # theme = "glue_pro_blue"; #good fallback theme that comes installed with rofi
     theme = "dracula-theme";
   };
@@ -316,9 +323,9 @@ in
 
   programs.git = {
     enable = true;
-    extraConfig = {
-      credential.helper = "oauth";
-    };
+    # extraConfig = {
+    #   credential.helper = "oauth";
+    # };
     settings = {
       # :TODO: fix these
       # github.user = "$(cat ${config.sops.secrets.GITHUB_USER.path})";
@@ -336,6 +343,7 @@ in
         br = "branch";
         co = "checkout";
       };
+      credential.helper = "oauth";
     };
   };
   
