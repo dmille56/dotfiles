@@ -28,9 +28,6 @@ in
   programs.home-manager.enable = true;
   fonts.fontconfig.enable = true;
 
-  # nixpkgs.config.allowUnfree = true;
-  # nixpkgs.config.pulseaudio = true;
-  
   # :NOTE: enable automatic nix garbage collection
   nix.gc = {
     automatic = true;
@@ -304,10 +301,11 @@ in
 
   programs.rofi = {
     enable = true;
+    # :TODO: figure out why the plugins aren't working correctly
     plugins = with pkgs; [ 
       rofi-emoji
       rofi-games
-      rofi-power-menu
+      # rofi-power-menu
     ];
     # theme = "glue_pro_blue"; #good fallback theme that comes installed with rofi
     theme = "dracula-theme";
@@ -323,9 +321,6 @@ in
 
   programs.git = {
     enable = true;
-    # extraConfig = {
-    #   credential.helper = "oauth";
-    # };
     settings = {
       # :TODO: fix these
       # github.user = "$(cat ${config.sops.secrets.GITHUB_USER.path})";
