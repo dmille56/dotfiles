@@ -1,7 +1,7 @@
 import Data.Char (toLower)
 import Data.Default (def)
-import Data.Maybe (isJust)
 import qualified Data.Map as M
+import Data.Maybe (isJust)
 import Graphics.X11.ExtraTypes.XF86
 import MyTheme
 import System.Directory (findExecutable)
@@ -142,6 +142,7 @@ myStartupHook = do
   spawnOnce "xfsettingsd"
   spawnOnce "start-pulseaudio-x1ll"
   spawnOnce "trayer --edge bottom --align right --widthtype request --expand true --SetDockType true --SetPartialStrut true --transparent true --alpha 0 --tint 0x282A36 --expand true --heighttype pixel --height 24"
+  spawnOnce "yad --notification --image='system-shutdown' --text='Power Menu' --command='rofi -show power-menu -modi power-menu:rofi-power-menu'"
   spawnOnce "redshift-gtk"
   spawn "xrdb ~/.XResources"
   greenclipDaemon <- spawnPipe "greenclip daemon"
@@ -235,6 +236,6 @@ notifySpawn s = do
   spawn s
 
 glWrapper hasNixGL s =
-  if hasNixGL 
+  if hasNixGL
     then "nixGL " ++ s
     else s

@@ -243,6 +243,9 @@ in
 
     # rofi
     rofi-bluetooth 
+    rofi-power-menu
+    yad # :NOTE: to make sys tray program for rofi-power-menu
+
     xdotool
     noto-fonts-color-emoji
 
