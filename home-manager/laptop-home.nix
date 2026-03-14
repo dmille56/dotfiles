@@ -28,6 +28,8 @@ in
   programs.home-manager.enable = true;
   fonts.fontconfig.enable = true;
 
+  xsession.enable = true;
+
   # :NOTE: enable automatic nix garbage collection
   nix.gc = {
     automatic = true;
@@ -86,6 +88,9 @@ in
     nerd-fonts.sauce-code-pro
     nerd-fonts.iosevka-term-slab
     nerd-fonts.fira-mono
+    
+    # ubuntu font
+    ubuntu-classic
 
     powershell
     tmux
@@ -193,6 +198,7 @@ in
 
     # rofi
     rofi-bluetooth 
+    rofi-power-menu
 
     xdotool
     noto-fonts-color-emoji
@@ -305,7 +311,6 @@ in
     plugins = with pkgs; [ 
       rofi-emoji
       rofi-games
-      # rofi-power-menu
     ];
     # theme = "glue_pro_blue"; #good fallback theme that comes installed with rofi
     theme = "dracula-theme";
@@ -787,6 +792,9 @@ in
     sha256 = "XzyspX6U9FWglDA8VIZE4JamGsFvARQX7iCcQ/blbUE=";
     stripRoot = false;
   };
+
+  # :NOTE: use image profile picture (for display manager)
+  home.file.".face".source = ../img/dracula-profile.png;
   
   home.sessionVariables = {
     OPENAI_API_KEY = "$(cat ${config.sops.secrets.OPENAI_API_KEY.path})";
