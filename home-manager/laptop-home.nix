@@ -28,6 +28,8 @@ in
   programs.home-manager.enable = true;
   fonts.fontconfig.enable = true;
 
+  xsession.enable = true;
+
   # :NOTE: enable automatic nix garbage collection
   nix.gc = {
     automatic = true;
@@ -86,6 +88,9 @@ in
     nerd-fonts.sauce-code-pro
     nerd-fonts.iosevka-term-slab
     nerd-fonts.fira-mono
+    
+    # ubuntu font
+    ubuntu-classic
 
     powershell
     tmux
