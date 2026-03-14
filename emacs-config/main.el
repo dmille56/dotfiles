@@ -80,6 +80,8 @@
       (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
 
+(straight-use-package 'org)
+
 ;; How to check for system type:
 ;; (if (eq system-type 'gnu/linux)
 ;; (if (eq system-type 'windows-nt)
@@ -1618,27 +1620,6 @@ Make sure to run \='ollama serve\=' and have zephyr model."
   :config
   (global-treesit-fold-mode 1))
 
-;; :TODO: remove warning supression for eglot/bytecomp eventually
-(setq warning-suppress-types '((deprecated)))
-(setq warning-suppress-log-types '((deprecated)))
-
-;; Add-hooks for eglot
-(add-hook 'python-mode-hook 'eglot-ensure)
-(add-hook 'python-ts-mode-hook 'eglot-ensure)
-(add-hook 'yaml-mode-hook 'eglot-ensure)
-(add-hook 'yaml-ts-mode-hook 'eglot-ensure)
-(add-hook 'typescript-ts-mode 'eglot-ensure)
-(add-hook 'tsx-ts-mode 'eglot-ensure)
-;; (add-hook 'nix-mode-hook 'eglot-ensure)
-;; (with-eval-after-load 'eglot
-;;   (defvar eglot-server-programs)
-;;   (add-to-list 'eglot-server-programs '(nix-mode . ("rnix-lsp"))))
-
-(use-package ruff-format
-  :hook
-  (python-mode . ruff-format-on-save-mode)
-  (python-ts-mode . ruff-format-on-save-mode))
-
 (use-package typescript-ts-mode
   :ensure t
   :after eglot
@@ -1659,6 +1640,27 @@ Make sure to run \='ollama serve\=' and have zephyr model."
 (use-package typst-ts-mode
   :straight '(:type git :host codeberg :repo "meow_king/typst-ts-mode"))
 (add-to-list 'auto-mode-alist '("\\.typ\\'" . typst-ts-mode))
+
+;; :TODO: remove warning supression for eglot/bytecomp eventually
+(setq warning-suppress-types '((deprecated)))
+(setq warning-suppress-log-types '((deprecated)))
+
+;; Add-hooks for eglot
+(add-hook 'python-mode-hook 'eglot-ensure)
+(add-hook 'python-ts-mode-hook 'eglot-ensure)
+(add-hook 'yaml-mode-hook 'eglot-ensure)
+(add-hook 'yaml-ts-mode-hook 'eglot-ensure)
+(add-hook 'typescript-ts-mode-hook 'eglot-ensure)
+(add-hook 'tsx-ts-mode-hook 'eglot-ensure)
+;; (add-hook 'nix-mode-hook 'eglot-ensure)
+;; (with-eval-after-load 'eglot
+;;   (defvar eglot-server-programs)
+;;   (add-to-list 'eglot-server-programs '(nix-mode . ("rnix-lsp"))))
+
+(use-package ruff-format
+  :hook
+  (python-mode . ruff-format-on-save-mode)
+  (python-ts-mode . ruff-format-on-save-mode))
 
 (use-package grafana-alloy-mode
   :straight '(:type git :host codeberg :repo "bgcartman/grafana-alloy-mode"))

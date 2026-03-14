@@ -49,6 +49,7 @@ in
     # pacvim
     curl
     git
+    git-credential-oauth
     ((emacsPackagesFor emacs-gtk).emacsWithPackages
       (epkgs: [ epkgs.vterm epkgs.w3m epkgs.jinx ]))
     eask-cli #emacs eask
@@ -315,6 +316,9 @@ in
 
   programs.git = {
     enable = true;
+    extraConfig = {
+      credential.helper = "oauth";
+    };
     settings = {
       # :TODO: fix these
       # github.user = "$(cat ${config.sops.secrets.GITHUB_USER.path})";
