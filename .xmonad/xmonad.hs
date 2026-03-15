@@ -59,7 +59,7 @@ myLayoutHook = onWorkspace "9" ((smartBorders . avoidStruts) myLayout') $ ((smar
 
 myManageHook hasNixGL =
   composeAll
-    [ className =? "steam" --> doShift "3:game",
+    [ className =? "steam" <&&> title =? "Steam" --> doShift "3:game",
       className =? "Spotify" --> doShift "4:mus",
       className =? "mpv" --> doShift "2:vid",
       className =? "vlc" --> doShift "2:vid",
@@ -227,7 +227,7 @@ main = do
                                  ((0, xK_e), notifySpawn "emacsclient -n -c"),
                                  ((shiftMask, xK_e), notifySpawn "emacs"),
                                  ((0, xK_i), spawn "rofi -modi emoji -show emoji -font 'Noto Color Emoji 12'"),
-                                 ((0, xK_g), spawn "rofi -modi games -show games -theme games-default && wmctrl -s 2")
+                                 ((0, xK_g), spawn "rofi -modi games -show games -theme games-default")
                                ]
                            )
                          ]
