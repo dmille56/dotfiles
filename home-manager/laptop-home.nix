@@ -698,8 +698,13 @@ in
     max_cache_size = 2000000000
     bitrate = 160
   '';
-  
+
   home.file.".config/spotify-player/app.toml".source = "${my-dotfile-dir}/.config/spotify-player/app.toml";
+
+  home.file.".config/rofi-games/config.toml".text = ''
+    [launchers.steam]
+    extra_args = ["-silent"]
+  '';
 
   home.file.".vimrc".source = "${my-dotfile-dir}/vim/vim/vimrc";
   home.file.".Xresources".source = "${my-dotfile-dir}/Xresources";
