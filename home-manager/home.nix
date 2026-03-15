@@ -245,6 +245,7 @@ in
     rofi-bluetooth 
     rofi-power-menu
     yad # :NOTE: to make sys tray program for rofi-power-menu
+    wmctrl # :NOTE: to make rofi-games work with steam properly
 
     xdotool
     noto-fonts-color-emoji

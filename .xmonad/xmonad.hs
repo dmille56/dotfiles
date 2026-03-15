@@ -227,7 +227,7 @@ main = do
                                  ((0, xK_e), notifySpawn "emacsclient -n -c"),
                                  ((shiftMask, xK_e), notifySpawn "emacs"),
                                  ((0, xK_i), spawn "rofi -modi emoji -show emoji -font 'Noto Color Emoji 12'"),
-                                 ((0, xK_g), spawn "rofi -modi games -show games -theme games-default")
+                                 ((0, xK_g), spawn "rofi -modi games -show games -theme games-default && wmctrl -s 2")
                                ]
                            )
                          ]
