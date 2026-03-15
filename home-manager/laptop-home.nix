@@ -821,7 +821,9 @@ in
     AIDER_MODEL = "gpt-5-mini";
     RIPGREP_CONFIG_PATH = "${my-home-dir}/.ripgreprc";
     LG_CONFIG_FILE= "${my-home-dir}/.config/lazygit/config.yml,${my-home-dir}/.config/lazygit/theme/lazygit/themes-mergable/mocha/blue.yml";
-    BROWSER = "firefox";
+    BROWSER = "${pkgs.firefox-bin}/bin/firefox";
+    TERMINAL_EMULATOR = "${pkgs.alacritty}/bin/alacritty";
+    TERMINAL = "${pkgs.alacritty}/bin/alacritty";
     PAGER = "less";
     EDITOR = "nvim";
     VISUAL = "neovide";

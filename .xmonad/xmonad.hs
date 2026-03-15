@@ -201,7 +201,7 @@ main = do
                            ((myModMask .|. shiftMask, xK_bracketleft), openScratchPad hasNixGL "fileManager"),
                            -- ((myModMask, xK_j), spawn "xdotool key Page_Down"), -- Remap mod+j, mod+k to page down / up
                            -- ((myModMask, xK_k), spawn "xdotool key Page_Up"),
-                           ((myModMask, xK_d), spawn "export BROWSER=sensible-browser && rofi-buku"),
+                           ((myModMask, xK_d), spawn "export BROWSER=firefox && rofi-buku"),
                            ((myModMask, xK_F9), spawn audioQueryTrackInfoCommand),
                            ((0, xF86XK_AudioPlay), spawn audioPlayPauseCommand),
                            ((myModMask, xK_F12), spawn audioPlayPauseCommand),
