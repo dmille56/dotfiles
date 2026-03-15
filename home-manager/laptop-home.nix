@@ -828,6 +828,7 @@ in
     EDITOR = "nvim";
     VISUAL = "neovide";
     NIXPKGS_ALLOW_UNFREE = "1";
+    MY_MACHINE_ID = "Laptop";
   };
 
 }

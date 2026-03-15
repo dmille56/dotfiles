@@ -1,11 +1,13 @@
 import Data.Char (toLower)
 import Data.Default (def)
 import qualified Data.Map as M
-import Data.Maybe (isJust)
+import Data.Maybe (fromMaybe, isJust)
 import Graphics.X11.ExtraTypes.XF86
 import MyTheme
 import System.Directory (findExecutable)
+import System.Environment (lookupEnv)
 import System.IO
+import Text.Read (readMaybe)
 import XMonad
 import XMonad.Actions.Search
 import XMonad.Actions.Submap
@@ -59,8 +61,7 @@ myLayoutHook = onWorkspace "9" ((smartBorders . avoidStruts) myLayout') $ ((smar
 
 myManageHook hasNixGL =
   composeAll
-    [ 
-      className =? "steam" <&&> title =? "Steam - Updating" --> doFloat,
+    [ className =? "steam" <&&> title =? "Steam - Updating" --> doFloat,
       className =? "steam" <&&> title =? "Steam Login" --> doFloat,
       className =? "steam" <&&> title =? "Steam" --> doF (W.greedyView "3:game") <+> doShift "3:game",
       className =? "Spotify" --> doShift "4:mus",
@@ -157,6 +158,7 @@ main = do
   -- spawn "redshift -l 47.608013:-122.335167 -t 6500:3500" -- causes issues when starting it this way for some reason... :TODO: figure out why
   -- emacsDaemon <- spawnPipe "emacs --daemon" -- maybe re-enable this at some point... :TODO: figure out why svg-tag-mode causes issues when started as a daemon
   hasNixGL <- isJust <$> findExecutable "nixGL"
+  myConfigMachine <- getConfigMachine
   xmonad $
     ewmh $
       def
@@ -201,7 +203,7 @@ main = do
                            ((myModMask .|. shiftMask, xK_bracketleft), openScratchPad hasNixGL "fileManager"),
                            -- ((myModMask, xK_j), spawn "xdotool key Page_Down"), -- Remap mod+j, mod+k to page down / up
                            -- ((myModMask, xK_k), spawn "xdotool key Page_Up"),
-                           ((myModMask, xK_d), spawn "export BROWSER=firefox && rofi-buku"),
+                           ((myModMask, xK_d), spawnRofiBuku myConfigMachine),
                            ((myModMask, xK_F9), spawn audioQueryTrackInfoCommand),
                            ((0, xF86XK_AudioPlay), spawn audioPlayPauseCommand),
                            ((myModMask, xK_F12), spawn audioPlayPauseCommand),
@@ -243,3 +245,19 @@ glWrapper hasNixGL s =
   if hasNixGL
     then "nixGL " ++ s
     else s
+
+spawnRofiBuku myConfigMachine = do
+  let cmd = case myConfigMachine of
+        Desktop -> "export BROWSER=sensible-browser && rofi-buku"
+        Laptop -> "export BROWSER=firefox && rofi-buku"
+  spawn cmd
+
+data MyConfigMachine = Desktop | Laptop
+  deriving (Show, Read, Eq, Enum, Bounded)
+
+getConfigMachine :: IO MyConfigMachine
+getConfigMachine = do
+  mbString <- lookupEnv "MY_MACHINE_ID"
+  let config :: Maybe MyConfigMachine
+      config = mbString >>= readMaybe
+  return $ fromMaybe Desktop config

@@ -828,6 +828,7 @@ in
     BROWSER = "sensible-browser";
     NIXPKGS_ALLOW_UNFREE = "1";
     EDITOR = "nvim";
+    MY_MACHINE_ID = "Desktop";
   };
 
 }
