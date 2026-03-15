@@ -59,7 +59,10 @@ myLayoutHook = onWorkspace "9" ((smartBorders . avoidStruts) myLayout') $ ((smar
 
 myManageHook hasNixGL =
   composeAll
-    [ className =? "steam" <&&> title =? "Steam" --> doShift "3:game",
+    [ 
+      className =? "steam" <&&> title =? "Steam - Updating" --> doFloat,
+      className =? "steam" <&&> title =? "Steam Login" --> doFloat,
+      className =? "steam" <&&> title =? "Steam" --> doF (W.greedyView "3:game") <+> doShift "3:game",
       className =? "Spotify" --> doShift "4:mus",
       className =? "mpv" --> doShift "2:vid",
       className =? "vlc" --> doShift "2:vid",
