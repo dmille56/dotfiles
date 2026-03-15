@@ -199,6 +199,7 @@ in
     # rofi
     rofi-bluetooth 
     rofi-power-menu
+    yad # :NOTE: to make sys tray program for rofi-power-menu
 
     xdotool
     noto-fonts-color-emoji
@@ -719,6 +720,16 @@ in
   home.file.".config/rofi/themes/dracula-theme-2.rasi".text = builtins.readFile(builtins.fetchurl {
     url = "https://raw.githubusercontent.com/dracula/rofi/48a024639fbf25e3237766f0dcef4af75a2df908/theme/config2.rasi";
     sha256 = "68010556ad7b351b63b6d061f5c4b7c8feb9d9b32687bf0530b105a86634766c";
+  });
+
+  home.file.".config/rofi/themes/games-default.rasi".text = builtins.readFile(builtins.fetchurl {
+    url = "https://raw.githubusercontent.com/Rolv-Apneseth/rofi-games/17e53726e8f81f6bbe15b4dd66329f869409f4c6/themes/games-default.rasi";
+    sha256 = "sha256:0w3cyp7v102n5pdmngz1rhzh86rrc120gfxzxv3h86vs1ch2zli2";
+  });
+
+  home.file.".config/rofi/themes/games-smaller.rasi".text = builtins.readFile(builtins.fetchurl {
+    url = "https://raw.githubusercontent.com/Rolv-Apneseth/rofi-games/17e53726e8f81f6bbe15b4dd66329f869409f4c6/themes/games-smaller.rasi";
+    sha256 = "sha256:1105kf4q9flrdpcf0mzzav6h8m2maj9yfrm9avzwkdfcddax6i7s";
   });
 
   home.file.".config/kak/colors/dracula.kak".text = builtins.readFile(builtins.fetchurl {
