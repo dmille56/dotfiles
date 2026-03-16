@@ -252,6 +252,7 @@ in
     wifitui # :NOTE: added
     zoom-us # :NOTE: added
     remmina # :NOTE: added
+    xmessage # :NOTE: added
   ];
 
   # :TODO: make sure this works to set gtk applications themes correctly
