@@ -732,6 +732,17 @@ in
     [launchers.steam]
     extra_args = ["-silent"]
   '';
+  
+  # :NOTE: this is a fix so can use stack install xmonad on ubuntu (because xmonad in ubuntu repo is outdated)
+  home.file.".xmonad/build" = {
+    text = ''
+      #!/bin/sh
+  
+      exec stack ghc -- \
+        --make xmonad.hs -i -ilib -fforce-recomp -main-is main -v0 -o "$1"
+    '';
+    executable = true;
+  };
 
   home.file.".vimrc".source = "${my-dotfile-dir}/vim/vim/vimrc";
   home.file.".Xresources".source = "${my-dotfile-dir}/Xresources";
