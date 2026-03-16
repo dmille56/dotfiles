@@ -1,6 +1,9 @@
 # sudo nixos-rebuild switch
 { pkgs, config, ...}: 
 
+# :NOTE: update nix pkgs
+# cd /etc/nixos && sudo nix flake update
+
 # :NOTE: Garbage collect nix:
 # nix-collect-garbage -d
 
