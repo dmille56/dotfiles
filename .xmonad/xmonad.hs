@@ -3,9 +3,9 @@ import Data.Char (toLower)
 import Data.Default (def)
 import qualified Data.Map as M
 import Data.Maybe (fromMaybe, isJust)
-import Data.Monoid (All(..), appEndo)
+import Data.Monoid (All (..), appEndo)
 import Graphics.X11.ExtraTypes.XF86
-import Graphics.X11.Xlib.Extras (Event(..))
+import Graphics.X11.Xlib.Extras (Event (..))
 import MyTheme
 import System.Directory (findExecutable)
 import System.Environment (lookupEnv)
@@ -232,6 +232,7 @@ main = do
                                    ((0, xK_v), notifySpawn "rofi-bluetooth"),
                                    ((0, xK_b), notifySpawn $ glWrapper hasNixGL "alacritty -e bluetoothctl"),
                                    ((0, xK_s), notifySpawn "spotify"),
+                                   ((shiftMask, xK_s), spawn "rofi -show ssh"),
                                    ((0, xK_a), notifySpawn "steam"),
                                    ((0, xK_p), notifySpawn "pavucontrol"),
                                    ((0, xK_m), notifySpawn "gnome-system-monitor"),
