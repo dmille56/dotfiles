@@ -1,8 +1,11 @@
+import Control.Monad (when)
 import Data.Char (toLower)
 import Data.Default (def)
 import qualified Data.Map as M
 import Data.Maybe (fromMaybe, isJust)
+import Data.Monoid (All(..), appEndo)
 import Graphics.X11.ExtraTypes.XF86
+import Graphics.X11.Xlib.Extras (Event(..))
 import MyTheme
 import System.Directory (findExecutable)
 import System.Environment (lookupEnv)
@@ -12,9 +15,8 @@ import XMonad
 import XMonad.Actions.Search
 import XMonad.Actions.Submap
 import XMonad.Hooks.DynamicLog
-import XMonad.Hooks.DynamicProperty
-import XMonad.Hooks.EwmhDesktops
-import XMonad.Hooks.ManageDocks
+import XMonad.Hooks.EwmhDesktops (ewmh, ewmhFullscreen)
+import XMonad.Hooks.ManageDocks (avoidStruts, docks, manageDocks)
 import XMonad.Hooks.ManageHelpers
 import XMonad.Layout.Accordion
 import XMonad.Layout.NoBorders
@@ -129,6 +131,15 @@ myScratchPads hasNixGL = [btm, term, fileManager, lazygit, music, volumeControl]
 openScratchPad :: Bool -> String -> X ()
 openScratchPad hasNixGL = namedScratchpadAction (myScratchPads hasNixGL)
 
+myPropertyChangeHook :: Bool -> Event -> X All
+myPropertyChangeHook hasNixGL PropertyEvent {ev_window = w, ev_atom = atom} = do
+  wmClassAtom <- getAtom "WM_CLASS"
+  when (atom == wmClassAtom) $ do
+    action <- runQuery (myManageHook hasNixGL) w
+    windows (appEndo action)
+  pure mempty
+myPropertyChangeHook _ _ = pure mempty
+
 audioPlayPauseCommand = "playerctl play-pause -p spotifyd,spotify,chromium,firefox"
 
 audioPreviousCommand = "playerctl previous -p spotifyd,spotify,chromium,firefox"
@@ -159,83 +170,86 @@ main = do
   -- emacsDaemon <- spawnPipe "emacs --daemon" -- maybe re-enable this at some point... :TODO: figure out why svg-tag-mode causes issues when started as a daemon
   hasNixGL <- isJust <$> findExecutable "nixGL"
   myConfigMachine <- getConfigMachine
+  let baseConfig =
+        def
+          { manageHook = myManageHook hasNixGL,
+            layoutHook = myLayoutHook,
+            startupHook = myStartupHook,
+            logHook =
+              dynamicLogWithPP
+                xmobarPP
+                  { ppOutput = hPutStrLn xmproc,
+                    ppTitle = xmobarColor (_myTheme_ppTitleColor myTheme) "" . shorten 50,
+                    ppCurrent = xmobarColor (_myTheme_ppCurrentColor myTheme) "",
+                    ppLayout = xmobarColor (_myTheme_ppLayoutColor myTheme) "",
+                    ppSep = " | "
+                  },
+            handleEventHook = handleEventHook def <+> myPropertyChangeHook hasNixGL,
+            modMask = myModMask,
+            borderWidth = 2,
+            normalBorderColor = (_myTheme_normalBorderColor myTheme),
+            focusedBorderColor = (_myTheme_focusedBorderColor myTheme),
+            workspaces = ["1:web", "2:vid", "3:game", "4:mus", "5", "6", "7", "8:term", "9:dev"]
+          }
+          `additionalKeys` [ ((myModMask .|. shiftMask, xK_z), spawn "xscreensaver-command -lock; xset dpms force off"),
+                             ((myModMask, xK_p), spawn "rofi -show run"),
+                             ((myModMask, xK_i), spawn "rofi -show window"),
+                             ((myModMask, xK_o), spawn "play-yt-script"),
+                             ((myModMask .|. shiftMask, xK_o), spawn "play-yt-script-format"),
+                             ((myModMask, xK_s), promptSearch myXPConfig duckduckgo),
+                             ((myModMask .|. shiftMask, xK_s), selectSearch duckduckgo),
+                             ((myModMask, xK_v), shellPrompt myXPConfig),
+                             ((myModMask .|. shiftMask, xK_v), prompt (glWrapper hasNixGL "alacritty" ++ " -e") myXPConfig),
+                             ((myModMask, xK_g), windowPrompt myXPConfig Goto allWindows),
+                             ((myModMask .|. shiftMask, xK_g), windowPrompt myXPConfig Bring allWindows),
+                             ((myModMask, xK_c), spawn "rofi -modi 'clipboard:greenclip print' -show clipboard -run-command '{cmd}'"),
+                             ((myModMask, xK_y), spawn "ytfzf -D"),
+                             ((myModMask, xK_r), spawn "xrandr --output DP-4 --auto --right-of DP-0"), -- Set Monitors to Extend Mode (instead of mirror mode)
+                             ((myModMask, xK_backslash), openScratchPad hasNixGL "term"),
+                             ((myModMask .|. shiftMask, xK_backslash), openScratchPad hasNixGL "lazygit"),
+                             ((myModMask, xK_bracketright), openScratchPad hasNixGL "btm"),
+                             ((myModMask .|. shiftMask, xK_bracketright), openScratchPad hasNixGL "volumeControl"),
+                             ((myModMask, xK_bracketleft), openScratchPad hasNixGL "music"),
+                             ((myModMask .|. shiftMask, xK_bracketleft), openScratchPad hasNixGL "fileManager"),
+                             -- ((myModMask, xK_j), spawn "xdotool key Page_Down"), -- Remap mod+j, mod+k to page down / up
+                             -- ((myModMask, xK_k), spawn "xdotool key Page_Up"),
+                             ((myModMask, xK_d), spawnRofiBuku myConfigMachine),
+                             ((myModMask, xK_F9), spawn audioQueryTrackInfoCommand),
+                             ((0, xF86XK_AudioPlay), spawn audioPlayPauseCommand),
+                             ((myModMask, xK_F12), spawn audioPlayPauseCommand),
+                             ((0, xF86XK_AudioPrev), spawn audioPreviousCommand),
+                             ((myModMask, xK_F10), spawn audioPreviousCommand),
+                             ((0, xF86XK_AudioNext), spawn audioNextCommand),
+                             ((myModMask, xK_F11), spawn audioNextCommand),
+                             ((0, xF86XK_AudioLowerVolume), spawn audioLowerVolumeCommand),
+                             ((myModMask, xK_Down), spawn audioLowerVolumeCommand),
+                             ((0, xF86XK_AudioRaiseVolume), spawn audioRaiseVolumeCommand),
+                             ((myModMask, xK_Up), spawn audioRaiseVolumeCommand),
+                             ( (myModMask, xK_semicolon),
+                               (submap . M.fromList) $
+                                 [ ((0, xK_f), notifySpawn "sensible-browser"),
+                                   ((0, xK_c), notifySpawn "chromium"),
+                                   ((0, xK_v), notifySpawn "rofi-bluetooth"),
+                                   ((0, xK_b), notifySpawn $ glWrapper hasNixGL "alacritty -e bluetoothctl"),
+                                   ((0, xK_s), notifySpawn "spotify"),
+                                   ((0, xK_a), notifySpawn "steam"),
+                                   ((0, xK_p), notifySpawn "pavucontrol"),
+                                   ((0, xK_m), notifySpawn "gnome-system-monitor"),
+                                   ((0, xK_r), notifySpawn $ glWrapper hasNixGL "alacritty -e ranger"),
+                                   ((0, xK_t), notifySpawn "thunar"),
+                                   ((0, xK_d), notifySpawn $ glWrapper hasNixGL "alacritty -e dropbox"),
+                                   ((0, xK_x), notifySpawn $ glWrapper hasNixGL "alacritty"),
+                                   ((0, xK_e), notifySpawn "emacsclient -n -c"),
+                                   ((shiftMask, xK_e), notifySpawn "emacs"),
+                                   ((0, xK_i), spawn "rofi -modi emoji -show emoji -font 'Noto Color Emoji 12'"),
+                                   ((0, xK_g), spawn "rofi -modi games -show games -theme games-default")
+                                 ]
+                             )
+                           ]
   xmonad $
-    ewmh $
-      def
-        { manageHook = (myManageHook hasNixGL),
-          layoutHook = myLayoutHook,
-          startupHook = myStartupHook,
-          logHook =
-            dynamicLogWithPP
-              xmobarPP
-                { ppOutput = hPutStrLn xmproc,
-                  ppTitle = xmobarColor (_myTheme_ppTitleColor myTheme) "" . shorten 50,
-                  ppCurrent = xmobarColor (_myTheme_ppCurrentColor myTheme) "",
-                  ppLayout = xmobarColor (_myTheme_ppLayoutColor myTheme) "",
-                  ppSep = " | "
-                },
-          handleEventHook = handleEventHook def <+> XMonad.Hooks.EwmhDesktops.fullscreenEventHook <+> dynamicPropertyChange "WM_CLASS" (myManageHook hasNixGL) <+> docksEventHook,
-          modMask = myModMask,
-          borderWidth = 2,
-          normalBorderColor = (_myTheme_normalBorderColor myTheme),
-          focusedBorderColor = (_myTheme_focusedBorderColor myTheme),
-          workspaces = ["1:web", "2:vid", "3:game", "4:mus", "5", "6", "7", "8:term", "9:dev"]
-        }
-        `additionalKeys` [ ((myModMask .|. shiftMask, xK_z), spawn "xscreensaver-command -lock; xset dpms force off"),
-                           ((myModMask, xK_p), spawn "rofi -show run"),
-                           ((myModMask, xK_i), spawn "rofi -show window"),
-                           ((myModMask, xK_o), spawn "play-yt-script"),
-                           ((myModMask .|. shiftMask, xK_o), spawn "play-yt-script-format"),
-                           ((myModMask, xK_s), promptSearch myXPConfig duckduckgo),
-                           ((myModMask .|. shiftMask, xK_s), selectSearch duckduckgo),
-                           ((myModMask, xK_v), shellPrompt myXPConfig),
-                           ((myModMask .|. shiftMask, xK_v), prompt (glWrapper hasNixGL "alacritty" ++ " -e") myXPConfig),
-                           ((myModMask, xK_g), windowPrompt myXPConfig Goto allWindows),
-                           ((myModMask .|. shiftMask, xK_g), windowPrompt myXPConfig Bring allWindows),
-                           ((myModMask, xK_c), spawn "rofi -modi 'clipboard:greenclip print' -show clipboard -run-command '{cmd}'"),
-                           ((myModMask, xK_y), spawn "ytfzf -D"),
-                           ((myModMask, xK_r), spawn "xrandr --output DP-4 --auto --right-of DP-0"), -- Set Monitors to Extend Mode (instead of mirror mode)
-                           ((myModMask, xK_backslash), openScratchPad hasNixGL "term"),
-                           ((myModMask .|. shiftMask, xK_backslash), openScratchPad hasNixGL "lazygit"),
-                           ((myModMask, xK_bracketright), openScratchPad hasNixGL "btm"),
-                           ((myModMask .|. shiftMask, xK_bracketright), openScratchPad hasNixGL "volumeControl"),
-                           ((myModMask, xK_bracketleft), openScratchPad hasNixGL "music"),
-                           ((myModMask .|. shiftMask, xK_bracketleft), openScratchPad hasNixGL "fileManager"),
-                           -- ((myModMask, xK_j), spawn "xdotool key Page_Down"), -- Remap mod+j, mod+k to page down / up
-                           -- ((myModMask, xK_k), spawn "xdotool key Page_Up"),
-                           ((myModMask, xK_d), spawnRofiBuku myConfigMachine),
-                           ((myModMask, xK_F9), spawn audioQueryTrackInfoCommand),
-                           ((0, xF86XK_AudioPlay), spawn audioPlayPauseCommand),
-                           ((myModMask, xK_F12), spawn audioPlayPauseCommand),
-                           ((0, xF86XK_AudioPrev), spawn audioPreviousCommand),
-                           ((myModMask, xK_F10), spawn audioPreviousCommand),
-                           ((0, xF86XK_AudioNext), spawn audioNextCommand),
-                           ((myModMask, xK_F11), spawn audioNextCommand),
-                           ((0, xF86XK_AudioLowerVolume), spawn audioLowerVolumeCommand),
-                           ((myModMask, xK_Down), spawn audioLowerVolumeCommand),
-                           ((0, xF86XK_AudioRaiseVolume), spawn audioRaiseVolumeCommand),
-                           ((myModMask, xK_Up), spawn audioRaiseVolumeCommand),
-                           ( (myModMask, xK_semicolon),
-                             (submap . M.fromList) $
-                               [ ((0, xK_f), notifySpawn "sensible-browser"),
-                                 ((0, xK_c), notifySpawn "chromium"),
-                                 ((0, xK_v), notifySpawn "rofi-bluetooth"),
-                                 ((0, xK_b), notifySpawn $ glWrapper hasNixGL "alacritty -e bluetoothctl"),
-                                 ((0, xK_s), notifySpawn "spotify"),
-                                 ((0, xK_a), notifySpawn "steam"),
-                                 ((0, xK_p), notifySpawn "pavucontrol"),
-                                 ((0, xK_m), notifySpawn "gnome-system-monitor"),
-                                 ((0, xK_r), notifySpawn $ glWrapper hasNixGL "alacritty -e ranger"),
-                                 ((0, xK_t), notifySpawn "thunar"),
-                                 ((0, xK_d), notifySpawn $ glWrapper hasNixGL "alacritty -e dropbox"),
-                                 ((0, xK_x), notifySpawn $ glWrapper hasNixGL "alacritty"),
-                                 ((0, xK_e), notifySpawn "emacsclient -n -c"),
-                                 ((shiftMask, xK_e), notifySpawn "emacs"),
-                                 ((0, xK_i), spawn "rofi -modi emoji -show emoji -font 'Noto Color Emoji 12'"),
-                                 ((0, xK_g), spawn "rofi -modi games -show games -theme games-default")
-                               ]
-                           )
-                         ]
+    docks $
+      ewmhFullscreen $
+        ewmh baseConfig
 
 notifySpawn s = do
   spawn ("notify-send -t 3000 'Launching " ++ s ++ "'")
