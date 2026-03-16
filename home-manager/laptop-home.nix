@@ -251,6 +251,19 @@ in
     remmina # :NOTE: added
   ];
 
+  # :TODO: make sure this works to set gtk applications themes correctly
+  gtk = {
+    enable = true;
+    theme = {
+      name = "dracula";
+      # package = pkgs.dracula-theme;
+    };
+    iconTheme = {
+      name = "candy-icons";
+      # package = pkgs.papirus-icon-theme;
+    };
+  };
+
   programs.fzf = {
     enable = true;
     enableZshIntegration = true;
@@ -744,6 +757,12 @@ in
   });
 
   home.file.".themes/dracula".source = builtins.fetchGit {
+    url = "https://github.com/dracula/gtk";
+    rev = "f3c876d8c97f9bb504c98592a8d96770e70585bb";
+  };
+
+  # :TODO: maybe remove this since it's already in .themes
+  home.file.".local/share/themes/dracula".source = builtins.fetchGit {
     url = "https://github.com/dracula/gtk";
     rev = "f3c876d8c97f9bb504c98592a8d96770e70585bb";
   };
