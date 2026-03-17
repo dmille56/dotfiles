@@ -156,17 +156,17 @@ in
     git-repo-updater #gitup
     fastfetch
 
-    # (import ../nix/twitchy.nix) # :TODO: fix 
-    # (import ../nix/twitchy-rofi-script.nix)
-    (import ../nix/search-ddg-script.nix)
+    # (import ../../nix/twitchy.nix) # :TODO: fix 
+    # (import ../../nix/twitchy-rofi-script.nix)
+    (import ../../nix/search-ddg-script.nix)
     # (import ../nix/twitchy-play-emacs.nix)
     # (import ../nix/ChatGPT/ChatGPT-CLI.nix)
-    (import ../nix/play-yt-script.nix)
-    (import ../nix/play-yt-script-format.nix)
-    (import ../nix/rofi-buku.nix)
-    (import ../nix/my-tts.nix)
-    (import ../nix/trayer-padding-icon.nix { inherit stdenv; })
-    (import ../nix/fireplace.nix { inherit lib stdenv fetchgit ncurses5; })
+    (import ../../nix/play-yt-script.nix)
+    (import ../../nix/play-yt-script-format.nix)
+    (import ../../nix/rofi-buku.nix)
+    (import ../../nix/my-tts.nix)
+    (import ../../nix/trayer-padding-icon.nix { inherit stdenv; })
+    (import ../../nix/fireplace.nix { inherit lib stdenv fetchgit ncurses5; })
 
     cmatrix
     neo
