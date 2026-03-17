@@ -207,8 +207,6 @@ in with constants;
     # darktable
     scrcpy
     redshift
-
-    hello # :TODO: remove me eventually
   ];
 
   sops = { 
