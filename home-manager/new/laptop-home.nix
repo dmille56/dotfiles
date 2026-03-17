@@ -1,16 +1,6 @@
-# sudo nixos-rebuild switch
 { pkgs, config, lib, ...}: 
-
-# :NOTE: update nix pkgs
-# cd /etc/nixos && sudo nix flake update
-
-# :NOTE: Garbage collect nix:
-# nix-collect-garbage -d
-
 let
-  username = "dono";
-  my-dotfile-dir = "/home/${username}/dotfiles";
-  my-home-dir = "/home/${username}";
+  constants = import ./common-constants.nix; 
   sweetIconsRepo = builtins.fetchGit {
     url = "https://github.com/EliverLara/Sweet-folders";
     rev = "40a5d36e50437901c7eaa1119bb9ae8006e2fe5c";
@@ -19,11 +9,11 @@ let
     url = "https://github.com/dracula/wallpaper";
     rev = "f2b8cc4223bcc2dfd5f165ab80f701bbb84e3303";
   };
-in
+in with constants;
 {
   imports = [ ./common-home.nix ];
 
-  home.username = "${username}";
+  home.username = "${my-username}";
   home.homeDirectory = "${my-home-dir}";
   home.stateVersion = "23.11"; # To figure this out you can comment out the line and see what version it expected.
   programs.home-manager.enable = true;
@@ -425,27 +415,6 @@ in
     EOF
     '';
   };
-  
-  sops = { 
-    # :NOTE: generate key with age:
-    # mkdir -p ~/.config/sops/age
-    # age-keygen -o ~/.config/sops/age/keys.txt
-    # to output the public key: age-keygen -y ~/.config/sops/age/keys.txt
-    # change the yaml config at .sops.yaml (when need to update the age key)
-    age.keyFile = "${my-home-dir}/.config/sops/age/keys.txt"; # Path to your age key file
-    # :NOTE:
-    # to add/init a new secrets file: 
-    # sops secrets.yaml
-    defaultSopsFile = ../../secrets.yaml; # default secrets file
-    
-    # :NOTE: need to add one of these entries for each secret added to the secrets file (so can be accessed in nix)
-    secrets.OPENAI_API_KEY.path = "${config.sops.defaultSymlinkPath}/OPENAI_API_KEY";
-    secrets.GOOGLE_API_KEY.path = "${config.sops.defaultSymlinkPath}/GOOGLE_API_KEY";
-    secrets.ANTHROPIC_API_KEY.path = "${config.sops.defaultSymlinkPath}/ANTHROPIC_API_KEY";
-    secrets.GIT_NAME.path = "${config.sops.defaultSymlinkPath}/GIT_NAME";
-    secrets.GIT_EMAIL.path = "${config.sops.defaultSymlinkPath}/GIT_EMAIL";
-    secrets.GITHUB_USER.path = "${config.sops.defaultSymlinkPath}/GITHUB_USER";
-  };
 
   services.kdeconnect.enable = true;
   services.syncthing.enable = true;
@@ -627,22 +596,7 @@ in
   home.file.".face".source = ../../img/dracula-profile.png;
   
   home.sessionVariables = {
-    OPENAI_API_KEY = "$(cat ${config.sops.secrets.OPENAI_API_KEY.path})";
-    GOOGLE_API_KEY = "$(cat ${config.sops.secrets.GOOGLE_API_KEY.path})";
-    ANTHROPIC_API_KEY = "$(cat ${config.sops.secrets.ANTHROPIC_API_KEY.path})";
-    OPENAI_API_MODEL = "gpt-5-mini";
-    AIDER_MODEL = "gpt-5-mini";
-    RIPGREP_CONFIG_PATH = "${my-home-dir}/.ripgreprc";
-    LG_CONFIG_FILE= "${my-home-dir}/.config/lazygit/config.yml,${my-home-dir}/.config/lazygit/theme/lazygit/themes-mergable/mocha/blue.yml";
-    BROWSER = "${pkgs.firefox-bin}/bin/firefox";
-    TERMINAL_EMULATOR = "${pkgs.alacritty}/bin/alacritty";
-    TERMINAL = "${pkgs.alacritty}/bin/alacritty";
-    PAGER = "less";
-    EDITOR = "nvim";
-    VISUAL = "neovide";
-    NIXPKGS_ALLOW_UNFREE = "1";
     MY_MACHINE_ID = "Laptop";
-    GHOSTRIDER = "negative the pattern is full";
   };
 
 }

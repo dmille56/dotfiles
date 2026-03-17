@@ -1,7 +1,9 @@
-{ pkgs, lib, ... }:
+{ pkgs, config, lib, ... }:
+let 
+  constants = import ./common-constants.nix; 
+in with constants;
 {
-
-  # Lists automatically merge, so this all gets added to home.nix's packages
+  # :NOTE: Lists automatically merge, so this all gets added to home.nix's packages
   home.packages = with pkgs; [
     #terminal
     nano
@@ -209,9 +211,44 @@
     hello # :TODO: remove me eventually
   ];
 
+  sops = { 
+    # :NOTE: generate key with age:
+    # mkdir -p ~/.config/sops/age
+    # age-keygen -o ~/.config/sops/age/keys.txt
+    # to output the public key: age-keygen -y ~/.config/sops/age/keys.txt
+    # change the yaml config at .sops.yaml (when need to update the age key)
+    # to update the keys in the yaml config: sops updatekeys .sops.yaml
+    age.keyFile = "${my-home-dir}/.config/sops/age/keys.txt"; # Path to your age key file
+    # :NOTE:
+    # to add/init a new secrets file: 
+    # sops secrets.yaml
+    defaultSopsFile = ../../secrets.yaml; # default secrets file
+    
+    # :NOTE: need to add one of these entries for each secret added to the secrets file (so can be accessed in nix)
+    secrets.OPENAI_API_KEY.path = "${config.sops.defaultSymlinkPath}/OPENAI_API_KEY";
+    secrets.GOOGLE_API_KEY.path = "${config.sops.defaultSymlinkPath}/GOOGLE_API_KEY";
+    secrets.ANTHROPIC_API_KEY.path = "${config.sops.defaultSymlinkPath}/ANTHROPIC_API_KEY";
+    secrets.GIT_NAME.path = "${config.sops.defaultSymlinkPath}/GIT_NAME";
+    secrets.GIT_EMAIL.path = "${config.sops.defaultSymlinkPath}/GIT_EMAIL";
+    secrets.GITHUB_USER.path = "${config.sops.defaultSymlinkPath}/GITHUB_USER";
+  };
+
+  # :NOTE: lib.mkDefault makes it so the setting can be overrun in home.nix
   home.sessionVariables = {
-    # Using mkDefault allows laptop-home.nix to overwrite these without conflicts
+    OPENAI_API_KEY = "$(cat ${config.sops.secrets.OPENAI_API_KEY.path})";
+    GOOGLE_API_KEY = "$(cat ${config.sops.secrets.GOOGLE_API_KEY.path})";
+    ANTHROPIC_API_KEY = "$(cat ${config.sops.secrets.ANTHROPIC_API_KEY.path})";
+    OPENAI_API_MODEL = "gpt-5-mini";
+    AIDER_MODEL = "gpt-5-mini";
+    RIPGREP_CONFIG_PATH = "${my-home-dir}/.ripgreprc";
+    LG_CONFIG_FILE= "${my-home-dir}/.config/lazygit/config.yml,${my-home-dir}/.config/lazygit/theme/lazygit/themes-mergable/mocha/blue.yml";
+    BROWSER = "${pkgs.firefox-bin}/bin/firefox";
+    TERMINAL_EMULATOR = "${pkgs.alacritty}/bin/alacritty";
+    TERMINAL = "${pkgs.alacritty}/bin/alacritty";
+    PAGER = "less";
+    EDITOR = "nvim";
+    VISUAL = "neovide";
+    NIXPKGS_ALLOW_UNFREE = "1";
     MY_MACHINE_ID = lib.mkDefault "none";
-    HELLO_WORLD_VAR = lib.mkDefault "hello world";
   };
 }
