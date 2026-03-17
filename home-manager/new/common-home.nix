@@ -233,20 +233,20 @@ in with constants;
 
   # :NOTE: lib.mkDefault makes it so the setting can be overrun in home.nix
   home.sessionVariables = {
-    OPENAI_API_KEY = "$(cat ${config.sops.secrets.OPENAI_API_KEY.path})";
-    GOOGLE_API_KEY = "$(cat ${config.sops.secrets.GOOGLE_API_KEY.path})";
-    ANTHROPIC_API_KEY = "$(cat ${config.sops.secrets.ANTHROPIC_API_KEY.path})";
-    OPENAI_API_MODEL = "gpt-5-mini";
-    AIDER_MODEL = "gpt-5-mini";
-    RIPGREP_CONFIG_PATH = "${my-home-dir}/.ripgreprc";
-    LG_CONFIG_FILE= "${my-home-dir}/.config/lazygit/config.yml,${my-home-dir}/.config/lazygit/theme/lazygit/themes-mergable/mocha/blue.yml";
-    BROWSER = "${pkgs.firefox-bin}/bin/firefox";
-    TERMINAL_EMULATOR = "${pkgs.alacritty}/bin/alacritty";
-    TERMINAL = "${pkgs.alacritty}/bin/alacritty";
-    PAGER = "less";
-    EDITOR = "nvim";
-    VISUAL = "neovide";
-    NIXPKGS_ALLOW_UNFREE = "1";
+    OPENAI_API_KEY = lib.mkDefault "$(cat ${config.sops.secrets.OPENAI_API_KEY.path})";
+    GOOGLE_API_KEY = lib.mkDefault "$(cat ${config.sops.secrets.GOOGLE_API_KEY.path})";
+    ANTHROPIC_API_KEY = lib.mkDefault "$(cat ${config.sops.secrets.ANTHROPIC_API_KEY.path})";
+    OPENAI_API_MODEL = lib.mkDefault "gpt-5-mini";
+    AIDER_MODEL = lib.mkDefault "gpt-5-mini";
+    RIPGREP_CONFIG_PATH = lib.mkDefault "${my-home-dir}/.ripgreprc";
+    LG_CONFIG_FILE= lib.mkDefault "${my-home-dir}/.config/lazygit/config.yml,${my-home-dir}/.config/lazygit/theme/lazygit/themes-mergable/mocha/blue.yml";
+    BROWSER = lib.mkDefault "${pkgs.firefox-bin}/bin/firefox";
+    TERMINAL_EMULATOR = lib.mkDefault "${pkgs.alacritty}/bin/alacritty";
+    TERMINAL = lib.mkDefault "${pkgs.alacritty}/bin/alacritty";
+    PAGER = lib.mkDefault "less";
+    EDITOR = lib.mkDefault "nvim";
+    VISUAL = lib.mkDefault "neovide";
+    NIXPKGS_ALLOW_UNFREE = lib.mkDefault "1";
     MY_MACHINE_ID = lib.mkDefault "none";
   };
 }
