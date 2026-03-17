@@ -853,6 +853,7 @@ in
     VISUAL = "neovide";
     NIXPKGS_ALLOW_UNFREE = "1";
     MY_MACHINE_ID = "Laptop";
+    GHOSTRIDER = "negative the pattern is full";
   };
 
 }

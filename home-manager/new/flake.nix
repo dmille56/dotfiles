@@ -34,7 +34,6 @@
       nixosConfigurations.${my-host-name} = nixpkgs.lib.nixosSystem {
         modules = [
           (builtins.toPath "${const.my-dotfile-nix-dir}/${my-machine-id}-configuration.nix")
-          # ./configuration.nix # :TODO: remove later
           sops-nix.nixosModules.sops
 
           # make home-manager as a module of nixos
@@ -45,7 +44,6 @@
             home-manager.useUserPackages = true;
 
             home-manager.users.dono = import (builtins.toPath "${const.my-dotfile-nix-dir}/${my-machine-id}-home.nix");
-            # home-manager.users.dono = import ./home.nix; # :TODO: remove later
 
             home-manager.sharedModules = [
               sops-nix.homeManagerModules.sops
