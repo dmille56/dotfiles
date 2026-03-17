@@ -216,19 +216,19 @@ in with constants;
     # to output the public key: age-keygen -y ~/.config/sops/age/keys.txt
     # change the yaml config at .sops.yaml (when need to update the age key)
     # to update the keys in the yaml config: sops updatekeys .sops.yaml
-    age.keyFile = "${my-home-dir}/.config/sops/age/keys.txt"; # Path to your age key file
+    age.keyFile = lib.mkDefault "${my-home-dir}/.config/sops/age/keys.txt"; # Path to your age key file
     # :NOTE:
     # to add/init a new secrets file: 
     # sops secrets.yaml
-    defaultSopsFile = ../../secrets.yaml; # default secrets file
+    defaultSopsFile = lib.mkDefault ../../secrets.yaml; # default secrets file
     
     # :NOTE: need to add one of these entries for each secret added to the secrets file (so can be accessed in nix)
-    secrets.OPENAI_API_KEY.path = "${config.sops.defaultSymlinkPath}/OPENAI_API_KEY";
-    secrets.GOOGLE_API_KEY.path = "${config.sops.defaultSymlinkPath}/GOOGLE_API_KEY";
-    secrets.ANTHROPIC_API_KEY.path = "${config.sops.defaultSymlinkPath}/ANTHROPIC_API_KEY";
-    secrets.GIT_NAME.path = "${config.sops.defaultSymlinkPath}/GIT_NAME";
-    secrets.GIT_EMAIL.path = "${config.sops.defaultSymlinkPath}/GIT_EMAIL";
-    secrets.GITHUB_USER.path = "${config.sops.defaultSymlinkPath}/GITHUB_USER";
+    secrets.OPENAI_API_KEY.path = lib.mkDefault "${config.sops.defaultSymlinkPath}/OPENAI_API_KEY";
+    secrets.GOOGLE_API_KEY.path = lib.mkDefault "${config.sops.defaultSymlinkPath}/GOOGLE_API_KEY";
+    secrets.ANTHROPIC_API_KEY.path = lib.mkDefault "${config.sops.defaultSymlinkPath}/ANTHROPIC_API_KEY";
+    secrets.GIT_NAME.path = lib.mkDefault "${config.sops.defaultSymlinkPath}/GIT_NAME";
+    secrets.GIT_EMAIL.path = lib.mkDefault "${config.sops.defaultSymlinkPath}/GIT_EMAIL";
+    secrets.GITHUB_USER.path = lib.mkDefault "${config.sops.defaultSymlinkPath}/GITHUB_USER";
   };
 
   # :NOTE: lib.mkDefault makes it so the setting can be overrun in home.nix
