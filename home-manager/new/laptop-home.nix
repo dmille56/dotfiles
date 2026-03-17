@@ -647,7 +647,7 @@ in
     # :NOTE:
     # to add/init a new secrets file: 
     # sops secrets.yaml
-    defaultSopsFile = ../secrets.yaml; # default secrets file
+    defaultSopsFile = ../../secrets.yaml; # default secrets file
     
     # :NOTE: need to add one of these entries for each secret added to the secrets file (so can be accessed in nix)
     secrets.OPENAI_API_KEY.path = "${config.sops.defaultSymlinkPath}/OPENAI_API_KEY";
@@ -835,7 +835,7 @@ in
   };
 
   # :NOTE: use image profile picture (for display manager)
-  home.file.".face".source = ../img/dracula-profile.png;
+  home.file.".face".source = ../../img/dracula-profile.png;
   
   home.sessionVariables = {
     OPENAI_API_KEY = "$(cat ${config.sops.secrets.OPENAI_API_KEY.path})";
