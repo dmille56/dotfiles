@@ -1,8 +1,8 @@
-# :NOTE: Install notes
-1.) copy flake.nix to /etc/nixos/flake.nix: `sudo cp flake.nix /etc/nixos/flake.nix`.
-2.) change my-machine-id variable to the correct machine (desktop or laptop)
-3.) make sure dotfiles are cloned to /home/dono/dotfiles: `git clone https://github.com/dmille56/dotfiles`
-4.) Switch to the new config: `sudo nixos-rebuild switch --impure`
+# Install notes
+1. copy flake.nix to /etc/nixos/flake.nix: `sudo cp flake.nix /etc/nixos/flake.nix`.
+2. change my-machine-id variable to the correct machine (desktop or laptop)
+3. make sure dotfiles are cloned to /home/dono/dotfiles: `git clone https://github.com/dmille56/dotfiles`
+4. Switch to the new config: `sudo nixos-rebuild switch --impure`
 
 # Non nix install:
 1. setup syncthing directories
@@ -15,5 +15,5 @@
 - Apply new/updated nixos config: `sudo nixos-rebuild switch`
 - How to update nix pkgs: `cd /etc/nixos && sudo nix flake update`
 - Garbage collect nix: `nix-collect-garbage -d`
-
-
+- How to test out a program without install (drops you in a shell with that program in it)... Replace hellow with the pkg: `nix-shell -p hello`
+- Nix pkgs search: https://search.nixos.org/packages
