@@ -45,7 +45,7 @@ in
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
 
-              home-manager.users.dono = import "${const.my-dotfile-nix-dir}-${my-machine-id}-home.nix";
+              home-manager.users.dono = import (builtins.toPath "${const.my-dotfile-nix-dir}/${my-machine-id}-home.nix");
               # home-manager.users.dono = import ./home.nix; # :TODO: remove later
 
 	      home-manager.sharedModules = [
