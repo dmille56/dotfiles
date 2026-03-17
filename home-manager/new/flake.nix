@@ -5,14 +5,14 @@
 # 4.) sudo nixos-rebuild switch --impure
 
 # :NOTE: how to update nix flakes
-# cd 
 let 
   const = (import "/home/dono/dotfiles/home-manager/new/common-constants.nix");
   my-machine-id = "laptop"; # desktop, laptop
   my-host-name =
-    if my-machine-id == "laptop" then "batmobile"
+    if my-machine-id == "laptop" then "nixos"
     else if my-machine-id == "desktop" then "van"
     else builtins.throw "Unknown host-name: ${my-machine-id}";
+in
 {
     description = "NixOS Flake";
 
@@ -32,11 +32,10 @@ let
     outputs = inputs@{ nixpkgs, home-manager, sops-nix, ... }: {
       nixosConfigurations = {
         # :NOTE: change the hostname to your own
-        "${my-host-name}" = nixpkgs.lib.nixosSystem {
+        nixos = nixpkgs.lib.nixosSystem {
           modules = [
-            "${const.my-dotfile-nix-dir}/${my-machine-id}-configuration.nix";
+            (builtins.toPath "${const.my-dotfile-nix-dir}/${my-machine-id}-configuration.nix")
             # ./configuration.nix # :TODO: remove later
-            home.file.".xmobarrc".source = "${const.my-dotfile-dir}/xmobarrc-${my-machine-id}"; # :TODO: fix this to work with desktop later
             sops-nix.nixosModules.sops
 
             # make home-manager as a module of nixos
@@ -46,7 +45,7 @@ let
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
 
-              home-manager.users.dono = (import "${const.my-dotfile-nix-dir}-${my-machine-id}-home.nix";
+              home-manager.users.dono = import "${const.my-dotfile-nix-dir}-${my-machine-id}-home.nix";
               # home-manager.users.dono = import ./home.nix; # :TODO: remove later
 
 	      home-manager.sharedModules = [
