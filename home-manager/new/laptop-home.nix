@@ -49,7 +49,7 @@ in
     options = "--delete-older-than 14d";
   };
 
-  home.packages = lib.unique (config.home.packages ++ (with pkgs; [
+  home.packages = with pkgs; [
     #terminal
     nano
     micro
@@ -262,7 +262,7 @@ in
     remmina # :NOTE: added
     xmessage # :NOTE: added
     x2goclient # :NOTE: added
-  ]));
+  ];
 
   # :TODO: make sure this works to set gtk applications themes correctly
   # gtk = {
@@ -839,7 +839,7 @@ in
   # :NOTE: use image profile picture (for display manager)
   home.file.".face".source = ../../img/dracula-profile.png;
   
-  home.sessionVariables = config.home.sessionVariables // {
+  home.sessionVariables = {
     OPENAI_API_KEY = "$(cat ${config.sops.secrets.OPENAI_API_KEY.path})";
     GOOGLE_API_KEY = "$(cat ${config.sops.secrets.GOOGLE_API_KEY.path})";
     ANTHROPIC_API_KEY = "$(cat ${config.sops.secrets.ANTHROPIC_API_KEY.path})";
