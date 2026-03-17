@@ -13,6 +13,14 @@ in with constants;
   home.homeDirectory = lib.mkDefault "${my-home-dir}";
   home.stateVersion = lib.mkDefault "23.11"; # To figure this out you can comment out the line and see what version it expected.
 
+  # :NOTE: enable automatic nix garbage collection
+  nix.gc = {
+    automatic = lib.mkDefault true;
+    dates = lib.mkDefault "daily";
+    # Optional: options to pass to nix-collect-garbage, e.g., "--delete-older-than 30d"
+    options = lib.mkDefault "--delete-older-than 14d";
+  };
+
   # :NOTE: Lists automatically merge, so this all gets added to home.nix's packages
   home.packages = with pkgs; [
     #terminal
@@ -218,6 +226,39 @@ in with constants;
     scrcpy
     redshift
   ];
+
+  programs.fzf = {
+    enable = lib.mkDefault true;
+    enableZshIntegration = lib.mkDefault true;
+  };
+
+  programs.direnv = {
+    enable = lib.mkDefault true;
+    enableZshIntegration = lib.mkDefault true;
+  };
+
+  programs.zoxide = {
+    enable = lib.mkDefault true;
+    enableZshIntegration = lib.mkDefault true;
+  };
+
+  programs.rofi = {
+    enable = lib.mkDefault true;
+    plugins = lib.mkDefault (with pkgs; [ 
+      rofi-emoji
+      rofi-games
+    ]);
+    # theme = "glue_pro_blue"; #good fallback theme that comes installed with rofi
+    theme = lib.mkDefault "dracula-theme";
+  };
+  
+  programs.delta = {
+    enable = lib.mkDefault true;
+    enableGitIntegration = lib.mkDefault true;
+    options = {
+      features = lib.mkDefault "dracula";
+    };
+  };
 
   sops = { 
     # :NOTE: generate key with age:

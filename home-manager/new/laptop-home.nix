@@ -13,14 +13,6 @@ in with constants;
 {
   imports = [ ./common-home.nix ];
 
-  # :NOTE: enable automatic nix garbage collection
-  nix.gc = {
-    automatic = true;
-    dates = "daily";
-    # Optional: options to pass to nix-collect-garbage, e.g., "--delete-older-than 30d"
-    options = "--delete-older-than 14d";
-  };
-
   home.packages = with pkgs; [
     steam # :NOTE: added
     sensible-utils # :NOTE: added
@@ -45,11 +37,6 @@ in with constants;
   #     # package = pkgs.papirus-icon-theme;
   #   };
   # };
-
-  programs.fzf = {
-    enable = true;
-    enableZshIntegration = true;
-  };
 
   programs.zsh = {
     enable = true;
