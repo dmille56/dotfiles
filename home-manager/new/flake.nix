@@ -5,57 +5,55 @@
 # 4.) sudo nixos-rebuild switch --impure
 
 # :NOTE: how to update nix flakes
-let 
-  const = (import "/home/dono/dotfiles/home-manager/new/common-constants.nix");
-  my-machine-id = "laptop"; # desktop, laptop
-  my-host-name =
-    if my-machine-id == "laptop" then "nixos"
-    else if my-machine-id == "desktop" then "van"
-    else builtins.throw "Unknown host-name: ${my-machine-id}";
-in
 {
-    description = "NixOS Flake";
+  description = "NixOS Flake";
 
-    inputs = {
-        nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
-        home-manager = {
-            url = "github:nix-community/home-manager";
-            inputs.nixpkgs.follows = "nixpkgs";
-        };
-        
-        sops-nix = {
-          url = "github:Mic92/sops-nix";
-          inputs.nixpkgs.follows = "nixpkgs";
-        };
+  inputs = {
+    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+    home-manager = {
+      url = "github:nix-community/home-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    outputs = inputs@{ nixpkgs, home-manager, sops-nix, ... }: {
-      nixosConfigurations = {
-        # :NOTE: change the hostname to your own
-        nixos = nixpkgs.lib.nixosSystem {
-          modules = [
-            (builtins.toPath "${const.my-dotfile-nix-dir}/${my-machine-id}-configuration.nix")
-            # ./configuration.nix # :TODO: remove later
-            sops-nix.nixosModules.sops
+    sops-nix = {
+      url = "github:Mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+  };
 
-            # make home-manager as a module of nixos
-            # so that home-manager configuration will be deployed automatically when executing `nixos-rebuild switch`
-            home-manager.nixosModules.home-manager
-            {
-              home-manager.useGlobalPkgs = true;
-              home-manager.useUserPackages = true;
+  outputs = inputs@{ nixpkgs, home-manager, sops-nix, ... }:
+    let
+      const = import (builtins.toPath "/home/dono/dotfiles/home-manager/new/common-constants.nix");
+      my-machine-id = "laptop"; # desktop, laptop
+      my-host-name =
+        if my-machine-id == "laptop" then "nixos"
+        else if my-machine-id == "desktop" then "van"
+        else builtins.throw "Unknown host-name: ${my-machine-id}";
+    in
+    {
+      nixosConfigurations.${my-host-name} = nixpkgs.lib.nixosSystem {
+        modules = [
+          (builtins.toPath "${const.my-dotfile-nix-dir}/${my-machine-id}-configuration.nix")
+          # ./configuration.nix # :TODO: remove later
+          sops-nix.nixosModules.sops
 
-              home-manager.users.dono = import (builtins.toPath "${const.my-dotfile-nix-dir}/${my-machine-id}-home.nix");
-              # home-manager.users.dono = import ./home.nix; # :TODO: remove later
+          # make home-manager as a module of nixos
+          # so that home-manager configuration will be deployed automatically when executing `nixos-rebuild switch`
+          home-manager.nixosModules.home-manager
+          {
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
 
-	      home-manager.sharedModules = [
-                sops-nix.homeManagerModules.sops
-	      ];
+            home-manager.users.dono = import (builtins.toPath "${const.my-dotfile-nix-dir}/${my-machine-id}-home.nix");
+            # home-manager.users.dono = import ./home.nix; # :TODO: remove later
 
-              # Optionally, use home-manager.extraSpecialArgs to pass arguments to home.nix
-            }
-          ];
-        };
+            home-manager.sharedModules = [
+              sops-nix.homeManagerModules.sops
+            ];
+
+            # Optionally, use home-manager.extraSpecialArgs to pass arguments to home.nix
+          }
+        ];
       };
     };
 }
