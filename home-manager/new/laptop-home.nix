@@ -79,35 +79,6 @@ in with constants;
     # sessionVariables = { RIPGREP_CONFIG_PATH = "${my-home-dir}/.ripgreprc"; };
   };
 
-  programs.direnv = {
-    enable = true;
-    enableZshIntegration = true;
-  };
-
-  programs.zoxide = {
-    enable = true;
-    enableZshIntegration = true;
-  };
-
-  programs.rofi = {
-    enable = true;
-    # :TODO: figure out why the plugins aren't working correctly
-    plugins = with pkgs; [ 
-      rofi-emoji
-      rofi-games
-    ];
-    # theme = "glue_pro_blue"; #good fallback theme that comes installed with rofi
-    theme = "dracula-theme";
-  };
-  
-  programs.delta = {
-    enable = true;
-    enableGitIntegration = true;
-    options = {
-      features = "dracula";
-    };
-  };
-
   programs.git = {
     enable = true;
     settings = {
