@@ -3,6 +3,16 @@ let
   constants = import ./common-constants.nix; 
 in with constants;
 {
+  programs.home-manager.enable = true; # obviously we need to enable home-manager
+
+  # :NOTE: lib.mkDefault makes it so the setting can be overrun in home.nix
+  xsession.enable = lib.mkDefault true;
+  fonts.fontconfig.enable = lib.mkDefault true;
+
+  home.username = lib.mkDefault "${my-username}";
+  home.homeDirectory = lib.mkDefault "${my-home-dir}";
+  home.stateVersion = lib.mkDefault "23.11"; # To figure this out you can comment out the line and see what version it expected.
+
   # :NOTE: Lists automatically merge, so this all gets added to home.nix's packages
   home.packages = with pkgs; [
     #terminal
@@ -231,7 +241,6 @@ in with constants;
     secrets.GITHUB_USER.path = lib.mkDefault "${config.sops.defaultSymlinkPath}/GITHUB_USER";
   };
 
-  # :NOTE: lib.mkDefault makes it so the setting can be overrun in home.nix
   home.sessionVariables = {
     OPENAI_API_KEY = lib.mkDefault "$(cat ${config.sops.secrets.OPENAI_API_KEY.path})";
     GOOGLE_API_KEY = lib.mkDefault "$(cat ${config.sops.secrets.GOOGLE_API_KEY.path})";

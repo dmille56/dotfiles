@@ -13,14 +13,6 @@ in with constants;
 {
   imports = [ ./common-home.nix ];
 
-  home.username = "${my-username}";
-  home.homeDirectory = "${my-home-dir}";
-  home.stateVersion = "23.11"; # To figure this out you can comment out the line and see what version it expected.
-  programs.home-manager.enable = true;
-  fonts.fontconfig.enable = true;
-
-  xsession.enable = true;
-
   # :NOTE: enable automatic nix garbage collection
   nix.gc = {
     automatic = true;
