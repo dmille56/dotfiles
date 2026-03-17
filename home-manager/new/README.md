@@ -7,9 +7,9 @@
 # Non nix install:
 1. setup syncthing directories
 2. setup firefox / chrome extensions
-  - vimium, ublock origin, stylus, location guard, vihn, old reddit redirect, reddit enhancement suite, what hacker news says, dracula theme, blocktube, unhook
+    - vimium, ublock origin, stylus, location guard, vihn, old reddit redirect, reddit enhancement suite, what hacker news says, dracula theme, blocktube, unhook
 3. setup vscode extensions
-  - python, vscode neovim, direnv, dracula theme, grafana alloy, haskell, nix, c#
+    - python, vscode neovim, direnv, dracula theme, grafana alloy, haskell, nix, c#
 
 # Update / Managing NixOS Config
 - Apply new/updated nixos config: `sudo nixos-rebuild switch`
