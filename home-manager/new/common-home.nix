@@ -651,6 +651,58 @@ in with constants;
   };
 
   # :NOTE: home file configuration starts here
+  # :TODO: need to make them all optional still
+
+  home.file.".config/kak/kakrc".text = lib.mkDefault ''
+    colorscheme dracula
+  '';
+
+  home.file.".config/helix/config.toml".text = lib.mkDefault ''
+    theme = "dracula"
+  '';
+
+  home.file.".config/alacritty/alacritty.toml".text = lib.mkDefault ''
+    general.import = ["~/.config/alacritty/dracula.toml"]
+
+    [font]
+    size = 13.0
+    
+    [font.bold]
+    family = "DejaVu Sans Mono"
+    style = "Bold"
+    
+    [font.bold_italic]
+    family = "DejaVu Sans Mono"
+    style = "Bold Italic"
+    
+    [font.italic]
+    family = "DejaVu Sans Mono"
+    style = "Italic"
+    
+    [font.normal]
+    family = "DejaVu Sans Mono"
+    style = "Regular"
+
+    [window]
+    opacity = 0.8
+  '';
+  
+  home.file.".config/spotifyd/spotifyd.conf".text = lib.mkDefault ''
+    [global]
+    username = "donovanm56"
+    password_cmd = "pass spotify"
+    backend = "pulseaudio"
+    cache_path = "${my-home-dir}/.cache/spotifyd"
+    max_cache_size = 2000000000
+    bitrate = 160
+  '';
+
+  home.file.".config/spotify-player/app.toml".source = lib.mkDefault "${my-dotfile-dir}/.config/spotify-player/app.toml";
+
+  home.file.".config/rofi-games/config.toml".text = lib.mkDefault ''
+    [launchers.steam]
+    extra_args = ["-silent"]
+  '';
 
   home.file.".vimrc".source = lib.mkDefault "${my-dotfile-dir}/vim/vim/vimrc";
   home.file.".Xresources".source = lib.mkDefault "${my-dotfile-dir}/Xresources";
