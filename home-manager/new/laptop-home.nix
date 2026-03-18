@@ -38,47 +38,6 @@ in with constants;
   #   };
   # };
 
-  programs.zsh = {
-    enable = true;
-    #autosuggestion.enable = true;
-
-    initContent = ''
-     if [ -e ~/.nix-profile/etc/profile.d/nix.sh ]; then . ~/.nix-profile/etc/profile.d/nix.sh; fi
-     source ${pkgs.zsh-syntax-highlighting}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-   '';
-
-    oh-my-zsh = {
-      enable = true;
-      theme = "agnoster";
-      plugins = [ "git" ];
-    };
-
-    shellAliases = {
-      cls = "clear";
-      r = "ranger";
-      nv = "nvim";
-      lg = "lazygit";
-      e = "emacs";
-    };
-
-    plugins = [
-      {
-        name = "fzf-tab";
-        src = pkgs.fetchFromGitHub {
-          owner = "Aloxaf";
-          repo = "fzf-tab";
-          rev = "fac145167f7ec1861233c54de0c8900b09c650fe";
-          sha256 = "1Ior+/9e+M+Fc1u0uq5HhknlGRS96q7tazhEE6rmx9Y=";
-        };
-      }
-    ];
-
-    localVariables = {
-      ZSH_DISABLE_COMPFIX = "true"; # for syntax highlighting to work
-    };
-    # sessionVariables = { RIPGREP_CONFIG_PATH = "${my-home-dir}/.ripgreprc"; };
-  };
-
   programs.neovim = {
     enable = true;
     plugins = with pkgs.vimPlugins; [
