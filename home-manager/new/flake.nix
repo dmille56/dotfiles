@@ -26,8 +26,8 @@
       const = import (builtins.toPath "/home/dono/dotfiles/home-manager/new/common-constants.nix");
       my-machine-id = "laptop"; # desktop, laptop
       my-host-name =
-        if my-machine-id == "laptop" then "nixos"
-        else if my-machine-id == "desktop" then "van"
+        if my-machine-id == "laptop" then "${const.my-desktop-hostname}"
+        else if my-machine-id == "desktop" then "${const.my-laptop-hostname}"
         else builtins.throw "Unknown host-name: ${my-machine-id}";
     in
     {

@@ -1,5 +1,8 @@
 { config, pkgs, ... }:
 
+let
+  constants = import ./common-constants.nix; 
+in
 {
   imports =
     [ # Include the results of the hardware scan.
@@ -7,7 +10,7 @@
       ./common-configuration.nix
     ];
 
-  networking.hostName = "nixos"; # Define your hostname.
+  networking.hostName = "${constants.my-laptop-hostname}"; # Define your hostname.
 
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
