@@ -825,6 +825,7 @@ in with constants;
   home.file.".face".source = lib.mkDefault ../../img/dracula-profile.png;
 
   # :NOTE: home environment variables config starts here
+  # :TODO: need to fix OPENAI_API_KEY, GOOGLE_API_KEY, and ANTHROPIC_API_KEY only being set through SOPS secrets some of the time... Need to figure out what is happening
   home.sessionVariables = {
     OPENAI_API_KEY = lib.mkDefault "$(cat ${config.sops.secrets.OPENAI_API_KEY.path})";
     GOOGLE_API_KEY = lib.mkDefault "$(cat ${config.sops.secrets.GOOGLE_API_KEY.path})";

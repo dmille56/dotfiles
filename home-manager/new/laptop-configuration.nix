@@ -8,6 +8,7 @@
   imports =
     [ # Include the results of the hardware scan.
       ./laptop-hardware-configuration.nix
+      # ./common-configuration.nix # :TODO: enable this eventually
     ];
 
   # Bootloader.
