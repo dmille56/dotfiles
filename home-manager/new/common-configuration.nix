@@ -102,11 +102,11 @@
 
   # Configure bluetooth
   hardware.bluetooth = {
-    enable = lib.mkDefault true;
-    powerOnBoot = lib.mkDefault true;
+    enable = true;
+    powerOnBoot = true;
   };
 
-  services.blueman.enable = lib.mkDefault true;
+  services.blueman.enable = true;
 
   # Enable CUPS to print documents.
   services.printing.enable = lib.mkDefault true;
