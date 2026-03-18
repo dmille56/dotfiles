@@ -17,30 +17,6 @@
   # networking.proxy.default = "http://user:password@proxy:port/";
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
-  # Enable the X11 windowing system.
-  services.xserver.enable = true;
-
-  # Enable lightdm Display Manager
-  services.xserver.displayManager.lightdm = {
-    enable = true;
-
-    greeters.gtk = {
-      enable = true;
-      theme = {
-        name = "Dracula";
-        package = pkgs.dracula-theme;
-      };
-      iconTheme = {
-        name = "Papirus-Dark";
-        package = pkgs.papirus-icon-theme;
-      };
-      cursorTheme = {
-        name = "Numix-Cursor";
-        package = pkgs.numix-cursor-theme;
-      };
-    };
-  };
-
   # Enable the XFCE Desktop Environment (and also XMonad).
   services.xserver.desktopManager.xfce.enable = true;
   services.xserver.windowManager.xmonad = {
