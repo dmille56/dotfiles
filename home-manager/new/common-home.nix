@@ -3,6 +3,8 @@ let
   constants = import ./common-constants.nix; 
 in with constants;
 {
+  # :NOTE: misc settings
+
   programs.home-manager.enable = true; # obviously we need to enable home-manager
 
   # :NOTE: lib.mkDefault makes it so the setting can be overrun in home.nix
@@ -21,6 +23,7 @@ in with constants;
     options = lib.mkDefault "--delete-older-than 14d";
   };
 
+  # :NOTE: packages config
   # :NOTE: Lists automatically merge, so this all gets added to home.nix's packages
   home.packages = with pkgs; [
     #terminal
@@ -227,6 +230,8 @@ in with constants;
     redshift
   ];
 
+  # :NOTE: programs config starts here
+
   programs.fzf = {
     enable = lib.mkDefault true;
     enableZshIntegration = lib.mkDefault true;
@@ -258,6 +263,100 @@ in with constants;
     options = {
       features = lib.mkDefault "dracula";
     };
+  };
+
+  programs.git = {
+    enable = lib.mkDefault true;
+    settings = {
+      # :TODO: fix these
+      # github.user = "$(cat ${config.sops.secrets.GITHUB_USER.path})";
+      # user.name = "$(cat ${config.sops.secrets.GIT_NAME.path})";
+      # user.email = "$(cat ${config.sops.secrets.GIT_EMAIL.path})";
+      github.user = lib.mkDefault "dmille56";
+      user.name = lib.mkDefault "Donovan M";
+      user.email = lib.mkDefault "donovanm256@gmail.com";
+      color = {
+        ui = lib.mkDefault "always";
+      };
+      alias = {
+        st = lib.mkDefault "status";
+        ci = lib.mkDefault "commit"; 
+        br = lib.mkDefault "branch";
+        co = lib.mkDefault "checkout";
+      };
+      credential.helper = lib.mkDefault "oauth";
+    };
+  };
+  
+  programs.gh = {
+    enable = lib.mkDefault true;
+    extensions = lib.mkDefault [ pkgs.gh-dash ];
+    gitCredentialHelper.enable = lib.mkDefault true;
+  };
+
+  programs.tmux = {
+    enable = lib.mkDefault true;
+    clock24 = lib.mkDefault true;
+    plugins = lib.mkDefault (with pkgs.tmuxPlugins; [
+      sensible
+      yank
+      tmux-fzf
+      jump
+      urlview
+      {
+        plugin = dracula;
+        extraConfig = ''
+            set -g @dracula-show-battery false
+            set -g @dracula-show-powerline true
+            set -g @dracula-refresh-rate 10
+        '';
+      }
+    ]);
+
+    extraConfig = lib.mkDefault ''
+        unbind C-b
+        set-option -g prefix C-a
+        bind-key C-a send-prefix
+
+        #map F5 to cycle to next window
+        bind -n F5 next-window
+
+        #map F6 to cycle to next pane
+        bind -n F6 select-pane -t :.+
+
+        set -g mouse on
+
+        # Start windows and panes at 1, not 0
+        set -g base-index 1
+        setw -g pane-base-index 1
+
+        # Make % (horizontal split) and " (vertical split) bindings split the window and cd to the current path
+        bind % split-window -h -c "#{pane_current_path}"
+        bind '"' split-window -v -c "#{pane_current_path}"
+    '';
+  };
+
+  # :NOTE: services config starts here
+
+  services.kdeconnect.enable = lib.mkDefault true;
+  services.syncthing.enable = lib.mkDefault true;
+
+  services.spotifyd = {
+    enable = lib.mkDefault true;
+    package = lib.mkDefault (pkgs.spotifyd.override { withPulseAudio = true; withMpris = true; });
+    settings.global = {
+      username = lib.mkDefault "donovanm56";
+      password_cmd = lib.mkDefault "pass spotify";
+      backend = lib.mkDefault "pulseaudio";
+      cache_path = lib.mkDefault "${my-home-dir}/.cache/spotifyd";
+      max_cache_size = lib.mkDefault 2000000000;
+      bitrate = lib.mkDefault 160;
+    };
+  };
+
+  services.lorri = {
+    enable = lib.mkDefault true;
+    enableNotifications = lib.mkDefault true;
   };
 
   sops = { 

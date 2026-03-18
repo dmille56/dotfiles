@@ -79,77 +79,6 @@ in with constants;
     # sessionVariables = { RIPGREP_CONFIG_PATH = "${my-home-dir}/.ripgreprc"; };
   };
 
-  programs.git = {
-    enable = true;
-    settings = {
-      # :TODO: fix these
-      # github.user = "$(cat ${config.sops.secrets.GITHUB_USER.path})";
-      # user.name = "$(cat ${config.sops.secrets.GIT_NAME.path})";
-      # user.email = "$(cat ${config.sops.secrets.GIT_EMAIL.path})";
-      github.user = "dmille56";
-      user.name = "Donovan M";
-      user.email = "donovanm256@gmail.com";
-      color = {
-        ui = "always";
-      };
-      alias = {
-        st = "status";
-        ci = "commit"; 
-        br = "branch";
-        co = "checkout";
-      };
-      credential.helper = "oauth";
-    };
-  };
-  
-  programs.gh = {
-    enable = true;
-    extensions = [ pkgs.gh-dash ];
-    gitCredentialHelper.enable = true;
-  };
-
-  programs.tmux = {
-    enable = true;
-    clock24 = true;
-    plugins = with pkgs.tmuxPlugins; [
-      sensible
-      yank
-      tmux-fzf
-      jump
-      urlview
-      {
-        plugin = dracula;
-        extraConfig = ''
-            set -g @dracula-show-battery false
-            set -g @dracula-show-powerline true
-            set -g @dracula-refresh-rate 10
-        '';
-      }
-    ];
-
-    extraConfig = ''
-        unbind C-b
-        set-option -g prefix C-a
-        bind-key C-a send-prefix
-
-        #map F5 to cycle to next window
-        bind -n F5 next-window
-
-        #map F6 to cycle to next pane
-        bind -n F6 select-pane -t :.+
-
-        set -g mouse on
-
-        # Start windows and panes at 1, not 0
-        set -g base-index 1
-        setw -g pane-base-index 1
-
-        # Make % (horizontal split) and " (vertical split) bindings split the window and cd to the current path
-        bind % split-window -h -c "#{pane_current_path}"
-        bind '"' split-window -v -c "#{pane_current_path}"
-    '';
-  };
-
   programs.neovim = {
     enable = true;
     plugins = with pkgs.vimPlugins; [
@@ -366,26 +295,7 @@ in with constants;
     '';
   };
 
-  services.kdeconnect.enable = true;
-  services.syncthing.enable = true;
-
-  services.spotifyd = {
-    enable = true;
-    package = (pkgs.spotifyd.override { withPulseAudio = true; withMpris = true; });
-    settings.global = {
-      username = "donovanm56";
-      password_cmd = "pass spotify";
-      backend = "pulseaudio";
-      cache_path = "${my-home-dir}/.cache/spotifyd";
-      max_cache_size = 2000000000;
-      bitrate = 160;
-    };
-  };
-
-  services.lorri = {
-    enable = true;
-    enableNotifications = true;
-  };
+  # :NOTE: home file configuration starts here
 
   home.file.".config/kak/kakrc".text = ''
     colorscheme dracula
