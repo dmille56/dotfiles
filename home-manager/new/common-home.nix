@@ -665,48 +665,48 @@ in with constants;
   home.file.".config/redshift.conf".source = lib.mkDefault "${my-dotfile-dir}/redshift.conf";
  
   home.file.".config/rofi/themes/dracula-theme.rasi".text = builtins.readFile(builtins.fetchurl {
-    url = lib.mkDefault "https://raw.githubusercontent.com/dracula/rofi/48a024639fbf25e3237766f0dcef4af75a2df908/theme/config1.rasi";
-    sha256 = lib.mkDefault "52f26dd7c44bb919a7a604d71bea26df5e52bd2188f9804e103fc002239bc99a";
+    url = "https://raw.githubusercontent.com/dracula/rofi/48a024639fbf25e3237766f0dcef4af75a2df908/theme/config1.rasi";
+    sha256 = "52f26dd7c44bb919a7a604d71bea26df5e52bd2188f9804e103fc002239bc99a";
   });
 
   home.file.".config/rofi/themes/dracula-theme-2.rasi".text = builtins.readFile(builtins.fetchurl {
-    url = lib.mkDefault "https://raw.githubusercontent.com/dracula/rofi/48a024639fbf25e3237766f0dcef4af75a2df908/theme/config2.rasi";
-    sha256 = lib.mkDefault "68010556ad7b351b63b6d061f5c4b7c8feb9d9b32687bf0530b105a86634766c";
+    url = "https://raw.githubusercontent.com/dracula/rofi/48a024639fbf25e3237766f0dcef4af75a2df908/theme/config2.rasi";
+    sha256 = "68010556ad7b351b63b6d061f5c4b7c8feb9d9b32687bf0530b105a86634766c";
   });
 
   home.file.".config/rofi/themes/games-default.rasi".text = builtins.readFile(builtins.fetchurl {
-    url = lib.mkDefault "https://raw.githubusercontent.com/Rolv-Apneseth/rofi-games/17e53726e8f81f6bbe15b4dd66329f869409f4c6/themes/games-default.rasi";
-    sha256 = lib.mkDefault "sha256:0w3cyp7v102n5pdmngz1rhzh86rrc120gfxzxv3h86vs1ch2zli2";
+    url = "https://raw.githubusercontent.com/Rolv-Apneseth/rofi-games/17e53726e8f81f6bbe15b4dd66329f869409f4c6/themes/games-default.rasi";
+    sha256 = "sha256:0w3cyp7v102n5pdmngz1rhzh86rrc120gfxzxv3h86vs1ch2zli2";
   });
 
   home.file.".config/rofi/themes/games-smaller.rasi".text = builtins.readFile(builtins.fetchurl {
-    url = lib.mkDefault "https://raw.githubusercontent.com/Rolv-Apneseth/rofi-games/17e53726e8f81f6bbe15b4dd66329f869409f4c6/themes/games-smaller.rasi";
-    sha256 = lib.mkDefault "sha256:1105kf4q9flrdpcf0mzzav6h8m2maj9yfrm9avzwkdfcddax6i7s";
+    url = "https://raw.githubusercontent.com/Rolv-Apneseth/rofi-games/17e53726e8f81f6bbe15b4dd66329f869409f4c6/themes/games-smaller.rasi";
+    sha256 = "sha256:1105kf4q9flrdpcf0mzzav6h8m2maj9yfrm9avzwkdfcddax6i7s";
   });
 
   home.file.".config/kak/colors/dracula.kak".text = builtins.readFile(builtins.fetchurl {
-    url = lib.mkDefault "https://raw.githubusercontent.com/dracula/kakoune/master/colors/dracula.kak";
-    sha256 = lib.mkDefault "57e11ca24375df2a02541a44670d4a48cf90ce179f4eecfc0f5ba005c2c03a02";
+    url = "https://raw.githubusercontent.com/dracula/kakoune/master/colors/dracula.kak";
+    sha256 = "57e11ca24375df2a02541a44670d4a48cf90ce179f4eecfc0f5ba005c2c03a02";
   });
 
   home.file.".themes/dracula".source = builtins.fetchGit {
-    url = lib.mkDefault "https://github.com/dracula/gtk";
-    rev = lib.mkDefault "f3c876d8c97f9bb504c98592a8d96770e70585bb";
+    url = "https://github.com/dracula/gtk";
+    rev = "f3c876d8c97f9bb504c98592a8d96770e70585bb";
   };
 
   home.file.".themes/sweet".source = builtins.fetchTarball {
-    url = lib.mkDefault "https://github.com/EliverLara/Sweet/releases/download/v6.0/Sweet.tar.xz";
-    sha256 = lib.mkDefault "sha256:012nc14vz31zq34pg5nv2ybzryhqpf6x0jh022nvgyhrf9q1zrn9";
+    url = "https://github.com/EliverLara/Sweet/releases/download/v6.0/Sweet.tar.xz";
+    sha256 = "sha256:012nc14vz31zq34pg5nv2ybzryhqpf6x0jh022nvgyhrf9q1zrn9";
   };
 
   home.file.".themes/sweet-dark".source = builtins.fetchTarball {
-    url = lib.mkDefault "https://github.com/EliverLara/Sweet/releases/download/v6.0/Sweet-Dark.tar.xz";
-    sha256 = lib.mkDefault "sha256:1j67jwpab7f13rgcxmzqqvjixp5j8mdpv6vpsf2ajnh5yyxzqxvj";
+    url = "https://github.com/EliverLara/Sweet/releases/download/v6.0/Sweet-Dark.tar.xz";
+    sha256 = "sha256:1j67jwpab7f13rgcxmzqqvjixp5j8mdpv6vpsf2ajnh5yyxzqxvj";
   };
 
   home.file.".local/share/icons/candy-icons".source = builtins.fetchGit {
-    url = lib.mkDefault "https://github.com/EliverLara/candy-icons";
-    rev = lib.mkDefault "83512fbcadcb7e1015ebbe1729a1894946b021be";
+    url = "https://github.com/EliverLara/candy-icons";
+    rev = "83512fbcadcb7e1015ebbe1729a1894946b021be";
   };
 
   home.file.".local/share/icons/Sweet-Purple" = {
@@ -720,29 +720,29 @@ in with constants;
   };
 
   home.file.".local/share/xfce4/terminal/colorschemes/Dracula.theme".source = builtins.fetchurl {
-    url = lib.mkDefault "https://raw.githubusercontent.com/dracula/xfce4-terminal/refs/heads/master/Dracula.theme";
+    url = "https://raw.githubusercontent.com/dracula/xfce4-terminal/refs/heads/master/Dracula.theme";
   };
   
   home.file.".config/lazygit/theme/lazygit".source = builtins.fetchGit {
-    url = lib.mkDefault "https://github.com/catppuccin/lazygit";
-    rev = lib.mkDefault "a544cef9a18c3a94e0344281e0ddcf99a18a8ede";
+    url = "https://github.com/catppuccin/lazygit";
+    rev = "a544cef9a18c3a94e0344281e0ddcf99a18a8ede";
   };
   home.file.".config/lazygit/config.yml".text = lib.mkDefault ''
   '';
 
   home.file.".config/alacritty/dracula.toml".text = builtins.readFile(builtins.fetchurl {
-    url = lib.mkDefault "https://raw.githubusercontent.com/dracula/alacritty/master/dracula.toml";
-    sha256 = lib.mkDefault "e9de3a792548c8112168c1dd18b5651d1ebee2893975cda4ccd9c4c0430c87b8";
+    url = "https://raw.githubusercontent.com/dracula/alacritty/master/dracula.toml";
+    sha256 = "e9de3a792548c8112168c1dd18b5651d1ebee2893975cda4ccd9c4c0430c87b8";
   });
 
   home.file."piper/models/en_US-lessac-high.onnx".source = builtins.fetchurl {
-    url = lib.mkDefault "https://huggingface.co/rhasspy/piper-voices/resolve/main/en/en_US/lessac/high/en_US-lessac-high.onnx?download=true";
-    sha256 = lib.mkDefault "4cabf7c3a638017137f34a1516522032d4fe3f38228a843cc9b764ddcbcd9e09";
+    url = "https://huggingface.co/rhasspy/piper-voices/resolve/main/en/en_US/lessac/high/en_US-lessac-high.onnx?download=true";
+    sha256 = "4cabf7c3a638017137f34a1516522032d4fe3f38228a843cc9b764ddcbcd9e09";
   };
 
   home.file."piper/models/en_US-lessac-high.onnx.json".text = builtins.readFile(builtins.fetchurl {
-    url = lib.mkDefault "https://huggingface.co/rhasspy/piper-voices/raw/main/en/en_US/lessac/high/en_US-lessac-high.onnx.json";
-    sha256 = lib.mkDefault "0bs1j8d97v6bsvfp82h50a23kckz1scfvf312ny5gwjrk1yvjhnv";
+    url = "https://huggingface.co/rhasspy/piper-voices/raw/main/en/en_US/lessac/high/en_US-lessac-high.onnx.json";
+    sha256 = "0bs1j8d97v6bsvfp82h50a23kckz1scfvf312ny5gwjrk1yvjhnv";
   });
 
   # :TODO: fix this
