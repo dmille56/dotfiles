@@ -811,12 +811,11 @@ in with constants;
     })
   );
 
-  # :TODO: fix this
-  # home.file.".PowershellEditorServices".source = pkgs.fetchzip {
-  #   url = lib.mkDefault "https://github.com/PowerShell/PowerShellEditorServices/releases/download/v3.20.0/PowerShellEditorServices.zip";
-  #   sha256 = lib.mkDefault "XzyspX6U9FWglDA8VIZE4JamGsFvARQX7iCcQ/blbUE=";
-  #   stripRoot = lib.mkDefault false;
-  # };
+  home.file.".PowershellEditorServices".source = lib.mkDefault (pkgs.fetchzip {
+    url = "https://github.com/PowerShell/PowerShellEditorServices/releases/download/v3.20.0/PowerShellEditorServices.zip";
+    sha256 = "XzyspX6U9FWglDA8VIZE4JamGsFvARQX7iCcQ/blbUE=";
+    stripRoot = false;
+  });
 
   # :NOTE: this sets the desktop wallpaper
   home.file.".background-image" = {
