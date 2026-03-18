@@ -1,6 +1,14 @@
 { pkgs, config, lib, ... }:
 let 
   constants = import ./common-constants.nix; 
+  sweetIconsRepo = builtins.fetchGit {
+    url = "https://github.com/EliverLara/Sweet-folders";
+    rev = "40a5d36e50437901c7eaa1119bb9ae8006e2fe5c";
+  };
+  draculaWallpaperRepo = builtins.fetchGit {
+    url = "https://github.com/dracula/wallpaper";
+    rev = "f2b8cc4223bcc2dfd5f165ab80f701bbb84e3303";
+  };
 in with constants;
 {
   # :NOTE: misc settings
@@ -618,6 +626,8 @@ in with constants;
     enableNotifications = lib.mkDefault true;
   };
 
+
+  # :NOTE: secrets sops config starts here
   sops = { 
     # :NOTE: generate key with age:
     # mkdir -p ~/.config/sops/age
@@ -640,6 +650,7 @@ in with constants;
     secrets.GITHUB_USER.path = lib.mkDefault "${config.sops.defaultSymlinkPath}/GITHUB_USER";
   };
 
+  # :NOTE: home environment variables config starts here
   home.sessionVariables = {
     OPENAI_API_KEY = lib.mkDefault "$(cat ${config.sops.secrets.OPENAI_API_KEY.path})";
     GOOGLE_API_KEY = lib.mkDefault "$(cat ${config.sops.secrets.GOOGLE_API_KEY.path})";
