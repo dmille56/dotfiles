@@ -28,7 +28,6 @@ in with constants;
   #     # package = pkgs.papirus-icon-theme;
   #   };
   # };
-
   
   home.sessionVariables = {
     MY_MACHINE_ID = "Laptop";
