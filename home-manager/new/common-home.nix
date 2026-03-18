@@ -651,7 +651,6 @@ in with constants;
   };
 
   # :NOTE: home file configuration starts here
-  # :TODO: need to make them all optional still
 
   home.file.".config/kak/kakrc".text = lib.mkDefault ''
     colorscheme dracula
