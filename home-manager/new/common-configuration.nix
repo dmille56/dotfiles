@@ -4,6 +4,9 @@
 
 { pkgs, config, lib, ... }:
 
+let
+  constants = import ./common-constants.nix; 
+in with constants;
 {
   # Bootloader.
   boot.loader.systemd-boot.enable = lib.mkDefault true;
@@ -161,6 +164,7 @@
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
+    nano
     neovim
     wget
     curl
@@ -171,6 +175,10 @@
    BROWSER = lib.mkDefault "firefox";
    EDITOR = lib.mkDefault "nano";
   };
+
+  systemd.tmpfiles.rules = [
+    "L+ /root/.vimrc - root root - ${my-dotfile-dir}/vim/vim/vimrc"
+  ];
 
   services.upower.enable = lib.mkDefault true;
 
