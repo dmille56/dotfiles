@@ -12,8 +12,8 @@
     - python, vscode neovim, direnv, dracula theme, grafana alloy, haskell, nix, c#
 
 # Update / Managing NixOS Config
-- Apply new/updated nixos config: `sudo nixos-rebuild switch`
-- How to update nix pkgs: `cd /etc/nixos && sudo nix flake update`
+- Apply new/updated nixos config: `sudo nixos-rebuild switch --impure`
+- How to update nix pkgs (NOTE still after run switch command to apply the update): `cd /etc/nixos && sudo nix flake update`
 - Garbage collect nix: `nix-collect-garbage -d`
 - How to test out a program without install (drops you in a shell with that program in it)... Replace hellow with the pkg: `nix-shell -p hello`
 - Nix pkgs search: https://search.nixos.org/packages
