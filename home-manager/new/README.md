@@ -10,6 +10,7 @@
     - vimium, ublock origin, stylus, location guard, vihn, old reddit redirect, reddit enhancement suite, what hacker news says, dracula theme, blocktube, unhook
 3. setup vscode extensions
     - python, vscode neovim, direnv, dracula theme, grafana alloy, haskell, nix, c#
+4. install .emacs file `cp ~/dotfiles/emacs-config/default.emacs ~/.emacs`
 
 # Update / Managing NixOS Config
 - Apply new/updated nixos config: `sudo nixos-rebuild switch --impure`

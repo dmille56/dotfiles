@@ -14,6 +14,9 @@ in with constants;
     remmina # :NOTE: added
     xmessage # :NOTE: added
     x2goclient # :NOTE: added
+
+    kdePackages.dolphin
+    nautilus
   ];
 
   # :TODO: make sure this works to set gtk applications themes correctly
