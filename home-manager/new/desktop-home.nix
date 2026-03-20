@@ -32,6 +32,8 @@ in with constants;
   #   };
   # };
   
+  home.file.".xmobarrc".source = "${my-dotfile-dir}/xmobarrc";
+  
   home.sessionVariables = {
     MY_MACHINE_ID = "Desktop";
   };
