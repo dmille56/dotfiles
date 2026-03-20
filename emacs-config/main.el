@@ -1620,11 +1620,12 @@ Make sure to run \='ollama serve\=' and have zephyr model."
   :config
   (global-treesit-fold-mode 1))
 
-(use-package typescript-ts-mode
-  :ensure t
-  :after eglot
-  :config
-  (setq typescript-ts-mode-indent-offset 4))
+;; :TODO: fix this
+;; (use-package typescript-ts-mode
+;;   :ensure t
+;;   :after eglot
+;;   :config
+;;   (setq typescript-ts-mode-indent-offset 4))
 
 (use-package jtsx
   :ensure t

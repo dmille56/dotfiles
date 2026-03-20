@@ -11,6 +11,9 @@
 3. setup vscode extensions
     - python, vscode neovim, direnv, dracula theme, grafana alloy, haskell, nix, c#
 4. install .emacs file `cp ~/dotfiles/emacs-config/default.emacs ~/.emacs`
+5. Initial pass password store
+    1. Generate GPG key: `gpg --full-generate-key`
+    2. `pass init`
 
 # Update / Managing NixOS Config
 - Apply new/updated nixos config: `sudo nixos-rebuild switch --impure`
