@@ -75,6 +75,8 @@ myManageHook hasNixGL =
       className =? "Termonad-linux-x86_64" --> doShift "8:term",
       className =? "Alacritty" --> doShift "8:term",
       className =? "ee_term" --> doRectFloat (W.RationalRect 0.02 0.02 0.97 0.97),
+      className =? "Xfce4-notifyd" --> doIgnore,
+      isInProperty "_NET_WM_WINDOW_TYPE" "_NET_WM_WINDOW_TYPE_NOTIFICATION" --> doIgnore,
       title =? "Mozilla Firefox" --> doShift "1:web",
       (isFullscreen --> doFullFloat),
       manageDocks,
