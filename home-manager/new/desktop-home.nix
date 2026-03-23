@@ -19,18 +19,18 @@ in with constants;
     nautilus
   ];
 
-  # :TODO: make sure this works to set gtk applications themes correctly
-  # gtk = {
-  #   enable = true;
-  #   theme = {
-  #     name = "dracula";
-  #     # package = pkgs.dracula-theme;
-  #   };
-  #   iconTheme = {
-  #     name = "candy-icons";
-  #     # package = pkgs.papirus-icon-theme;
-  #   };
-  # };
+  # :NOTE: GTK theming for GNOME
+  # themes are fetched via home.file in common-home.nix to ~/.themes and ~/.local/share/icons
+  # if these don't get picked up, add pkgs.dracula-theme / pkgs.papirus-icon-theme as packages
+  gtk = {
+    enable = true;
+    theme = {
+      name = "Dracula";
+    };
+    iconTheme = {
+      name = "candy-icons";
+    };
+  };
   
   home.file.".xmobarrc".source = "${my-dotfile-dir}/xmobarrc";
   
