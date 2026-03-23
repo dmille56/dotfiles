@@ -34,7 +34,7 @@ in
   environment.variables.XCURSOR_SIZE = "48";
 
   # VNC server via x11vnc as a systemd service
-  # Generate password file first with: x11vnc -storepasswd /etc/x11vnc.pass
+  # No VNC password needed since access is restricted to SSH tunnel only.
   # Only accessible via SSH tunneling:
   #   ssh -p 50022 -L 5900:localhost:5900 dono@your-desktop-ip
   # Then connect your VNC client to localhost:5900
@@ -43,7 +43,7 @@ in
     after = [ "display-manager.service" ];
     wantedBy = [ "multi-user.target" ];
     serviceConfig = {
-      ExecStart = "${pkgs.x11vnc}/bin/x11vnc -display :0 -forever -shared -rfbauth /etc/x11vnc.pass -auth /home/${constants.my-username}/.Xauthority -localhost";
+      ExecStart = "${pkgs.x11vnc}/bin/x11vnc -display :0 -forever -shared -nopw -auth /home/${constants.my-username}/.Xauthority -localhost";
       Restart = "on-failure";
       RestartSec = "3";
     };
