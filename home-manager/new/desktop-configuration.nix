@@ -23,7 +23,22 @@ in
 
   # Bigger cursor everywhere (including login manager)
   environment.variables.XCURSOR_SIZE = "48";
-  
+
+  # VNC server via x11vnc as a systemd service
+  # Generate password file first with: x11vnc -storepasswd /etc/x11vnc.pass
+  systemd.services.x11vnc = {
+    description = "x11vnc VNC Server";
+    after = [ "display-manager.service" ];
+    wantedBy = [ "multi-user.target" ];
+    serviceConfig = {
+      ExecStart = "${pkgs.x11vnc}/bin/x11vnc -display :0 -forever -shared -rfbauth /etc/x11vnc.pass -auth /home/${constants.my-username}/.Xauthority";
+      Restart = "on-failure";
+      RestartSec = "3";
+    };
+  };
+
+  networking.firewall.allowedTCPPorts = [ 5900 ];
+
   # :NOTE: graphics card configuration
 
   # Enable OpenGL
