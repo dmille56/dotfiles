@@ -11,7 +11,7 @@ in
     ];
 
   networking.hostName = "${constants.my-desktop-hostname}"; # Define your hostname.
-  
+
   environment.systemPackages = with pkgs; [
     x11vnc
   ];
@@ -20,7 +20,12 @@ in
   # networking.proxy.default = "http://user:password@proxy:port/";
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
-  services.openssh.enable = true;
+  services.openssh = {
+    enable = true;
+    ports = [ 50022 ];
+  };
+
+  networking.firewall.allowedTCPPorts = [ 50022 ];
 
   # Scale everything on X11 (96 is default). Try 144 or 192.
   services.xserver.dpi = 144;
@@ -31,7 +36,7 @@ in
   # VNC server via x11vnc as a systemd service
   # Generate password file first with: x11vnc -storepasswd /etc/x11vnc.pass
   # Only accessible via SSH tunneling:
-  #   ssh -L 5900:localhost:5900 ${constants.my-username}@your-desktop-ip
+  #   ssh -p 50022 -L 5900:localhost:5900 dono@your-desktop-ip
   # Then connect your VNC client to localhost:5900
   systemd.services.x11vnc = {
     description = "x11vnc VNC Server";
