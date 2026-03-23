@@ -26,18 +26,22 @@ in
 
   # VNC server via x11vnc as a systemd service
   # Generate password file first with: x11vnc -storepasswd /etc/x11vnc.pass
+  # Only accessible via SSH tunneling:
+  #   ssh -L 5900:localhost:5900 ${constants.my-username}@your-desktop-ip
+  # Then connect your VNC client to localhost:5900
   systemd.services.x11vnc = {
     description = "x11vnc VNC Server";
     after = [ "display-manager.service" ];
     wantedBy = [ "multi-user.target" ];
     serviceConfig = {
-      ExecStart = "${pkgs.x11vnc}/bin/x11vnc -display :0 -forever -shared -rfbauth /etc/x11vnc.pass -auth /home/${constants.my-username}/.Xauthority";
+      ExecStart = "${pkgs.x11vnc}/bin/x11vnc -display :0 -forever -shared -rfbauth /etc/x11vnc.pass -auth /home/${constants.my-username}/.Xauthority -localhost";
       Restart = "on-failure";
       RestartSec = "3";
     };
   };
 
-  networking.firewall.allowedTCPPorts = [ 5900 ];
+  # Port 5900 is intentionally not opened in the firewall.
+  # VNC is only accessible via SSH tunnel for security.
 
   # :NOTE: graphics card configuration
 
