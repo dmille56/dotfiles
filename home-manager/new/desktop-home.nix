@@ -25,11 +25,14 @@ in with constants;
   gtk = {
     enable = true;
     theme = {
-      name = "Dracula";
+      name = "dracula";
     };
     iconTheme = {
       name = "candy-icons";
     };
+
+    gtk4.theme.name = "dracula";
+    gtk4.iconTheme.name = "candy-icons";
   };
   
   home.file.".xmobarrc".source = "${my-dotfile-dir}/xmobarrc";

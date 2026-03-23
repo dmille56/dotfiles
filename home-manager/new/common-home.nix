@@ -294,6 +294,7 @@ in with constants;
       };
       credential.helper = lib.mkDefault "oauth";
     };
+    signing.format = lib.mkDefault "openpgp";
   };
   
   programs.gh = {
