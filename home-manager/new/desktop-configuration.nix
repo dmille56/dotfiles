@@ -11,6 +11,10 @@ in
     ];
 
   networking.hostName = "${constants.my-desktop-hostname}"; # Define your hostname.
+  
+  environment.systemPackages = with pkgs; [
+    x11vnc
+  ];
 
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
