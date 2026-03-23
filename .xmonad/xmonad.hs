@@ -142,11 +142,11 @@ myPropertyChangeHook hasNixGL PropertyEvent {ev_window = w, ev_atom = atom} = do
   pure mempty
 myPropertyChangeHook _ _ = pure mempty
 
-audioPlayPauseCommand = "playerctl play-pause -p spotifyd,spotify,chromium,firefox"
+audioPlayPauseCommand = "playerctl play-pause -p spotifyd,spotify,spotify_player,chromium,firefox"
 
-audioPreviousCommand = "playerctl previous -p spotifyd,spotify,chromium,firefox"
+audioPreviousCommand = "playerctl previous -p spotifyd,spotify,spotify_player,chromium,firefox"
 
-audioNextCommand = "playerctl next -p spotifyd,spotify,chromium,firefox"
+audioNextCommand = "playerctl next -p spotifyd,spotify,spotify_player,chromium,firefox"
 
 audioQueryTrackInfoCommand = "notify-send -i media-optical -t 1000 \"$(playerctl metadata artist) - $(playerctl metadata title)\""
 
