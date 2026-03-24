@@ -19,33 +19,6 @@ in with constants;
     nautilus
   ];
 
-  # :NOTE: GTK theming for GNOME
-  # themes are fetched via home.file in common-home.nix to ~/.themes and ~/.local/share/icons
-  # if these don't get picked up, add pkgs.dracula-theme / pkgs.papirus-icon-theme as packages
-  gtk = {
-    enable = true;
-    theme = {
-      name = "dracula";
-    };
-    iconTheme = {
-      name = "candy-icons";
-    };
-
-    gtk4.theme.name = "dracula";
-    gtk4.iconTheme.name = "candy-icons";
-  };
-  
-  # :NOTE: setup theming for libadwaita (for nautilus)
-  dconf.settings = {
-    "org/gnome/desktop/interface" = {
-      gtk-theme = "dracula";
-      icon-theme = "candy-icons";
-      color-scheme = "prefer-dark";
-    };
-    "org/gnome/nautilus/preferences" = {
-      default-folder-viewer = "list-view";
-    };
-  };
   
   home.file.".xmobarrc".source = "${my-dotfile-dir}/xmobarrc";
   

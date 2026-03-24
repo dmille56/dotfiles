@@ -650,6 +650,34 @@ in with constants;
     secrets.GIT_EMAIL.path = lib.mkDefault "${config.sops.defaultSymlinkPath}/GIT_EMAIL";
     secrets.GITHUB_USER.path = lib.mkDefault "${config.sops.defaultSymlinkPath}/GITHUB_USER";
   };
+  
+  # :NOTE: GTK theming for GNOME
+  # themes are fetched via home.file in common-home.nix to ~/.themes and ~/.local/share/icons
+  # if these don't get picked up, add pkgs.dracula-theme / pkgs.papirus-icon-theme as packages
+  gtk = {
+    enable = lib.mkDefault true;
+    theme = {
+      name = lib.mkDefault "dracula";
+    };
+    iconTheme = {
+      name = lib.mkDefault "candy-icons";
+    };
+
+    gtk4.theme.name = lib.mkDefault "dracula";
+    gtk4.iconTheme.name = lib.mkDefault "candy-icons";
+  };
+  
+  # :NOTE: setup theming for libadwaita (for nautilus)
+  dconf.settings = {
+    "org/gnome/desktop/interface" = {
+      gtk-theme = lib.mkDefault "dracula";
+      icon-theme = lib.mkDefault "candy-icons";
+      color-scheme = lib.mkDefault "prefer-dark";
+    };
+    "org/gnome/nautilus/preferences" = {
+      default-folder-viewer = lib.mkDefault "list-view";
+    };
+  };
 
   # :NOTE: home file configuration starts here
 
