@@ -651,12 +651,12 @@ in with constants;
     defaultSopsFile = lib.mkDefault ../../secrets.yaml; # default secrets file
     
     # :NOTE: need to add one of these entries for each secret added to the secrets file (so can be accessed in nix)
-    secrets.OPENAI_API_KEY.path = lib.mkDefault "${config.sops.defaultSymlinkPath}/OPENAI_API_KEY";
-    secrets.GOOGLE_API_KEY.path = lib.mkDefault "${config.sops.defaultSymlinkPath}/GOOGLE_API_KEY";
-    secrets.ANTHROPIC_API_KEY.path = lib.mkDefault "${config.sops.defaultSymlinkPath}/ANTHROPIC_API_KEY";
-    secrets.GIT_NAME.path = lib.mkDefault "${config.sops.defaultSymlinkPath}/GIT_NAME";
-    secrets.GIT_EMAIL.path = lib.mkDefault "${config.sops.defaultSymlinkPath}/GIT_EMAIL";
-    secrets.GITHUB_USER.path = lib.mkDefault "${config.sops.defaultSymlinkPath}/GITHUB_USER";
+    # secrets.OPENAI_API_KEY.path = lib.mkDefault "${config.sops.defaultSymlinkPath}/OPENAI_API_KEY";
+    # secrets.GOOGLE_API_KEY.path = lib.mkDefault "${config.sops.defaultSymlinkPath}/GOOGLE_API_KEY";
+    # secrets.ANTHROPIC_API_KEY.path = lib.mkDefault "${config.sops.defaultSymlinkPath}/ANTHROPIC_API_KEY";
+    # secrets.GIT_NAME.path = lib.mkDefault "${config.sops.defaultSymlinkPath}/GIT_NAME";
+    # secrets.GIT_EMAIL.path = lib.mkDefault "${config.sops.defaultSymlinkPath}/GIT_EMAIL";
+    # secrets.GITHUB_USER.path = lib.mkDefault "${config.sops.defaultSymlinkPath}/GITHUB_USER";
   };
   
   # :NOTE: GTK theming for GNOME
@@ -887,9 +887,12 @@ in with constants;
   # :NOTE: home environment variables config starts here
   # :TODO: need to fix OPENAI_API_KEY, GOOGLE_API_KEY, and ANTHROPIC_API_KEY only being set through SOPS secrets some of the time... Need to figure out what is happening
   home.sessionVariables = {
-    OPENAI_API_KEY = lib.mkDefault "$(cat ${config.sops.secrets.OPENAI_API_KEY.path})";
-    GOOGLE_API_KEY = lib.mkDefault "$(cat ${config.sops.secrets.GOOGLE_API_KEY.path})";
-    ANTHROPIC_API_KEY = lib.mkDefault "$(cat ${config.sops.secrets.ANTHROPIC_API_KEY.path})";
+    # OPENAI_API_KEY = lib.mkDefault "$(cat ${config.sops.secrets.OPENAI_API_KEY.path})";
+    # GOOGLE_API_KEY = lib.mkDefault "$(cat ${config.sops.secrets.GOOGLE_API_KEY.path})";
+    # ANTHROPIC_API_KEY = lib.mkDefault "$(cat ${config.sops.secrets.ANTHROPIC_API_KEY.path})";
+    OPENAI_API_KEY = lib.mkDefault "$(cat /run/secrets/OPENAI_API_KEY)";
+    GOOGLE_API_KEY = lib.mkDefault "$(cat /run/secrets/GOOGLE_API_KEY)";
+    ANTHROPIC_API_KEY = lib.mkDefault "$(cat /run/secrets/ANTHROPIC_API_KEY)";
     OPENAI_API_MODEL = lib.mkDefault "gpt-5-mini";
     AIDER_MODEL = lib.mkDefault "gpt-5-mini";
     RIPGREP_CONFIG_PATH = lib.mkDefault "${my-home-dir}/.ripgreprc";

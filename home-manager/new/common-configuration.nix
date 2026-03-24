@@ -225,7 +225,7 @@ in with constants;
   # Then re-encrypt secrets.yaml with the new public key if needed:
   #   sops updatekeys secrets.yaml
   sops = {
-    age.keyFile = lib.mkDefault "/root/.config/sops/age/keys.txt";
+    age.keyFile = lib.mkDefault "/root/.config/sops/age/keys.txt"; # Path to your age key file
     defaultSopsFile = lib.mkDefault ../../secrets.yaml;
 
     secrets = {
