@@ -35,6 +35,18 @@ in with constants;
     gtk4.iconTheme.name = "candy-icons";
   };
   
+  # :NOTE: setup theming for libadwaita (for nautilus)
+  dconf.settings = {
+    "org/gnome/desktop/interface" = {
+      gtk-theme = "dracula";
+      icon-theme = "candy-icons";
+      color-scheme = "prefer-dark";
+    };
+    "org/gnome/nautilus/preferences" = {
+      default-folder-viewer = "list-view";
+    };
+  };
+  
   home.file.".xmobarrc".source = "${my-dotfile-dir}/xmobarrc";
   
   home.sessionVariables = {
