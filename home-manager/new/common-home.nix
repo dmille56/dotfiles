@@ -679,6 +679,24 @@ in with constants;
       default-folder-viewer = lib.mkDefault "list-view";
     };
   };
+  
+  # :TODO: make KDE theming work appropriately
+  home.file.".local/share/color-schemes/Dracula.colors".source = lib.mkDefault "${gtkDraculaRepo}/kde/color-schemes/Dracula.colors";
+  home.file.".local/share/plasma/desktoptheme/dracula".source = lib.mkDefault "${gtkDraculaRepo}/kde/plasma/desktoptheme/Dracula";
+  home.file.".local/share/plasma/look-and-feel/dracula".source = lib.mkDefault "${gtkDraculaRepo}/kde/plasma/look-and-feel/Dracula";
+  
+  home.file.".config/kdeglobals".text = lib.mkDefault ''
+    [General]
+    ColorScheme=Dracula
+  
+    [KDE]
+    LookAndFeelPackage=dracula
+  '';
+  
+  home.file.".config/plasmarc".text = lib.mkDefault ''
+    [Theme]
+    name=dracula
+  '';
 
   # :NOTE: home file configuration starts here
 
