@@ -1,15 +1,16 @@
-# :NOTE: Install notes
-# 1.) copy this to /etc/nixos/flake.nix
-# 2.) change my-machine-id variable to the correct machine
-# 3.) make sure dotfiles are cloned to /home/dono/dotfiles
-# 4.) sudo nixos-rebuild switch --impure
-
-# :NOTE: how to update nix flakes
+# :NOTE: to how pin a package
+# 1. go find the revision from nixos hydra (where the package is still passing): https://hyrdra.nixos.org
+# 2. add to inputs: YOURPACKAGE-revision.url = "github:NixOS/nixpkgs/GIT-REVISION-HASH"
+# 3. add to outputs: YOURPACKAGE-revision
+# see here for more: https://www.aalbacetef.io/blog/nix-pinning-a-specific-package-version-in-a-flake-using-overlays/
 {
   description = "NixOS Flake";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+
+    aider-chat-full-revision.url = "github:NixOS/nixpkgs/2b69405f19c7004b832a7410c8aefa9d859feea3";
+
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -21,7 +22,7 @@
     };
   };
 
-  outputs = inputs@{ nixpkgs, home-manager, sops-nix, ... }:
+  outputs = inputs@{ nixpkgs, home-manager, sops-nix, aider-chat-full-revision, ... }:
     let
       const = import (builtins.toPath "/home/dono/dotfiles/home-manager/new/common-constants.nix");
       my-machine-id = "laptop"; # desktop, laptop
@@ -31,6 +32,7 @@
         else builtins.throw "Unknown host-name: ${my-machine-id}";
     in
     {
+
       nixosConfigurations.${my-host-name} = nixpkgs.lib.nixosSystem {
         modules = [
           (builtins.toPath "${const.my-dotfile-nix-dir}/${my-machine-id}-configuration.nix")
