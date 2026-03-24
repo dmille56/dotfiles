@@ -30,11 +30,17 @@
         if my-machine-id == "laptop" then "${const.my-laptop-hostname}"
         else if my-machine-id == "desktop" then "${const.my-desktop-hostname}"
         else builtins.throw "Unknown host-name: ${my-machine-id}";
+
+      aider-overlay = final: prev: {
+        aider-chat-full = aider-chat-full-revision.legacyPackages.${prev.system}.aider-chat-full;
+      };
     in
     {
 
       nixosConfigurations.${my-host-name} = nixpkgs.lib.nixosSystem {
         modules = [
+          { nixpkgs.overlays = [ aider-overlay ]; }
+
           (builtins.toPath "${const.my-dotfile-nix-dir}/${my-machine-id}-configuration.nix")
           sops-nix.nixosModules.sops
 
