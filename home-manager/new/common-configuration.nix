@@ -169,6 +169,7 @@ in with constants;
     wget
     curl
     w3m
+    xmodmap
   ];
 
   environment.sessionVariables = {

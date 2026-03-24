@@ -236,6 +236,7 @@ in with constants;
     # darktable
     scrcpy
     redshift
+    xmodmap
   ];
 
   # :NOTE: programs config starts here

@@ -35,7 +35,7 @@ in
 
   # Remap Pause/Break key to Insert
   services.xserver.displayManager.sessionCommands = ''
-    ${pkgs.xorg.xmodmap}/bin/xmodmap -e "keycode 127 = Insert"
+    ${pkgs.xmodmap}/bin/xmodmap -e "keycode 127 = Insert"
   '';
 
   # VNC server via x11vnc as a systemd service
