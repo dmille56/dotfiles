@@ -9,6 +9,10 @@ let
     url = "https://github.com/dracula/wallpaper";
     rev = "f2b8cc4223bcc2dfd5f165ab80f701bbb84e3303";
   };
+  gtkDraculaRepo = builtins.fetchGit {
+    url = "https://github.com/dracula/gtk";
+    rev = "2618a035409d65e0a1e4da1909ae1b5fd6a796fd";
+  };
 in with constants;
 {
   # :NOTE: misc settings
@@ -123,6 +127,9 @@ in with constants;
     # ai
     aider-chat-full
     claude-code
+    gemini-cli
+    codex-acp
+    claude-agent-acp
     # ollama
     
     sqlite-interactive

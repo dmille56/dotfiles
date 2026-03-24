@@ -1,10 +1,6 @@
 { pkgs, config, lib, ...}: 
 let
   constants = import ./common-constants.nix; 
-  gtkDraculaRepo = builtins.fetchGit {
-    url = "https://github.com/dracula/gtk";
-    rev = "2618a035409d65e0a1e4da1909ae1b5fd6a796fd";
-  };
 in with constants;
 {
   imports = [ ./common-home.nix ];
