@@ -704,6 +704,11 @@ in with constants;
     [Theme]
     name=dracula
   '';
+  
+   qt = {
+     enable = true;
+     platformTheme.name = "gtk";
+   };
 
   # :NOTE: home file configuration starts here
 
