@@ -26,7 +26,7 @@ in with constants;
   # :TODO: make KDE theming work appropriately
   home.file.".local/share/color-schemes/Dracula.colors".source = lib.mkDefault "${gtkDraculaRepo}/kde/color-schemes/Dracula.colors";
   home.file.".local/share/plasma/desktoptheme/dracula".source = lib.mkDefault "${gtkDraculaRepo}/kde/plasma/desktoptheme/Dracula";
-  home.file.".local/share/plasma/look-and-feel/dracula".source = lib.mkDefault "${gtkDraculaRepo}/kde/look-and-feel/Dracula";
+  home.file.".local/share/plasma/look-and-feel/dracula".source = lib.mkDefault "${gtkDraculaRepo}/kde/plasma/look-and-feel/Dracula";
   
   home.file.".config/kdeglobals".text = lib.mkDefault ''
     [General]
