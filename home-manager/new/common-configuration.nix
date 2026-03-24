@@ -199,9 +199,6 @@ in with constants;
 
   # List services that you want to enable:
 
-  # :TODO: enable an x11 vnc server
-  services.x2goserver.enable = lib.mkDefault true;
-
   # Enable the OpenSSH daemon.
   # :TODO: get the ssh enable correctly for both SSH and VNC (through ssh tunnel)
   services.openssh.enable = lib.mkDefault true;
