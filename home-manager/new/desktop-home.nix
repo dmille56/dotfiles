@@ -41,9 +41,7 @@ in with constants;
     name=dracula
   '';
   
-  home.file.".background-image" = {
-    source = ../../img/dracula-castle-matrix-background.png;
-  };
+  home.file.".background-image".source = ../../img/dracula-castle-matrix-background.png;
   
   home.file.".xmobarrc".source = "${my-dotfile-dir}/xmobarrc";
   
