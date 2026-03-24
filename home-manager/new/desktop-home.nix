@@ -18,7 +18,10 @@ in with constants;
     kdePackages.dolphin
     nautilus
   ];
-
+  
+  home.file.".background-image" = {
+    source = ../../img/dracula-castle-matrix-background.png;
+  };
   
   home.file.".xmobarrc".source = "${my-dotfile-dir}/xmobarrc";
   

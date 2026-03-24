@@ -265,8 +265,8 @@ glWrapper hasNixGL s =
 
 spawnRofiBuku myConfigMachine = do
   let cmd = case myConfigMachine of
-        Desktop -> "export BROWSER=sensible-browser && rofi-buku"
-        Laptop -> "export BROWSER=firefox && rofi-buku"
+        Desktop -> "rofi-buku"
+        Laptop -> "rofi-buku"
   spawn cmd
 
 data MyConfigMachine = Desktop | Laptop
