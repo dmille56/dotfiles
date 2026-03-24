@@ -1,6 +1,10 @@
 { pkgs, config, lib, ...}: 
 let
   constants = import ./common-constants.nix; 
+  gtkDraculaRepo = builtins.fetchGit {
+    url = "https://github.com/dracula/gtk";
+    rev = "2618a035409d65e0a1e4da1909ae1b5fd6a796fd";
+  };
 in with constants;
 {
   imports = [ ./common-home.nix ];
@@ -18,6 +22,22 @@ in with constants;
     kdePackages.dolphin
     nautilus
   ];
+  
+  home.file.".local/share/color-schemes/Dracula.colors".source = lib.mkDefault "${gtkDraculaRepo}/kde/color-schemes/Dracula.colors";
+  home.file.".local/share/plasma/desktoptheme/dracula".source = lib.mkDefault "${gtkDraculaRepo}/kde/plasma/desktoptheme/Dracula";
+  
+  home.file.".config/kdeglobals".text = lib.mkDefault ''
+    [General]
+    ColorScheme=Dracula
+  
+    [KDE]
+    LookAndFeelPackage=org.kde.breeze.desktop
+  '';
+  
+  home.file.".config/plasmarc".text = lib.mkDefault ''
+    [Theme]
+    name=dracula
+  '';
   
   home.file.".background-image" = {
     source = ../../img/dracula-castle-matrix-background.png;
