@@ -2,6 +2,14 @@
 # 1. go find the revision from nixos hydra (where the package is still passing): https://hyrdra.nixos.org
 # 2. add to inputs: YOURPACKAGE-revision.url = "github:NixOS/nixpkgs/GIT-REVISION-HASH"
 # 3. add to outputs: YOURPACKAGE-revision
+# 4. let YOURPACKAGE-overlay = final: prev: {
+#      aider-chat-full = aider-chat-full-revision.legacyPackages.${prev.system}.aider-chat-full;
+#    };
+# 5. (add the overlays to your modules) 
+# ie. modules = [
+#     { nixpkgs.overlays = [ YOURPACKAGE-overlay ]; }
+# ... rest of your config...
+#
 # see here for more: https://www.aalbacetef.io/blog/nix-pinning-a-specific-package-version-in-a-flake-using-overlays/
 {
   description = "NixOS Flake";
