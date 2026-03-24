@@ -17,19 +17,6 @@ in with constants;
     
     kdePackages.dolphin
   ];
-
-  # :TODO: make sure this works to set gtk applications themes correctly
-  # gtk = {
-  #   enable = true;
-  #   theme = {
-  #     name = "dracula";
-  #     # package = pkgs.dracula-theme;
-  #   };
-  #   iconTheme = {
-  #     name = "candy-icons";
-  #     # package = pkgs.papirus-icon-theme;
-  #   };
-  # };
   
   home.sessionVariables = {
     MY_MACHINE_ID = "Laptop";
