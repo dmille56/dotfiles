@@ -301,6 +301,7 @@ in with constants;
         co = lib.mkDefault "checkout";
       };
       credential.helper = lib.mkDefault "oauth";
+      "credential.https://bitbucket.org.helper" = lib.mkDefault "oauth";
     };
     signing.format = lib.mkDefault "openpgp";
   };
