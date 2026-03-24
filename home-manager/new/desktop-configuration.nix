@@ -33,6 +33,11 @@ in
   # Bigger cursor everywhere (including login manager)
   environment.variables.XCURSOR_SIZE = "48";
 
+  # Remap Pause/Break key to Insert
+  services.xserver.displayManager.sessionCommands = ''
+    ${pkgs.xorg.xmodmap}/bin/xmodmap -e "keycode 127 = Insert"
+  '';
+
   # VNC server via x11vnc as a systemd service
   # :NOTE: No VNC password needed since access is restricted to SSH tunnel only.
   # Only accessible via SSH tunneling:
