@@ -39,12 +39,15 @@ in
   # Only accessible via SSH tunneling:
   #   ssh -p 50022 -L 5900:localhost:5900 dono@your-desktop-ip
   # Then connect your VNC client to localhost:5900
+  #
+  # Uses LightDM's auth file so VNC is accessible even before a user logs in
+  # (i.e. the login screen is visible and controllable via VNC).
   systemd.services.x11vnc = {
     description = "x11vnc VNC Server";
-    after = [ "display-manager.service" ];
+    after = [ "display-manager.service" "lightdm.service" ];
     wantedBy = [ "multi-user.target" ];
     serviceConfig = {
-      ExecStart = "${pkgs.x11vnc}/bin/x11vnc -display :0 -forever -shared -nopw -auth /home/${constants.my-username}/.Xauthority -localhost";
+      ExecStart = "${pkgs.x11vnc}/bin/x11vnc -display :0 -forever -shared -nopw -auth /var/run/lightdm/root/:0 -localhost";
       Restart = "on-failure";
       RestartSec = "3";
     };
