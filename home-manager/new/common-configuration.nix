@@ -230,34 +230,34 @@ in with constants;
 
     secrets = {
       OPENAI_API_KEY = {
-        owner = lib.mkDefault "${my-username}";
-        group = lib.mkDefault "users";
-        mode = lib.mkDefault "0440";
+        owner = my-username;
+        group = "users";
+        mode = "0440";
       };
       GOOGLE_API_KEY = {
-        owner = lib.mkDefault "${my-username}";
-        group = lib.mkDefault "users";
-        mode = lib.mkDefault "0440";
+        owner = my-username;
+        group = "users";
+        mode = "0440";
       };
       ANTHROPIC_API_KEY = {
-        owner = lib.mkDefault "${my-username}";
-        group = lib.mkDefault "users";
-        mode = lib.mkDefault "0440";
+        owner = my-username;
+        group = "users";
+        mode = "0440";
       };
       GIT_NAME = {
-        owner = lib.mkDefault "${my-username}";
-        group = lib.mkDefault "users";
-        mode = lib.mkDefault "0440";
+        owner = my-username;
+        group = "users";
+        mode = "0440";
       };
       GIT_EMAIL = {
-        owner = lib.mkDefault "${my-username}";
-        group = lib.mkDefault "users";
-        mode = lib.mkDefault "0440";
+        owner = my-username;
+        group = "users";
+        mode = "0440";
       };
       GITHUB_USER = {
-        owner = lib.mkDefault "${my-username}";
-        group = lib.mkDefault "users";
-        mode = lib.mkDefault "0440";
+        owner = my-username;
+        group = "users";
+        mode = "0440";
       };
     };
   };
@@ -268,4 +268,5 @@ in with constants;
   # this value at the release version of the first install of this system.
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = lib.mkDefault "25.
+  system.stateVersion = lib.mkDefault "25.05";
+}
