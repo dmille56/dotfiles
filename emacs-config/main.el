@@ -1370,6 +1370,9 @@ _p_rev       _U_pper              _=_: upper/lower       _r_esolve
     (lambda ()
         (auth-source-pass-get 'secret "GOOGLE_GEMINI_KEY")))))
 
+;; :TODO: make sure this is working correctly
+(use-package agent-shell)
+
 (use-package org-ai
   :straight (:type git :host github :repo "rksm/org-ai" :local-repo "org-ai" :files ("*.el" "README.md" "snippets"))
   :ensure t
@@ -1954,9 +1957,10 @@ shell exits, the buffer is killed."
 ;;   :bind (:map git-commit-mode-map
 ;;               ("C-c C-g" . magit-gptcommit-commit-accept)))
 
-(use-package good-scroll
-  :config
-  (good-scroll-mode 1))
+;; :TODO: maybe re-enable good-scroll mode later... it was causing issues with scrolling in comint-mod
+;; (use-package good-scroll
+;;   :config
+;;   (good-scroll-mode 1))
 
 ;; :NOTE: fix scrolling in comint-mode since it's so fucking annoying when it tries to keep the cursor at the prompt
 (add-hook 'comint-mode-hook
