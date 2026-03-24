@@ -50,6 +50,9 @@
           { nixpkgs.overlays = [ aider-overlay ]; }
 
           (builtins.toPath "${const.my-dotfile-nix-dir}/${my-machine-id}-configuration.nix")
+
+          # :NOTE: sops-nix is now added at the system level so secrets are
+          # decrypted at boot, before any user session starts
           sops-nix.nixosModules.sops
 
           # make home-manager as a module of nixos

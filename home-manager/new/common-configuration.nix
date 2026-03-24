@@ -1,6 +1,6 @@
 # Edit this configuration file to define what should be installed on
 # your system.  Help is available in the configuration.nix(5) man page
-# and in the NixOS manual (accessible by running ‘nixos-help’).
+# and in the NixOS manual (accessible by running 'nixos-help').
 
 { pkgs, config, lib, ... }:
 
@@ -145,7 +145,7 @@ in with constants;
     }))
   ];
 
-  # Define a user account. Don't forget to set a password with ‘passwd’.
+  # Define a user account. Don't forget to set a password with 'passwd'.
   users.users.dono = {
     isNormalUser = true;
     description = "dono";
@@ -213,11 +213,59 @@ in with constants;
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
 
+  # :NOTE: system-level SOPS secrets configuration
+  # Secrets are decrypted at boot into /run/secrets/ before any user session starts,
+  # eliminating the race condition with home-manager SOPS decryption.
+  # :NOTE: to set up the system-level age key:
+  #   sudo mkdir -p /root/.config/sops/age
+  #   sudo cp ~/.config/sops/age/keys.txt /root/.config/sops/age/keys.txt
+  #   sudo chmod 600 /root/.config/sops/age/keys.txt
+  # Or generate a new system key:
+  #   sudo age-keygen -o /root/.config/sops/age/keys.txt
+  # Then re-encrypt secrets.yaml with the new public key if needed:
+  #   sops updatekeys secrets.yaml
+  sops = {
+    age.keyFile = lib.mkDefault "/root/.config/sops/age/keys.txt";
+    defaultSopsFile = lib.mkDefault ../../secrets.yaml;
+
+    secrets = {
+      OPENAI_API_KEY = {
+        owner = lib.mkDefault "${my-username}";
+        group = lib.mkDefault "users";
+        mode = lib.mkDefault "0440";
+      };
+      GOOGLE_API_KEY = {
+        owner = lib.mkDefault "${my-username}";
+        group = lib.mkDefault "users";
+        mode = lib.mkDefault "0440";
+      };
+      ANTHROPIC_API_KEY = {
+        owner = lib.mkDefault "${my-username}";
+        group = lib.mkDefault "users";
+        mode = lib.mkDefault "0440";
+      };
+      GIT_NAME = {
+        owner = lib.mkDefault "${my-username}";
+        group = lib.mkDefault "users";
+        mode = lib.mkDefault "0440";
+      };
+      GIT_EMAIL = {
+        owner = lib.mkDefault "${my-username}";
+        group = lib.mkDefault "users";
+        mode = lib.mkDefault "0440";
+      };
+      GITHUB_USER = {
+        owner = lib.mkDefault "${my-username}";
+        group = lib.mkDefault "users";
+        mode = lib.mkDefault "0440";
+      };
+    };
+  };
+
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
-  # on your system were taken. It‘s perfectly fine and recommended to leave
+  # on your system were taken. It's perfectly fine and recommended to leave
   # this value at the release version of the first install of this system.
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = lib.mkDefault "25.11"; # Did you read the comment?
-}
+  system.stateVersion = lib.mkDefault "25.
