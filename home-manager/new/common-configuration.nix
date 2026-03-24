@@ -80,6 +80,11 @@ in with constants;
     options = lib.mkDefault "ctrl:swapcaps";
   };
 
+  # Remap Pause/Break key to Insert
+  services.xserver.displayManager.sessionCommands = lib.mkDefault ''
+    ${pkgs.xmodmap}/bin/xmodmap -e "keycode 127 = Insert"
+  '';
+
   # :TODO: figure out how to setup xkb correctly so that Pause Break key is mapped to Insert correctly
   # services.xserver.xkb.extraLayouts.custom = {
   #   description = "Custom layout (Pause mapped to Insert)";
