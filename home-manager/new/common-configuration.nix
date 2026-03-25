@@ -261,6 +261,14 @@ in with constants;
       };
     };
   };
+  
+  programs.ssh = {
+    extraConfig = lib.mkDefault ''
+      Host bitbucket.org
+        IdentityFile /home/${my-username}/.ssh/id_rsa
+        User git
+    '';
+  };
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions

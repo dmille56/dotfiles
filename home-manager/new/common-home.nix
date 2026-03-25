@@ -302,14 +302,16 @@ in with constants;
       };
       credential = {
         helper = lib.mkDefault "oauth";
-        "https://bitbucket.org" = {
-          helper = lib.mkDefault "oauth";
+      };
+      url = {
+        "ssh://git@bitbucket.org/" = {
+          insteadOf = "https://bitbucket.org/";
         };
       };
     };
     signing.format = lib.mkDefault "openpgp";
   };
-  
+
   programs.gh = {
     enable = lib.mkDefault true;
     extensions = lib.mkDefault [ pkgs.gh-dash ];
@@ -911,4 +913,5 @@ in with constants;
     NIXPKGS_ALLOW_UNFREE = lib.mkDefault "1";
     MY_MACHINE_ID = lib.mkDefault "none";
   };
+  
 }
