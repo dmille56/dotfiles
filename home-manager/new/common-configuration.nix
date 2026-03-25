@@ -267,6 +267,12 @@ in with constants;
       Host bitbucket.org
         IdentityFile /home/${my-username}/.ssh/id_rsa
         User git
+      Host castle
+        HostName 73.140.10.210
+        Port 50022
+        User dono
+        Compression yes
+        ForwardX11 yes
     '';
   };
 
