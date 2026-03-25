@@ -19,7 +19,7 @@ in with constants;
     nautilus
   ];
   
-  home.file.".background-image".source = ../../img/dracula-castle-matrix-background.png;
+  home.file.".background-image".source = my-desktop-background-image;
   
   home.file.".xmobarrc".source = "${my-dotfile-dir}/xmobarrc";
   

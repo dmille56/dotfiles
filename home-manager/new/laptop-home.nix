@@ -18,6 +18,8 @@ in with constants;
     kdePackages.dolphin
   ];
   
+  home.file.".background-image".source = my-laptop-background-image;
+  
   home.sessionVariables = {
     MY_MACHINE_ID = "Laptop";
   };

@@ -5,10 +5,6 @@ let
     url = "https://github.com/EliverLara/Sweet-folders";
     rev = "40a5d36e50437901c7eaa1119bb9ae8006e2fe5c";
   };
-  draculaWallpaperRepo = builtins.fetchGit {
-    url = "https://github.com/dracula/wallpaper";
-    rev = "f2b8cc4223bcc2dfd5f165ab80f701bbb84e3303";
-  };
   gtkDraculaRepo = builtins.fetchGit {
     url = "https://github.com/dracula/gtk";
     rev = "2618a035409d65e0a1e4da1909ae1b5fd6a796fd";
@@ -917,9 +913,7 @@ in with constants;
   });
 
   # :NOTE: this sets the desktop wallpaper
-  home.file.".background-image" = {
-    source = lib.mkDefault "${draculaWallpaperRepo}/first-collection/nixos.png";
-  };
+  home.file.".background-image".source = lib.mkDefault my-default-background-image;
 
   # :NOTE: use image profile picture (for display manager)
   home.file.".face".source = lib.mkDefault ../../img/dracula-profile.png;
