@@ -57,7 +57,7 @@ in with constants;
         name = lib.mkDefault "Numix-Cursor";
         package = lib.mkDefault pkgs.numix-cursor-theme;
       };
-      extraConfig = ''
+      extraConfig = lib.mkDefault ''
         user-background false
       '';
     };
