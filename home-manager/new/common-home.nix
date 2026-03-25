@@ -359,6 +359,11 @@ in with constants;
         # Make % (horizontal split) and " (vertical split) bindings split the window and cd to the current path
         bind % split-window -h -c "#{pane_current_path}"
         bind '"' split-window -v -c "#{pane_current_path}"
+
+        # Open a popup, run sway-launcher-desktop inside it, and close when it exits
+        unbind-key -T prefix p
+        # bind-key -T prefix p display-popup -E -T "Launcher" -w 80% -h 60% -d "#{pane_current_path}" -- 'sway-launcher-desktop'
+        bind-key  -T prefix p display-popup -E -w 80% -h 60% -- 'env SHELL="$HOME/.local/bin/sh-mute" sway-launcher-desktop'
     '';
   };
 
@@ -720,6 +725,19 @@ in with constants;
    };
 
   # :NOTE: home file configuration starts here
+   
+  home.file.".local/bin/sh-mute" = {
+    text = ''
+      #!/usr/bin/env bash
+      if [ "$1" = "-c" ]; then
+        shift
+        setsid -f bash -lc "$*" >/dev/null 2>&1 </dev/null &
+        exit 0
+      fi
+      exec bash "$@"
+    '';
+    executable = true;
+  };
 
   home.file.".config/kak/kakrc".text = lib.mkDefault ''
     colorscheme dracula
