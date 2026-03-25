@@ -44,7 +44,7 @@ in with constants;
     enable = lib.mkDefault true;
 
     greeters.gtk = {
-      enable = lib.mkDefault false;
+      enable = lib.mkDefault true;
       theme = {
         name = lib.mkDefault "Dracula";
         package = lib.mkDefault pkgs.dracula-theme;
@@ -57,10 +57,13 @@ in with constants;
         name = lib.mkDefault "Numix-Cursor";
         package = lib.mkDefault pkgs.numix-cursor-theme;
       };
+      extraConfig = ''
+        user-background false
+      '';
     };
     
     greeters.slick = {
-      enable = lib.mkDefault true;
+      enable = lib.mkDefault false;
       draw-user-backgrounds = lib.mkDefault true;
       theme = {
         name = lib.mkDefault "Dracula";
