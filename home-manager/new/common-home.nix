@@ -244,6 +244,8 @@ in with constants;
     scrcpy
     redshift
     xmodmap
+    
+    sway-launcher-desktop # :NOTE: added
   ];
 
   # :NOTE: programs config starts here
