@@ -323,9 +323,7 @@ in with constants;
   programs.ssh = {
     enable = lib.mkDefault true;
     matchBlocks = {
-      "castle" = {
-      # :TODO: fix this once I get it working
-      # "${my-desktop-hostname}" = {
+      "${my-desktop-hostname}" = {
         hostname = lib.mkDefault "73.140.10.210";
         port = lib.mkDefault 50022;
         user = lib.mkDefault my-username;
