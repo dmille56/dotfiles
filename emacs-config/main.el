@@ -250,6 +250,7 @@ _p_rev       _U_pper              _=_: upper/lower       _r_esolve
     ("GC" "chatgpt write git commit" chatgpt-shell-write-git-commit)
     ("Gc" "copilot chat" copilot-chat-display)
     ("Ga" "aider transient" aider-transient-menu)
+    ("GA" "agent-shell" agent-shell)
     ]
    ["Help"
     ("h" "emacs help" help-for-help)
