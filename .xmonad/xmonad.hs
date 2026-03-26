@@ -154,8 +154,8 @@ audioLowerVolumeCommand = "amixer -D pulse sset Master 5%-; notify-send -i audio
 
 audioRaiseVolumeCommand = "amixer -D pulse sset Master 5%+; notify-send -i audio-volume-medium -t 1000 'Volume: '$(amixer -D pulse sget Master | grep 'Left:' | awk -F'[][]' '{ print $2 } ')"
 
-myStartupHook :: X ()
-myStartupHook = do
+myStartupHook :: MyConfigMachine -> X ()
+myStartupHook myConfigMachine = do
   spawnOnce "xfsettingsd"
   spawnOnce "start-pulseaudio-x1ll"
   spawnOnce "trayer --edge bottom --align right --widthtype request --expand true --SetDockType true --SetPartialStrut true --transparent true --alpha 0 --tint 0x282A36 --expand true --heighttype pixel --height 24"
@@ -163,8 +163,8 @@ myStartupHook = do
   spawnOnce "redshift-gtk"
   spawn "xrdb ~/.XResources"
   greenclipDaemon <- spawnPipe "greenclip daemon"
+  when (myConfigMachine == Desktop) $ spawn "xmodmap -e 'keycode 118 = Pause'"
   spawn "xmodmap -e 'keycode 127 = Insert'"
-  spawn "xmodmap -e 'keycode 118 = Pause'"
 
 main = do
   xmproc <- spawnPipe "xmobar"
@@ -176,7 +176,7 @@ main = do
         def
           { manageHook = myManageHook hasNixGL,
             layoutHook = myLayoutHook,
-            startupHook = myStartupHook,
+            startupHook = myStartupHook myConfigMachine,
             logHook =
               dynamicLogWithPP
                 xmobarPP
