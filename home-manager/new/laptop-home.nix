@@ -21,7 +21,7 @@ in with constants;
   home.file.".background-image".source = my-laptop-background-image;
   
   home.sessionVariables = {
-    MY_MACHINE_ID = "Laptop";
+    MY_MACHINE_ID = "laptop";
   };
 
 }

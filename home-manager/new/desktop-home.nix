@@ -17,6 +17,7 @@ in with constants;
 
     kdePackages.dolphin
     nautilus
+    obs-studio
   ];
   
   home.file.".background-image".source = my-desktop-background-image;
@@ -24,7 +25,7 @@ in with constants;
   home.file.".xmobarrc".source = "${my-dotfile-dir}/xmobarrc";
   
   home.sessionVariables = {
-    MY_MACHINE_ID = "Desktop";
+    MY_MACHINE_ID = "desktop";
   };
 
 }
