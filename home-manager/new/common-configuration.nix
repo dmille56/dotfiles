@@ -44,7 +44,7 @@ in with constants;
     enable = lib.mkDefault true;
 
     greeters.gtk = {
-      enable = true;
+      enable = lib.mkForce true;
       theme = {
         name = lib.mkDefault "Dracula";
         package = lib.mkDefault pkgs.dracula-theme;
@@ -57,27 +57,27 @@ in with constants;
         name = lib.mkDefault "Numix-Cursor";
         package = lib.mkDefault pkgs.numix-cursor-theme;
       };
-      extraConfig = lib.mkDefault ''
-        user-background false
-      '';
+      # extraConfig = lib.mkDefault ''
+      #   user-background false
+      # '';
     };
     
-    # greeters.slick = {
-    #   enable = lib.mkDefault false;
-    #   draw-user-backgrounds = lib.mkDefault true;
-    #   theme = {
-    #     name = lib.mkDefault "Dracula";
-    #     package = lib.mkDefault pkgs.dracula-theme;
-    #   };
-    #   iconTheme = {
-    #     name = lib.mkDefault "Papirus-Dark";
-    #     package = lib.mkDefault pkgs.papirus-icon-theme;
-    #   };
-    #   cursorTheme = {
-    #     name = lib.mkDefault "Numix-Cursor";
-    #     package = lib.mkDefault pkgs.numix-cursor-theme;
-    #   };
-    # };
+    greeters.slick = {
+      enable = lib.mkForce false;
+      # draw-user-backgrounds = lib.mkDefault true;
+      # theme = {
+      #   name = lib.mkDefault "Dracula";
+      #   package = lib.mkDefault pkgs.dracula-theme;
+      # };
+      # iconTheme = {
+      #   name = lib.mkDefault "Papirus-Dark";
+      #   package = lib.mkDefault pkgs.papirus-icon-theme;
+      # };
+      # cursorTheme = {
+      #   name = lib.mkDefault "Numix-Cursor";
+      #   package = lib.mkDefault pkgs.numix-cursor-theme;
+      # };
+    };
   };
 
   # Enable the XFCE Desktop Environment (and also XMonad).
