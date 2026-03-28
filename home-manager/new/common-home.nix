@@ -887,7 +887,7 @@ in with constants;
   # :TODO: fix this
   home.file.".config/clock-rs/conf.toml".text = lib.mkDefault ''
     [general]
-    color = "#ff79c6"
+    color = "#BD93F9"
     interval = 250
     blink = true
     bold = true
