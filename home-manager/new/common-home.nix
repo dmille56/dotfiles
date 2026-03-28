@@ -242,6 +242,7 @@ in with constants;
     xmodmap
     
     sway-launcher-desktop # :NOTE: added
+    clock-rs # :NOTE: added
   ];
 
   # :NOTE: programs config starts here
@@ -373,6 +374,9 @@ in with constants;
         unbind-key -T prefix p
         # bind-key -T prefix p display-popup -E -T "Launcher" -w 80% -h 60% -d "#{pane_current_path}" -- 'sway-launcher-desktop'
         bind-key  -T prefix p display-popup -E -w 80% -h 60% -- 'env SHELL="$HOME/.local/bin/sh-mute" sway-launcher-desktop'
+
+        unbind-key -T prefix t
+        bind-key -T prefix t display-popup -E -T "Clock" -w 80% -h 60% -d "#{pane_current_path}" -- 'clock-rs'
     '';
   };
 
@@ -879,6 +883,25 @@ in with constants;
   home.file.".local/share/xfce4/terminal/colorschemes/Dracula.theme".source = lib.mkDefault (builtins.fetchurl {
     url = "https://raw.githubusercontent.com/dracula/xfce4-terminal/refs/heads/master/Dracula.theme";
   });
+  
+  # :TODO: fix this
+  home.file.".config/clock-rs/conf.toml".text = lib.mkDefault ''
+    [general]
+    color = "#ff79c6"
+    interval = 250
+    blink = true
+    bold = true
+    
+    [position]
+    horizontal = "center"
+    vertical = "center"
+    
+    [date]
+    fmt = "%A, %B %d, %Y"
+    use_12h = true
+    utc = false
+    hide_seconds = true
+  '';
   
   home.file.".config/lazygit/theme/lazygit".source = lib.mkDefault (builtins.fetchGit {
     url = "https://github.com/catppuccin/lazygit";
