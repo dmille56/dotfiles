@@ -243,6 +243,7 @@ in with constants;
     
     sway-launcher-desktop # :NOTE: added
     clock-rs # :NOTE: added
+    gitu # :NOTE: added
   ];
 
   # :NOTE: programs config starts here
@@ -378,6 +379,9 @@ in with constants;
 
         unbind-key -T prefix t
         bind-key -T prefix t display-popup -E -T "Clock" -w 80% -h 60% -d "#{pane_current_path}" -- 'clock-rs'
+
+        unbind-key -T prefix g
+        bind-key -T prefix g display-popup -E -T "Gitu" -w 90% -h 90% -d "#{pane_current_path}" -- 'gitu'
 
         unbind-key -T prefix G
         bind-key -T prefix G display-popup -E -T "Lazygit" -w 90% -h 90% -d "#{pane_current_path}" -- 'lazygit'
