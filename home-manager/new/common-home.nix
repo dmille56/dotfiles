@@ -289,7 +289,8 @@ in with constants;
       # user.email = "$(cat ${config.sops.secrets.GIT_EMAIL.path})";
       github.user = lib.mkDefault "dmille56";
       user.name = lib.mkDefault "Donovan M";
-      user.email = lib.mkDefault "donovanm256@gmail.com";
+      # user.email = lib.mkDefault "donovanm256@gmail.com";
+      user.email = lib.mkDefault "donovanm56@gmail.com";
       color = {
         ui = lib.mkDefault "always";
       };
@@ -377,6 +378,9 @@ in with constants;
 
         unbind-key -T prefix t
         bind-key -T prefix t display-popup -E -T "Clock" -w 80% -h 60% -d "#{pane_current_path}" -- 'clock-rs'
+
+        unbind-key -T prefix G
+        bind-key -T prefix G display-popup -E -T "Lazygit" -w 90% -h 90% -d "#{pane_current_path}" -- 'lazygit'
     '';
   };
 
