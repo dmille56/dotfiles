@@ -244,6 +244,8 @@ in with constants;
     sway-launcher-desktop # :NOTE: added
     clock-rs # :NOTE: added
     gitu # :NOTE: added
+    glow # :NOTE: added
+    tree # :NOTE: added
   ];
 
   # :NOTE: programs config starts here
