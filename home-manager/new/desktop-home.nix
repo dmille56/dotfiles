@@ -18,6 +18,8 @@ in with constants;
     kdePackages.dolphin
     nautilus
     obs-studio
+
+    ollama-cuda
   ];
   
   home.file.".background-image".source = my-desktop-background-image;

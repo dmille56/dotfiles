@@ -234,7 +234,8 @@ in with constants;
     spotify-player
     blanket
 
-    vscode
+    # vscode
+    vscode-fhs
     blueman
     # darktable
     scrcpy
@@ -246,6 +247,7 @@ in with constants;
     gitu # :NOTE: added
     glow # :NOTE: added
     tree # :NOTE: added
+    xclock # :NOTE: added
   ];
 
   # :NOTE: programs config starts here
