@@ -248,6 +248,7 @@ in with constants;
     glow # :NOTE: added
     tree # :NOTE: added
     xclock # :NOTE: added
+    postman # :NOTE: added
   ];
 
   # :NOTE: programs config starts here
@@ -964,6 +965,8 @@ in with constants;
     ANTHROPIC_API_KEY = lib.mkDefault "$(cat /run/secrets/ANTHROPIC_API_KEY)";
     OPENAI_API_MODEL = lib.mkDefault "gpt-5-mini";
     AIDER_MODEL = lib.mkDefault "gpt-5-mini";
+    AIDER_GIT_COMMIT_VERIFY = lib.mkDefault "true";
+    OLLAMA_CONTEXT_LENGTH = lib.mkDefault "64000";
     RIPGREP_CONFIG_PATH = lib.mkDefault "${my-home-dir}/.ripgreprc";
     LG_CONFIG_FILE= lib.mkDefault "${my-home-dir}/.config/lazygit/config.yml,${my-home-dir}/.config/lazygit/theme/lazygit/themes-mergable/mocha/blue.yml";
     BROWSER = lib.mkDefault "${pkgs.firefox-bin}/bin/firefox";

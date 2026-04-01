@@ -28,12 +28,17 @@
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    nix-openclaw = {
+      url = "github:openclaw/nix-openclaw";
+      # inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = inputs@{ nixpkgs, home-manager, sops-nix, aider-chat-full-revision, ... }:
+  outputs = inputs@{ nixpkgs, home-manager, sops-nix, nix-openclaw, aider-chat-full-revision, ... }:
     let
       const = import (builtins.toPath "/home/dono/dotfiles/home-manager/new/common-constants.nix");
-      my-machine-id = "laptop"; # desktop, laptop
+      my-machine-id = "desktop"; # desktop, laptop
       my-host-name =
         if my-machine-id == "laptop" then "${const.my-laptop-hostname}"
         else if my-machine-id == "desktop" then "${const.my-desktop-hostname}"
@@ -47,13 +52,15 @@
 
       nixosConfigurations.${my-host-name} = nixpkgs.lib.nixosSystem {
         modules = [
-          { nixpkgs.overlays = [ aider-overlay ]; }
+          { nixpkgs.overlays = [ aider-overlay nix-openclaw.overlays.default ]; }
 
           (builtins.toPath "${const.my-dotfile-nix-dir}/${my-machine-id}-configuration.nix")
 
           # :NOTE: sops-nix is now added at the system level so secrets are
           # decrypted at boot, before any user session starts
           sops-nix.nixosModules.sops
+          
+          # nix-openclaw.nixosModules.openclaw-gateway
 
           # make home-manager as a module of nixos
           # so that home-manager configuration will be deployed automatically when executing `nixos-rebuild switch`
@@ -66,6 +73,7 @@
 
             home-manager.sharedModules = [
               sops-nix.homeManagerModules.sops
+              nix-openclaw.homeManagerModules.openclaw
             ];
 
             # Optionally, use home-manager.extraSpecialArgs to pass arguments to home.nix

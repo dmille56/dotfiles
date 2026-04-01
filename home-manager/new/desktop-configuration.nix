@@ -96,4 +96,9 @@ in
     # Optionally, you may need to select the appropriate driver version for your specific GPU.
     package = config.boot.kernelPackages.nvidiaPackages.stable;
   };
+  
+  nixpkgs.config.permittedInsecurePackages = [
+    "openclaw-2026.3.12"
+  ];
+  
 }

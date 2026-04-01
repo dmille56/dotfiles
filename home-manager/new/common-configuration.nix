@@ -279,6 +279,16 @@ in with constants;
         group = "users";
         mode = "0440";
       };
+      OPENCLAW_GATEWAY_TOKEN = {
+        owner = my-username;
+        group = "users";
+        mode = "0440";
+      };
+      OPENCLAW_TELEGRAM_BOT_TOKEN = {
+        owner = my-username;
+        group = "users";
+        mode = "0440";
+      };
     };
   };
   
