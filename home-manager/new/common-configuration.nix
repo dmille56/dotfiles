@@ -290,6 +290,20 @@ in with constants;
         mode = "0440";
       };
     };
+
+    templates."openclaw-gateway-env" = {
+      content = ''
+        OPENAI_API_KEY=${config.sops.placeholder.OPENAI_API_KEY}
+        ANTHROPIC_API_KEY=${config.sops.placeholder.ANTHROPIC_API_KEY}
+        GOOGLE_API_KEY=${config.sops.placeholder.GOOGLE_API_KEY}
+        OPENCLAW_GATEWAY_TOKEN=${config.sops.placeholder.OPENCLAW_GATEWAY_TOKEN}
+        EXTRA_FLAG=1
+        OPENCLAW_NIX_MODE=1
+      '';
+      owner = "openclaw";
+      restartUnits = [ "openclaw-gateway.service" ];
+    };
+
   };
   
   programs.ssh = {

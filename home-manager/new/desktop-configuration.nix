@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 let
   constants = import ./common-constants.nix; 
@@ -100,5 +100,35 @@ in
   nixpkgs.config.permittedInsecurePackages = [
     "openclaw-2026.3.12"
   ];
+  
+  services.openclaw-gateway = {
+    enable = true;
+    # port = 18789;
+  
+    stateDir = "/var/lib/openclaw";
+    user = "openclaw";
+    group = "openclaw";
+  
+    # Provide JSON config as an attrset; the module will write it to /etc/openclaw/openclaw.json
+    config = {
+      # server = {
+      #   host = "127.0.0.1";
+      #   tls = { enabled = false; };
+      # };
+      logging = { level = "info"; };
+      gateway = {
+        mode = "local";
+      };
+      channels.telegram = {
+        tokenFile = "/run/secrets/OPENCLAW_TELEGRAM_BOT_TOKEN";
+        allowFrom = [ 7696196772 ];
+      };
+    };
+  
+    servicePath = [ pkgs.jq ];    # add tools to the service PATH
+    environmentFiles = [ "${config.sops.templates."openclaw-gateway-env".path}" ];
+    # logPath = "/var/log/openclaw/gateway.log";
+  };
+  systemd.services.openclaw-gateway.after = lib.mkForce [ "sops-unpack.service" "network.target" ];
   
 }

@@ -60,7 +60,7 @@
           # decrypted at boot, before any user session starts
           sops-nix.nixosModules.sops
           
-          # nix-openclaw.nixosModules.openclaw-gateway
+          nix-openclaw.nixosModules.openclaw-gateway
 
           # make home-manager as a module of nixos
           # so that home-manager configuration will be deployed automatically when executing `nixos-rebuild switch`

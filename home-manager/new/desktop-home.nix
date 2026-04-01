@@ -25,38 +25,24 @@ in with constants;
   # :NOTE: open claw setup
   programs.openclaw = {
     enable = true;
+    excludeTools = [ "ffmpeg" "git" "ripgrep" ]; # tools you already have
     config = {
       gateway = {
         mode = "local";
-        # :NOTE: don't need to set this since OPENCLAW_GATEWAY_TOKEN is set
         # auth = {
-        #   # token = "$(cat ${config.sops.secrets.OPENCLAW_GATEWAY_TOKEN.path})";
-        #   token = "<gatewayToken>"; # or set OPENCLAW_GATEWAY_TOKEN
+        #   # token = "<gatewayToken>"; # or set OPENCLAW_GATEWAY_TOKEN env
         # };
       };
-
       channels.telegram = {
-        tokenFile = "/run/secrets/OPENCLAW_TELEGRAM_BOT_TOKEN"; # any file path works
-        allowFrom = [ 7696196772 ]; # your Telegram user ID
+        tokenFile = "/run/secrets/OPENCLAW_TELEGRAM_BOT_TOKEN";
+        allowFrom = [ 7696196772 ];
       };
     };
-
-    # Built-ins (tools + skills) shipped via nix-steipete-tools.
-    # plugins = [
-    #   { source = "github:openclaw/nix-steipete-tools?dir=tools/summarize"; }
-    # ];
-    
-    excludeTools = [ "git" "ripgrep" "ffmpeg" ];
     
     instances.default = {
       enable = true;
-      # package = pkgs.openclaw; # batteries-included #:NOTE: this doesn't really work right because of installed tool collisions
-      # stateDir = "~/.openclaw";
-      # workspaceDir = "~/.openclaw/workspace";
-      # launchd.enable = true;
+      # systemd.enable = true;
       plugins = [
-        # Example plugin without config:
-        # { source = "github:acme/hello-world"; }
         { source = "github:openclaw/nix-steipete-tools?dir=tools/summarize"; }
       ];
     };
