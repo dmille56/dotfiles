@@ -95,6 +95,11 @@
              (t 'pc) ;; fall-back to pc
              ))
 
+
+(defvar my/in-terminal (frame-parameter nil 'terminal-p))
+(defvar my/has-nixgl (executable-find "nixGL"))
+(defvar my/has-alacritty (executable-find "alacritty"))
+
 (use-package hydra)
 
 (use-package smerge-mode
@@ -1923,8 +1928,9 @@ shell exits, the buffer is killed."
   (cond
    ;; :TODO: figure out why ee doesn't work with nixGL correctly anymore
    ;; ((eq my/config-machine 'pc) (ee-lazygit))
-   ((eq my/config-machine 'pc) (start-process "lazygit-process" "*lazygit-buffer" "nixGL" "alacritty" "--class" "ee_term" "-e" "lazygit"))
-   ((eq my/config-machine 'work) (start-process "lazygit-process" "*lazygit-buffer" "alacritty" "-e" "lazygit"))
+   (my/in-terminal (run-in-vterm "lazygit"))
+   (my/has-nixgl (start-process "lazygit-process" "*lazygit-buffer" "nixGL" "alacritty" "--class" "ee_term" "-e" "lazygit"))
+   (my/has-alacritty (start-process "lazygit-process" "*lazygit-buffer" "alacritty" "--class" "ee_term" "-e" "lazygit"))
    (t (run-in-vterm "lazygit"))
   ))
 
@@ -1932,7 +1938,7 @@ shell exits, the buffer is killed."
   :straight (:host github :repo "eval-exec/eee.el" :files ("*.el" "*.sh"))
   :config
   ;; Should have wezterm or alacritty installed, more terminal application is supporting...
-  (if (eq my/config-machine 'pc)
+  (if my/has-nixgl
       (setq ee-terminal-command "nixGL alacritty --class ee_term")
     (setq ee-terminal-command "alacritty"))
   )
