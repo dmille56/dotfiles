@@ -22,31 +22,31 @@ in with constants;
     ollama-cuda
   ];
   
-  # :NOTE: open claw setup
-  programs.openclaw = {
-    enable = true;
-    excludeTools = [ "ffmpeg" "git" "ripgrep" ]; # tools you already have
-    config = {
-      gateway = {
-        mode = "local";
-        # auth = {
-        #   # token = "<gatewayToken>"; # or set OPENCLAW_GATEWAY_TOKEN env
-        # };
-      };
-      channels.telegram = {
-        tokenFile = "/run/secrets/OPENCLAW_TELEGRAM_BOT_TOKEN";
-        allowFrom = [ 7696196772 ];
-      };
-    };
-    
-    # instances.default = {
-    #   enable = true;
-    #   # systemd.enable = true;
-    #   plugins = [
-    #     { source = "github:openclaw/nix-steipete-tools?dir=tools/summarize"; }
-    #   ];
-    # };
-  };
+  # # :NOTE: open claw setup
+  # programs.openclaw = {
+  #   enable = true;
+  #   excludeTools = [ "ffmpeg" "git" "ripgrep" ]; # tools you already have
+  #   config = {
+  #     gateway = {
+  #       mode = "local";
+  #       # auth = {
+  #       #   # token = "<gatewayToken>"; # or set OPENCLAW_GATEWAY_TOKEN env
+  #       # };
+  #     };
+  #     channels.telegram = {
+  #       tokenFile = "/run/secrets/OPENCLAW_TELEGRAM_BOT_TOKEN";
+  #       allowFrom = [ 7696196772 ];
+  #     };
+  #   };
+  #   
+  #   # instances.default = {
+  #   #   enable = true;
+  #   #   # systemd.enable = true;
+  #   #   plugins = [
+  #   #     { source = "github:openclaw/nix-steipete-tools?dir=tools/summarize"; }
+  #   #   ];
+  #   # };
+  # };
   
   home.file.".background-image".source = my-desktop-background-image;
   
@@ -54,7 +54,7 @@ in with constants;
   
   home.sessionVariables = {
     OPENCLAW_GATEWAY_TOKEN = "$(cat /run/secrets/OPENCLAW_GATEWAY_TOKEN)";
-    OPENCLAW_NIX_MODE = "1";
+    # OPENCLAW_NIX_MODE = "1";
     MY_MACHINE_ID = "desktop";
   };
 

@@ -169,7 +169,7 @@ in with constants;
   users.users.dono = {
     isNormalUser = true;
     description = "dono";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [ "networkmanager" "wheel" "podman" ];
     shell = pkgs.zsh;
     homeMode = "711";
   };
@@ -232,6 +232,15 @@ in with constants;
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
+  
+  users.groups.openclaw = {};
+  users.users.openclaw = {
+    isSystemUser = true;
+    description = "openclaw daemon user";
+    group = "openclaw";
+    createHome = false;
+    shell = "/run/current-system/sw/bin/false";
+  };
 
   # :NOTE: system-level SOPS secrets configuration
   # Secrets are decrypted at boot into /run/secrets/ before any user session starts,
@@ -319,6 +328,15 @@ in with constants;
         Compression yes
         ForwardX11 yes
     '';
+  };
+  
+  virtualisation = {
+    containers.enable = true;
+    podman = {
+      enable = true;
+      dockerCompat = true;
+      defaultNetwork.settings.dns_enabled = true; # Required for containers under podman-compose to be able to talk to each other.
+    };
   };
 
   # This value determines the NixOS release from which the default

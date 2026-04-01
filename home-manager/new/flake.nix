@@ -31,7 +31,6 @@
 
     nix-openclaw = {
       url = "github:openclaw/nix-openclaw";
-      # inputs.nixpkgs.follows = "nixpkgs";
     };
     
   };
@@ -49,27 +48,6 @@
         aider-chat-full = aider-chat-full-revision.legacyPackages.${prev.system}.aider-chat-full;
       };
       
-      openclaw-plugin-manifest-overlay = final: prev: {
-        openclaw-gateway = prev.openclaw-gateway.overrideAttrs (old: {
-          postFixup = (old.postFixup or "") + ''
-            if [ -d "$out/lib/openclaw/extensions" ]; then
-              mkdir -p "$out/lib/openclaw/dist/extensions"
-
-              while IFS= read -r manifest; do
-                pluginDir="$(basename "$(dirname "$manifest")")"
-                mkdir -p "$out/lib/openclaw/dist/extensions/$pluginDir"
-                ln -sf "$out/lib/openclaw/extensions/$pluginDir/openclaw.plugin.json" \
-                  "$out/lib/openclaw/dist/extensions/$pluginDir/openclaw.plugin.json"
-              done < <(
-                find "$out/lib/openclaw/extensions" \
-                  -mindepth 2 -maxdepth 2 \
-                  -name openclaw.plugin.json \
-                  -type f
-              )
-            fi
-          '';
-        });
-      };
     in
     {
 
@@ -79,7 +57,6 @@
             nixpkgs.overlays = [ 
               aider-overlay
               nix-openclaw.overlays.default
-              openclaw-plugin-manifest-overlay
             ]; 
           }
 
