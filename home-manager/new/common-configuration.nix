@@ -280,13 +280,13 @@ in with constants;
         mode = "0440";
       };
       OPENCLAW_GATEWAY_TOKEN = {
-        owner = my-username;
-        group = "users";
+        owner = "openclaw";
+        group = "openclaw";
         mode = "0440";
       };
       OPENCLAW_TELEGRAM_BOT_TOKEN = {
-        owner = my-username;
-        group = "users";
+        owner = "openclaw";
+        group = "openclaw";
         mode = "0440";
       };
     };
@@ -297,6 +297,7 @@ in with constants;
         ANTHROPIC_API_KEY=${config.sops.placeholder.ANTHROPIC_API_KEY}
         GOOGLE_API_KEY=${config.sops.placeholder.GOOGLE_API_KEY}
         OPENCLAW_GATEWAY_TOKEN=${config.sops.placeholder.OPENCLAW_GATEWAY_TOKEN}
+        TELEGRAM_BOT_TOKEN=${config.sops.placeholder.OPENCLAW_TELEGRAM_BOT_TOKEN}
         EXTRA_FLAG=1
         OPENCLAW_NIX_MODE=1
       '';

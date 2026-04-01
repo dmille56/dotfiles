@@ -33,6 +33,7 @@
       url = "github:openclaw/nix-openclaw";
       # inputs.nixpkgs.follows = "nixpkgs";
     };
+    
   };
 
   outputs = inputs@{ nixpkgs, home-manager, sops-nix, nix-openclaw, aider-chat-full-revision, ... }:
@@ -47,12 +48,40 @@
       aider-overlay = final: prev: {
         aider-chat-full = aider-chat-full-revision.legacyPackages.${prev.system}.aider-chat-full;
       };
+      
+      openclaw-plugin-manifest-overlay = final: prev: {
+        openclaw-gateway = prev.openclaw-gateway.overrideAttrs (old: {
+          postFixup = (old.postFixup or "") + ''
+            if [ -d "$out/lib/openclaw/extensions" ]; then
+              mkdir -p "$out/lib/openclaw/dist/extensions"
+
+              while IFS= read -r manifest; do
+                pluginDir="$(basename "$(dirname "$manifest")")"
+                mkdir -p "$out/lib/openclaw/dist/extensions/$pluginDir"
+                ln -sf ../../../../extensions/$pluginDir/openclaw.plugin.json \
+                  "$out/lib/openclaw/dist/extensions/$pluginDir/openclaw.plugin.json"
+              done < <(
+                find "$out/lib/openclaw/extensions" \
+                  -mindepth 2 -maxdepth 2 \
+                  -name openclaw.plugin.json \
+                  -type f
+              )
+            fi
+          '';
+        });
+      };
     in
     {
 
       nixosConfigurations.${my-host-name} = nixpkgs.lib.nixosSystem {
         modules = [
-          { nixpkgs.overlays = [ aider-overlay nix-openclaw.overlays.default ]; }
+          { 
+            nixpkgs.overlays = [ 
+              aider-overlay
+              nix-openclaw.overlays.default
+              openclaw-plugin-manifest-overlay
+            ]; 
+          }
 
           (builtins.toPath "${const.my-dotfile-nix-dir}/${my-machine-id}-configuration.nix")
 

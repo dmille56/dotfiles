@@ -39,13 +39,13 @@ in with constants;
       };
     };
     
-    instances.default = {
-      enable = true;
-      # systemd.enable = true;
-      plugins = [
-        { source = "github:openclaw/nix-steipete-tools?dir=tools/summarize"; }
-      ];
-    };
+    # instances.default = {
+    #   enable = true;
+    #   # systemd.enable = true;
+    #   plugins = [
+    #     { source = "github:openclaw/nix-steipete-tools?dir=tools/summarize"; }
+    #   ];
+    # };
   };
   
   home.file.".background-image".source = my-desktop-background-image;

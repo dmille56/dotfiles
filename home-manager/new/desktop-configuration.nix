@@ -120,7 +120,9 @@ in
         mode = "local";
       };
       channels.telegram = {
-        tokenFile = "/run/secrets/OPENCLAW_TELEGRAM_BOT_TOKEN";
+        enabled = true;
+        dmPolicy = "allowlist";
+        # tokenFile = "/run/secrets/OPENCLAW_TELEGRAM_BOT_TOKEN";
         allowFrom = [ 7696196772 ];
       };
     };
