@@ -58,7 +58,7 @@
               while IFS= read -r manifest; do
                 pluginDir="$(basename "$(dirname "$manifest")")"
                 mkdir -p "$out/lib/openclaw/dist/extensions/$pluginDir"
-                ln -sf ../../../../extensions/$pluginDir/openclaw.plugin.json \
+                ln -sf "$out/lib/openclaw/extensions/$pluginDir/openclaw.plugin.json" \
                   "$out/lib/openclaw/dist/extensions/$pluginDir/openclaw.plugin.json"
               done < <(
                 find "$out/lib/openclaw/extensions" \
