@@ -97,6 +97,12 @@ in with constants;
     # ];
   };
   
+  systemd.user.services."openclaw-gateway" = {
+    Service = {
+      EnvironmentFile = "/run/secrets/rendered/openclaw-gateway-env";
+    };
+  };
+  
   home.file.".openclaw/openclaw.json".force = true;  # :NOTE: clobber existing openclaw config
   
   home.file.".background-image".source = my-desktop-background-image;

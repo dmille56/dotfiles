@@ -131,6 +131,6 @@ in
   #   environmentFiles = [ "${config.sops.templates."openclaw-gateway-env".path}" ];
   #   # logPath = "/var/log/openclaw/gateway.log";
   # };
-  systemd.services.openclaw-gateway.after = lib.mkForce [ "sops-unpack.service" "network.target" ];
+  # systemd.services.openclaw-gateway.after = lib.mkForce [ "sops-unpack.service" "network.target" ];
   
 }

@@ -307,11 +307,11 @@ in with constants;
         GOOGLE_API_KEY=${config.sops.placeholder.GOOGLE_API_KEY}
         OPENCLAW_GATEWAY_TOKEN=${config.sops.placeholder.OPENCLAW_GATEWAY_TOKEN}
         TELEGRAM_BOT_TOKEN=${config.sops.placeholder.OPENCLAW_TELEGRAM_BOT_TOKEN}
-        EXTRA_FLAG=1
         OPENCLAW_NIX_MODE=1
       '';
       owner = "openclaw";
-      restartUnits = [ "openclaw-gateway.service" ];
+      group = "openclaw";
+      mode = "0440";
     };
 
   };
