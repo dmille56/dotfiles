@@ -1,6 +1,9 @@
 { pkgs, config, lib, ...}: 
 let
   constants = import ./common-constants.nix; 
+  openclawNoTools = (pkgs.openclawPackages.withTools {
+    excludeToolNames = [ "ffmpeg" "git" "ripgrep" ];
+  }).openclaw;
 in with constants;
 {
   imports = [ ./common-home.nix ];
@@ -20,24 +23,26 @@ in with constants;
     obs-studio
 
     ollama-cuda
+    # openclawNoTools
+    openclaw-gateway
   ];
   
   # # :NOTE: open claw setup
   # programs.openclaw = {
-  #   enable = true;
+  #   enable = false;
   #   excludeTools = [ "ffmpeg" "git" "ripgrep" ]; # tools you already have
-  #   config = {
-  #     gateway = {
-  #       mode = "local";
-  #       # auth = {
-  #       #   # token = "<gatewayToken>"; # or set OPENCLAW_GATEWAY_TOKEN env
-  #       # };
-  #     };
-  #     channels.telegram = {
-  #       tokenFile = "/run/secrets/OPENCLAW_TELEGRAM_BOT_TOKEN";
-  #       allowFrom = [ 7696196772 ];
-  #     };
-  #   };
+  #   # config = {
+  #   #   gateway = {
+  #   #     mode = "local";
+  #   #     # auth = {
+  #   #     #   # token = "<gatewayToken>"; # or set OPENCLAW_GATEWAY_TOKEN env
+  #   #     # };
+  #   #   };
+  #   #   channels.telegram = {
+  #   #     tokenFile = "/run/secrets/OPENCLAW_TELEGRAM_BOT_TOKEN";
+  #   #     allowFrom = [ 7696196772 ];
+  #   #   };
+  #   # };
   #   
   #   # instances.default = {
   #   #   enable = true;
@@ -54,6 +59,8 @@ in with constants;
   
   home.sessionVariables = {
     OPENCLAW_GATEWAY_TOKEN = "$(cat /run/secrets/OPENCLAW_GATEWAY_TOKEN)";
+    OPENCLAW_TELEGRAM_BOT_TOKEN = "$(cat /run/secrets/OPENCLAW_TELEGRAM_BOT_TOKEN)";
+    OPENCLAW_CONTAINER = "openclaw";
     # OPENCLAW_NIX_MODE = "1";
     MY_MACHINE_ID = "desktop";
   };

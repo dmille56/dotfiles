@@ -169,7 +169,7 @@ in with constants;
   users.users.dono = {
     isNormalUser = true;
     description = "dono";
-    extraGroups = [ "networkmanager" "wheel" "podman" ];
+    extraGroups = [ "networkmanager" "wheel" "podman" "openclaw" ];
     shell = pkgs.zsh;
     homeMode = "711";
   };
