@@ -66,8 +66,6 @@ in with constants;
           providers = {
             ollama = {
               baseUrl = "http://localhost:11434/";
-              # baseUrl = "http://127.0.0.1:1143/";
-              # api = "openai-completions";
               api = "ollama";
               models = [
                 {
