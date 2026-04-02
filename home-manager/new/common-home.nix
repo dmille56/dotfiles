@@ -249,6 +249,7 @@ in with constants;
     tree # :NOTE: added
     xclock # :NOTE: added
     postman # :NOTE: added
+    jq # :NOTE: added
   ];
 
   # :NOTE: programs config starts here

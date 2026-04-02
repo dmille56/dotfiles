@@ -30,7 +30,7 @@
     };
 
     nix-openclaw = {
-      url = "github:openclaw/nix-openclaw";
+      url = "github:openclaw/nix-openclaw/64d410666821866c565e048a4d07d6cf5d8e494e";
     };
     
   };

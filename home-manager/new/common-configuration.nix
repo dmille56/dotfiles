@@ -238,8 +238,8 @@ in with constants;
     isSystemUser = true;
     description = "openclaw daemon user";
     group = "openclaw";
-    createHome = false;
-    shell = "/run/current-system/sw/bin/false";
+    createHome = lib.mkDefault false;
+    shell = lib.mkDefault "/run/current-system/sw/bin/false";
   };
 
   # :NOTE: system-level SOPS secrets configuration

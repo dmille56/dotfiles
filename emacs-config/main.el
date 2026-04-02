@@ -256,6 +256,7 @@ _p_rev       _U_pper              _=_: upper/lower       _r_esolve
     ("Gc" "copilot chat" copilot-chat-display)
     ("Ga" "aider transient" aider-transient-menu)
     ("GA" "agent-shell" agent-shell)
+    ("Gl" "chatgpt load ollama models" chatgpt-shell-ollama-load-models)
     ]
    ["Help"
     ("h" "emacs help" help-for-help)
