@@ -97,6 +97,13 @@ in
     package = config.boot.kernelPackages.nvidiaPackages.stable;
   };
   
+  # :NOTE: workaround — nixos-rebuild switch doesn't re-run home-manager-dono.service
+  # if it's already in active (exited) state, so force a restart after every switch
+  system.activationScripts.restartHomeManager = {
+    deps = [ "users" ];
+    text = "systemctl restart home-manager-${constants.my-username}.service || true";
+  };
+
   # nixpkgs.config.permittedInsecurePackages = [
   #   "openclaw-2026.3.12"
   # ];
