@@ -82,9 +82,10 @@ in with constants;
         };
       };
       plugins = [
-        {
-          source = "github:openclaw/nix-steipete-tools/5f677a283da837cad26c1ce982d85ee181085fc6?dir=tools/summarize";
-        }
+        { source = "github:openclaw/nix-steipete-tools/5f677a283da837cad26c1ce982d85ee181085fc6?dir=tools/summarize"; }
+        { source = "github:openclaw/nix-steipete-tools/5f677a283da837cad26c1ce982d85ee181085fc6?dir=tools/gogcli"; }
+        { source = "github:openclaw/nix-steipete-tools/5f677a283da837cad26c1ce982d85ee181085fc6?dir=tools/goplaces"; }
+        # { source = "github:openclaw/nix-steipete-tools/5f677a283da837cad26c1ce982d85ee181085fc6?dir=tools/bird"; }
       ];
     };
 
@@ -94,6 +95,18 @@ in with constants;
     #   }
     # ];
   };
+  
+  # :NOTE: workaround for plugins
+  home.activation.fixOpenclawSkillSymlinks = lib.hm.dag.entryAfter ["writeBoundary"] ''
+    for skill_dir in ~/.openclaw/workspace/skills/*/; do
+      for skill_file in "$skill_dir"*; do
+        if [ -L "$skill_file" ]; then
+          target=$(readlink "$skill_file")
+          $DRY_RUN_CMD cp --remove-destination "$target" "$skill_file"
+        fi
+      done
+    done
+  '';
   
   systemd.user.services."openclaw-gateway" = {
     Service = {
