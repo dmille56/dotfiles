@@ -51,8 +51,8 @@ in with constants;
     # zsh
     networkmanager
     lorri
-    python313Packages.python-lsp-server
-    python313Packages.ruff
+    # python313Packages.python-lsp-server # :NOTE: don't include these python packages directly since it can cause environment mismatches
+    # python313Packages.ruff
     yaml-language-server
     typescript-language-server
     
@@ -250,6 +250,7 @@ in with constants;
     xclock # :NOTE: added
     postman # :NOTE: added
     jq # :NOTE: added
+    libreoffice # :NOTE: added
   ];
 
   # :NOTE: programs config starts here

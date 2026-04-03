@@ -86,6 +86,7 @@ in with constants;
         { source = "github:openclaw/nix-steipete-tools/5f677a283da837cad26c1ce982d85ee181085fc6?dir=tools/gogcli"; }
         { source = "github:openclaw/nix-steipete-tools/5f677a283da837cad26c1ce982d85ee181085fc6?dir=tools/goplaces"; }
         # { source = "github:openclaw/nix-steipete-tools/5f677a283da837cad26c1ce982d85ee181085fc6?dir=tools/bird"; }
+        { source = "github:dmille56/jobspy-plugin"; }
       ];
     };
 
