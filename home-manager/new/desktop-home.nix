@@ -86,7 +86,7 @@ in with constants;
         { source = "github:openclaw/nix-steipete-tools/5f677a283da837cad26c1ce982d85ee181085fc6?dir=tools/gogcli"; }
         { source = "github:openclaw/nix-steipete-tools/5f677a283da837cad26c1ce982d85ee181085fc6?dir=tools/goplaces"; }
         # { source = "github:openclaw/nix-steipete-tools/5f677a283da837cad26c1ce982d85ee181085fc6?dir=tools/bird"; }
-        { source = "github:dmille56/jobspy-plugin"; }
+        { source = "github:dmille56/jobspy-plugin/59bc54042b221b45c51216ec4ae7cf77e31d0902"; }
       ];
     };
 
@@ -122,9 +122,9 @@ in with constants;
   home.file.".xmobarrc".source = "${my-dotfile-dir}/xmobarrc";
   
   home.sessionVariables = {
-    OPENCLAW_GATEWAY_TOKEN = "$(cat /run/secrets/OPENCLAW_GATEWAY_TOKEN)";
-    OPENCLAW_TELEGRAM_BOT_TOKEN = "$(cat /run/secrets/OPENCLAW_TELEGRAM_BOT_TOKEN)";
-    TELEGRAM_BOT_TOKEN = "$(cat /run/secrets/OPENCLAW_TELEGRAM_BOT_TOKEN)";
+    # OPENCLAW_GATEWAY_TOKEN = "$(cat /run/secrets/OPENCLAW_GATEWAY_TOKEN)";
+    # OPENCLAW_TELEGRAM_BOT_TOKEN = "$(cat /run/secrets/OPENCLAW_TELEGRAM_BOT_TOKEN)";
+    # TELEGRAM_BOT_TOKEN = "$(cat /run/secrets/OPENCLAW_TELEGRAM_BOT_TOKEN)";
     # OPENCLAW_CONTAINER = "openclaw";
     OPENCLAW_NIX_MODE = "1";
     MY_MACHINE_ID = "desktop";
