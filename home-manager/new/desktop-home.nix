@@ -25,6 +25,8 @@ in with constants;
     ollama-cuda
     # openclawNoTools
     # openclaw-gateway
+    
+    nvtopPackages.nvidia
   ];
   
   # :NOTE: open claw setup
@@ -86,7 +88,7 @@ in with constants;
         { source = "github:openclaw/nix-steipete-tools/5f677a283da837cad26c1ce982d85ee181085fc6?dir=tools/gogcli"; }
         { source = "github:openclaw/nix-steipete-tools/5f677a283da837cad26c1ce982d85ee181085fc6?dir=tools/goplaces"; }
         # { source = "github:openclaw/nix-steipete-tools/5f677a283da837cad26c1ce982d85ee181085fc6?dir=tools/bird"; }
-        { source = "github:dmille56/jobspy-plugin/59bc54042b221b45c51216ec4ae7cf77e31d0902"; }
+        { source = "github:dmille56/jobspy-plugin/c992c9d01d11d82ceff55f0d182c16801aab67be"; }
       ];
     };
 
@@ -97,7 +99,18 @@ in with constants;
     # ];
   };
   
-  # :NOTE: workaround for plugins
+  # :NOTE: workaround for plugins - remove previously-copied skill files before HM writes symlinks
+  home.activation.clearOpenclawSkillFiles = lib.hm.dag.entryBefore ["checkLinkTargets"] ''
+    for skill_dir in ~/.openclaw/workspace/skills/*/; do
+      for skill_file in "$skill_dir"*; do
+        if [ -f "$skill_file" ] && [ ! -L "$skill_file" ]; then
+          $DRY_RUN_CMD rm -f "$skill_file"
+        fi
+      done
+    done
+  '';
+
+  # :NOTE: workaround for plugins - convert symlinks to real files so plugins work correctly
   home.activation.fixOpenclawSkillSymlinks = lib.hm.dag.entryAfter ["writeBoundary"] ''
     for skill_dir in ~/.openclaw/workspace/skills/*/; do
       for skill_file in "$skill_dir"*; do
