@@ -251,6 +251,7 @@ in with constants;
     postman # :NOTE: added
     jq # :NOTE: added
     libreoffice # :NOTE: added
+    drawiterm # :NOTE: added
   ];
 
   # :NOTE: programs config starts here

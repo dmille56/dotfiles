@@ -33,9 +33,15 @@
       url = "github:openclaw/nix-openclaw/64d410666821866c565e048a4d07d6cf5d8e494e";
     };
     
+
+    drawiterm = {
+      url = "github:dmille56/drawiterm";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    
   };
 
-  outputs = inputs@{ nixpkgs, home-manager, sops-nix, nix-openclaw, aider-chat-full-revision, ... }:
+  outputs = inputs@{ nixpkgs, home-manager, sops-nix, nix-openclaw, aider-chat-full-revision, drawiterm, ... }:
     let
       const = import (builtins.toPath "/home/dono/dotfiles/home-manager/new/common-constants.nix");
       my-machine-id = "desktop"; # desktop, laptop
@@ -81,6 +87,7 @@
               aider-overlay
               nix-openclaw.overlays.default
               openclaw-gateway-fixed-overlay
+              drawiterm.overlays.default
             ]; 
           }
 
