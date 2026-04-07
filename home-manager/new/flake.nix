@@ -32,6 +32,8 @@
     nix-openclaw = {
       url = "github:openclaw/nix-openclaw/64d410666821866c565e048a4d07d6cf5d8e494e";
     };
+    
+    nix-steipete-tools.url = "github:openclaw/nix-steipete-tools";
 
     drawiterm = {
       url = "github:dmille56/drawiterm";
@@ -51,6 +53,10 @@
 
       aider-overlay = final: prev: {
         aider-chat-full = aider-chat-full-revision.legacyPackages.${prev.system}.aider-chat-full;
+      };
+
+      gogcli-overlay = final: prev: {
+        gogcli = inputs.nix-steipete-tools.packages.${prev.system}.gogcli;
       };
       
       openclaw-gateway-fixed-overlay = final: prev: {
@@ -87,6 +93,7 @@
               nix-openclaw.overlays.default
               openclaw-gateway-fixed-overlay
               drawiterm.overlays.default
+              gogcli-overlay
             ]; 
           }
 

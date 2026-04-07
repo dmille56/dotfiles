@@ -156,6 +156,7 @@ in with constants;
     (import ../../nix/my-tts.nix)
     (import ../../nix/trayer-padding-icon.nix { inherit stdenv; })
     (import ../../nix/fireplace.nix { inherit lib stdenv fetchgit ncurses5; })
+    (import ../../nix/glow-org.nix { inherit pkgs; })
 
     cmatrix
     neo

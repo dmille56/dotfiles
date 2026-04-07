@@ -298,6 +298,11 @@ in with constants;
         group = "openclaw";
         mode = "0440";
       };
+      OPENCLAW_GOOGLE_PLACES_KEY = {
+        owner = "openclaw";
+        group = "openclaw";
+        mode = "0440";
+      };
     };
 
     templates."openclaw-gateway-env" = {
@@ -307,6 +312,7 @@ in with constants;
         GOOGLE_API_KEY=${config.sops.placeholder.GOOGLE_API_KEY}
         OPENCLAW_GATEWAY_TOKEN=${config.sops.placeholder.OPENCLAW_GATEWAY_TOKEN}
         TELEGRAM_BOT_TOKEN=${config.sops.placeholder.OPENCLAW_TELEGRAM_BOT_TOKEN}
+        GOOGLE_PLACES_API_KEY: ${config.sops.placeholder.OPENCLAW_GOOGLE_PLACES_KEY}
         OPENCLAW_NIX_MODE=1
       '';
       owner = "openclaw";
