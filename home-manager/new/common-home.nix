@@ -457,6 +457,9 @@ in with constants;
       neogit
       golden-ratio
       lazygit-nvim
+      (nvim-treesitter.withPlugins (_: [
+        (nvim-treesitter.passthru.grammarToPlugin pkgs.tree-sitter-grammars.tree-sitter-org-nvim)
+      ])) # for orgmode
       orgmode
 
       # completion
@@ -642,6 +645,7 @@ in with constants;
       vim.lsp.enable('ruff')
       vim.lsp.enable('ts_ls')
       vim.lsp.enable('hls')
+      vim.lsp.enable('org')
 
       -- Setup AI codecompanion
       require("codecompanion").setup({
