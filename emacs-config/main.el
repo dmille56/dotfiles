@@ -1378,7 +1378,13 @@ _p_rev       _U_pper              _=_: upper/lower       _r_esolve
         (auth-source-pass-get 'secret "GOOGLE_GEMINI_KEY")))))
 
 ;; :TODO: make sure this is working correctly
-(use-package agent-shell)
+(use-package agent-shell
+  :init
+  (setq agent-shell-google-authentication
+        (agent-shell-google-make-authentication
+         :api-key (or (getenv "GOOGLE_API_KEY")
+                      (user-error "GOOGLE_API_KEY is not set"))))
+  )
 
 (use-package org-ai
   :straight (:type git :host github :repo "rksm/org-ai" :local-repo "org-ai" :files ("*.el" "README.md" "snippets"))

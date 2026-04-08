@@ -459,9 +459,11 @@ in with constants;
       lazygit-nvim
 
       # orgmode plugins
-      (nvim-treesitter.withPlugins (_: [
-        (nvim-treesitter.passthru.grammarToPlugin pkgs.tree-sitter-grammars.tree-sitter-org-nvim)
-      ]))
+      nvim-treesitter
+      (pkgs.runCommand "tree-sitter-org-plugin" {} ''
+        mkdir -p $out/parser
+        cp ${pkgs.tree-sitter-grammars.tree-sitter-org-nvim}/parser $out/parser/org.so
+      '')
       orgmode
 
       # completion

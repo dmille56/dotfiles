@@ -15,9 +15,14 @@
   description = "NixOS Flake";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+    nixpkgs = {
+      url = "github:nixos/nixpkgs/nixpkgs-unstable";
+    };
 
     aider-chat-full-revision.url = "github:NixOS/nixpkgs/2b69405f19c7004b832a7410c8aefa9d859feea3";
+    
+    # :NOTE: we're pinning ollama because I'm getting tired of updating everytime i update nixpkgs lol
+    ollama-revision.url = "github:NixOS/nixpkgs/16c7794d0a28b5a37904d55bcca36003b9109aaa";
 
     home-manager = {
       url = "github:nix-community/home-manager";
@@ -42,7 +47,7 @@
     
   };
 
-  outputs = inputs@{ nixpkgs, home-manager, sops-nix, nix-openclaw, aider-chat-full-revision, drawiterm, ... }:
+  outputs = inputs@{ nixpkgs, home-manager, sops-nix, nix-openclaw, aider-chat-full-revision, ollama-revision, drawiterm, ... }:
     let
       const = import (builtins.toPath "/home/dono/dotfiles/home-manager/new/common-constants.nix");
       my-machine-id = "desktop"; # desktop, laptop
@@ -58,6 +63,11 @@
       gogcli-overlay = final: prev: {
         gogcli = inputs.nix-steipete-tools.packages.${prev.system}.gogcli;
       };
+      
+      # :TODO: fix ollama overlay still
+      # ollama-overlay = final: prev: {
+      #   ollama-cuda = ollama-revision.legacyPackages.${prev.system}.ollama-cuda;
+      # };
       
       openclaw-gateway-fixed-overlay = final: prev: {
         openclaw-gateway = final.runCommand "openclaw-gateway-fixed" {
@@ -84,7 +94,6 @@
       
     in
     {
-
       nixosConfigurations.${my-host-name} = nixpkgs.lib.nixosSystem {
         modules = [
           { 
@@ -94,6 +103,7 @@
               openclaw-gateway-fixed-overlay
               drawiterm.overlays.default
               gogcli-overlay
+              # ollama-overlay
             ]; 
           }
 
