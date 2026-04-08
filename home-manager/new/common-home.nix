@@ -457,9 +457,11 @@ in with constants;
       neogit
       golden-ratio
       lazygit-nvim
+
+      # orgmode plugins
       (nvim-treesitter.withPlugins (_: [
         (nvim-treesitter.passthru.grammarToPlugin pkgs.tree-sitter-grammars.tree-sitter-org-nvim)
-      ])) # for orgmode
+      ]))
       orgmode
 
       # completion
