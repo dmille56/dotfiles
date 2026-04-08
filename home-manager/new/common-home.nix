@@ -462,7 +462,16 @@ in with constants;
       nvim-treesitter
       (pkgs.runCommand "tree-sitter-org-plugin" {} ''
         mkdir -p $out/parser
-        cp ${pkgs.tree-sitter-grammars.tree-sitter-org-nvim}/parser $out/parser/org.so
+        cp ${pkgs.tree-sitter.buildGrammar {
+          language = "org";
+          version = "1.0.0";
+          src = pkgs.fetchFromGitHub {
+            owner = "nvim-orgmode";
+            repo = "tree-sitter-org";
+            rev = "master";
+            sha256 = "sha256-g5TZ3XTj6mUbshhJlfoKw0blr1u3qblW93cHqVucISM=";
+          };
+        }}/parser $out/parser/org.so
       '')
       orgmode
 
@@ -484,13 +493,14 @@ in with constants;
     extraConfig = ''
     set nocompatible
 
-    syntax enable
+    " :NOTE: disabled this for now because caused issues with orgmode
+    "syntax enable
+
 
     "get rid of annoyances
     set noswapfile
     set nobackup
     set nowritebackup
-
     set ignorecase          " Make searching case insensitive
     set smartcase           " ... unless the query has capital letters.
     set gdefault            " Use 'g' flag by default with :s/foo/bar/.
