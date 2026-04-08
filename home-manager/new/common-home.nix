@@ -496,7 +496,6 @@ in with constants;
     " :NOTE: disabled this for now because caused issues with orgmode
     "syntax enable
 
-
     "get rid of annoyances
     set noswapfile
     set nobackup
