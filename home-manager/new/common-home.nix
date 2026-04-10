@@ -253,6 +253,7 @@ in with constants;
     jq # :NOTE: added
     libreoffice # :NOTE: added
     drawiterm # :NOTE: added
+    alsa-utils # :NOTE: added
   ];
 
   # :NOTE: programs config starts here
@@ -350,6 +351,7 @@ in with constants;
       tmux-fzf
       jump
       urlview
+      fuzzback
       tmux-toggle-popup
       {
         plugin = dracula;
@@ -362,6 +364,9 @@ in with constants;
     ]);
 
     extraConfig = lib.mkDefault ''
+        set -g @urlviewkey 'A'
+        set -g @fuzzback-bind S
+
         unbind C-b
         set-option -g prefix C-a
         bind-key C-a send-prefix
