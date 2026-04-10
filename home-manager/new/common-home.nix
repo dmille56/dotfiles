@@ -123,6 +123,8 @@ in with constants;
     # ai
     aider-chat-full
     claude-code
+    opencode
+
     gemini-cli
     codex-acp
     claude-agent-acp
