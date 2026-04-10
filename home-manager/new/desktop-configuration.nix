@@ -26,6 +26,9 @@ in
   };
 
   networking.firewall.allowedTCPPorts = [ 50022 ];
+  
+  # :NOTE: enable tailscale
+  services.tailscale.enable = true;
 
   # Scale everything on X11 (96 is default). Try 144 or 192.
   services.xserver.dpi = 144;

@@ -16,7 +16,7 @@ in with constants;
     zoom-us # :NOTE: added
     remmina # :NOTE: added
     xmessage # :NOTE: added
-    x2goclient # :NOTE: added
+    tailscale # :NOTE: added
 
     kdePackages.dolphin
     nautilus

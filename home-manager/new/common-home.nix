@@ -124,6 +124,7 @@ in with constants;
     aider-chat-full
     claude-code
     opencode
+    codex
 
     gemini-cli
     codex-acp
