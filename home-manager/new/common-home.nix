@@ -350,6 +350,7 @@ in with constants;
       tmux-fzf
       jump
       urlview
+      tmux-toggle-popup
       {
         plugin = dracula;
         extraConfig = ''
@@ -394,6 +395,9 @@ in with constants;
 
         unbind-key -T prefix G
         bind-key -T prefix G display-popup -E -T "Lazygit" -w 90% -h 90% -d "#{pane_current_path}" -- 'lazygit'
+
+        unbind-key -T prefix \\
+        bind-key -T prefix \\ run "#{@popup-toggle} -Ed'##{pane_current_path}' -w85% -h85%"
     '';
   };
 

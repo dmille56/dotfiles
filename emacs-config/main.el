@@ -1,4 +1,4 @@
-;;; package --- Summary
+;;; package --- Summary -*- lexical-binding: t; -*-
 
 ;;; Commentary:
 ;;; Emacs config file :smile:👍💪
@@ -1396,6 +1396,8 @@ _p_rev       _U_pper              _=_: upper/lower       _r_esolve
 
 (use-package agent-shell-workspace
   :vc (:url "https://github.com/gveres/agent-shell-workspace")
+  :init
+  (evil-set-initial-state 'agent-shell-workspace-sidebar-mode 'emacs)
   :ensure t
   :after agent-shell)
   ;; :bind (:map agent-shell-command-map ("w" . agent-shell-workspace-toggle)))
