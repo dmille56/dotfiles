@@ -830,6 +830,12 @@ in with constants;
 
     [window]
     opacity = 0.8
+
+    [keyboard]
+    bindings = [
+    { key = "+", mods = "Control", action = "IncreaseFontSize" },
+    { key = "-", mods = "Control", action = "DecreaseFontSize" },
+    ] 
   '';
   
   home.file.".config/spotifyd/spotifyd.conf".text = lib.mkDefault ''
