@@ -375,6 +375,8 @@ in with constants;
         set -g @urlviewkey 'A'
         set -g @fuzzback-bind S
 
+        set -g extended-keys on
+
         unbind C-b
         set-option -g prefix C-a
         bind-key C-a send-prefix
