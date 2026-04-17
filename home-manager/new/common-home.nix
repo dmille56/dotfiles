@@ -100,6 +100,9 @@ in with constants;
     
     # rust
     cargo
+    
+    # node
+    nodejs
 
     gnupg
     pass
@@ -804,6 +807,13 @@ in with constants;
     '';
     executable = true;
   };
+  
+  # # :TODO: implement this
+  # home.file.".config/opencode/opencode.json".text = builtins.toJSON {
+  #   plugin = [
+  #     "opentmux"
+  #   ];
+  # };
 
   home.file.".config/kak/kakrc".text = lib.mkDefault ''
     colorscheme dracula
@@ -1009,6 +1019,7 @@ in with constants;
     OPENAI_API_KEY = lib.mkDefault "$(cat /run/secrets/OPENAI_API_KEY)";
     GOOGLE_API_KEY = lib.mkDefault "$(cat /run/secrets/GOOGLE_API_KEY)";
     ANTHROPIC_API_KEY = lib.mkDefault "$(cat /run/secrets/ANTHROPIC_API_KEY)";
+    OPENROUTER_API_KEY = lib.mkDefault "$(cat /run/secrets/OPENROUTER_API_KEY)";
     OPENAI_API_MODEL = lib.mkDefault "gpt-5.4-mini";
     AIDER_MODEL = lib.mkDefault "gpt-5.4-mini";
     AIDER_GIT_COMMIT_VERIFY = lib.mkDefault "true";

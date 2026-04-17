@@ -255,8 +255,8 @@ _p_rev       _U_pper              _=_: upper/lower       _r_esolve
     ("GC" "chatgpt write git commit" chatgpt-shell-write-git-commit)
     ("Gc" "copilot chat" copilot-chat-display)
     ("Ga" "aider transient" aider-transient-menu)
-    ("GA" "agent-shell" agent-shell)
-    ("Gw" "agent-shell-workspace-toggle" agent-shell-workspace-toggle)
+    ;; ("GA" "agent-shell" agent-shell)
+    ;; ("Gw" "agent-shell-workspace-toggle" agent-shell-workspace-toggle)
     ("Gl" "chatgpt load ollama models" chatgpt-shell-ollama-load-models)
     ]
    ["Help"
@@ -1361,10 +1361,14 @@ _p_rev       _U_pper              _=_: upper/lower       _r_esolve
 (use-package pcsv :defer)
 
 (use-package chatgpt-shell
-  :defines chatgpt-shell-model-version
+  :defines chatgpt-shell-model-version chatgpt-shell-openrouter-key
   :defer
   :ensure t
+  :init
+  (setq chatgpt-shell-openrouter-key (getenv "OPENROUTER_API_KEY"))
   :config
+  (let ((chatgpt-shell-root-path (expand-file-name "var/shell-maker" user-emacs-directory)))
+    (make-directory chatgpt-shell-root-path t))
   (setq chatgpt-shell-model-version "gpt-5-mini")
   :custom
   (
@@ -1378,29 +1382,31 @@ _p_rev       _U_pper              _=_: upper/lower       _r_esolve
     (lambda ()
         (auth-source-pass-get 'secret "GOOGLE_GEMINI_KEY")))))
 
-(use-package agent-shell
-  :init
-  (setq agent-shell-google-authentication
-        (agent-shell-google-make-authentication
-         :api-key (or (getenv "GOOGLE_API_KEY")
-                      (user-error "GOOGLE_API_KEY is not set"))))
-  (setq agent-shell-anthropic-authentication
-        (agent-shell-anthropic-make-authentication
-         :api-key (or (getenv "ANTHROPIC_API_KEY")
-                      (user-error "ANTHROPIC_API_KEY is not set"))))
-  (setq agent-shell-openai-authentication
-        (agent-shell-openai-make-authentication
-         :api-key (or (getenv "OPENAI_API_KEY")
-                      (user-error "OPENAI_API_KEY is not set"))))
-  )
-
-(use-package agent-shell-workspace
-  :vc (:url "https://github.com/gveres/agent-shell-workspace")
-  :init
-  (evil-set-initial-state 'agent-shell-workspace-sidebar-mode 'emacs)
-  :ensure t
-  :after agent-shell)
-  ;; :bind (:map agent-shell-command-map ("w" . agent-shell-workspace-toggle)))
+;; (use-package agent-shell
+;;   :defer
+;;   :ensure t
+;;   :init
+;;   (setq agent-shell-google-authentication
+;;         (agent-shell-google-make-authentication
+;;          :api-key (or (getenv "GOOGLE_API_KEY")
+;;                       (user-error "GOOGLE_API_KEY is not set"))))
+;;   (setq agent-shell-anthropic-authentication
+;;         (agent-shell-anthropic-make-authentication
+;;          :api-key (or (getenv "ANTHROPIC_API_KEY")
+;;                       (user-error "ANTHROPIC_API_KEY is not set"))))
+;;   (setq agent-shell-openai-authentication
+;;         (agent-shell-openai-make-authentication
+;;          :api-key (or (getenv "OPENAI_API_KEY")
+;;                       (user-error "OPENAI_API_KEY is not set"))))
+;;   )
+;; 
+;; (use-package agent-shell-workspace
+;;   :vc (:url "https://github.com/gveres/agent-shell-workspace")
+;;   :init
+;;   (evil-set-initial-state 'agent-shell-workspace-sidebar-mode 'emacs)
+;;   :ensure t
+;;   :after agent-shell)
+;;   ;; :bind (:map agent-shell-command-map ("w" . agent-shell-workspace-toggle)))
 
 (use-package org-ai
   :straight (:type git :host github :repo "rksm/org-ai" :local-repo "org-ai" :files ("*.el" "README.md" "snippets"))

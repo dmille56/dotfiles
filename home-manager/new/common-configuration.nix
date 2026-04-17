@@ -273,6 +273,11 @@ in with constants;
         group = "users";
         mode = "0440";
       };
+      OPENROUTER_API_KEY = {
+        owner = my-username;
+        group = "users";
+        mode = "0440";
+      };
       GIT_NAME = {
         owner = my-username;
         group = "users";
@@ -310,6 +315,7 @@ in with constants;
         OPENAI_API_KEY=${config.sops.placeholder.OPENAI_API_KEY}
         ANTHROPIC_API_KEY=${config.sops.placeholder.ANTHROPIC_API_KEY}
         GOOGLE_API_KEY=${config.sops.placeholder.GOOGLE_API_KEY}
+        OPENROUTER_API_KEY=${config.sops.placeholder.OPENROUTER_API_KEY}
         OPENCLAW_GATEWAY_TOKEN=${config.sops.placeholder.OPENCLAW_GATEWAY_TOKEN}
         TELEGRAM_BOT_TOKEN=${config.sops.placeholder.OPENCLAW_TELEGRAM_BOT_TOKEN}
         GOOGLE_PLACES_API_KEY: ${config.sops.placeholder.OPENCLAW_GOOGLE_PLACES_KEY}
