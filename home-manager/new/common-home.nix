@@ -129,6 +129,7 @@ in with constants;
     
     codex
 
+    llm-agents.tuicr
     llm-agents.droid
     llm-agents.pi
     gemini-cli
