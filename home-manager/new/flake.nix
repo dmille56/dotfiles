@@ -39,15 +39,22 @@
     };
     
     nix-steipete-tools.url = "github:openclaw/nix-steipete-tools";
+    
+    llm-agents.url = "github:numtide/llm-agents.nix";
 
     drawiterm = {
       url = "github:dmille56/drawiterm";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     
+    opentmux = {
+      url = "github:dmille56/opentmux";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    
   };
 
-  outputs = inputs@{ nixpkgs, home-manager, sops-nix, nix-openclaw, aider-chat-full-revision, ollama-revision, drawiterm, ... }:
+  outputs = inputs@{ nixpkgs, home-manager, sops-nix, nix-openclaw, aider-chat-full-revision, ollama-revision, drawiterm, llm-agents, opentmux, ... }:
     let
       const = import (builtins.toPath "/home/dono/dotfiles/home-manager/new/common-constants.nix");
       my-machine-id = "desktop"; # desktop, laptop
@@ -104,6 +111,8 @@
               drawiterm.overlays.default
               gogcli-overlay
               # ollama-overlay
+              opentmux.overlays.default
+              llm-agents.overlays.default
             ]; 
           }
 

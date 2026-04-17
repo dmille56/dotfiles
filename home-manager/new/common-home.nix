@@ -123,9 +123,14 @@ in with constants;
     # ai
     aider-chat-full
     claude-code
+
     opencode
+    opentmux
+    
     codex
 
+    llm-agents.droid
+    llm-agents.pi
     gemini-cli
     codex-acp
     claude-agent-acp
