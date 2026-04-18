@@ -88,7 +88,7 @@ in with constants;
         { source = "github:openclaw/nix-steipete-tools/5f677a283da837cad26c1ce982d85ee181085fc6?dir=tools/gogcli"; }
         { source = "github:openclaw/nix-steipete-tools/5f677a283da837cad26c1ce982d85ee181085fc6?dir=tools/goplaces"; }
         # { source = "github:openclaw/nix-steipete-tools/5f677a283da837cad26c1ce982d85ee181085fc6?dir=tools/bird"; }
-        { source = "github:dmille56/jobspy-plugin/c992c9d01d11d82ceff55f0d182c16801aab67be"; }
+        { source = "github:dmille56/jobspy-plugin/a858eb0324ace1f0de7ab65f5a4e7d8ecd6947e3"; }
       ];
     };
 
