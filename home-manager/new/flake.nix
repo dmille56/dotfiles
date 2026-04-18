@@ -52,9 +52,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     
+    jobspy-plugin.url = "github:dmille56/jobspy-plugin/opencode";
   };
 
-  outputs = inputs@{ nixpkgs, home-manager, sops-nix, nix-openclaw, aider-chat-full-revision, ollama-revision, drawiterm, llm-agents, opentmux, ... }:
+  outputs = inputs@{ nixpkgs, home-manager, sops-nix, nix-openclaw, aider-chat-full-revision, ollama-revision, drawiterm, llm-agents, opentmux, jobspy-plugin, ... }:
     let
       const = import (builtins.toPath "/home/dono/dotfiles/home-manager/new/common-constants.nix");
       my-machine-id = "desktop"; # desktop, laptop
@@ -113,6 +114,7 @@
               # ollama-overlay
               opentmux.overlays.default
               llm-agents.overlays.default
+              jobspy-plugin.overlays.default
             ]; 
           }
 
