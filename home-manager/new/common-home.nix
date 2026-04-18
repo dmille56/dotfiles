@@ -238,6 +238,7 @@ in with constants;
 
     streamlink
 
+    vbam
     # dolphin-emu
     # mupen64plus
     # snes9x-gtk
