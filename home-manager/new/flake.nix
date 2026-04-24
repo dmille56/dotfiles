@@ -52,7 +52,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     
-    jobspy-plugin.url = "github:dmille56/jobspy-plugin/opencode";
+    jobspy-plugin.url = "github:dmille56/jobspy-plugin";
   };
 
   outputs = inputs@{ nixpkgs, home-manager, sops-nix, nix-openclaw, aider-chat-full-revision, ollama-revision, drawiterm, llm-agents, opentmux, jobspy-plugin, ... }:

@@ -1,6 +1,11 @@
-{ pkgs, config, lib, ... }:
-let 
-  constants = import ./common-constants.nix; 
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}:
+let
+  constants = import ./common-constants.nix;
   sweetIconsRepo = builtins.fetchGit {
     url = "https://github.com/EliverLara/Sweet-folders";
     rev = "40a5d36e50437901c7eaa1119bb9ae8006e2fe5c";
@@ -9,7 +14,8 @@ let
     url = "https://github.com/dracula/gtk";
     rev = "2618a035409d65e0a1e4da1909ae1b5fd6a796fd";
   };
-in with constants;
+in
+with constants;
 {
   # :NOTE: misc settings
 
@@ -45,9 +51,12 @@ in with constants;
     curl
     git
     git-credential-oauth
-    ((emacsPackagesFor emacs-gtk).emacsWithPackages
-      (epkgs: [ epkgs.vterm epkgs.w3m epkgs.jinx ]))
-    eask-cli #emacs eask
+    ((emacsPackagesFor emacs-gtk).emacsWithPackages (epkgs: [
+      epkgs.vterm
+      epkgs.w3m
+      epkgs.jinx
+    ]))
+    eask-cli # emacs eask
     # zsh
     networkmanager
     lorri
@@ -55,11 +64,11 @@ in with constants;
     # python313Packages.ruff
     yaml-language-server
     typescript-language-server
-    
+
     # fonts
     emacs-all-the-icons-fonts
     font-awesome
-    
+
     # minimal nerd fonts
     nerd-fonts.symbols-only
     nerd-fonts.meslo-lg
@@ -83,7 +92,7 @@ in with constants;
     nerd-fonts.sauce-code-pro
     nerd-fonts.iosevka-term-slab
     nerd-fonts.fira-mono
-    
+
     # ubuntu font
     ubuntu-classic
 
@@ -97,10 +106,10 @@ in with constants;
     # haskell
     stack
     ormolu
-    
+
     # rust
     cargo
-    
+
     # node
     nodejs
 
@@ -110,7 +119,7 @@ in with constants;
     sops
 
     bat
-    eza #exa
+    eza # exa
     fd
     bottom
     delta
@@ -134,12 +143,12 @@ in with constants;
     codex-acp
     claude-agent-acp
     # ollama
-    
+
     llm-agents.rtk
     llm-agents.tuicr
     opentmux # :NOTE: for opencode
     jobspy-plugin
-    
+
     sqlite-interactive
 
     tuir # rtv
@@ -152,12 +161,12 @@ in with constants;
     ytfzf
     piper-tts
     # csvtool
-    ueberzugpp 
+    ueberzugpp
     lazygit
-    git-repo-updater #gitup
+    git-repo-updater # gitup
     fastfetch
 
-    # (import ../../nix/twitchy.nix) # :TODO: fix 
+    # (import ../../nix/twitchy.nix) # :TODO: fix
     # (import ../../nix/twitchy-rofi-script.nix)
     (import ../../nix/search-ddg-script.nix)
     # (import ../nix/twitchy-play-emacs.nix)
@@ -167,7 +176,14 @@ in with constants;
     (import ../../nix/rofi-buku.nix)
     (import ../../nix/my-tts.nix)
     (import ../../nix/trayer-padding-icon.nix { inherit stdenv; })
-    (import ../../nix/fireplace.nix { inherit lib stdenv fetchgit ncurses5; })
+    (import ../../nix/fireplace.nix {
+      inherit
+        lib
+        stdenv
+        fetchgit
+        ncurses5
+        ;
+    })
     (import ../../nix/glow-org.nix { inherit pkgs; })
 
     cmatrix
@@ -208,7 +224,7 @@ in with constants;
     playerctl
 
     # rofi
-    rofi-bluetooth 
+    rofi-bluetooth
     rofi-power-menu
     yad # :NOTE: to make sys tray program for rofi-power-menu
     wmctrl # :NOTE: to make rofi-games work with steam properly
@@ -218,7 +234,7 @@ in with constants;
 
     gmrun
     dmenu
-    
+
     #video editing
     # shotcut
 
@@ -255,7 +271,7 @@ in with constants;
     scrcpy
     redshift
     xmodmap
-    
+
     sway-launcher-desktop # :NOTE: added
     clock-rs # :NOTE: added
     gitu # :NOTE: added
@@ -288,14 +304,17 @@ in with constants;
 
   programs.rofi = {
     enable = lib.mkDefault true;
-    plugins = lib.mkDefault (with pkgs; [ 
-      rofi-emoji
-      rofi-games
-    ]);
+    plugins = lib.mkDefault (
+      with pkgs;
+      [
+        rofi-emoji
+        rofi-games
+      ]
+    );
     # theme = "glue_pro_blue"; #good fallback theme that comes installed with rofi
     theme = lib.mkDefault "dracula-theme";
   };
-  
+
   programs.delta = {
     enable = lib.mkDefault true;
     enableGitIntegration = lib.mkDefault true;
@@ -320,7 +339,7 @@ in with constants;
       };
       alias = {
         st = lib.mkDefault "status";
-        ci = lib.mkDefault "commit"; 
+        ci = lib.mkDefault "commit";
         br = lib.mkDefault "branch";
         co = lib.mkDefault "checkout";
       };
@@ -358,66 +377,69 @@ in with constants;
   programs.tmux = {
     enable = lib.mkDefault true;
     clock24 = lib.mkDefault true;
-    plugins = lib.mkDefault (with pkgs.tmuxPlugins; [
-      sensible
-      yank
-      tmux-fzf
-      jump
-      urlview
-      fuzzback
-      tmux-toggle-popup
-      {
-        plugin = dracula;
-        extraConfig = ''
+    plugins = lib.mkDefault (
+      with pkgs.tmuxPlugins;
+      [
+        sensible
+        yank
+        tmux-fzf
+        jump
+        urlview
+        fuzzback
+        tmux-toggle-popup
+        {
+          plugin = dracula;
+          extraConfig = ''
             set -g @dracula-show-battery false
             set -g @dracula-show-powerline true
             set -g @dracula-refresh-rate 10
-        '';
-      }
-    ]);
+          '';
+        }
+      ]
+    );
 
     extraConfig = lib.mkDefault ''
-        set -g @urlviewkey 'A'
-        set -g @fuzzback-bind S
+      set -g @urlviewkey 'A'
+      set -g @fuzzback-bind S
 
-        set -g extended-keys on
+      set -g extended-keys on
 
-        unbind C-b
-        set-option -g prefix C-a
-        bind-key C-a send-prefix
+      unbind C-b
+      set-option -g prefix C-a
+      bind-key C-a send-prefix
 
-        #map F5 to cycle to next window
-        bind -n F5 next-window
+      #map F5 to cycle to next window
+      bind -n F5 next-window
 
-        #map F6 to cycle to next pane
-        bind -n F6 select-pane -t :.+
+      #map F6 to cycle to next pane
+      bind -n F6 select-pane -t :.+
 
-        set -g mouse on
+      set -g mouse on
 
-        # Start windows and panes at 1, not 0
-        set -g base-index 1
-        setw -g pane-base-index 1
+      # Start windows and panes at 1, not 0
+      set -g base-index 1
+      setw -g pane-base-index 1
 
-        # Make % (horizontal split) and " (vertical split) bindings split the window and cd to the current path
-        bind % split-window -h -c "#{pane_current_path}"
-        bind '"' split-window -v -c "#{pane_current_path}"
+      # Make % (horizontal split) and " (vertical split) bindings split the window and cd to the current path
+      bind % split-window -h -c "#{pane_current_path}"
+      bind '"' split-window -v -c "#{pane_current_path}"
 
-        # Open a popup, run sway-launcher-desktop inside it, and close when it exits
-        unbind-key -T prefix p
-        # bind-key -T prefix p display-popup -E -T "Launcher" -w 80% -h 60% -d "#{pane_current_path}" -- 'sway-launcher-desktop'
-        bind-key  -T prefix p display-popup -E -w 80% -h 60% -- 'env SHELL="$HOME/.local/bin/sh-mute" sway-launcher-desktop'
+      # Open a popup, run sway-launcher-desktop inside it, and close when it exits
+      unbind-key -T prefix p
+      # bind-key -T prefix p display-popup -E -T "Launcher" -w 80% -h 60% -d "#{pane_current_path}" -- 'sway-launcher-desktop'
+      bind-key  -T prefix p display-popup -E -w 80% -h 60% -- 'env SHELL="$HOME/.local/bin/sh-mute" sway-launcher-desktop'
 
-        unbind-key -T prefix t
-        bind-key -T prefix t display-popup -E -T "Clock" -w 80% -h 60% -d "#{pane_current_path}" -- 'clock-rs'
+      unbind-key -T prefix t
+      bind-key -T prefix t display-popup -E -T "Clock" -w 80% -h 60% -d "#{pane_current_path}" -- 'clock-rs'
 
-        unbind-key -T prefix g
-        bind-key -T prefix g display-popup -E -T "Gitu" -w 90% -h 90% -d "#{pane_current_path}" -- 'gitu'
+      unbind-key -T prefix g
+      bind-key -T prefix g display-popup -E -T "Gitu" -w 90% -h 90% -d "#{pane_current_path}" -- 'gitu'
 
-        unbind-key -T prefix G
-        bind-key -T prefix G display-popup -E -T "Lazygit" -w 90% -h 90% -d "#{pane_current_path}" -- 'lazygit'
+      unbind-key -T prefix G
+      bind-key -T prefix G display-popup -E -T "Lazygit" -w 90% -h 90% -d "#{pane_current_path}" -- 'lazygit'
 
-        unbind-key -T prefix \\
-        bind-key -T prefix \\ run "#{@popup-toggle} -Ed'##{pane_current_path}' -w85% -h85%"
+      unbind-key -T prefix \\
+      bind-key -T prefix \\ run "#{@popup-toggle} -Ed'##{pane_current_path}' -w85% -h85%"
     '';
   };
 
@@ -427,9 +449,9 @@ in with constants;
     #autosuggestion.enable = true;
 
     initContent = ''
-     if [ -e ~/.nix-profile/etc/profile.d/nix.sh ]; then . ~/.nix-profile/etc/profile.d/nix.sh; fi
-     source ${pkgs.zsh-syntax-highlighting}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-   '';
+      if [ -e ~/.nix-profile/etc/profile.d/nix.sh ]; then . ~/.nix-profile/etc/profile.d/nix.sh; fi
+      source ${pkgs.zsh-syntax-highlighting}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+    '';
 
     oh-my-zsh = {
       enable = true;
@@ -484,19 +506,26 @@ in with constants;
 
       # orgmode plugins
       nvim-treesitter
-      (pkgs.runCommand "tree-sitter-org-plugin" {} ''
-        mkdir -p $out/parser
-        cp ${pkgs.tree-sitter.buildGrammar {
-          language = "org";
-          version = "1.0.0";
-          src = pkgs.fetchFromGitHub {
-            owner = "nvim-orgmode";
-            repo = "tree-sitter-org";
-            rev = "master";
-            sha256 = "sha256-g5TZ3XTj6mUbshhJlfoKw0blr1u3qblW93cHqVucISM=";
-          };
-        }}/parser $out/parser/org.so
-      '')
+      (pkgs.runCommand "tree-sitter-org-plugin"
+        {
+          pname = "tree-sitter-org-plugin";
+        }
+        ''
+          mkdir -p $out/parser
+          cp ${
+            pkgs.tree-sitter.buildGrammar {
+              language = "org";
+              version = "1.0.0";
+              src = pkgs.fetchFromGitHub {
+                owner = "nvim-orgmode";
+                repo = "tree-sitter-org";
+                rev = "master";
+                sha256 = "sha256-g5TZ3XTj6mUbshhJlfoKw0blr1u3qblW93cHqVucISM=";
+              };
+            }
+          }/parser $out/parser/org.so
+        ''
+      )
       orgmode
 
       # completion
@@ -507,7 +536,7 @@ in with constants;
       nvim-cmp
       cmp-vsnip
       vim-vsnip
-      
+
       #ai
       codecompanion-nvim
 
@@ -515,185 +544,185 @@ in with constants;
     ];
 
     extraConfig = ''
-    set nocompatible
+      set nocompatible
 
-    " :NOTE: disabled this for now because caused issues with orgmode
-    "syntax enable
+      " :NOTE: disabled this for now because caused issues with orgmode
+      "syntax enable
 
-    "get rid of annoyances
-    set noswapfile
-    set nobackup
-    set nowritebackup
-    set ignorecase          " Make searching case insensitive
-    set smartcase           " ... unless the query has capital letters.
-    set gdefault            " Use 'g' flag by default with :s/foo/bar/.
+      "get rid of annoyances
+      set noswapfile
+      set nobackup
+      set nowritebackup
+      set ignorecase          " Make searching case insensitive
+      set smartcase           " ... unless the query has capital letters.
+      set gdefault            " Use 'g' flag by default with :s/foo/bar/.
 
-    " set color scheme
-    colorscheme dracula
-    set termguicolors
+      " set color scheme
+      colorscheme dracula
+      set termguicolors
 
-    "remap ; to : to save a keystroke
-    nnoremap : ;
-    nnoremap ; :
-    vnoremap : ;
-    vnoremap ; :
-    
-    " Use system clipboard for all yank/delete/put operations
-    set clipboard+=unnamedplus
+      "remap ; to : to save a keystroke
+      nnoremap : ;
+      nnoremap ; :
+      vnoremap : ;
+      vnoremap ; :
 
-    let mapleader="\<SPACE>"
+      " Use system clipboard for all yank/delete/put operations
+      set clipboard+=unnamedplus
 
-    "NERDTree
-    "-------------------------
-    nnoremap <leader>\ :NERDTreeToggle<CR>
-    nnoremap <leader>uy :NERDTreeToggle<CR>
-    let NERDTreeIgnore = [ '\.js_dyn_o', '\.js_hi', '\.js_o', '\.js_dyn_hi', '\.dyn_hi', '\.dyn_o', '\.hi', '\.o', '\.p_hi', '\.p_o' ]
-    "Automatically close if NERDTree is the only buffer left
-    autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
-    
-    " Open file menu
-    " nnoremap <Leader>p :CtrlP<CR>
-    " Open buffer menu
-    " nnoremap <Leader>b :CtrlPBuffer<CR>
-    " Open most recently used files
-    nnoremap <Leader>P :CtrlPMRUFiles<CR>
+      let mapleader="\<SPACE>"
 
-    " Move to word
-    map  <Leader>w <Plug>(easymotion-bd-w)
-    nmap <Leader>w <Plug>(easymotion-overwin-w)
+      "NERDTree
+      "-------------------------
+      nnoremap <leader>\ :NERDTreeToggle<CR>
+      nnoremap <leader>uy :NERDTreeToggle<CR>
+      let NERDTreeIgnore = [ '\.js_dyn_o', '\.js_hi', '\.js_o', '\.js_dyn_hi', '\.dyn_hi', '\.dyn_o', '\.hi', '\.o', '\.p_hi', '\.p_o' ]
+      "Automatically close if NERDTree is the only buffer left
+      autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
 
-    " <Leader>j{char} to move to {char}
-    map  <Leader>J <Plug>(easymotion-bd-f)
-    nmap <Leader>J <Plug>(easymotion-overwin-f)
-    map  <Leader>f <Plug>(easymotion-bd-f)
-    nmap <Leader>f <Plug>(easymotion-overwin-f)
+      " Open file menu
+      " nnoremap <Leader>p :CtrlP<CR>
+      " Open buffer menu
+      " nnoremap <Leader>b :CtrlPBuffer<CR>
+      " Open most recently used files
+      nnoremap <Leader>P :CtrlPMRUFiles<CR>
 
-    " Move to line
-    map <Leader>j <Plug>(easymotion-bd-jk)
-    nmap <Leader>j <Plug>(easymotion-overwin-line)
+      " Move to word
+      map  <Leader>w <Plug>(easymotion-bd-w)
+      nmap <Leader>w <Plug>(easymotion-overwin-w)
 
-    " CTRL-Tab is next tab
-    noremap <C-Tab> :<C-U>tabnext<CR>
-    inoremap <C-Tab> <C-\><C-N>:tabnext<CR>
-    cnoremap <C-Tab> <C-C>:tabnext<CR>
-    " CTRL-SHIFT-Tab is previous tab
-    noremap <C-S-Tab> :<C-U>tabprevious<CR>
-    inoremap <C-S-Tab> <C-\><C-N>:tabprevious<CR>
-    cnoremap <C-S-Tab> <C-C>:tabprevious<CR>
+      " <Leader>j{char} to move to {char}
+      map  <Leader>J <Plug>(easymotion-bd-f)
+      nmap <Leader>J <Plug>(easymotion-overwin-f)
+      map  <Leader>f <Plug>(easymotion-bd-f)
+      nmap <Leader>f <Plug>(easymotion-overwin-f)
 
-    " New tab keybinding
-    nnoremap <Leader>tn :tabnew<CR>
+      " Move to line
+      map <Leader>j <Plug>(easymotion-bd-jk)
+      nmap <Leader>j <Plug>(easymotion-overwin-line)
 
-    " Map go to tab keybindings
-    nnoremap <leader>t1 1gt<CR>
-    nnoremap <leader>t2 2gt<CR>
-    nnoremap <leader>t3 3gt<CR>
-    nnoremap <leader>t4 4gt<CR>
-    nnoremap <leader>t5 5gt<CR>
-    nnoremap <leader>t6 6gt<CR>
-    nnoremap <leader>t7 7gt<CR>
-    nnoremap <leader>t8 8gt<CR>
-    nnoremap <leader>t9 9gt<CR>
-    nnoremap <leader>t0 10gt<CR>
+      " CTRL-Tab is next tab
+      noremap <C-Tab> :<C-U>tabnext<CR>
+      inoremap <C-Tab> <C-\><C-N>:tabnext<CR>
+      cnoremap <C-Tab> <C-C>:tabnext<CR>
+      " CTRL-SHIFT-Tab is previous tab
+      noremap <C-S-Tab> :<C-U>tabprevious<CR>
+      inoremap <C-S-Tab> <C-\><C-N>:tabprevious<CR>
+      cnoremap <C-S-Tab> <C-C>:tabprevious<CR>
 
-    " :TODO: figure out a keybinding for fuzzy deleting buffers
-    " :TODO: add toggleterm package and keybindings https://github.com/akinsho/toggleterm.nvim
-    " :TODO: look into integrations with tmux https://github.com/aserowy/tmux.nvim
-    " :TODO: add harpoon plugin and keybindings https://github.com/ThePrimeagen/harpoon/tree/harpoon2
-    " :TODO: look into this plugin https://github.com/junegunn/fzf.vim
-    
-    " Control+W followed by W
-    nnoremap <leader>o <C-w>w<CR>
-    nnoremap <leader>2 <C-w>s<CR>
-    nnoremap <leader>3 <C-w>v<CR>
+      " New tab keybinding
+      nnoremap <Leader>tn :tabnew<CR>
 
-    nnoremap <leader>i :Telescope current_buffer_fuzzy_find<CR>
-    nnoremap <leader>us :Telescope live_grep<CR>
-    nnoremap <leader>p :Telescope find_files<CR>
-    nnoremap <leader>b :Telescope buffers<CR>
+      " Map go to tab keybindings
+      nnoremap <leader>t1 1gt<CR>
+      nnoremap <leader>t2 2gt<CR>
+      nnoremap <leader>t3 3gt<CR>
+      nnoremap <leader>t4 4gt<CR>
+      nnoremap <leader>t5 5gt<CR>
+      nnoremap <leader>t6 6gt<CR>
+      nnoremap <leader>t7 7gt<CR>
+      nnoremap <leader>t8 8gt<CR>
+      nnoremap <leader>t9 9gt<CR>
+      nnoremap <leader>t0 10gt<CR>
 
-    nnoremap <leader>g :Neogit<CR>
-    nnoremap <leader>G :LazyGit<CR>
+      " :TODO: figure out a keybinding for fuzzy deleting buffers
+      " :TODO: add toggleterm package and keybindings https://github.com/akinsho/toggleterm.nvim
+      " :TODO: look into integrations with tmux https://github.com/aserowy/tmux.nvim
+      " :TODO: add harpoon plugin and keybindings https://github.com/ThePrimeagen/harpoon/tree/harpoon2
+      " :TODO: look into this plugin https://github.com/junegunn/fzf.vim
 
-    nnoremap <leader>ug :CodeCompanionChat<CR>
+      " Control+W followed by W
+      nnoremap <leader>o <C-w>w<CR>
+      nnoremap <leader>2 <C-w>s<CR>
+      nnoremap <leader>3 <C-w>v<CR>
 
-    nnoremap <leader>z :Telescope zoxide list<CR>
+      nnoremap <leader>i :Telescope current_buffer_fuzzy_find<CR>
+      nnoremap <leader>us :Telescope live_grep<CR>
+      nnoremap <leader>p :Telescope find_files<CR>
+      nnoremap <leader>b :Telescope buffers<CR>
 
-    " Make terminal ESC work like you would expect it to
-    tnoremap <Esc> <C-\><C-n>
+      nnoremap <leader>g :Neogit<CR>
+      nnoremap <leader>G :LazyGit<CR>
 
-    let g:airline_powerline_fonts = 1
-    let g:airline_theme= 'dracula'
+      nnoremap <leader>ug :CodeCompanionChat<CR>
 
-    set completeopt=menu,menuone,noselect
+      nnoremap <leader>z :Telescope zoxide list<CR>
 
-    lua <<EOF
+      " Make terminal ESC work like you would expect it to
+      tnoremap <Esc> <C-\><C-n>
 
-      -- Setup neogit
-      local neogit = require'neogit'
-      neogit.setup()
+      let g:airline_powerline_fonts = 1
+      let g:airline_theme= 'dracula'
 
-      -- Setup orgmode
-      require('orgmode').setup({
-        org_agenda_files = {'~/Dropbox/org/*', '~/my-orgs/**/*'},
-        org_default_notes_file = '~/Dropbox/org/refile.org',
-      })
+      set completeopt=menu,menuone,noselect
 
-      -- Setup nvim-cmp.
-      local cmp = require'cmp'
+      lua <<EOF
 
-      cmp.setup {
-          mapping = {
-              ["<C-d>"] = cmp.mapping.scroll_docs(-4),
-              ["<C-f>"] = cmp.mapping.scroll_docs(4),
-              ['<C-k>'] = cmp.mapping.select_prev_item(select_opts),
-              ['<C-j>'] = cmp.mapping.select_next_item(select_opts),
-              ['<Up>'] = cmp.mapping.select_prev_item(select_opts),
-              ['<Down>'] = cmp.mapping.select_next_item(select_opts),
-              ["<C-e>"] = cmp.mapping.close(),
-              ['<C-Space>'] = cmp.mapping.complete(),
-              ['<C-e>'] = cmp.mapping.abort(),
-              ["<CR>"] = cmp.mapping.confirm {
-                  behavior = cmp.ConfirmBehavior.Insert,
-                  select = true,
-              },
-          },
+        -- Setup neogit
+        local neogit = require'neogit'
+        neogit.setup()
 
-          snippet = {
-              -- REQUIRED - you must specify a snippet engine
-              expand = function(args)
-                  vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
-              end,
-          },
-  
-          sources = {
-              { name = "nvim_lsp"},
-              { name = "path" },
-              { name = 'vsnip' },
-              { name = "buffer" , keyword_length = 5},
-          },
-          experimental = {
-              ghost_text = true
-          }
-      }
+        -- Setup orgmode
+        require('orgmode').setup({
+          org_agenda_files = {'~/Dropbox/org/*', '~/my-orgs/**/*'},
+          org_default_notes_file = '~/Dropbox/org/refile.org',
+        })
 
-      -- Setup lspconfig.
-      vim.lsp.enable('pylsp')
-      vim.lsp.enable('ruff')
-      vim.lsp.enable('ts_ls')
-      vim.lsp.enable('hls')
-      vim.lsp.enable('org')
+        -- Setup nvim-cmp.
+        local cmp = require'cmp'
 
-      -- Setup AI codecompanion
-      require("codecompanion").setup({
-        strategies = {
-          chat = {
-            adapter = "openai",
-            model = "gpt-5-mini"
-          },
+        cmp.setup {
+            mapping = {
+                ["<C-d>"] = cmp.mapping.scroll_docs(-4),
+                ["<C-f>"] = cmp.mapping.scroll_docs(4),
+                ['<C-k>'] = cmp.mapping.select_prev_item(select_opts),
+                ['<C-j>'] = cmp.mapping.select_next_item(select_opts),
+                ['<Up>'] = cmp.mapping.select_prev_item(select_opts),
+                ['<Down>'] = cmp.mapping.select_next_item(select_opts),
+                ["<C-e>"] = cmp.mapping.close(),
+                ['<C-Space>'] = cmp.mapping.complete(),
+                ['<C-e>'] = cmp.mapping.abort(),
+                ["<CR>"] = cmp.mapping.confirm {
+                    behavior = cmp.ConfirmBehavior.Insert,
+                    select = true,
+                },
+            },
+
+            snippet = {
+                -- REQUIRED - you must specify a snippet engine
+                expand = function(args)
+                    vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
+                end,
+            },
+
+            sources = {
+                { name = "nvim_lsp"},
+                { name = "path" },
+                { name = 'vsnip' },
+                { name = "buffer" , keyword_length = 5},
+            },
+            experimental = {
+                ghost_text = true
+            }
         }
-      })
-    EOF
+
+        -- Setup lspconfig.
+        vim.lsp.enable('pylsp')
+        vim.lsp.enable('ruff')
+        vim.lsp.enable('ts_ls')
+        vim.lsp.enable('hls')
+        vim.lsp.enable('org')
+
+        -- Setup AI codecompanion
+        require("codecompanion").setup({
+          strategies = {
+            chat = {
+              adapter = "openai",
+              model = "gpt-5-mini"
+            },
+          }
+        })
+      EOF
     '';
   };
 
@@ -704,7 +733,12 @@ in with constants;
 
   services.spotifyd = {
     enable = lib.mkDefault true;
-    package = lib.mkDefault (pkgs.spotifyd.override { withPulseAudio = true; withMpris = true; });
+    package = lib.mkDefault (
+      pkgs.spotifyd.override {
+        withPulseAudio = true;
+        withMpris = true;
+      }
+    );
     settings.global = {
       username = lib.mkDefault "donovanm56";
       password_cmd = lib.mkDefault "pass spotify";
@@ -720,9 +754,8 @@ in with constants;
     enableNotifications = lib.mkDefault true;
   };
 
-
   # :NOTE: secrets sops config starts here
-  sops = { 
+  sops = {
     # :NOTE: generate key with age:
     # mkdir -p ~/.config/sops/age
     # age-keygen -o ~/.config/sops/age/keys.txt
@@ -731,10 +764,10 @@ in with constants;
     # to update the keys in the yaml config: sops updatekeys .sops.yaml
     age.keyFile = lib.mkDefault "${my-home-dir}/.config/sops/age/keys.txt"; # Path to your age key file
     # :NOTE:
-    # to add/init a new secrets file: 
+    # to add/init a new secrets file:
     # sops secrets.yaml
     defaultSopsFile = lib.mkDefault ../../secrets.yaml; # default secrets file
-    
+
     # :NOTE: need to add one of these entries for each secret added to the secrets file (so can be accessed in nix)
     # secrets.OPENAI_API_KEY.path = lib.mkDefault "${config.sops.defaultSymlinkPath}/OPENAI_API_KEY";
     # secrets.GOOGLE_API_KEY.path = lib.mkDefault "${config.sops.defaultSymlinkPath}/GOOGLE_API_KEY";
@@ -743,7 +776,7 @@ in with constants;
     # secrets.GIT_EMAIL.path = lib.mkDefault "${config.sops.defaultSymlinkPath}/GIT_EMAIL";
     # secrets.GITHUB_USER.path = lib.mkDefault "${config.sops.defaultSymlinkPath}/GITHUB_USER";
   };
-  
+
   # :NOTE: GTK theming for GNOME
   # themes are fetched via home.file in common-home.nix to ~/.themes and ~/.local/share/icons
   # if these don't get picked up, add pkgs.dracula-theme / pkgs.papirus-icon-theme as packages
@@ -759,7 +792,7 @@ in with constants;
     gtk4.theme.name = lib.mkDefault "dracula";
     gtk4.iconTheme.name = lib.mkDefault "candy-icons";
   };
-  
+
   # :NOTE: setup theming for libadwaita (for nautilus)
   dconf.settings = {
     "org/gnome/desktop/interface" = {
@@ -771,32 +804,35 @@ in with constants;
       default-folder-viewer = lib.mkDefault "list-view";
     };
   };
-  
+
   # :TODO: make KDE theming work appropriately
-  home.file.".local/share/color-schemes/Dracula.colors".source = lib.mkDefault "${gtkDraculaRepo}/kde/color-schemes/Dracula.colors";
-  home.file.".local/share/plasma/desktoptheme/dracula".source = lib.mkDefault "${gtkDraculaRepo}/kde/plasma/desktoptheme/Dracula";
-  home.file.".local/share/plasma/look-and-feel/dracula".source = lib.mkDefault "${gtkDraculaRepo}/kde/plasma/look-and-feel/Dracula";
-  
+  home.file.".local/share/color-schemes/Dracula.colors".source =
+    lib.mkDefault "${gtkDraculaRepo}/kde/color-schemes/Dracula.colors";
+  home.file.".local/share/plasma/desktoptheme/dracula".source =
+    lib.mkDefault "${gtkDraculaRepo}/kde/plasma/desktoptheme/Dracula";
+  home.file.".local/share/plasma/look-and-feel/dracula".source =
+    lib.mkDefault "${gtkDraculaRepo}/kde/plasma/look-and-feel/Dracula";
+
   home.file.".config/kdeglobals".text = lib.mkDefault ''
     [General]
     ColorScheme=Dracula
-  
+
     [KDE]
     LookAndFeelPackage=dracula
   '';
-  
+
   home.file.".config/plasmarc".text = lib.mkDefault ''
     [Theme]
     name=dracula
   '';
-  
-   qt = {
-     enable = true;
-     platformTheme.name = "gtk";
-   };
+
+  qt = {
+    enable = true;
+    platformTheme.name = "gtk";
+  };
 
   # :NOTE: home file configuration starts here
-   
+
   home.file.".local/bin/sh-mute" = {
     text = ''
       #!/usr/bin/env bash
@@ -809,7 +845,7 @@ in with constants;
     '';
     executable = true;
   };
-  
+
   # # :TODO: implement this
   # home.file.".config/opencode/opencode.json".text = builtins.toJSON {
   #   plugin = [
@@ -830,19 +866,19 @@ in with constants;
 
     [font]
     size = 13.0
-    
+
     [font.bold]
     family = "DejaVu Sans Mono"
     style = "Bold"
-    
+
     [font.bold_italic]
     family = "DejaVu Sans Mono"
     style = "Bold Italic"
-    
+
     [font.italic]
     family = "DejaVu Sans Mono"
     style = "Italic"
-    
+
     [font.normal]
     family = "DejaVu Sans Mono"
     style = "Regular"
@@ -856,7 +892,7 @@ in with constants;
     { key = "-", mods = "Control", action = "DecreaseFontSize" },
     ] 
   '';
-  
+
   home.file.".config/spotifyd/spotifyd.conf".text = lib.mkDefault ''
     [global]
     username = "donovanm56"
@@ -867,7 +903,8 @@ in with constants;
     bitrate = 160
   '';
 
-  home.file.".config/spotify-player/app.toml".source = lib.mkDefault "${my-dotfile-dir}/.config/spotify-player/app.toml";
+  home.file.".config/spotify-player/app.toml".source =
+    lib.mkDefault "${my-dotfile-dir}/.config/spotify-player/app.toml";
 
   home.file.".config/rofi-games/config.toml".text = lib.mkDefault ''
     [launchers.steam]
@@ -883,63 +920,82 @@ in with constants;
   home.file.".ripgreprc".source = lib.mkDefault "${my-dotfile-dir}/.ripgreprc";
   home.file.".config/mpv/mpv.conf".source = lib.mkDefault "${my-dotfile-dir}/mpv.conf";
   home.file.".config/ytfzf/conf.sh".source = lib.mkDefault "${my-dotfile-dir}/ytfzf-conf.sh";
-  home.file.".config/termonad/termonad.hs".source = lib.mkDefault "${my-dotfile-dir}/.termonad/termonad.hs";
+  home.file.".config/termonad/termonad.hs".source =
+    lib.mkDefault "${my-dotfile-dir}/.termonad/termonad.hs";
   home.file.".config/redshift.conf".source = lib.mkDefault "${my-dotfile-dir}/redshift.conf";
- 
+
   home.file.".config/rofi/themes/dracula-theme.rasi".text = lib.mkDefault (
-    builtins.readFile (builtins.fetchurl {
-      url = "https://raw.githubusercontent.com/dracula/rofi/48a024639fbf25e3237766f0dcef4af75a2df908/theme/config1.rasi";
-      sha256 = "52f26dd7c44bb919a7a604d71bea26df5e52bd2188f9804e103fc002239bc99a";
-    })
+    builtins.readFile (
+      builtins.fetchurl {
+        url = "https://raw.githubusercontent.com/dracula/rofi/48a024639fbf25e3237766f0dcef4af75a2df908/theme/config1.rasi";
+        sha256 = "52f26dd7c44bb919a7a604d71bea26df5e52bd2188f9804e103fc002239bc99a";
+      }
+    )
   );
 
   home.file.".config/rofi/themes/dracula-theme-2.rasi".text = lib.mkDefault (
-    builtins.readFile (builtins.fetchurl {
-      url = "https://raw.githubusercontent.com/dracula/rofi/48a024639fbf25e3237766f0dcef4af75a2df908/theme/config2.rasi";
-      sha256 = "68010556ad7b351b63b6d061f5c4b7c8feb9d9b32687bf0530b105a86634766c";
-    })
+    builtins.readFile (
+      builtins.fetchurl {
+        url = "https://raw.githubusercontent.com/dracula/rofi/48a024639fbf25e3237766f0dcef4af75a2df908/theme/config2.rasi";
+        sha256 = "68010556ad7b351b63b6d061f5c4b7c8feb9d9b32687bf0530b105a86634766c";
+      }
+    )
   );
 
   home.file.".config/rofi/themes/games-default.rasi".text = lib.mkDefault (
-    builtins.readFile (builtins.fetchurl {
-      url = "https://raw.githubusercontent.com/Rolv-Apneseth/rofi-games/17e53726e8f81f6bbe15b4dd66329f869409f4c6/themes/games-default.rasi";
-      sha256 = "sha256:0w3cyp7v102n5pdmngz1rhzh86rrc120gfxzxv3h86vs1ch2zli2";
-    })
+    builtins.readFile (
+      builtins.fetchurl {
+        url = "https://raw.githubusercontent.com/Rolv-Apneseth/rofi-games/17e53726e8f81f6bbe15b4dd66329f869409f4c6/themes/games-default.rasi";
+        sha256 = "sha256:0w3cyp7v102n5pdmngz1rhzh86rrc120gfxzxv3h86vs1ch2zli2";
+      }
+    )
   );
 
   home.file.".config/rofi/themes/games-smaller.rasi".text = lib.mkDefault (
-    builtins.readFile (builtins.fetchurl {
-      url = "https://raw.githubusercontent.com/Rolv-Apneseth/rofi-games/17e53726e8f81f6bbe15b4dd66329f869409f4c6/themes/games-smaller.rasi";
-      sha256 = "sha256:1105kf4q9flrdpcf0mzzav6h8m2maj9yfrm9avzwkdfcddax6i7s";
-    })
+    builtins.readFile (
+      builtins.fetchurl {
+        url = "https://raw.githubusercontent.com/Rolv-Apneseth/rofi-games/17e53726e8f81f6bbe15b4dd66329f869409f4c6/themes/games-smaller.rasi";
+        sha256 = "sha256:1105kf4q9flrdpcf0mzzav6h8m2maj9yfrm9avzwkdfcddax6i7s";
+      }
+    )
   );
 
   home.file.".config/kak/colors/dracula.kak".text = lib.mkDefault (
-    builtins.readFile (builtins.fetchurl {
-      url = "https://raw.githubusercontent.com/dracula/kakoune/master/colors/dracula.kak";
-      sha256 = "57e11ca24375df2a02541a44670d4a48cf90ce179f4eecfc0f5ba005c2c03a02";
-    })
+    builtins.readFile (
+      builtins.fetchurl {
+        url = "https://raw.githubusercontent.com/dracula/kakoune/master/colors/dracula.kak";
+        sha256 = "57e11ca24375df2a02541a44670d4a48cf90ce179f4eecfc0f5ba005c2c03a02";
+      }
+    )
   );
 
-  home.file.".themes/dracula".source = lib.mkDefault (builtins.fetchGit {
-    url = "https://github.com/dracula/gtk";
-    rev = "f3c876d8c97f9bb504c98592a8d96770e70585bb";
-  });
+  home.file.".themes/dracula".source = lib.mkDefault (
+    builtins.fetchGit {
+      url = "https://github.com/dracula/gtk";
+      rev = "f3c876d8c97f9bb504c98592a8d96770e70585bb";
+    }
+  );
 
-  home.file.".themes/sweet".source = lib.mkDefault (builtins.fetchTarball {
-    url = "https://github.com/EliverLara/Sweet/releases/download/v6.0/Sweet.tar.xz";
-    sha256 = "sha256:012nc14vz31zq34pg5nv2ybzryhqpf6x0jh022nvgyhrf9q1zrn9";
-  });
+  home.file.".themes/sweet".source = lib.mkDefault (
+    builtins.fetchTarball {
+      url = "https://github.com/EliverLara/Sweet/releases/download/v6.0/Sweet.tar.xz";
+      sha256 = "sha256:012nc14vz31zq34pg5nv2ybzryhqpf6x0jh022nvgyhrf9q1zrn9";
+    }
+  );
 
-  home.file.".themes/sweet-dark".source = lib.mkDefault (builtins.fetchTarball {
-    url = "https://github.com/EliverLara/Sweet/releases/download/v6.0/Sweet-Dark.tar.xz";
-    sha256 = "sha256:1j67jwpab7f13rgcxmzqqvjixp5j8mdpv6vpsf2ajnh5yyxzqxvj";
-  });
+  home.file.".themes/sweet-dark".source = lib.mkDefault (
+    builtins.fetchTarball {
+      url = "https://github.com/EliverLara/Sweet/releases/download/v6.0/Sweet-Dark.tar.xz";
+      sha256 = "sha256:1j67jwpab7f13rgcxmzqqvjixp5j8mdpv6vpsf2ajnh5yyxzqxvj";
+    }
+  );
 
-  home.file.".local/share/icons/candy-icons".source = lib.mkDefault (builtins.fetchGit {
-    url = "https://github.com/EliverLara/candy-icons";
-    rev = "83512fbcadcb7e1015ebbe1729a1894946b021be";
-  });
+  home.file.".local/share/icons/candy-icons".source = lib.mkDefault (
+    builtins.fetchGit {
+      url = "https://github.com/EliverLara/candy-icons";
+      rev = "83512fbcadcb7e1015ebbe1729a1894946b021be";
+    }
+  );
 
   home.file.".local/share/icons/Sweet-Purple" = {
     source = lib.mkDefault "${sweetIconsRepo}/Sweet-Purple";
@@ -951,10 +1007,12 @@ in with constants;
     recursive = lib.mkDefault true;
   };
 
-  home.file.".local/share/xfce4/terminal/colorschemes/Dracula.theme".source = lib.mkDefault (builtins.fetchurl {
-    url = "https://raw.githubusercontent.com/dracula/xfce4-terminal/refs/heads/master/Dracula.theme";
-  });
-  
+  home.file.".local/share/xfce4/terminal/colorschemes/Dracula.theme".source = lib.mkDefault (
+    builtins.fetchurl {
+      url = "https://raw.githubusercontent.com/dracula/xfce4-terminal/refs/heads/master/Dracula.theme";
+    }
+  );
+
   # :TODO: fix this
   home.file.".config/clock-rs/conf.toml".text = lib.mkDefault ''
     [general]
@@ -962,56 +1020,65 @@ in with constants;
     interval = 250
     blink = true
     bold = true
-    
+
     [position]
     horizontal = "center"
     vertical = "center"
-    
+
     [date]
     fmt = "%A, %B %d, %Y"
     use_12h = true
     utc = false
     hide_seconds = true
   '';
-  
-  home.file.".config/lazygit/theme/lazygit".source = lib.mkDefault (builtins.fetchGit {
-    url = "https://github.com/catppuccin/lazygit";
-    rev = "a544cef9a18c3a94e0344281e0ddcf99a18a8ede";
-  });
-  home.file.".config/lazygit/config.yml".text = lib.mkDefault ''
-  '';
+
+  home.file.".config/lazygit/theme/lazygit".source = lib.mkDefault (
+    builtins.fetchGit {
+      url = "https://github.com/catppuccin/lazygit";
+      rev = "a544cef9a18c3a94e0344281e0ddcf99a18a8ede";
+    }
+  );
+  home.file.".config/lazygit/config.yml".text = lib.mkDefault "";
 
   home.file.".config/alacritty/dracula.toml".text = lib.mkDefault (
-    builtins.readFile (builtins.fetchurl {
-      url = "https://raw.githubusercontent.com/dracula/alacritty/master/dracula.toml";
-      sha256 = "e9de3a792548c8112168c1dd18b5651d1ebee2893975cda4ccd9c4c0430c87b8";
-    })
+    builtins.readFile (
+      builtins.fetchurl {
+        url = "https://raw.githubusercontent.com/dracula/alacritty/master/dracula.toml";
+        sha256 = "e9de3a792548c8112168c1dd18b5651d1ebee2893975cda4ccd9c4c0430c87b8";
+      }
+    )
   );
 
-  home.file."piper/models/en_US-lessac-high.onnx".source = lib.mkDefault (builtins.fetchurl {
-    url = "https://huggingface.co/rhasspy/piper-voices/resolve/main/en/en_US/lessac/high/en_US-lessac-high.onnx?download=true";
-    sha256 = "4cabf7c3a638017137f34a1516522032d4fe3f38228a843cc9b764ddcbcd9e09";
-  });
+  home.file."piper/models/en_US-lessac-high.onnx".source = lib.mkDefault (
+    builtins.fetchurl {
+      url = "https://huggingface.co/rhasspy/piper-voices/resolve/main/en/en_US/lessac/high/en_US-lessac-high.onnx?download=true";
+      sha256 = "4cabf7c3a638017137f34a1516522032d4fe3f38228a843cc9b764ddcbcd9e09";
+    }
+  );
 
   home.file."piper/models/en_US-lessac-high.onnx.json".text = lib.mkDefault (
-    builtins.readFile (builtins.fetchurl {
-      url = "https://huggingface.co/rhasspy/piper-voices/raw/main/en/en_US/lessac/high/en_US-lessac-high.onnx.json";
-      sha256 = "0bs1j8d97v6bsvfp82h50a23kckz1scfvf312ny5gwjrk1yvjhnv";
-    })
+    builtins.readFile (
+      builtins.fetchurl {
+        url = "https://huggingface.co/rhasspy/piper-voices/raw/main/en/en_US/lessac/high/en_US-lessac-high.onnx.json";
+        sha256 = "0bs1j8d97v6bsvfp82h50a23kckz1scfvf312ny5gwjrk1yvjhnv";
+      }
+    )
   );
 
-  home.file.".PowershellEditorServices".source = lib.mkDefault (pkgs.fetchzip {
-    url = "https://github.com/PowerShell/PowerShellEditorServices/releases/download/v3.20.0/PowerShellEditorServices.zip";
-    sha256 = "XzyspX6U9FWglDA8VIZE4JamGsFvARQX7iCcQ/blbUE=";
-    stripRoot = false;
-  });
+  home.file.".PowershellEditorServices".source = lib.mkDefault (
+    pkgs.fetchzip {
+      url = "https://github.com/PowerShell/PowerShellEditorServices/releases/download/v3.20.0/PowerShellEditorServices.zip";
+      sha256 = "XzyspX6U9FWglDA8VIZE4JamGsFvARQX7iCcQ/blbUE=";
+      stripRoot = false;
+    }
+  );
 
   # :NOTE: this sets the desktop wallpaper
   home.file.".background-image".source = lib.mkDefault my-default-background-image;
 
   # :NOTE: use image profile picture (for display manager)
   home.file.".face".source = lib.mkDefault ../../img/dracula-profile.png;
-  
+
   home.file.".agents/skills/jobspy/SKILL.md".source = pkgs.jobspy-skill + "/SKILL.md";
 
   # :NOTE: home environment variables config starts here
@@ -1028,7 +1095,7 @@ in with constants;
     AIDER_GIT_COMMIT_VERIFY = lib.mkDefault "true";
     OLLAMA_CONTEXT_LENGTH = lib.mkDefault "64000";
     RIPGREP_CONFIG_PATH = lib.mkDefault "${my-home-dir}/.ripgreprc";
-    LG_CONFIG_FILE= lib.mkDefault "${my-home-dir}/.config/lazygit/config.yml,${my-home-dir}/.config/lazygit/theme/lazygit/themes-mergable/mocha/blue.yml";
+    LG_CONFIG_FILE = lib.mkDefault "${my-home-dir}/.config/lazygit/config.yml,${my-home-dir}/.config/lazygit/theme/lazygit/themes-mergable/mocha/blue.yml";
     BROWSER = lib.mkDefault "${pkgs.firefox-bin}/bin/firefox";
     TERMINAL_EMULATOR = lib.mkDefault "${pkgs.alacritty}/bin/alacritty";
     TERMINAL = lib.mkDefault "${pkgs.alacritty}/bin/alacritty";
@@ -1038,5 +1105,5 @@ in with constants;
     NIXPKGS_ALLOW_UNFREE = lib.mkDefault "1";
     MY_MACHINE_ID = lib.mkDefault "none";
   };
-  
+
 }
