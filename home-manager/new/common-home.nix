@@ -362,8 +362,16 @@ with constants;
   };
 
   programs.ssh = {
+    enableDefaultConfig = false;
     enable = lib.mkDefault true;
     matchBlocks = {
+      "*" = {
+        hostname = lib.mkDefault "73.140.10.210";
+        port = lib.mkDefault 50022;
+        user = lib.mkDefault my-username;
+        compression = lib.mkDefault true;
+        forwardX11 = lib.mkDefault true;
+      };
       "${my-desktop-hostname}" = {
         hostname = lib.mkDefault "73.140.10.210";
         port = lib.mkDefault 50022;
@@ -488,6 +496,8 @@ with constants;
   # :TODO: make neovim configuration optional with lib.mkDefault
   programs.neovim = {
     enable = true;
+    withRuby = false;
+    withPython3 = false;
     plugins = with pkgs.vimPlugins; [
       vim-nix
       vim-which-key

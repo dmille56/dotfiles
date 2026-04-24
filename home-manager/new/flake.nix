@@ -3,7 +3,7 @@
 # 2. add to inputs: YOURPACKAGE-revision.url = "github:NixOS/nixpkgs/GIT-REVISION-HASH"
 # 3. add to outputs: YOURPACKAGE-revision
 # 4. let YOURPACKAGE-overlay = final: prev: {
-#      aider-chat-full = aider-chat-full-revision.legacyPackages.${prev.system}.aider-chat-full;
+#      aider-chat-full = aider-chat-full-revision.legacyPackages.${prev.stdenv.hostPlatform.system}.aider-chat-full;
 #    };
 # 5. (add the overlays to your modules) 
 # ie. modules = [
@@ -65,16 +65,16 @@
         else builtins.throw "Unknown host-name: ${my-machine-id}";
 
       aider-overlay = final: prev: {
-        aider-chat-full = aider-chat-full-revision.legacyPackages.${prev.system}.aider-chat-full;
+        aider-chat-full = aider-chat-full-revision.legacyPackages.${prev.stdenv.hostPlatform.system}.aider-chat-full;
       };
 
       gogcli-overlay = final: prev: {
-        gogcli = inputs.nix-steipete-tools.packages.${prev.system}.gogcli;
+        gogcli = inputs.nix-steipete-tools.packages.${prev.stdenv.hostPlatform.system}.gogcli;
       };
       
       # :TODO: fix ollama overlay still
       # ollama-overlay = final: prev: {
-      #   ollama-cuda = ollama-revision.legacyPackages.${prev.system}.ollama-cuda;
+      #   ollama-cuda = ollama-revision.legacyPackages.${prev.stdenv.hostPlatform.system}.ollama-cuda;
       # };
       
       openclaw-gateway-fixed-overlay = final: prev: {

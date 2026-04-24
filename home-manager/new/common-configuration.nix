@@ -2,18 +2,24 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running 'nixos-help').
 
-{ pkgs, config, lib, ... }:
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}:
 
 let
-  constants = import ./common-constants.nix; 
-in with constants;
+  constants = import ./common-constants.nix;
+in
+with constants;
 {
   # Bootloader.
   boot.loader.systemd-boot.enable = lib.mkDefault true;
   boot.loader.efi.canTouchEfiVariables = lib.mkDefault true;
 
   networking.hostName = lib.mkDefault "common"; # Define your hostname. :NOTE: make sure to overwrite this in the actual configuration
-  networking.wireless.enable = lib.mkDefault true;  # Enables wireless support via wpa_supplicant.
+  networking.wireless.enable = lib.mkDefault true; # Enables wireless support via wpa_supplicant.
 
   # Enable networking
   networking.networkmanager.enable = lib.mkDefault true;
@@ -61,7 +67,7 @@ in with constants;
       #   user-background false
       # '';
     };
-    
+
     greeters.slick = {
       enable = lib.mkForce false;
       # draw-user-backgrounds = lib.mkDefault true;
@@ -159,17 +165,24 @@ in with constants;
   # services.xserver.libinput.enable = true;
 
   nixpkgs.overlays = [
-    (import (builtins.fetchGit {
-      url = "https://github.com/nix-community/emacs-overlay.git";
-      rev = "fe3b2b9eeef2150992104730612230bbe061dca3";
-    }))
+    (import (
+      builtins.fetchGit {
+        url = "https://github.com/nix-community/emacs-overlay.git";
+        rev = "fe3b2b9eeef2150992104730612230bbe061dca3";
+      }
+    ))
   ];
 
   # Define a user account. Don't forget to set a password with 'passwd'.
   users.users.dono = {
     isNormalUser = true;
     description = "dono";
-    extraGroups = [ "networkmanager" "wheel" "podman" "openclaw" ];
+    extraGroups = [
+      "networkmanager"
+      "wheel"
+      "podman"
+      "openclaw"
+    ];
     shell = pkgs.zsh;
     homeMode = "711";
   };
@@ -183,7 +196,10 @@ in with constants;
   nixpkgs.config.allowUnfree = lib.mkDefault true;
 
   # Enable flakes
-  nix.settings.experimental-features = lib.mkDefault [ "nix-command" "flakes" ];
+  nix.settings.experimental-features = lib.mkDefault [
+    "nix-command"
+    "flakes"
+  ];
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
@@ -198,8 +214,8 @@ in with constants;
   ];
 
   environment.sessionVariables = {
-   BROWSER = lib.mkDefault "firefox";
-   EDITOR = lib.mkDefault "nano";
+    BROWSER = lib.mkDefault "firefox";
+    EDITOR = lib.mkDefault "nano";
   };
 
   systemd.tmpfiles.rules = [
@@ -232,8 +248,8 @@ in with constants;
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
-  
-  users.groups.openclaw = {};
+
+  users.groups.openclaw = { };
   users.users.openclaw = {
     isSystemUser = true;
     description = "openclaw daemon user";
@@ -327,7 +343,7 @@ in with constants;
     };
 
   };
-  
+
   programs.ssh = {
     extraConfig = lib.mkDefault ''
       Host bitbucket.org
@@ -341,7 +357,7 @@ in with constants;
         ForwardX11 yes
     '';
   };
-  
+
   virtualisation = {
     containers.enable = true;
     podman = {
@@ -357,5 +373,5 @@ in with constants;
   # this value at the release version of the first install of this system.
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = lib.mkDefault "25.05";
+  system.stateVersion = lib.mkDefault "26.05";
 }
