@@ -411,6 +411,7 @@ with constants;
       set -g @fuzzback-bind S
 
       set -g extended-keys on
+      set -g extended-keys-format csi-u
 
       unbind C-b
       set-option -g prefix C-a
