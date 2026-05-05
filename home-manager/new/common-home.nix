@@ -6,6 +6,13 @@
 }:
 let
   constants = import ./common-constants.nix;
+  piNpmPrefix = "${config.home.homeDirectory}/.local/share/npm-global";
+  npmUserConfig = if config.home.preferXdgDirectories then "${config.xdg.configHome}/npm/npmrc" else "${config.home.homeDirectory}/.npmrc";
+  piPackages = [
+    "npm:@ifi/pi-plan"
+    "npm:pi-permission-system"
+    "npm:pi-aliases"
+  ];
   sweetIconsRepo = builtins.fetchGit {
     url = "https://github.com/EliverLara/Sweet-folders";
     rev = "40a5d36e50437901c7eaa1119bb9ae8006e2fe5c";
@@ -1093,6 +1100,13 @@ with constants;
   home.file.".agents/skills/jobspy/SKILL.md".source = pkgs.jobspy-skill + "/SKILL.md";
 
   # :NOTE: home environment variables config starts here
+  programs.npm = {
+    enable = true;
+    settings.prefix = piNpmPrefix;
+  };
+
+  home.sessionPath = [ "${piNpmPrefix}/bin" ];
+
   home.sessionVariables = {
     # OPENAI_API_KEY = lib.mkDefault "$(cat ${config.sops.secrets.OPENAI_API_KEY.path})";
     # GOOGLE_API_KEY = lib.mkDefault "$(cat ${config.sops.secrets.GOOGLE_API_KEY.path})";
@@ -1116,5 +1130,29 @@ with constants;
     NIXPKGS_ALLOW_UNFREE = lib.mkDefault "1";
     MY_MACHINE_ID = lib.mkDefault "none";
   };
+
+  # :NOTE: pi packages are installed at HM activation time because
+  # pi manages them through npm, not as pure Nix derivations.
+  # This keeps the package list declarative in this file while still
+  # using pi's own installer when a package is missing.
+  home.activation.installPiPackages = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    set -eu
+
+    mkdir -p "${piNpmPrefix}"
+
+    for pkg in ${lib.concatStringsSep " " piPackages}; do
+      case "$pkg" in
+        npm:*) pkg_name="''${pkg#npm:}" ;;
+        *) pkg_name="$pkg" ;;
+      esac
+
+      if [ ! -d "${piNpmPrefix}/lib/node_modules/$pkg_name" ]; then
+        # pi shells out to npm itself, so make npm explicit for HM activation.
+        PATH="${pkgs.nodejs}/bin:$PATH" \
+        NPM_CONFIG_USERCONFIG="${npmUserConfig}" \
+        ${pkgs.llm-agents.pi}/bin/pi install "$pkg"
+      fi
+    done
+  '';
 
 }
