@@ -12,6 +12,7 @@ let
     "npm:@ifi/pi-plan"
     "npm:pi-permission-system"
     "npm:pi-aliases"
+    "npm:pi-generate-commit-message"
   ];
   sweetIconsRepo = builtins.fetchGit {
     url = "https://github.com/EliverLara/Sweet-folders";
