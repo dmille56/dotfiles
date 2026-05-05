@@ -140,7 +140,7 @@ with constants;
     llm-agents.droid
     llm-agents.pi
     gemini-cli
-    codex-acp
+    # codex-acp
     claude-agent-acp
     # ollama
 

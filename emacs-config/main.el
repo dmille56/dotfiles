@@ -6,6 +6,8 @@
 ;;; Code:
 
 (setq gc-cons-threshold 100000000)
+(setq load-prefer-newer t)
+(require 'cl)
 
 ;; Some same defaults to start:
 
@@ -1370,6 +1372,12 @@ _p_rev       _U_pper              _=_: upper/lower       _r_esolve
   (let ((chatgpt-shell-root-path (expand-file-name "var/shell-maker" user-emacs-directory)))
     (make-directory chatgpt-shell-root-path t))
   (setq chatgpt-shell-model-version "gpt-5-mini")
+  (evil-define-key 'insert shell-maker-mode-map
+    (kbd "M-<return>") #'chatgpt-shell-submit
+    (kbd "M-RET")      #'chatgpt-shell-submit)
+  (evil-define-key 'insert shell-maker-mode-map
+    (kbd "<return>") #'chatgpt-shell-submit
+    (kbd "RET")      #'chatgpt-shell-submit)
   :custom
   (
    (chatgpt-shell-openai-key
