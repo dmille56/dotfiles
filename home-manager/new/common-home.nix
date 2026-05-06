@@ -8,6 +8,14 @@ let
   constants = import ./common-constants.nix;
   piNpmPrefix = "${config.home.homeDirectory}/.local/share/npm-global";
   npmUserConfig = "${config.xdg.configHome}/npm/npmrc";
+  piWrapped = pkgs.writeShellApplication {
+    name = "pi";
+    text = ''
+      export npm_config_prefix="${piNpmPrefix}"
+      export npm_config_userconfig="${npmUserConfig}"
+      exec ${pkgs.llm-agents.pi}/bin/pi "$@"
+    '';
+  };
   piPackages = [
     "npm:@ifi/pi-plan"
     "npm:pi-permission-system"
@@ -147,7 +155,7 @@ with constants;
     opencode
     codex
     llm-agents.droid
-    llm-agents.pi
+    piWrapped
     gemini-cli
     # codex-acp
     claude-agent-acp
@@ -1121,8 +1129,8 @@ with constants;
   home.sessionPath = [ "${piNpmPrefix}/bin" ];
 
   home.sessionVariables = {
-    NPM_CONFIG_PREFIX = lib.mkDefault piNpmPrefix;
-    NPM_CONFIG_USERCONFIG = lib.mkDefault npmUserConfig;
+    npm_config_prefix = lib.mkDefault piNpmPrefix;
+    npm_config_userconfig = lib.mkDefault npmUserConfig;
     # OPENAI_API_KEY = lib.mkDefault "$(cat ${config.sops.secrets.OPENAI_API_KEY.path})";
     # GOOGLE_API_KEY = lib.mkDefault "$(cat ${config.sops.secrets.GOOGLE_API_KEY.path})";
     # ANTHROPIC_API_KEY = lib.mkDefault "$(cat ${config.sops.secrets.ANTHROPIC_API_KEY.path})";
@@ -1163,10 +1171,10 @@ with constants;
 
       if [ ! -d "${piNpmPrefix}/lib/node_modules/$pkg_name" ]; then
         # pi shells out to npm itself, so make npm explicit for HM activation.
-        PATH="${pkgs.nodejs}/bin:$PATH" \
-        NPM_CONFIG_PREFIX="${piNpmPrefix}" \
-        NPM_CONFIG_USERCONFIG="${npmUserConfig}" \
-        ${pkgs.llm-agents.pi}/bin/pi install "$pkg"
+      PATH="${pkgs.nodejs}/bin:$PATH" \
+        npm_config_prefix="${piNpmPrefix}" \
+        npm_config_userconfig="${npmUserConfig}" \
+        ${piWrapped}/bin/pi install "$pkg"
       fi
     done
   '';
