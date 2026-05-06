@@ -7,12 +7,13 @@
 let
   constants = import ./common-constants.nix;
   piNpmPrefix = "${config.home.homeDirectory}/.local/share/npm-global";
-  npmUserConfig = if config.home.preferXdgDirectories then "${config.xdg.configHome}/npm/npmrc" else "${config.home.homeDirectory}/.npmrc";
+  npmUserConfig = "${config.xdg.configHome}/npm/npmrc";
   piPackages = [
     "npm:@ifi/pi-plan"
     "npm:pi-permission-system"
     "npm:pi-aliases"
     "npm:pi-generate-commit-message"
+    "npm:@dmille56/openvibes"
   ];
   sweetIconsRepo = builtins.fetchGit {
     url = "https://github.com/EliverLara/Sweet-folders";
@@ -1098,17 +1099,30 @@ with constants;
   # :NOTE: use image profile picture (for display manager)
   home.file.".face".source = lib.mkDefault ../../img/dracula-profile.png;
 
+  # Keep npm auth state writable outside the Nix store.
+  home.activation.ensureNpmUserConfig = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    set -eu
+    umask 077
+    mkdir -p "${config.xdg.configHome}/npm"
+    if [ ! -e "${npmUserConfig}" ]; then
+      : > "${npmUserConfig}"
+    fi
+  '';
+
+  home.file.".npmrc".source = config.lib.file.mkOutOfStoreSymlink npmUserConfig;
+
   home.file.".agents/skills/jobspy/SKILL.md".source = pkgs.jobspy-skill + "/SKILL.md";
 
   # :NOTE: home environment variables config starts here
   programs.npm = {
     enable = true;
-    settings.prefix = piNpmPrefix;
   };
 
   home.sessionPath = [ "${piNpmPrefix}/bin" ];
 
   home.sessionVariables = {
+    NPM_CONFIG_PREFIX = lib.mkDefault piNpmPrefix;
+    NPM_CONFIG_USERCONFIG = lib.mkDefault npmUserConfig;
     # OPENAI_API_KEY = lib.mkDefault "$(cat ${config.sops.secrets.OPENAI_API_KEY.path})";
     # GOOGLE_API_KEY = lib.mkDefault "$(cat ${config.sops.secrets.GOOGLE_API_KEY.path})";
     # ANTHROPIC_API_KEY = lib.mkDefault "$(cat ${config.sops.secrets.ANTHROPIC_API_KEY.path})";
@@ -1150,6 +1164,7 @@ with constants;
       if [ ! -d "${piNpmPrefix}/lib/node_modules/$pkg_name" ]; then
         # pi shells out to npm itself, so make npm explicit for HM activation.
         PATH="${pkgs.nodejs}/bin:$PATH" \
+        NPM_CONFIG_PREFIX="${piNpmPrefix}" \
         NPM_CONFIG_USERCONFIG="${npmUserConfig}" \
         ${pkgs.llm-agents.pi}/bin/pi install "$pkg"
       fi
