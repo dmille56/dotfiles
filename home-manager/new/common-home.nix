@@ -951,6 +951,15 @@ with constants;
   home.file.".config/termonad/termonad.hs".source =
     lib.mkDefault "${my-dotfile-dir}/.termonad/termonad.hs";
   home.file.".config/redshift.conf".source = lib.mkDefault "${my-dotfile-dir}/redshift.conf";
+  
+  home.file.".pi/agent/themes/dracula.json".text = lib.mkDefault (
+    builtins.readFile (
+      builtins.fetchurl {
+        url = "https://raw.githubusercontent.com/dracula/pi-coding-agent/refs/heads/main/dracula.json";
+        sha256 = "sha256:0whkxzj0rn4abj0dqvzhnykz69f7a0xmlswdxxrfiraddwnm8a34";
+      }
+    )
+  );
 
   home.file.".config/rofi/themes/dracula-theme.rasi".text = lib.mkDefault (
     builtins.readFile (
