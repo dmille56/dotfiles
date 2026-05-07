@@ -21,6 +21,7 @@ let
     "npm:pi-permission-system"
     "npm:pi-aliases"
     "npm:pi-generate-commit-message"
+    "npm:pi-web-access"
     "npm:@dmille56/openvibes"
   ];
   sweetIconsRepo = builtins.fetchGit {
@@ -961,6 +962,43 @@ with constants;
       }
     )
   );
+
+  home.file.".pi/agent/pi-permissions.jsonc".text =
+    builtins.toJSON {
+      defaultPolicy = {
+        tools = "ask";
+        bash = "ask";
+        mcp = "ask";
+        skills = "ask";
+        special = "ask";
+      };
+      tools = {
+        read = "allow";
+        ls = "allow";
+        grep = "allow";
+        find = "allow";
+      };
+      bash = {
+        git_status = "allow";
+        git_diff = "allow";
+        ls_wildcard = "allow";
+        "jobspy search *" = "allow";
+      };
+      skills = {
+        jobspy = "allow";
+        caveman = "allow";
+      };
+      special = {
+        external_directory = "ask";
+      };
+    };
+
+  # Optional: Extension Configuration (to enable YOLO mode or disable logs)
+  home.file.".pi/agent/extensions/pi-permission-system/config.json".text = builtins.toJSON {
+    debugLog = false;
+    permissionReviewLog = false;
+    yoloMode = false; # Set to true if you want total auto-approval
+  };
 
   home.file.".config/rofi/themes/dracula-theme.rasi".text = lib.mkDefault (
     builtins.readFile (
