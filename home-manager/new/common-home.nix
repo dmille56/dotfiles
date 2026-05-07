@@ -300,6 +300,7 @@ with constants;
     libreoffice # :NOTE: added
     drawiterm # :NOTE: added
     alsa-utils # :NOTE: added
+    asciinema # :NOTE: added
   ];
 
   # :NOTE: programs config starts here
