@@ -22,6 +22,7 @@ let
     "npm:pi-aliases"
     "npm:pi-generate-commit-message"
     "npm:pi-web-access"
+    "npm:pi-rtk-optimizer"
     "npm:@dmille56/openvibes"
   ];
   sweetIconsRepo = builtins.fetchGit {
@@ -302,6 +303,7 @@ with constants;
     drawiterm # :NOTE: added
     alsa-utils # :NOTE: added
     asciinema # :NOTE: added
+    asciinema-agg # :NOTE: added
   ];
 
   # :NOTE: programs config starts here
@@ -977,6 +979,7 @@ with constants;
         ls = "allow";
         grep = "allow";
         find = "allow";
+        write = "allow";
       };
       bash = {
         git_status = "allow";
