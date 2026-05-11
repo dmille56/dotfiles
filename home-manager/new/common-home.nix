@@ -386,13 +386,13 @@ with constants;
     enableDefaultConfig = false;
     enable = lib.mkDefault true;
     matchBlocks = {
-      "*" = {
-        hostname = lib.mkDefault "73.140.10.210";
-        port = lib.mkDefault 50022;
-        user = lib.mkDefault my-username;
-        compression = lib.mkDefault true;
-        forwardX11 = lib.mkDefault true;
-      };
+      # "*" = {
+      #   hostname = lib.mkDefault "73.140.10.210";
+      #   port = lib.mkDefault 50022;
+      #   user = lib.mkDefault my-username;
+      #   compression = lib.mkDefault true;
+      #   forwardX11 = lib.mkDefault true;
+      # };
       "${my-desktop-hostname}" = {
         hostname = lib.mkDefault "73.140.10.210";
         port = lib.mkDefault 50022;
@@ -414,6 +414,7 @@ with constants;
         tmux-fzf
         jump
         urlview
+        sidebar
         fuzzback
         tmux-toggle-popup
         {
