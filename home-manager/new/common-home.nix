@@ -981,6 +981,7 @@ with constants;
         grep = "allow";
         find = "allow";
         write = "allow";
+        edit = "allow";
       };
       bash = {
         git_status = "allow";
