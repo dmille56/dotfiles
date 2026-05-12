@@ -990,11 +990,15 @@ with constants;
         "git *" = "ask";
         "git status" = "allow";
         "git diff" = "allow";
+        "git log" = "allow";
+        "git log --oneline" = "allow";
         "ls" = "allow";
         "npm *" = "ask";
         "npm run lint" = "allow";
         "npm run build" = "allow";
+        "npm run typecheck" = "allow";
         "jobspy search *" = "allow";
+        "*|*" = "ask";
       };
       skills = {
         jobspy = "allow";
@@ -1010,6 +1014,13 @@ with constants;
     debugLog = false;
     permissionReviewLog = false;
     yoloMode = false; # Set to true if you want total auto-approval
+  };
+  
+  home.file.".pi/web-search.json".text = builtins.toJSON {
+    provider = "exa";
+    workflow = "summary-review";
+    searchModel = "openai/gpt-5.4-nano";
+    summaryModel = "openai/gpt-5.4-mini";
   };
 
   home.file.".config/rofi/themes/dracula-theme.rasi".text = lib.mkDefault (
