@@ -21,6 +21,7 @@ let
     "npm:pi-permission-system"
     "npm:pi-aliases"
     "npm:pi-generate-commit-message"
+    "npm:pi-tool-display"
     "npm:pi-web-access"
     "npm:pi-rtk-optimizer"
     "npm:@dmille56/openvibes"
@@ -982,11 +983,17 @@ with constants;
         find = "allow";
         write = "allow";
         edit = "allow";
+        set_plan = "allow";
       };
       bash = {
-        git_status = "allow";
-        git_diff = "allow";
-        ls_wildcard = "allow";
+        # :NOTE: last rule matched has precedence
+        "git *" = "ask";
+        "git status" = "allow";
+        "git diff" = "allow";
+        "ls" = "allow";
+        "npm *" = "ask";
+        "npm run lint" = "allow";
+        "npm run build" = "allow";
         "jobspy search *" = "allow";
       };
       skills = {
