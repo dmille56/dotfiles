@@ -19,5 +19,8 @@
 - Apply new/updated nixos config: `sudo nixos-rebuild switch --impure`
 - How to update nix pkgs (NOTE still after run switch command to apply the update): `cd /etc/nixos && sudo nix flake update`
 - Garbage collect nix: `nix-collect-garbage -d`
-- How to test out a program without install (drops you in a shell with that program in it)... Replace hellow with the pkg: `nix-shell -p hello`
+- Re run home-manager activation scripts: `sudo systemctl restart home-manager-dono.service`
+- How to test out a program without install (drops you in a shell with that program in it)... Replace hello with the actual pkg you want to use.
+    - Classic way: `nix-shell -p hello`
+    - Modern way: `nix shell nixpkgs#hello`
 - Nix pkgs search: https://search.nixos.org/packages
