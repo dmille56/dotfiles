@@ -1008,6 +1008,7 @@ with constants;
         # :NOTE: javascript/typescript commands
         "npm *" = "ask";
         "npm run lint" = "allow";
+        "npm run lint-fix" = "allow";
         "npm run build" = "allow";
         "npm run typecheck" = "allow";
         # :NOTE: python commands
