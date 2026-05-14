@@ -23,6 +23,7 @@ let
     "npm:pi-generate-commit-message"
     "npm:pi-tool-display"
     "npm:pi-web-access"
+    "npm:pi-ask-user"
     "npm:pi-rtk-optimizer"
     "npm:@dmille56/openvibes"
   ];
@@ -990,6 +991,8 @@ with constants;
         fetch_content = "allow";
         get_search_content = "allow";
         code_search = "allow";
+        # :NOTE: pi-ask-user
+        ask_user = "allow";
       };
       bash = {
         # :NOTE: last rule matched has precedence
@@ -1012,10 +1015,13 @@ with constants;
         "jobspy search *" = "allow";
         # :NOTE: catch all to make sure we don't pipe it to something unsafe
         "*|*" = "ask";
+        "su" = "deny";
+        "sudo *" = "deny";
       };
       skills = {
         jobspy = "allow";
         caveman = "allow";
+        ask-user = "allow";
       };
       special = {
         external_directory = "ask";
