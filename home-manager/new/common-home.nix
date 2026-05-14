@@ -1017,6 +1017,8 @@ with constants;
         "*|*" = "ask";
         "su" = "deny";
         "sudo *" = "deny";
+        "nixos-rebuild *" = "deny";
+        "home-manager *" = "deny";
       };
       skills = {
         jobspy = "allow";
