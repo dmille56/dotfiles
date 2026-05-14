@@ -23,7 +23,8 @@ let
     "npm:pi-generate-commit-message"
     "npm:pi-tool-display"
     "npm:pi-web-access"
-    "npm:pi-ask-user"
+    "npm:@juicesharp/rpiv-ask-user-question"
+    "npm:@juicesharp/rpiv-todo"
     "npm:pi-rtk-optimizer"
     "npm:@dmille56/openvibes"
   ];
@@ -991,8 +992,10 @@ with constants;
         fetch_content = "allow";
         get_search_content = "allow";
         code_search = "allow";
-        # :NOTE: pi-ask-user
-        ask_user = "allow";
+        # :NOTE: rpiv-ask-user-question
+        ask_user_question = "allow";
+        # :NOTE: rpiv-todo
+        todo = "allow";
       };
       bash = {
         # :NOTE: last rule matched has precedence
@@ -1023,7 +1026,6 @@ with constants;
       skills = {
         jobspy = "allow";
         caveman = "allow";
-        ask-user = "allow";
       };
       special = {
         external_directory = "ask";
