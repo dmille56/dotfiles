@@ -983,7 +983,13 @@ with constants;
         find = "allow";
         write = "allow";
         edit = "allow";
+        # :NOTE: pi-plan
         set_plan = "allow";
+        # :NOTE: pi-web-access
+        web_search = "allow";
+        fetch_content = "allow";
+        get_search_content = "allow";
+        code_search = "allow";
       };
       bash = {
         # :NOTE: last rule matched has precedence
@@ -993,11 +999,18 @@ with constants;
         "git log" = "allow";
         "git log --oneline" = "allow";
         "ls" = "allow";
+        # :NOTE: javascript/typescript commands
         "npm *" = "ask";
         "npm run lint" = "allow";
         "npm run build" = "allow";
         "npm run typecheck" = "allow";
+        # :NOTE: python commands
+        "ruff check" = "allow";
+        "ruff check --fix" = "allow";
+        "ruff format" = "allow";
+        "mypy ." = "allow";
         "jobspy search *" = "allow";
+        # :NOTE: catch all to make sure we don't pipe it to something unsafe
         "*|*" = "ask";
       };
       skills = {
