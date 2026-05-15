@@ -970,6 +970,10 @@ with constants;
     )
   );
 
+  home.file.".pi/agent/AGENTS.md".text = ''
+  When modifying files, always use the built-in edit/write tools. Avoid bash for file modifications and do not use sed/awk/nl | sed pipelines for editing.
+  '';
+
   home.file.".pi/agent/pi-permissions.jsonc".text =
     builtins.toJSON {
       defaultPolicy = {
@@ -1030,7 +1034,6 @@ with constants;
         "home-manager *" = "deny";
         # :NOTE: catch all to make sure we don't pipe it to something unsafe
         "*|*" = "ask";
-        "nl * | sed -n *" = "allow";
       };
       skills = {
         jobspy = "allow";
