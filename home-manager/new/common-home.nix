@@ -27,6 +27,7 @@ let
     "npm:@juicesharp/rpiv-todo"
     "npm:pi-rtk-optimizer"
     "npm:@dmille56/openvibes"
+    "npm:@dmille56/pi-piper-tts"
   ];
   sweetIconsRepo = builtins.fetchGit {
     url = "https://github.com/EliverLara/Sweet-folders";
@@ -987,11 +988,16 @@ with constants;
         edit = "allow";
         # :NOTE: pi-plan
         set_plan = "allow";
+        request_user_input = "allow";
+        steer_task_agent = "allow";
+        task_agents = "allow";
         # :NOTE: pi-web-access
         web_search = "allow";
         fetch_content = "allow";
         get_search_content = "allow";
         code_search = "allow";
+        # :NOTE: pi-ask-user
+        ask_user = "allow";
         # :NOTE: rpiv-ask-user-question
         ask_user_question = "allow";
         # :NOTE: rpiv-todo
@@ -1017,16 +1023,20 @@ with constants;
         "ruff format" = "allow";
         "mypy ." = "allow";
         "jobspy search *" = "allow";
-        # :NOTE: catch all to make sure we don't pipe it to something unsafe
-        "*|*" = "ask";
+        # :NOTE: deny some obvious commands
         "su" = "deny";
         "sudo *" = "deny";
         "nixos-rebuild *" = "deny";
         "home-manager *" = "deny";
+        # :NOTE: catch all to make sure we don't pipe it to something unsafe
+        "*|*" = "ask";
+        "nl * | sed -n *" = "allow";
       };
       skills = {
         jobspy = "allow";
         caveman = "allow";
+        # :NOTE: pi-ask-user
+        ask-user = "allow";
       };
       special = {
         external_directory = "ask";
@@ -1187,6 +1197,34 @@ with constants;
       }
     )
   );
+  
+  home.file."piper/models/en_GB-alan-medium.onnx".source = lib.mkDefault (
+    builtins.fetchurl {
+      url = "https://huggingface.co/rhasspy/piper-voices/resolve/main/en/en_GB/alan/medium/en_GB-alan-medium.onnx";
+      sha256 = "sha256:0c1kklrmd7p05gvas8ln68h02jyd6qkzq7hzh1iff192jdl9cc0a";
+    }
+  );
+
+  home.file."piper/models/en_GB-alan-medium.onnx.json".source = lib.mkDefault (
+    builtins.fetchurl {
+      url = "https://huggingface.co/rhasspy/piper-voices/resolve/main/en/en_GB/alan/medium/en_GB-alan-medium.onnx.json";
+      sha256 = "sha256:07lcxr9fgj5mvs1b2rd3k1lrlcbz534dqd9vq3kh0p49wljd3w60";
+    }
+  );
+  
+  home.file."piper/models/en_GB-alan-low.onnx".source = lib.mkDefault (
+    builtins.fetchurl {
+      url = "https://huggingface.co/rhasspy/piper-voices/resolve/main/en/en_GB/alan/low/en_GB-alan-low.onnx";
+      sha256 = "sha256:1pjxpz5f5qs1qgw36vrxbyqnycxvba7x08z87lhfsaqaca20bxm1"; # :TODO:
+    }
+  );
+
+  home.file."piper/models/en_GB-alan-low.onnx.json".source = lib.mkDefault (
+    builtins.fetchurl {
+      url = "https://huggingface.co/rhasspy/piper-voices/resolve/main/en/en_GB/alan/low/en_GB-alan-low.onnx.json";
+      sha256 = "sha256:0zk38i5qswb071ra1z01hmizlac4irw1wjnfa7305qbc9g04q5n8"; # :TODO:
+    }
+  );
 
   home.file.".PowershellEditorServices".source = lib.mkDefault (
     pkgs.fetchzip {
@@ -1231,6 +1269,7 @@ with constants;
     # ANTHROPIC_API_KEY = lib.mkDefault "$(cat ${config.sops.secrets.ANTHROPIC_API_KEY.path})";
     OPENAI_API_KEY = lib.mkDefault "$(cat /run/secrets/OPENAI_API_KEY)";
     GOOGLE_API_KEY = lib.mkDefault "$(cat /run/secrets/GOOGLE_API_KEY)";
+    GEMINI_API_KEY = lib.mkDefault "$(cat /run/secrets/GOOGLE_API_KEY)";
     ANTHROPIC_API_KEY = lib.mkDefault "$(cat /run/secrets/ANTHROPIC_API_KEY)";
     OPENROUTER_API_KEY = lib.mkDefault "$(cat /run/secrets/OPENROUTER_API_KEY)";
     OPENAI_API_MODEL = lib.mkDefault "gpt-5.4-mini";
