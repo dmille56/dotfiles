@@ -27,6 +27,7 @@ let
     "npm:@juicesharp/rpiv-ask-user-question"
     "npm:@juicesharp/rpiv-todo"
     "npm:pi-rtk-optimizer"
+    "git:github.com/cgxeiji/pi-emote"
     "npm:@dmille56/openvibes"
     "npm:@dmille56/pi-piper-tts"
   ];
@@ -235,6 +236,7 @@ with constants;
     xterm
     # termonad # :TODO: figure out why this broke
     alacritty
+    kitty
     neovide
 
     mplayer
@@ -932,6 +934,10 @@ with constants;
     ] 
   '';
 
+  home.file.".config/kitty/kitty.conf".text = lib.mkDefault ''
+    include dracula.conf
+  '';
+
   home.file.".config/spotifyd/spotifyd.conf".text = lib.mkDefault ''
     [global]
     username = "donovanm56"
@@ -1189,6 +1195,15 @@ with constants;
       }
     )
   );
+  
+  home.file.".config/kitty/dracula.conf".text = lib.mkDefault (
+    builtins.readFile (
+      builtins.fetchurl {
+        url = "https://raw.githubusercontent.com/dracula/kitty/refs/heads/master/dracula.conf";
+        sha256 = "sha256:139irq012z2yaxabmx9xn352knj1316qlyzn27lnfx5y9izkygri";
+      }
+    )
+  );
 
   home.file."piper/models/en_US-lessac-high.onnx".source = lib.mkDefault (
     builtins.fetchurl {
@@ -1313,7 +1328,7 @@ with constants;
 
       if [ ! -d "${piNpmPrefix}/lib/node_modules/$pkg_name" ]; then
         # pi shells out to npm itself, so make npm explicit for HM activation.
-      PATH="${pkgs.nodejs}/bin:$PATH" \
+      PATH="${pkgs.git}/bin:${pkgs.nodejs}/bin:$PATH" \
         npm_config_prefix="${piNpmPrefix}" \
         npm_config_userconfig="${npmUserConfig}" \
         ${piWrapped}/bin/pi install "$pkg"
