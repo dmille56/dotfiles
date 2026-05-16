@@ -198,6 +198,7 @@ with constants;
     (import ../../nix/play-yt-script-format.nix)
     (import ../../nix/rofi-buku.nix)
     (import ../../nix/my-tts.nix)
+    (import ../../nix/kokoro-tts.nix { pkgs = pkgs; })
     (import ../../nix/trayer-padding-icon.nix { inherit stdenv; })
     (import ../../nix/fireplace.nix {
       inherit
@@ -1026,6 +1027,7 @@ with constants;
         "ruff check --fix" = "allow";
         "ruff format" = "allow";
         "mypy ." = "allow";
+        # :NOTE: allow job searching commands via jobspy
         "jobspy search *" = "allow";
         # :NOTE: deny some obvious commands
         "su" = "deny";
