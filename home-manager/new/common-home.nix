@@ -479,6 +479,17 @@ with constants;
 
       unbind-key -T prefix \\
       bind-key -T prefix \\ run "#{@popup-toggle} -Ed'##{pane_current_path}' -w85% -h85%"
+
+      # :NOTE: the following is to make pi-emote work (https://github.com/cgxeiji/pi-emote)
+      # Required — allow image sequences to pass through to the outer terminal
+      set -g allow-passthrough on
+      
+      # Required — detect outer terminal when attaching from a different terminal
+      set -ga update-environment TERM
+      set -ga update-environment TERM_PROGRAM
+      
+      # Recommended — reduces flicker during animation
+      set -sg escape-time 0
     '';
   };
 
