@@ -998,7 +998,7 @@ with constants;
         steer_task_agent = "allow";
         task_agents = "allow";
         # :NOTE: open-plan-annotator/pi-extension
-        annotate_plan = "allow";
+        annotate_plan = "ask";
         # :NOTE: pi-web-access
         web_search = "allow";
         fetch_content = "allow";
