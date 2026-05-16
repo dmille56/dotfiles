@@ -163,6 +163,9 @@ with constants;
 
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
+  
+  # :NOTE: for running non-nix executables
+  programs.nix-ld.enable = true;
 
   nixpkgs.overlays = [
     (import (
