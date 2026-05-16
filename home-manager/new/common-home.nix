@@ -31,6 +31,9 @@ let
     "npm:@dmille56/openvibes"
     "npm:@dmille56/pi-piper-tts"
   ];
+
+  kokoroModels = import ../../nix/kokoro-tts.nix { pkgs = pkgs; exposeModels = true; };
+
   sweetIconsRepo = builtins.fetchGit {
     url = "https://github.com/EliverLara/Sweet-folders";
     rev = "40a5d36e50437901c7eaa1119bb9ae8006e2fe5c";
@@ -1274,6 +1277,12 @@ with constants;
       sha256 = "sha256:0zk38i5qswb071ra1z01hmizlac4irw1wjnfa7305qbc9g04q5n8"; # :TODO:
     }
   );
+
+  home.file.".local/share/kokoro-tts/kokoro-v1.0.onnx".source =
+    lib.mkDefault "${kokoroModels}/share/kokoro-tts/kokoro-v1.0.onnx";
+
+  home.file.".local/share/kokoro-tts/voices-v1.0.bin".source =
+    lib.mkDefault "${kokoroModels}/share/kokoro-tts/voices-v1.0.bin";
 
   home.file.".PowershellEditorServices".source = lib.mkDefault (
     pkgs.fetchzip {

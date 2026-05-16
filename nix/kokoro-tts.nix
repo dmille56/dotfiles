@@ -1,4 +1,6 @@
-{ pkgs ? import <nixpkgs> { } }:
+{ pkgs ? import <nixpkgs> { },
+  exposeModels ? false
+}:
 let
   python = pkgs.python312;
   pythonPackages = pkgs.python312Packages;
@@ -106,6 +108,9 @@ let
   };
 
 in
+  if exposeModels then
+    kokoroModels
+  else
   pkgs.writeShellApplication {
     name = "kokoro-tts";
     runtimeInputs = [ kokoroTts ];
