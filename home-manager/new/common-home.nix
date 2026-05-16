@@ -18,6 +18,7 @@ let
   };
   piPackages = [
     "npm:@ifi/pi-plan"
+    "npm:@open-plan-annotator/pi-extension"
     "npm:pi-permission-system"
     "npm:pi-aliases"
     "npm:pi-generate-commit-message"
@@ -996,6 +997,8 @@ with constants;
         request_user_input = "allow";
         steer_task_agent = "allow";
         task_agents = "allow";
+        # :NOTE: open-plan-annotator/pi-extension
+        annotate_plan = "allow";
         # :NOTE: pi-web-access
         web_search = "allow";
         fetch_content = "allow";
