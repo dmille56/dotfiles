@@ -936,6 +936,21 @@ with constants;
 
   home.file.".config/kitty/kitty.conf".text = lib.mkDefault ''
     include dracula.conf
+
+    # Font (matches the Alacritty config in this repo)
+    font_family "DejaVu Sans Mono"
+    bold_font "DejaVu Sans Mono Bold"
+    italic_font "DejaVu Sans Mono Italic"
+    bold_italic_font "DejaVu Sans Mono Bold Italic"
+    font_size 13.0
+
+    # Window appearance
+    background_opacity 0.8
+
+    # Ctrl +/- to resize font
+    map ctrl+equal change_font_size all +2.0
+    map ctrl+plus change_font_size all +2.0
+    map ctrl+minus change_font_size all -2.0
   '';
 
   home.file.".config/spotifyd/spotifyd.conf".text = lib.mkDefault ''
