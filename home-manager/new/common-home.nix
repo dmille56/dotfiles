@@ -28,8 +28,10 @@ let
     "npm:@juicesharp/rpiv-todo"
     "npm:pi-rtk-optimizer"
     "git:github.com/cgxeiji/pi-emote"
-    "npm:@dmille56/openvibes"
-    "npm:@dmille56/pi-piper-tts"
+    "git:github.com/dmille56/openvibes"
+    # "npm:@dmille56/openvibes"
+    "git:github.com/dmille56/pi-piper-tts"
+    #"npm:@dmille56/pi-piper-tts"
   ];
 
   kokoroModels = import ../../nix/kokoro-tts.nix { pkgs = pkgs; exposeModels = true; };
