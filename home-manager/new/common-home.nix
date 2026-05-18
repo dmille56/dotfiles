@@ -1104,6 +1104,12 @@ with constants;
     searchModel = "openai/gpt-5.4-nano";
     summaryModel = "openai/gpt-5.4-mini";
   };
+  
+  home.file.".config/opencode/opencode.jsonc".text = builtins.toJSON {
+    plugin = [
+      "open-plan-annotator@latest"
+    ];
+  };
 
   home.file.".config/rofi/themes/dracula-theme.rasi".text = lib.mkDefault (
     builtins.readFile (
