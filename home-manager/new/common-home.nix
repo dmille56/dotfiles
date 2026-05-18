@@ -1010,7 +1010,7 @@ with constants;
   );
 
   home.file.".pi/agent/AGENTS.md".text = ''
-  When modifying files, always use the built-in edit/write tools. Avoid bash for file modifications and do not use sed/awk/nl | sed pipelines for editing.
+  When modifying files, always use the built-in read/write/edit tools. Avoid bash for file modifications and do not use sed/awk/nl | sed pipelines for editing/reading.
   '';
 
   home.file.".pi/agent/pi-permissions.jsonc".text =
@@ -1058,10 +1058,13 @@ with constants;
         "ls" = "allow";
         # :NOTE: javascript/typescript commands
         "npm *" = "ask";
+        "npm test" = "allow";
         "npm run lint" = "allow";
         "npm run lint-fix" = "allow";
         "npm run build" = "allow";
         "npm run typecheck" = "allow";
+        "npm run test" = "allow";
+        "npm run format" = "allow";
         # :NOTE: python commands
         "ruff check" = "allow";
         "ruff check --fix" = "allow";
