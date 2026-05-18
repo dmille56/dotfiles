@@ -1100,7 +1100,7 @@ with constants;
   
   home.file.".pi/web-search.json".text = builtins.toJSON {
     provider = "exa";
-    workflow = "summary-review";
+    workflow = "none";
     searchModel = "openai/gpt-5.4-nano";
     summaryModel = "openai/gpt-5.4-mini";
   };
@@ -1109,6 +1109,10 @@ with constants;
     plugin = [
       "open-plan-annotator@latest"
     ];
+    tools = {
+      websearch = true;
+      codesearch = true;
+    };
   };
 
   home.file.".config/rofi/themes/dracula-theme.rasi".text = lib.mkDefault (
