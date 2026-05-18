@@ -1114,6 +1114,12 @@ with constants;
         render = "auto";
       }
     ];
+    emotes = [
+     {
+       model= "*";
+       emote-set = "aza_choi";
+     }
+    ];
   };
   
   home.file.".pi/web-search.json".text = builtins.toJSON {
