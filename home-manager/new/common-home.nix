@@ -505,6 +505,14 @@ with constants;
 
     initContent = ''
       if [ -e ~/.nix-profile/etc/profile.d/nix.sh ]; then . ~/.nix-profile/etc/profile.d/nix.sh; fi
+
+      # pi-emote (tmux passthrough) uses `tmux show-environment TERM_PROGRAM` to detect
+      # the *outer* terminal. Many terminal emulators leave TERM_PROGRAM unset.
+      # Set it here only when we can confidently identify the emulator.
+      if [ -n "$KITTY_WINDOW_ID" ] || [ "$TERM" = "xterm-kitty" ]; then
+        export TERM_PROGRAM="kitty"
+      fi
+
       source ${pkgs.zsh-syntax-highlighting}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
     '';
 
@@ -1098,6 +1106,16 @@ with constants;
     yoloMode = false; # Set to true if you want total auto-approval
   };
   
+  # pi-emote: tmux default is ASCII; opt in to kitty-unicode images when running under tmux.
+  home.file.".pi/agent/extensions/pi-emote/config.json".text = builtins.toJSON {
+    terminals = [
+      {
+        match = "tmux";
+        render = "auto";
+      }
+    ];
+  };
+  
   home.file.".pi/web-search.json".text = builtins.toJSON {
     provider = "exa";
     workflow = "none";
@@ -1354,6 +1372,8 @@ with constants;
     BROWSER = lib.mkDefault "${pkgs.firefox-bin}/bin/firefox";
     TERMINAL_EMULATOR = lib.mkDefault "${pkgs.alacritty}/bin/alacritty";
     TERMINAL = lib.mkDefault "${pkgs.alacritty}/bin/alacritty";
+
+
     PAGER = lib.mkDefault "less";
     EDITOR = lib.mkDefault "nvim";
     VISUAL = lib.mkDefault "neovide";
