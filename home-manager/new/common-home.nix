@@ -221,6 +221,10 @@ with constants;
     })
     (import ../../nix/glow-org.nix { inherit pkgs; })
 
+    # milli CLI (rendering engine)
+    (callPackage ../../nix/milli-cli.nix {})
+
+
     cmatrix
     neo
     snowmachine
