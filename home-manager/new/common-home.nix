@@ -44,6 +44,10 @@ let
     url = "https://github.com/dracula/gtk";
     rev = "2618a035409d65e0a1e4da1909ae1b5fd6a796fd";
   };
+  testPiEmotesRepo = builtins.fetchGit {
+    url = "https://github.com/dmille56/test-pi-emotes";
+    rev = "05ac288002755f79d7057eecfee9e0bd537f2ea2";
+  };
 in
 with constants;
 {
@@ -592,6 +596,7 @@ with constants;
         ''
       )
       orgmode
+      markdown-preview-nvim
 
       # completion
       cmp-nvim-lsp
@@ -1106,6 +1111,8 @@ with constants;
     yoloMode = false; # Set to true if you want total auto-approval
   };
   
+  home.file.".pi/agent/extensions/pi-emote/emotes/cyber-greymane".source = "${testPiEmotesRepo}/emotes/cyber-greymane";
+  
   # pi-emote: tmux default is ASCII; opt in to kitty-unicode images when running under tmux.
   home.file.".pi/agent/extensions/pi-emote/config.json".text = builtins.toJSON {
     terminals = [
@@ -1117,7 +1124,9 @@ with constants;
     emotes = [
      {
        model= "*";
-       emote-set = "aza_choi";
+       # :NOTE: switch between these
+       # emote-set = "aza_choi";
+       emote-set = "cyber-greymane";
      }
     ];
   };
