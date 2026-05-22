@@ -46,7 +46,7 @@ let
   };
   testPiEmotesRepo = builtins.fetchGit {
     url = "https://github.com/dmille56/test-pi-emotes";
-    rev = "05ac288002755f79d7057eecfee9e0bd537f2ea2";
+    rev = "900cf8e4a32e23247576fe8627da18bbaa5ba28f";
   };
 in
 with constants;
@@ -1070,6 +1070,7 @@ with constants;
         "git *" = "ask";
         "git status" = "allow";
         "git diff" = "allow";
+        "git diff --stat" = "allow";
         "git log" = "allow";
         "git log --oneline" = "allow";
         "ls" = "allow";
@@ -1089,13 +1090,13 @@ with constants;
         "mypy ." = "allow";
         # :NOTE: allow job searching commands via jobspy
         "jobspy search *" = "allow";
+        # :NOTE: catch all to make sure we don't pipe it to something unsafe
+        "*|*" = "ask";
         # :NOTE: deny some obvious commands
         "su" = "deny";
         "sudo *" = "deny";
         "nixos-rebuild *" = "deny";
         "home-manager *" = "deny";
-        # :NOTE: catch all to make sure we don't pipe it to something unsafe
-        "*|*" = "ask";
       };
       skills = {
         jobspy = "allow";
