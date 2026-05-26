@@ -3,7 +3,18 @@
 }:
 let
   python = pkgs.python312;
-  pythonPackages = pkgs.python312Packages;
+  pythonPackages = pkgs.python312Packages.overrideScope (self: super: {
+    datasette = super.datasette.overrideAttrs (_: {
+      doCheck = false;
+      doInstallCheck = false;
+    });
+
+    coloredlogs = super.coloredlogs.overrideAttrs (old: {
+      doCheck = false;
+      doInstallCheck = false;
+      nativeBuildInputs = builtins.filter (pkg: builtins.match ".*capturer.*" (toString pkg) == null) old.nativeBuildInputs;
+    });
+  });
 
   kokoroSrc = pkgs.fetchzip {
     url = "https://github.com/nazdridoy/kokoro-tts/archive/refs/tags/v2.3.1.tar.gz";
