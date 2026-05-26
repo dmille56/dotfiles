@@ -214,6 +214,7 @@ with constants;
     curl
     w3m
     xmodmap
+    poppler-utils
   ];
 
   environment.sessionVariables = {
