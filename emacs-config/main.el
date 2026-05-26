@@ -6,7 +6,8 @@
 ;;; Code:
 
 (setq gc-cons-threshold 100000000)
-(setq load-prefer-newer t)
+(setq load-prefer-newer nil)
+(require 'compat)
 (eval-and-compile
   (require 'cl-lib))
 
@@ -256,7 +257,7 @@ _p_rev       _U_pper              _=_: upper/lower       _r_esolve
     ("GR" "chatgpt refactor code" chatgpt-shell-refactor-code)
     ("Gd" "chatgpt describe code" chatgpt-shell-describe-code)
     ("GC" "chatgpt write git commit" chatgpt-shell-write-git-commit)
-    ("Gc" "copilot chat" copilot-chat-display)
+    ;; ("Gc" "copilot chat" copilot-chat-display)
     ("Ga" "aider transient" aider-transient-menu)
     ;; ("GA" "agent-shell" agent-shell)
     ;; ("Gw" "agent-shell-workspace-toggle" agent-shell-workspace-toggle)
@@ -477,7 +478,7 @@ _p_rev       _U_pper              _=_: upper/lower       _r_esolve
    ;; "l" 'run-lsp-command-map
    "g" 'magit
    "G" 'launch-lazygit
-   "F" 'my/transient-forge
+   ;; "F" 'my/transient-forge
    ;; "v" 'helm-semantic-or-imenu
    "v" 'consult-imenu ;; :TODO: make sure this works correctly
    "a" 'link-hint-open-link

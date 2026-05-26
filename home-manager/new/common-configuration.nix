@@ -171,7 +171,7 @@ with constants;
     (import (
       builtins.fetchGit {
         url = "https://github.com/nix-community/emacs-overlay.git";
-        rev = "fe3b2b9eeef2150992104730612230bbe061dca3";
+        rev = "c7704e4387f66c07a9ce2c76f5081848c61a3f1c";
       }
     ))
   ];
