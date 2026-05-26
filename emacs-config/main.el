@@ -7,7 +7,8 @@
 
 (setq gc-cons-threshold 100000000)
 (setq load-prefer-newer t)
-(require 'cl)
+(eval-and-compile
+  (require 'cl-lib))
 
 ;; Some same defaults to start:
 
@@ -80,9 +81,11 @@
          'silent 'inhibit-cookies)
       (goto-char (point-max))
       (eval-print-last-sexp)))
-  (load bootstrap-file nil 'nomessage))
+(load bootstrap-file nil 'nomessage))
 
 (straight-use-package 'org)
+(straight-use-package 'transient)
+(require 'transient)
 
 ;; How to check for system type:
 ;; (if (eq system-type 'gnu/linux)
@@ -167,8 +170,6 @@ _p_rev       _U_pper              _=_: upper/lower       _r_esolve
 ;;   :hook (after-init . hydra-posframe-mode))
 
 (setq-default evil-want-keybinding nil)
-
-(use-package transient)
 
 ;; :TODO: eventually fix tab management transient... It caused issue so I went back to manually defining it
 
@@ -1434,7 +1435,8 @@ _p_rev       _U_pper              _=_: upper/lower       _r_esolve
 
 (use-package aider
   :straight (:host github :repo "tninja/aider.el")
-  :config
+  :commands (aider-transient-menu)
+  :init
   ;; For latest claude sonnet model
   ;; (setq aider-args '("--model" "sonnet" "--no-auto-accept-architect"))
   ;; (setenv "ANTHROPIC_API_KEY" anthropic-api-key)
