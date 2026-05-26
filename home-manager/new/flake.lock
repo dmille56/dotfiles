@@ -494,6 +494,26 @@
         "type": "github"
       }
     },
+    "resume-qna": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1779770120,
+        "narHash": "sha256-eGo9iLaeyzuyOeTY3ydNgsQqgAfJYrm/pZ0To+TEY0o=",
+        "owner": "dmille56",
+        "repo": "resume-qna",
+        "rev": "4e2002266a4e4d8abbea6664cf31a078826277d5",
+        "type": "github"
+      },
+      "original": {
+        "owner": "dmille56",
+        "repo": "resume-qna",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "aider-chat-full-revision": "aider-chat-full-revision",
@@ -506,6 +526,7 @@
         "nixpkgs": "nixpkgs_6",
         "ollama-revision": "ollama-revision",
         "opentmux": "opentmux",
+        "resume-qna": "resume-qna",
         "sops-nix": "sops-nix"
       }
     },

@@ -73,6 +73,8 @@ with constants;
 
   # :NOTE: packages config
   # :NOTE: Lists automatically merge, so this all gets added to home.nix's packages
+  resumeQna.enable = true;
+
   home.packages = with pkgs; [
     #terminal
     nano

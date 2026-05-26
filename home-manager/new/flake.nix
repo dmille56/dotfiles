@@ -53,6 +53,11 @@
     };
     
     jobspy-plugin.url = "github:dmille56/jobspy-plugin";
+
+    resume-qna = {
+      url = "github:dmille56/resume-qna";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = inputs@{ nixpkgs, home-manager, sops-nix, nix-openclaw, aider-chat-full-revision, ollama-revision, drawiterm, llm-agents, opentmux, jobspy-plugin, ... }:
@@ -138,6 +143,7 @@
             home-manager.sharedModules = [
               sops-nix.homeManagerModules.sops
               nix-openclaw.homeManagerModules.openclaw
+              inputs.resume-qna.homeManagerModules.resume-qna
             ];
 
             # Optionally, use home-manager.extraSpecialArgs to pass arguments to home.nix
