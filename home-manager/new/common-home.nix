@@ -986,6 +986,8 @@ with constants;
     map ctrl+equal change_font_size all +2.0
     map ctrl+plus change_font_size all +2.0
     map ctrl+minus change_font_size all -2.0
+
+    enable_audio_bell no
   '';
 
   home.file.".config/spotifyd/spotifyd.conf".text = lib.mkDefault ''
