@@ -732,6 +732,10 @@ with constants;
 
       set completeopt=menu,menuone,noselect
 
+      " Use filetype-specific indent rules, then pin JS/TS to 4 spaces.
+      filetype plugin indent on
+      autocmd FileType typescript,typescriptreact,javascript,javascriptreact setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
+
       lua <<EOF
 
         -- Setup neogit
