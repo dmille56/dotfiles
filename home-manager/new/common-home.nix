@@ -1098,8 +1098,12 @@ with constants;
         "mypy ." = "allow";
         # :NOTE: allow job searching commands via jobspy
         "jobspy search *" = "allow";
-        # :NOTE: catch all to make sure we don't pipe it to something unsafe
+        # :NOTE: catch common shell chaining forms so one command cannot hide another
         "*|*" = "ask";
+        "*&&*" = "ask";
+        "*||*" = "ask";
+        "*;*" = "ask";
+        "*&*" = "ask";
         # :NOTE: deny some obvious commands
         "su" = "deny";
         "sudo *" = "deny";
