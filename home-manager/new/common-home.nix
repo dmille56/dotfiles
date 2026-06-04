@@ -35,6 +35,10 @@ let
   ];
 
   kokoroModels = import ../../nix/kokoro-tts.nix { pkgs = pkgs; exposeModels = true; };
+  pkgsWithRangerHighlightFix = pkgs.extend (final: prev: {
+    # highlight's shellscript patch is already applied upstream in current nixpkgs.
+    highlight = prev.highlight.overrideAttrs (_old: { patches = []; });
+  });
 
   sweetIconsRepo = builtins.fetchGit {
     url = "https://github.com/EliverLara/Sweet-folders";
@@ -134,7 +138,7 @@ with constants;
 
     powershell
     tmux
-    ranger
+    pkgsWithRangerHighlightFix.ranger
     yazi
     fzf
     ripgrep
