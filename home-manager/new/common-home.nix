@@ -953,19 +953,19 @@ with constants;
     size = 13.0
 
     [font.bold]
-    family = "DejaVu Sans Mono"
+    family = "DejaVuSansM Nerd Font Mono"
     style = "Bold"
 
     [font.bold_italic]
-    family = "DejaVu Sans Mono"
+    family = "DejaVuSansM Nerd Font Mono"
     style = "Bold Italic"
 
     [font.italic]
-    family = "DejaVu Sans Mono"
+    family = "DejaVuSansM Nerd Font Mono"
     style = "Italic"
 
     [font.normal]
-    family = "DejaVu Sans Mono"
+    family = "DejaVuSansM Nerd Font Mono"
     style = "Regular"
 
     [window]
@@ -1169,6 +1169,11 @@ with constants;
       codesearch = true;
     };
   };
+  
+  # home.file.".config/rtk/config.toml".text = ''
+  #   [hooks]
+  #   exclude_commands = ["npm run lint" "npm run lint-fix"] # skip rewrite for this
+  # '';
 
   home.file.".config/rofi/themes/dracula-theme.rasi".text = lib.mkDefault (
     builtins.readFile (

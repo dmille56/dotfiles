@@ -697,19 +697,19 @@ in
     size = 13.0
     
     [font.bold]
-    family = "DejaVu Sans Mono"
+    family = "DejaVuSansM Nerd Font Mono"
     style = "Bold"
     
     [font.bold_italic]
-    family = "DejaVu Sans Mono"
+    family = "DejaVuSansM Nerd Font Mono"
     style = "Bold Italic"
     
     [font.italic]
-    family = "DejaVu Sans Mono"
+    family = "DejaVuSansM Nerd Font Mono"
     style = "Italic"
     
     [font.normal]
-    family = "DejaVu Sans Mono"
+    family = "DejaVuSansM Nerd Font Mono"
     style = "Regular"
 
     [window]
