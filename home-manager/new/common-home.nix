@@ -18,6 +18,7 @@ let
   };
   piPackages = [
     "npm:@ifi/pi-plan"
+    "npm:typebox" # :NOTE: this is a dependency for open-plan-annotator
     "npm:@open-plan-annotator/pi-extension"
     "npm:pi-permission-system"
     "npm:pi-aliases"
