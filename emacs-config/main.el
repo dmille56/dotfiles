@@ -1434,6 +1434,17 @@ _p_rev       _U_pper              _=_: upper/lower       _r_esolve
   (setq org-ai-default-chat-model "gpt-5-mini")
   (org-ai-install-yasnippets)) ; if you are using yasnippet and want `ai` snippets
 
+(use-package md-ts-mode
+  :straight (:host github :repo "dnouri/md-ts-mode"))
+
+(use-package markdown-table-wrap
+  :straight (:host github :repo "dnouri/markdown-table-wrap"))
+
+(use-package pi-coding-agent
+  :straight (:host github :repo "dnouri/pi-coding-agent" :files ("*.el" "README.org"))
+  :commands (pi-coding-agent pi-coding-agent-toggle)
+  :init (defalias 'pi 'pi-coding-agent))
+
 (use-package aider
   :straight (:host github :repo "tninja/aider.el")
   :commands (aider-transient-menu)

@@ -92,6 +92,7 @@ with constants;
     curl
     git
     git-credential-oauth
+    gcc # provides cc for treesit grammar compilation
     ((emacsPackagesFor emacs-gtk).emacsWithPackages (epkgs: [
       epkgs.vterm
       epkgs.w3m
@@ -1128,8 +1129,8 @@ with constants;
 
   # Optional: Extension Configuration (to enable YOLO mode or disable logs)
   home.file.".pi/agent/extensions/pi-permission-system/config.json".text = builtins.toJSON {
-    debugLog = false;
-    permissionReviewLog = false;
+    debug = true;
+    permissionReviewLog = true;
     yoloMode = false; # Set to true if you want total auto-approval
   };
   
