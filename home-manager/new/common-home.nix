@@ -980,6 +980,10 @@ with constants;
   '';
 
   home.file.".config/kitty/kitty.conf".text = lib.mkDefault ''
+    # Disable kitty's config file watcher; Home Manager writes config through
+    # symlinks in the Nix store, which can trigger excessive watch usage.
+    auto_reload_config -1
+
     include dracula.conf
 
     # Font (matches the Alacritty config in this repo)
@@ -1130,7 +1134,6 @@ with constants;
   # Optional: Extension Configuration (to enable YOLO mode or disable logs)
   home.file.".pi/agent/extensions/pi-permission-system/config.json".text = builtins.toJSON {
     debug = true;
-    permissionReviewLog = true;
     yoloMode = false; # Set to true if you want total auto-approval
   };
   
@@ -1398,6 +1401,8 @@ with constants;
   home.sessionVariables = {
     npm_config_prefix = lib.mkDefault piNpmPrefix;
     npm_config_userconfig = lib.mkDefault npmUserConfig;
+    PI_PERMISSION_SYSTEM_CONFIG_PATH = lib.mkDefault "${config.home.homeDirectory}/.pi/agent/extensions/pi-permission-system/config.json";
+    PI_PERMISSION_SYSTEM_LOGS_DIR = lib.mkDefault "${config.home.homeDirectory}/.pi/agent/extensions/pi-permission-system/logs";
     # OPENAI_API_KEY = lib.mkDefault "$(cat ${config.sops.secrets.OPENAI_API_KEY.path})";
     # GOOGLE_API_KEY = lib.mkDefault "$(cat ${config.sops.secrets.GOOGLE_API_KEY.path})";
     # ANTHROPIC_API_KEY = lib.mkDefault "$(cat ${config.sops.secrets.ANTHROPIC_API_KEY.path})";
