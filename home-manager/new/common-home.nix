@@ -17,8 +17,9 @@ let
     '';
   };
   piPackages = [
+    "npm:@mariozechner/pi-tui" # :NOTE: dependency for pi-plan
     "npm:@ifi/pi-plan"
-    "npm:typebox" # :NOTE: this is a dependency for open-plan-annotator
+    "npm:typebox" # :NOTE: dependency for open-plan-annotator
     "npm:@open-plan-annotator/pi-extension"
     "npm:pi-permission-system"
     "npm:pi-aliases"
