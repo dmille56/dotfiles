@@ -68,7 +68,11 @@
   :config
   (setq auto-package-update-delete-old-versions t)
   (setq auto-package-update-hide-results t)
-  (auto-package-update-maybe))
+  (add-hook 'emacs-startup-hook
+            (lambda ()
+              (run-with-idle-timer 5 nil #'auto-package-update-maybe))))
+
+;; Run manually only if you don't want the post-startup idle timer.
 
 ;; install straight.el
 (defvar bootstrap-version)
@@ -85,7 +89,6 @@
 (load bootstrap-file nil 'nomessage))
 
 (straight-use-package 'org)
-(straight-use-package 'transient)
 (require 'transient)
 
 ;; How to check for system type:
