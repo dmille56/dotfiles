@@ -74,6 +74,11 @@ in with constants;
                   id = "qwen3.5:latest";
                   name = "qwen3.5:latest";
                   contextWindow = 64000;
+                },
+                {
+                  id = "gemma4:12b-it-qat";
+                  name = "gemma4:12b-it-qat";
+                  contextWindow = 64000;
                 }
               ];
             };
