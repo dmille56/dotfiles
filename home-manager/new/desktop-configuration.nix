@@ -104,7 +104,10 @@ in
   # if it's already in active (exited) state, so force a restart after every switch
   system.activationScripts.restartHomeManager = {
     deps = [ "users" ];
-    text = "systemctl restart home-manager-${constants.my-username}.service || true";
+    text = ''
+      systemctl restart home-manager-${constants.my-username}.service || true
+      runuser -u ${constants.my-username} -- sh -c 'XDG_RUNTIME_DIR=/run/user/$(id -u) DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$(id -u)/bus systemctl --user start pi-install-packages.service' || true
+    '';
   };
 
   # nixpkgs.config.permittedInsecurePackages = [

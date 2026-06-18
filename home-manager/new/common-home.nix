@@ -16,6 +16,29 @@ let
       exec ${pkgs.llm-agents.pi}/bin/pi "$@"
     '';
   };
+
+  piInstallPackages = pkgs.writeShellApplication {
+    name = "pi-install-packages";
+    text = ''
+      set -eu
+
+      mkdir -p "${piNpmPrefix}"
+
+      for pkg in ${lib.concatStringsSep " " piPackages}; do
+        case "$pkg" in
+          npm:*) pkg_name="''${pkg#npm:}" ;;
+          *) pkg_name="$pkg" ;;
+        esac
+
+        if [ ! -d "${piNpmPrefix}/lib/node_modules/$pkg_name" ]; then
+          PATH="${pkgs.git}/bin:${pkgs.nodejs}/bin:$PATH" \
+            npm_config_prefix="${piNpmPrefix}" \
+            npm_config_userconfig="${npmUserConfig}" \
+            ${piWrapped}/bin/pi install "$pkg"
+        fi
+      done
+    '';
+  };
   piPackages = [
     "npm:@mariozechner/pi-tui" # :NOTE: dependency for pi-plan
     "npm:@ifi/pi-plan"
@@ -182,6 +205,7 @@ with constants;
     codex
     llm-agents.droid
     piWrapped
+    piInstallPackages
     gemini-cli
     # codex-acp
     claude-agent-acp
@@ -1388,6 +1412,21 @@ with constants;
     fi
   '';
 
+  systemd.user.services.pi-install-packages = {
+    Unit = {
+      Description = "Install pi packages";
+    };
+
+    Service = {
+      Type = "oneshot";
+      ExecStart = "${config.home.homeDirectory}/.nix-profile/bin/pi-install-packages";
+    };
+
+    Install = {
+      WantedBy = [ "default.target" ];
+    };
+  };
+
   home.file.".npmrc".source = config.lib.file.mkOutOfStoreSymlink npmUserConfig;
 
   home.file.".agents/skills/jobspy/SKILL.md".source = pkgs.jobspy-skill + "/SKILL.md";
@@ -1429,30 +1468,5 @@ with constants;
     NIXPKGS_ALLOW_UNFREE = lib.mkDefault "1";
     MY_MACHINE_ID = lib.mkDefault "none";
   };
-
-  # :NOTE: pi packages are installed at HM activation time because
-  # pi manages them through npm, not as pure Nix derivations.
-  # This keeps the package list declarative in this file while still
-  # using pi's own installer when a package is missing.
-  home.activation.installPiPackages = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-    set -eu
-
-    mkdir -p "${piNpmPrefix}"
-
-    for pkg in ${lib.concatStringsSep " " piPackages}; do
-      case "$pkg" in
-        npm:*) pkg_name="''${pkg#npm:}" ;;
-        *) pkg_name="$pkg" ;;
-      esac
-
-      if [ ! -d "${piNpmPrefix}/lib/node_modules/$pkg_name" ]; then
-        # pi shells out to npm itself, so make npm explicit for HM activation.
-      PATH="${pkgs.git}/bin:${pkgs.nodejs}/bin:$PATH" \
-        npm_config_prefix="${piNpmPrefix}" \
-        npm_config_userconfig="${npmUserConfig}" \
-        ${piWrapped}/bin/pi install "$pkg"
-      fi
-    done
-  '';
 
 }
