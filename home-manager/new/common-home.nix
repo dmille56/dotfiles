@@ -1153,6 +1153,7 @@ with constants;
       };
       special = {
         external_directory = "ask";
+        "external_directory:${constants.my-home-dir}/.agents/skills/*" = "allow";
       };
     };
 
