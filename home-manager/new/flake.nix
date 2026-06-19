@@ -1,4 +1,4 @@
-# :NOTE: to how pin a package
+# :NOTE: to how pin a package.
 # 1. go find the revision from nixos hydra (where the package is still passing): https://hyrdra.nixos.org
 # 2. add to inputs: YOURPACKAGE-revision.url = "github:NixOS/nixpkgs/GIT-REVISION-HASH"
 # 3. add to outputs: YOURPACKAGE-revision

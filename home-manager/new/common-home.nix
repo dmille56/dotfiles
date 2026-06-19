@@ -39,6 +39,15 @@ let
       done
     '';
   };
+  gituWrapped = pkgs.writeShellApplication {
+    name = "gitu";
+    text = ''
+      export GIT_CONFIG_COUNT=1
+      export GIT_CONFIG_KEY_0=color.ui
+      export GIT_CONFIG_VALUE_0=never
+      exec ${pkgs.gitu}/bin/gitu "$@"
+    '';
+  };
   piPackages = [
     "npm:@mariozechner/pi-tui" # :NOTE: dependency for pi-plan
     "npm:@ifi/pi-plan"
@@ -347,7 +356,7 @@ with constants;
 
     sway-launcher-desktop # :NOTE: added
     clock-rs # :NOTE: added
-    gitu # :NOTE: added
+    gituWrapped # :NOTE: gitu's diff parser needs uncolored git output
     glow # :NOTE: added
     tree # :NOTE: added
     xclock # :NOTE: added
@@ -1068,6 +1077,12 @@ with constants;
       }
     )
   );
+
+  home.file.".config/gitu/config.toml".text = lib.mkDefault ''
+    [general]
+    # Keep the editable sections near the top of the status screen.
+    collapsed_sections = ["recent_commits", "untracked", "stashes"]
+  '';
 
   home.file.".pi/agent/AGENTS.md".text = ''
   When modifying files, always use the built-in read/write/edit tools. Avoid bash for file modifications and do not use sed/awk/nl | sed pipelines for editing/reading.
