@@ -44,12 +44,13 @@
 (require 'package)
 (add-to-list
  'package-archives
- '("melpa" . "http://melpa.org/packages/") t)
+ '("melpa" . "https://melpa.org/packages/") t)
 (package-initialize)
 (unless package-archive-contents (package-refresh-contents))
 
 ;; install use-package
-(package-install 'use-package)
+(unless (package-installed-p 'use-package)
+  (package-install 'use-package))
 (require 'use-package)
 (setq use-package-always-ensure t)
 ;; (setq package-install-upgrade-built-in t)
@@ -70,7 +71,7 @@
   (setq auto-package-update-hide-results t)
   (add-hook 'emacs-startup-hook
             (lambda ()
-              (run-with-idle-timer 5 nil #'auto-package-update-maybe))))
+              (run-with-idle-timer 60 nil #'auto-package-update-maybe))))
 
 ;; Run manually only if you don't want the post-startup idle timer.
 
@@ -1589,16 +1590,9 @@ Make sure to run \='ollama serve\=' and have zephyr model."
 (setq tab-bar-tab-hints t)
 
 ;; To repress eshell functions/varabiles not being found errors
-(defvar eshell-mode-map)
 (declare-function eshell/cd "esh-cmd")
 (declare-function eshell-send-input "esh-cmd")
 (declare-function eshell/alias "esh-cmd")
-
-(evil-define-key 'normal eshell-mode-map
-  (kbd "C-r") 'consult-history)
-
-(evil-define-key 'insert eshell-mode-map
-  (kbd "C-r") 'consult-history)
 
 (defun eshell-my-cd (dir)
   "Change DIR in eshell."
@@ -1611,11 +1605,13 @@ Make sure to run \='ollama serve\=' and have zephyr model."
   (eshell-my-cd "..")
 )
 
-(evil-define-key 'normal eshell-mode-map
-  (kbd "C-l") 'eshell-go-up-one-dir)
-
-(evil-define-key 'insert eshell-mode-map
-  (kbd "C-l") 'eshell-go-up-one-dir)
+(with-eval-after-load 'esh-mode
+  (evil-define-key 'normal eshell-mode-map
+    (kbd "C-r") 'consult-history
+    (kbd "C-l") 'eshell-go-up-one-dir)
+  (evil-define-key 'insert eshell-mode-map
+    (kbd "C-r") 'consult-history
+    (kbd "C-l") 'eshell-go-up-one-dir))
 
 (use-package eshell-syntax-highlighting
   :functions eshell-syntax-highlighting-global-mode
@@ -1673,7 +1669,7 @@ Make sure to run \='ollama serve\=' and have zephyr model."
 (use-package treesit-auto
   :functions global-treesit-auto-mode
   :custom
-  (setq treesit-auto-install 'prompt)
+  (treesit-auto-install 'prompt)
   :config
   (global-treesit-auto-mode)
   )
@@ -1737,18 +1733,20 @@ Make sure to run \='ollama serve\=' and have zephyr model."
 (require 'eglot)
 (setq-default powershell-editor-services-log-path (expand-file-name (concat powershell-editor-services-bundled-modules-path "/logs")))
 (setq-default powershell-editor-services-command (expand-file-name (concat powershell-editor-services-bundled-modules-path "/PowerShellEditorServices/Start-EditorServices.ps1")))
-(add-to-list 'eglot-server-programs
-            `(powershell-ts-mode . ("pwsh" "-NoLogo" "-NoProfile" "-NonInteractive" "-Command" ,powershell-editor-services-command
-                                    "-BundledModulesPath" ,powershell-editor-services-bundled-modules-path
-                                    "-FeatureFlags @()"
-                                    "-AdditionalModules @()"
-                                    "-HostName" "Emacs"
-                                    "-HostVersion" "1.0.0"
-                                    "-HostProfileId" "emacs"
-                                    "-Stdio"
-                                    "-LogPath" ,powershell-editor-services-log-path
-                                    "-LogLevel" "Normal")))
-(add-hook 'powershell-ts-mode-hook 'eglot-ensure)
+(when (and (executable-find "pwsh")
+           (file-exists-p powershell-editor-services-command))
+  (add-to-list 'eglot-server-programs
+               `(powershell-ts-mode . ("pwsh" "-NoLogo" "-NoProfile" "-NonInteractive" "-Command" ,powershell-editor-services-command
+                                       "-BundledModulesPath" ,powershell-editor-services-bundled-modules-path
+                                       "-FeatureFlags @()"
+                                       "-AdditionalModules @()"
+                                       "-HostName" "Emacs"
+                                       "-HostVersion" "1.0.0"
+                                       "-HostProfileId" "emacs"
+                                       "-Stdio"
+                                       "-LogPath" ,powershell-editor-services-log-path
+                                       "-LogLevel" "Normal")))
+  (add-hook 'powershell-ts-mode-hook 'eglot-ensure))
 
 (use-package flycheck-eglot
   :functions global-flycheck-eglot-mode
@@ -1940,6 +1938,9 @@ Make sure to run \='ollama serve\=' and have zephyr model."
   (eaf-bind-key insert_or_edit_url "C-l" eaf-browser-keybinding)
   (eaf-bind-key insert_or_open_link "a" eaf-browser-keybinding)
   (eaf-bind-key nil "M-q" eaf-browser-keybinding)) ;; unbind, see more in the Wiki
+
+(unless (fboundp 'browse-web)
+  (defalias 'browse-web #'browse-url))
 
 (defun run-in-vterm-kill (process event)
   "A process sentinel. Kills PROCESS's buffer if it is live."
