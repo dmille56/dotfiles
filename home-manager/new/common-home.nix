@@ -35,6 +35,13 @@ let
             npm_config_prefix="${piNpmPrefix}" \
             npm_config_userconfig="${npmUserConfig}" \
             ${piWrapped}/bin/pi install "$pkg"
+
+          if [ "$pkg_name" = "pi-web-access" ]; then
+            pi_web_access_index="${piNpmPrefix}/lib/node_modules/pi-web-access/index.ts"
+            if [ -f "$pi_web_access_index" ] && grep -q '@earendil-works/pi-ai/compat' "$pi_web_access_index"; then
+              perl -0pi -e 's|from "@earendil-works/pi-ai/compat"|from "@earendil-works/pi-ai/base"|g' "$pi_web_access_index"
+            fi
+          fi
         fi
       done
     '';
