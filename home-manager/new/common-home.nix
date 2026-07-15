@@ -234,7 +234,7 @@ with constants;
 
     sqlite-interactive
 
-    tuir # rtv
+    #tuir # rtv
     ddgr
     buku
     w3m
