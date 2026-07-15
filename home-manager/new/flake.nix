@@ -118,7 +118,7 @@
               gogcli-overlay
               # ollama-overlay
               opentmux.overlays.default
-              llm-agents.overlays.default
+              llm-agents.overlays.shared-nixpkgs
               jobspy-plugin.overlays.default
             ]; 
           }

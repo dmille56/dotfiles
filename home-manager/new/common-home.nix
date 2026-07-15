@@ -327,7 +327,7 @@ with constants;
     #video editing
     # shotcut
 
-    realvnc-vnc-viewer
+    # realvnc-vnc-viewer # disabled for now
     gimp-with-plugins
     flameshot
     # obs-studio
