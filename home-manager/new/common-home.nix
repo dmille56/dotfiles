@@ -1221,6 +1221,16 @@ with constants;
       codesearch = true;
     };
   };
+
+  programs.bluePrinceParlorSolverSkill = {
+    enable = true;
+    installFor = [
+      "claude"
+      "opencode"
+      "pi"
+      "agents"
+    ];
+  };
   
   # home.file.".config/rtk/config.toml".text = ''
   #   [hooks]

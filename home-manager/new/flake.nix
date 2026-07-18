@@ -58,9 +58,15 @@
       url = "github:dmille56/resume-qna";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    blue-prince-parlor-solver = {
+      url = "github:dmille56/blueprince-parlor-solver";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
   };
 
-  outputs = inputs@{ nixpkgs, home-manager, sops-nix, nix-openclaw, aider-chat-full-revision, ollama-revision, drawiterm, llm-agents, opentmux, jobspy-plugin, ... }:
+  outputs = inputs@{ nixpkgs, home-manager, sops-nix, nix-openclaw, aider-chat-full-revision, ollama-revision, drawiterm, llm-agents, opentmux, jobspy-plugin, blue-prince-parlor-solver, ... }:
     let
       const = import (builtins.toPath "/home/dono/dotfiles/home-manager/new/common-constants.nix");
       my-machine-id = "desktop"; # desktop, laptop
@@ -144,6 +150,7 @@
               sops-nix.homeManagerModules.sops
               nix-openclaw.homeManagerModules.openclaw
               inputs.resume-qna.homeManagerModules.resume-qna
+              blue-prince-parlor-solver.homeManagerModules.default
             ];
 
             # Optionally, use home-manager.extraSpecialArgs to pass arguments to home.nix
