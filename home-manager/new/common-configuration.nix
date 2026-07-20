@@ -108,6 +108,7 @@ with constants;
 
   # Remap Pause/Break key to Insert
   services.xserver.displayManager.sessionCommands = lib.mkDefault ''
+    export PATH="/etc/profiles/per-user/${my-username}/bin:$PATH"
     ${pkgs.xmodmap}/bin/xmodmap -e "keycode 127 = Insert"
   '';
 

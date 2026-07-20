@@ -158,11 +158,10 @@ audioRaiseVolumeCommand = "amixer -D pulse sset Master 5%+; notify-send -i audio
 myStartupHook :: MyConfigMachine -> X ()
 myStartupHook myConfigMachine = do
   spawnOnce "xfsettingsd"
-  spawnOnce "start-pulseaudio-x1ll"
   spawnOnce "trayer --edge bottom --align right --widthtype request --expand true --SetDockType true --SetPartialStrut true --transparent true --alpha 0 --tint 0x282A36 --expand true --heighttype pixel --height 24"
   spawnOnce "yad --notification --image='system-shutdown' --text='Power Menu' --command='rofi -show power-menu -modi power-menu:rofi-power-menu'"
   spawnOnce "redshift-gtk"
-  spawn "xrdb ~/.XResources"
+  spawn "xrdb ~/.Xresources"
   greenclipDaemon <- spawnPipe "greenclip daemon"
   when (myConfigMachine == Desktop) $ spawn "xmodmap -e 'keycode 118 = Pause'"
   spawn "xmodmap -e 'keycode 127 = Insert'"
