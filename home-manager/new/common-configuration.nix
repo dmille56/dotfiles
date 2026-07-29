@@ -221,6 +221,7 @@ with constants;
   environment.sessionVariables = {
     BROWSER = lib.mkDefault "firefox";
     EDITOR = lib.mkDefault "nano";
+    _ZO_EXCLUDE_DIRS = lib.mkDefault "$HOME:/nix/store/*";
   };
 
   systemd.tmpfiles.rules = [
