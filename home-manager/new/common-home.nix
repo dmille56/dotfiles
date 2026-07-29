@@ -159,6 +159,7 @@ with constants;
     nerd-fonts.iosevka
     nerd-fonts.hack
     nerd-fonts.dejavu-sans-mono
+    dejavu_fonts
     nerd-fonts.noto
 
     # optional nerd fonts
