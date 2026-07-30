@@ -4,6 +4,13 @@
 let
   python = pkgs.python312;
   pythonPackages = pkgs.python312Packages.overrideScope (self: super: {
+    # nixpkgs' scipy test suite is currently flaky/broken on this channel.
+    # kokoro-tts only needs scipy as a transitive runtime dependency via librosa.
+    scipy = super.scipy.overrideAttrs (_: {
+      doCheck = false;
+      doInstallCheck = false;
+    });
+
     datasette = super.datasette.overrideAttrs (_: {
       doCheck = false;
       doInstallCheck = false;
