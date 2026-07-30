@@ -2,6 +2,7 @@
   pkgs,
   config,
   lib,
+  kokoroOnnxPkgs ? pkgs,
   ...
 }:
 let
@@ -75,7 +76,7 @@ let
     #"npm:@dmille56/pi-piper-tts"
   ];
 
-  kokoroModels = import ../../nix/kokoro-tts.nix { pkgs = pkgs; exposeModels = true; };
+  kokoroModels = import ../../nix/kokoro-tts.nix { pkgs = kokoroOnnxPkgs; exposeModels = true; };
   pkgsWithRangerHighlightFix = pkgs.extend (final: prev: {
     # highlight's shellscript patch is already applied upstream in current nixpkgs.
     highlight = prev.highlight.overrideAttrs (_old: { patches = []; });
@@ -259,7 +260,7 @@ with constants;
     (import ../../nix/play-yt-script-format.nix)
     (import ../../nix/rofi-buku.nix)
     (import ../../nix/my-tts.nix)
-    (import ../../nix/kokoro-tts.nix { pkgs = pkgs; })
+    (import ../../nix/kokoro-tts.nix { pkgs = kokoroOnnxPkgs; })
     (import ../../nix/trayer-padding-icon.nix { inherit stdenv; })
     (import ../../nix/fireplace.nix {
       inherit

@@ -24,6 +24,9 @@
     # :NOTE: we're pinning ollama because I'm getting tired of updating everytime i update nixpkgs lol
     ollama-revision.url = "github:NixOS/nixpkgs/16c7794d0a28b5a37904d55bcca36003b9109aaa";
 
+    # :NOTE: keep the Kokoro/ONNX Runtime Python closure from rebuilding on normal nixpkgs updates.
+    kokoro-onnx-revision.url = "github:NixOS/nixpkgs/01fbdeef22b76df85ea168fbfe1bfd9e63681b30";
+
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -66,9 +69,18 @@
 
   };
 
-  outputs = inputs@{ nixpkgs, home-manager, sops-nix, nix-openclaw, aider-chat-full-revision, ollama-revision, drawiterm, llm-agents, opentmux, jobspy-plugin, blue-prince-parlor-solver, ... }:
+  outputs = inputs@{ nixpkgs, home-manager, sops-nix, nix-openclaw, aider-chat-full-revision, ollama-revision, kokoro-onnx-revision, drawiterm, llm-agents, opentmux, jobspy-plugin, blue-prince-parlor-solver, ... }:
     let
       const = import (builtins.toPath "/home/dono/dotfiles/home-manager/new/common-constants.nix");
+      system = "x86_64-linux";
+      ollamaPkgs = import ollama-revision {
+        inherit system;
+        config.allowUnfree = true;
+      };
+      kokoroOnnxPkgs = import kokoro-onnx-revision {
+        inherit system;
+        config.allowUnfree = true;
+      };
       my-machine-id = "desktop"; # desktop, laptop
       my-host-name =
         if my-machine-id == "laptop" then "${const.my-laptop-hostname}"
@@ -83,10 +95,9 @@
         gogcli = inputs.nix-steipete-tools.packages.${prev.stdenv.hostPlatform.system}.gogcli;
       };
       
-      # :TODO: fix ollama overlay still
-      # ollama-overlay = final: prev: {
-      #   ollama-cuda = ollama-revision.legacyPackages.${prev.stdenv.hostPlatform.system}.ollama-cuda;
-      # };
+      ollama-overlay = final: prev: {
+        ollama-cuda = ollamaPkgs.ollama-cuda;
+      };
       
       openclaw-gateway-fixed-overlay = final: prev: {
         openclaw-gateway = final.runCommand "openclaw-gateway-fixed" {
@@ -122,7 +133,7 @@
               openclaw-gateway-fixed-overlay
               drawiterm.overlays.default
               gogcli-overlay
-              # ollama-overlay
+              ollama-overlay
               opentmux.overlays.default
               llm-agents.overlays.shared-nixpkgs
               jobspy-plugin.overlays.default
@@ -153,7 +164,9 @@
               blue-prince-parlor-solver.homeManagerModules.default
             ];
 
-            # Optionally, use home-manager.extraSpecialArgs to pass arguments to home.nix
+            home-manager.extraSpecialArgs = {
+              inherit kokoroOnnxPkgs;
+            };
           }
         ];
       };
