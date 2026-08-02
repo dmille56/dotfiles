@@ -1377,7 +1377,7 @@ _p_rev       _U_pper              _=_: upper/lower       _r_esolve
   :config
   (let ((chatgpt-shell-root-path (expand-file-name "var/shell-maker" user-emacs-directory)))
     (make-directory chatgpt-shell-root-path t))
-  (setq chatgpt-shell-model-version "gpt-5-mini")
+  (setq chatgpt-shell-model-version "gpt-5.6-luna")
   (evil-define-key 'insert shell-maker-mode-map
     (kbd "M-<return>") #'chatgpt-shell-submit
     (kbd "M-RET")      #'chatgpt-shell-submit)
@@ -1435,7 +1435,7 @@ _p_rev       _U_pper              _=_: upper/lower       _r_esolve
          (lambda ()
            (auth-source-pass-get 'secret "OPENAI_API_KEY"))))
   :config
-  (setq org-ai-default-chat-model "gpt-5-mini")
+  (setq org-ai-default-chat-model "gpt-5.6-luna")
   (org-ai-install-yasnippets)) ; if you are using yasnippet and want `ai` snippets
 
 (use-package md-ts-mode
@@ -1457,7 +1457,7 @@ _p_rev       _U_pper              _=_: upper/lower       _r_esolve
   ;; (setq aider-args '("--model" "sonnet" "--no-auto-accept-architect"))
   ;; (setenv "ANTHROPIC_API_KEY" anthropic-api-key)
   ;; Or chatgpt model
-  (setq aider-args '("--model" "gpt-5-mini"))
+  (setq aider-args '("--model" "gpt-5.6-luna"))
   (setenv "OPENAI_API_KEY"
           (funcall
            (lambda ()

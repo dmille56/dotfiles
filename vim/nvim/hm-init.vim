@@ -162,7 +162,7 @@ lua <<EOF
     strategies = {
       chat = {
         adapter = "openai",
-        model = "gpt-5-mini"
+        model = "gpt-5.6-luna"
       },
     }
   })

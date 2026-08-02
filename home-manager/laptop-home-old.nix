@@ -629,7 +629,7 @@ in
         strategies = {
           chat = {
             adapter = "openai",
-            model = "gpt-5-mini"
+            model = "gpt-5.6-luna"
           },
         }
       })
@@ -841,8 +841,8 @@ in
     OPENAI_API_KEY = "$(cat ${config.sops.secrets.OPENAI_API_KEY.path})";
     GOOGLE_API_KEY = "$(cat ${config.sops.secrets.GOOGLE_API_KEY.path})";
     ANTHROPIC_API_KEY = "$(cat ${config.sops.secrets.ANTHROPIC_API_KEY.path})";
-    OPENAI_API_MODEL = "gpt-5-mini";
-    AIDER_MODEL = "gpt-5-mini";
+    OPENAI_API_MODEL = "gpt-5.6-luna";
+    AIDER_MODEL = "gpt-5.6-luna";
     RIPGREP_CONFIG_PATH = "${my-home-dir}/.ripgreprc";
     LG_CONFIG_FILE= "${my-home-dir}/.config/lazygit/config.yml,${my-home-dir}/.config/lazygit/theme/lazygit/themes-mergable/mocha/blue.yml";
     BROWSER = "${pkgs.firefox-bin}/bin/firefox";

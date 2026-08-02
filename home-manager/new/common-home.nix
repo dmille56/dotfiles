@@ -857,7 +857,7 @@ with constants;
           strategies = {
             chat = {
               adapter = "openai",
-              model = "gpt-5-mini"
+              model = "gpt-5.6-luna"
             },
           }
         })
@@ -1220,8 +1220,8 @@ with constants;
   home.file.".pi/web-search.json".text = builtins.toJSON {
     provider = "exa";
     workflow = "none";
-    searchModel = "openai/gpt-5.4-nano";
-    summaryModel = "openai/gpt-5.4-mini";
+    searchModel = "openai/gpt-5.6-luna";
+    summaryModel = "openai/gpt-5.6-luna";
   };
   
   home.file.".config/opencode/opencode.jsonc".text = builtins.toJSON {
@@ -1496,8 +1496,8 @@ with constants;
     GEMINI_API_KEY = lib.mkDefault "$(cat /run/secrets/GOOGLE_API_KEY)";
     ANTHROPIC_API_KEY = lib.mkDefault "$(cat /run/secrets/ANTHROPIC_API_KEY)";
     OPENROUTER_API_KEY = lib.mkDefault "$(cat /run/secrets/OPENROUTER_API_KEY)";
-    OPENAI_API_MODEL = lib.mkDefault "gpt-5.4-mini";
-    AIDER_MODEL = lib.mkDefault "gpt-5.4-mini";
+    OPENAI_API_MODEL = lib.mkDefault "gpt-5.6-luna";
+    AIDER_MODEL = lib.mkDefault "gpt-5.6-luna";
     AIDER_GIT_COMMIT_VERIFY = lib.mkDefault "true";
     OLLAMA_CONTEXT_LENGTH = lib.mkDefault "64000";
     RIPGREP_CONFIG_PATH = lib.mkDefault "${my-home-dir}/.ripgreprc";
