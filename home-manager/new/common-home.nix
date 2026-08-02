@@ -5,9 +5,10 @@
   kokoroOnnxPkgs ? pkgs,
   ...
 }:
-let
+  let
   constants = import ./common-constants.nix;
   piNpmPrefix = "${config.home.homeDirectory}/.local/share/npm-global";
+  piAgentNpmPrefix = "${config.home.homeDirectory}/.pi/agent/npm/node_modules";
   npmUserConfig = "${config.xdg.configHome}/npm/npmrc";
   piWrapped = pkgs.writeShellApplication {
     name = "pi";
@@ -45,6 +46,16 @@ let
           fi
         fi
       done
+
+      open_plan_extension="${piAgentNpmPrefix}/@open-plan-annotator/pi-extension"
+      open_plan_shared="${piAgentNpmPrefix}/open-plan-annotator/shared"
+      if [ -f "$open_plan_extension/extensions/index.js" ] && [ -d "$open_plan_shared" ]; then
+        # Pi gives each package an isolated module root. The published extension
+        # imports this code from a nested package, hiding Pi's typebox peer.
+        mkdir -p "$open_plan_extension/shared"
+        cp -f "$open_plan_shared"/*.mjs "$open_plan_extension/shared/"
+        perl -0pi -e 's|return await import\("\.\./\.\./\.\./shared/piExtension\.mjs"\);|return await import("../shared/piExtension.mjs");|' "$open_plan_extension/extensions/index.js"
+      fi
     '';
   };
   gituWrapped = pkgs.writeShellApplication {
@@ -59,7 +70,6 @@ let
   piPackages = [
     "npm:@mariozechner/pi-tui" # :NOTE: dependency for pi-plan
     "npm:@ifi/pi-plan"
-    "npm:typebox" # :NOTE: dependency for open-plan-annotator
     "npm:@open-plan-annotator/pi-extension"
     "npm:pi-permission-system"
     "npm:pi-aliases"
@@ -1454,7 +1464,7 @@ with constants;
 
     Service = {
       Type = "oneshot";
-      ExecStart = "${config.home.homeDirectory}/.nix-profile/bin/pi-install-packages";
+      ExecStart = "${piInstallPackages}/bin/pi-install-packages";
     };
 
     Install = {
