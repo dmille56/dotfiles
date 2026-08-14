@@ -10,6 +10,16 @@
   piNpmPrefix = "${config.home.homeDirectory}/.local/share/npm-global";
   piAgentNpmPrefix = "${config.home.homeDirectory}/.pi/agent/npm/node_modules";
   npmUserConfig = "${config.xdg.configHome}/npm/npmrc";
+  xmonadHomeDir = "${config.home.homeDirectory}/.xmonad";
+  xmonadCompiledBin = "${xmonadHomeDir}/xmonad-x86_64-linux";
+  xmonadBuiltFromMarker = "${xmonadHomeDir}/.xmonad-built-from";
+  # GHC (with xmonad + contrib) used to compile the xmonad config; keeps the
+  # compiled binary in sync with the HM-managed sources (mtime hints alone are
+  # unreliable across symlink swaps, which caused hangs on login).
+  xmonadGhc = pkgs.haskellPackages.ghcWithPackages (hs: [
+    hs.xmonad
+    hs.xmonad-contrib
+  ]);
   piWrapped = pkgs.writeShellApplication {
     name = "pi";
     text = ''
@@ -1080,6 +1090,26 @@ with constants;
   home.file.".xmobarrc".source = lib.mkDefault "${my-dotfile-dir}/xmobarrc-laptop";
   home.file.".xmonad/xmonad.hs".source = lib.mkDefault "${my-dotfile-dir}/.xmonad/xmonad.hs";
   home.file.".xmonad/lib/MyTheme.hs".source = lib.mkDefault "${my-dotfile-dir}/.xmonad/MyTheme.hs";
+
+  # :NOTE: xmonad re-execs the compiled config binary (~/.xmonad/xmonad-x86_64-linux)
+  # and relies on mtime heuristics to decide when to recompile. Those hints are
+  # unreliable across HM-managed symlink swaps, so on login it can fail with
+  # "executeFile: does not exist" and the session hangs with no window manager.
+  # Force a rebuild whenever the HM-written config source (resolved store path)
+  # differs from what the current binary was built from.
+  home.activation.rebuildXmonad = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    set -eu
+    src="$(readlink -f "${config.home.homeDirectory}/.xmonad/xmonad.hs")"
+    marker="${xmonadBuiltFromMarker}"
+    if [ ! -x "${xmonadCompiledBin}" ] || [ "$(cat "$marker" 2>/dev/null || true)" != "$src" ]; then
+      cd "${xmonadHomeDir}"
+      ${xmonadGhc}/bin/ghc --make xmonad.hs -i -ilib -fforce-recomp -main-is main -v0 \
+        -outputdir "${xmonadHomeDir}/build-x86_64-linux" \
+        -o "${xmonadCompiledBin}"
+      printf '%s\n' "$src" > "$marker"
+    fi
+  '';
+
   home.file.".ghci".source = lib.mkDefault "${my-dotfile-dir}/.ghci";
   home.file.".ripgreprc".source = lib.mkDefault "${my-dotfile-dir}/.ripgreprc";
   home.file.".config/mpv/mpv.conf".source = lib.mkDefault "${my-dotfile-dir}/mpv.conf";

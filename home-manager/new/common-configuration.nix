@@ -52,8 +52,11 @@ with constants;
     greeters.gtk = {
       enable = lib.mkForce true;
       theme = {
-        name = lib.mkDefault "Dracula";
-        package = lib.mkDefault pkgs.dracula-theme;
+        # :NOTE: dracula theme got removed from upstream for gtk greeter :(
+        # name = lib.mkDefault "Dracula";
+        # package = lib.mkDefault pkgs.dracula-theme;
+        name = lib.mkDefault "adw-gtk3-dark";
+        package = lib.mkDefault pkgs.adw-gtk3;
       };
       iconTheme = {
         name = lib.mkDefault "Papirus-Dark";
