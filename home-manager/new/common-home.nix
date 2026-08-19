@@ -861,6 +861,7 @@ with constants;
         vim.lsp.enable('ts_ls')
         vim.lsp.enable('hls')
         vim.lsp.enable('org')
+        vim.lsp.enable('csharp_ls')
 
         -- Setup AI codecompanion
         require("codecompanion").setup({

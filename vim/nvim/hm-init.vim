@@ -156,6 +156,7 @@ lua <<EOF
   vim.lsp.enable('ruff')
   vim.lsp.enable('ts_ls')
   vim.lsp.enable('hls')
+  vim.lsp.enable('csharp_ls')
   
   -- Setup AI codecompanion
   require("codecompanion").setup({
