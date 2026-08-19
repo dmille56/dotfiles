@@ -863,6 +863,24 @@ with constants;
         vim.lsp.enable('org')
         vim.lsp.enable('csharp_ls')
 
+        vim.api.nvim_create_autocmd('LspAttach', {
+          callback = function(event)
+            local opts = { buffer = event.buf, silent = true }
+            vim.keymap.set('n', '<leader>lgd', vim.lsp.buf.definition, opts)
+            vim.keymap.set('n', '<leader>lgD', vim.lsp.buf.declaration, opts)
+            vim.keymap.set('n', '<leader>lgi', vim.lsp.buf.implementation, opts)
+            vim.keymap.set('n', '<leader>lI', '<cmd>checkhealth vim.lsp<cr>', opts)
+            vim.keymap.set('n', '<leader>lh', vim.lsp.buf.hover, opts)
+            vim.keymap.set('n', '<leader>lr', vim.lsp.buf.rename, opts)
+            vim.keymap.set('n', '<leader>la', vim.lsp.buf.code_action, opts)
+            vim.keymap.set('n', '<leader>lR', vim.lsp.buf.references, opts)
+            vim.keymap.set('n', '<leader>ls', vim.lsp.buf.signature_help, opts)
+            vim.keymap.set('n', '<leader>le', vim.diagnostic.open_float, opts)
+            vim.keymap.set('n', '<leader>ln', vim.diagnostic.goto_next, opts)
+            vim.keymap.set('n', '<leader>lp', vim.diagnostic.goto_prev, opts)
+          end,
+        })
+
         -- Setup AI codecompanion
         require("codecompanion").setup({
           strategies = {
