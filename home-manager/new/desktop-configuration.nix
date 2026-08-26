@@ -105,8 +105,7 @@ in
   system.activationScripts.restartHomeManager = {
     deps = [ "users" ];
     text = ''
-      systemctl restart home-manager-${constants.my-username}.service || true
-      runuser -u ${constants.my-username} -- sh -c 'XDG_RUNTIME_DIR=/run/user/$(id -u) DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$(id -u)/bus systemctl --user start pi-install-packages.service' || true
+      ${pkgs.systemd}/bin/systemctl restart home-manager-${constants.my-username}.service || true
     '';
   };
 

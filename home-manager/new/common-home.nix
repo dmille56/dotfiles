@@ -25,6 +25,20 @@
     text = ''
       export npm_config_prefix="${piNpmPrefix}"
       export npm_config_userconfig="${npmUserConfig}"
+
+      open_plan_extension="${piAgentNpmPrefix}/@open-plan-annotator/pi-extension"
+      open_plan_shared="${piAgentNpmPrefix}/open-plan-annotator/shared"
+      open_plan_typebox="${piAgentNpmPrefix}/typebox"
+      if [ -f "$open_plan_extension/extensions/index.js" ] && [ -d "$open_plan_shared" ] && [ -d "$open_plan_typebox" ]; then
+        # Pi isolates package module roots, so vendor the dependency beside the
+        # extension before Pi discovers it. Reapply after every package update.
+        mkdir -p "$open_plan_extension/shared" "$open_plan_extension/node_modules/typebox"
+        cp -f "$open_plan_shared"/*.mjs "$open_plan_extension/shared/"
+        cp -a "$open_plan_typebox/." "$open_plan_extension/node_modules/typebox/"
+        ${pkgs.perl}/bin/perl -0pi -e 's|from "typebox";|from "../node_modules/typebox/build/index.mjs";|' "$open_plan_extension/shared/piExtension.mjs"
+        ${pkgs.perl}/bin/perl -0pi -e 's|return await import\("\.\./\.\./\.\./shared/piExtension\.mjs"\);|return await import("../shared/piExtension.mjs");|' "$open_plan_extension/extensions/index.js"
+      fi
+
       exec ${pkgs.llm-agents.pi}/bin/pi "$@"
     '';
   };
@@ -57,15 +71,6 @@
         fi
       done
 
-      open_plan_extension="${piAgentNpmPrefix}/@open-plan-annotator/pi-extension"
-      open_plan_shared="${piAgentNpmPrefix}/open-plan-annotator/shared"
-      if [ -f "$open_plan_extension/extensions/index.js" ] && [ -d "$open_plan_shared" ]; then
-        # Pi gives each package an isolated module root. The published extension
-        # imports this code from a nested package, hiding Pi's typebox peer.
-        mkdir -p "$open_plan_extension/shared"
-        cp -f "$open_plan_shared"/*.mjs "$open_plan_extension/shared/"
-        perl -0pi -e 's|return await import\("\.\./\.\./\.\./shared/piExtension\.mjs"\);|return await import("../shared/piExtension.mjs");|' "$open_plan_extension/extensions/index.js"
-      fi
     '';
   };
   gituWrapped = pkgs.writeShellApplication {
@@ -1513,6 +1518,7 @@ with constants;
 
     Service = {
       Type = "oneshot";
+      TimeoutStartSec = "60s";
       ExecStart = "${piInstallPackages}/bin/pi-install-packages";
     };
 
