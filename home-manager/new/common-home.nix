@@ -334,6 +334,7 @@ with constants;
     mpv
     vlc
     freetube
+    cheese
     pavucontrol
     pasystray
     trayer
