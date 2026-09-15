@@ -22,7 +22,7 @@
     aider-chat-full-revision.url = "github:NixOS/nixpkgs/2b69405f19c7004b832a7410c8aefa9d859feea3";
     
     # :NOTE: we're pinning ollama because I'm getting tired of updating everytime i update nixpkgs lol
-    ollama-revision.url = "github:NixOS/nixpkgs/16c7794d0a28b5a37904d55bcca36003b9109aaa";
+    ollama-revision.url = "github:NixOS/nixpkgs/efe6f071ede9d21c37462d2d6682d5e670099684";
 
     # :NOTE: keep the Kokoro/ONNX Runtime Python closure from rebuilding on normal nixpkgs updates.
     kokoro-onnx-revision.url = "github:NixOS/nixpkgs/01fbdeef22b76df85ea168fbfe1bfd9e63681b30";
