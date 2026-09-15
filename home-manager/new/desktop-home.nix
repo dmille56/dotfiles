@@ -1,9 +1,9 @@
 { pkgs, config, lib, ...}: 
 let
   constants = import ./common-constants.nix; 
-  openclawNoTools = (pkgs.openclawPackages.withTools {
+  /* openclawNoTools = (pkgs.openclawPackages.withTools {
     excludeToolNames = [ "ffmpeg" "git" "ripgrep" ];
-  }).openclaw;
+  }).openclaw; */
 in with constants;
 {
   imports = [ ./common-home.nix ];
@@ -29,6 +29,7 @@ in with constants;
     nvtopPackages.nvidia
   ];
   
+  /*
   # :NOTE: open claw setup
   programs.openclaw = {
     enable = true;
@@ -103,37 +104,39 @@ in with constants;
     #   }
     # ];
   };
+  */
   
-  # :NOTE: workaround for plugins - remove previously-copied skill files before HM writes symlinks
-  home.activation.clearOpenclawSkillFiles = lib.hm.dag.entryBefore ["checkLinkTargets"] ''
-    for skill_dir in ~/.openclaw/workspace/skills/*/; do
-      for skill_file in "$skill_dir"*; do
-        if [ -f "$skill_file" ] && [ ! -L "$skill_file" ]; then
-          $DRY_RUN_CMD rm -f "$skill_file"
-        fi
-      done
-    done
-  '';
+  # Disabled OpenClaw plugin workaround:
+  # home.activation.clearOpenclawSkillFiles = lib.hm.dag.entryBefore ["checkLinkTargets"] ''
+  #   for skill_dir in ~/.openclaw/workspace/skills/*/; do
+  #     for skill_file in "$skill_dir"*; do
+  #       if [ -f "$skill_file" ] && [ ! -L "$skill_file" ]; then
+  #         $DRY_RUN_CMD rm -f "$skill_file"
+  #       fi
+  #     done
+  #   done
+  # '';
 
-  # :NOTE: workaround for plugins - convert symlinks to real files so plugins work correctly
-  home.activation.fixOpenclawSkillSymlinks = lib.hm.dag.entryAfter ["writeBoundary"] ''
-    for skill_dir in ~/.openclaw/workspace/skills/*/; do
-      for skill_file in "$skill_dir"*; do
-        if [ -L "$skill_file" ]; then
-          target=$(readlink "$skill_file")
-          $DRY_RUN_CMD cp --remove-destination "$target" "$skill_file"
-        fi
-      done
-    done
-  '';
+  # Disabled OpenClaw plugin workaround:
+  # home.activation.fixOpenclawSkillSymlinks = lib.hm.dag.entryAfter ["writeBoundary"] ''
+  #   for skill_dir in ~/.openclaw/workspace/skills/*/; do
+  #     for skill_file in "$skill_dir"*; do
+  #       if [ -L "$skill_file" ]; then
+  #         target=$(readlink "$skill_file")
+  #         $DRY_RUN_CMD cp --remove-destination "$target" "$skill_file"
+  #       fi
+  #     done
+  #   done
+  # '';
   
-  systemd.user.services."openclaw-gateway" = {
+  /* systemd.user.services."openclaw-gateway" = {
     Service = {
       EnvironmentFile = "/run/secrets/rendered/openclaw-gateway-env";
     };
   };
+  */
   
-  home.file.".openclaw/openclaw.json".force = true;  # :NOTE: clobber existing openclaw config
+  /* home.file.".openclaw/openclaw.json".force = true;  # :NOTE: clobber existing openclaw config */
   
   home.file.".background-image".source = my-desktop-background-image;
   
@@ -144,7 +147,7 @@ in with constants;
     # OPENCLAW_TELEGRAM_BOT_TOKEN = "$(cat /run/secrets/OPENCLAW_TELEGRAM_BOT_TOKEN)";
     # TELEGRAM_BOT_TOKEN = "$(cat /run/secrets/OPENCLAW_TELEGRAM_BOT_TOKEN)";
     # OPENCLAW_CONTAINER = "openclaw";
-    OPENCLAW_NIX_MODE = "1";
+    # OPENCLAW_NIX_MODE = "1";
     MY_MACHINE_ID = "desktop";
   };
 
