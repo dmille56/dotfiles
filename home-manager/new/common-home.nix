@@ -1293,9 +1293,9 @@ with constants;
   programs.bluePrinceParlorSolverSkill = {
     enable = true;
     installFor = [
-      "claude"
-      "opencode"
-      "pi"
+      # "claude"
+      # "opencode"
+      # "pi"
       "agents"
     ];
   };
