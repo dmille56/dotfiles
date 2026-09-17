@@ -577,7 +577,11 @@ with constants;
       lazygit-nvim
 
       # orgmode plugins
-      nvim-treesitter
+      (nvim-treesitter.withPlugins (p: [
+        p.javascript
+        p.typescript
+        p.tsx
+      ]))
       (pkgs.runCommand "tree-sitter-org-plugin"
         {
           pname = "tree-sitter-org-plugin";
@@ -783,6 +787,24 @@ with constants;
             }
         }
 
+        -- Enable Tree-sitter highlighting and indentation for JavaScript,
+        -- TypeScript, and TSX. The grammars are provided by the Nix plugin
+        -- package above. nvim-treesitter's current API no longer provides
+        -- nvim-treesitter.configs.
+        require('nvim-treesitter').setup()
+        vim.api.nvim_create_autocmd('FileType', {
+          pattern = {
+            'javascript',
+            'javascriptreact',
+            'typescript',
+            'typescriptreact',
+          },
+          callback = function()
+            vim.treesitter.start()
+            vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+          end,
+        })
+
         -- Setup lspconfig.
         vim.lsp.enable('pylsp')
         vim.lsp.enable('ruff')
@@ -804,8 +826,18 @@ with constants;
             vim.keymap.set('n', '<leader>lR', vim.lsp.buf.references, opts)
             vim.keymap.set('n', '<leader>ls', vim.lsp.buf.signature_help, opts)
             vim.keymap.set('n', '<leader>le', vim.diagnostic.open_float, opts)
-            vim.keymap.set('n', '<leader>ln', vim.diagnostic.goto_next, opts)
-            vim.keymap.set('n', '<leader>lp', vim.diagnostic.goto_prev, opts)
+            vim.keymap.set('n', '<leader>ln', function()
+              vim.diagnostic.jump({
+                count = 1,
+                on_jump = function() vim.diagnostic.open_float() end,
+              })
+            end, opts)
+            vim.keymap.set('n', '<leader>lp', function()
+              vim.diagnostic.jump({
+                count = -1,
+                on_jump = function() vim.diagnostic.open_float() end,
+              })
+            end, opts)
           end,
         })
 

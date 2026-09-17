@@ -1,12 +1,12 @@
 set nocompatible
 
-syntax enable
+" :NOTE: disabled this for now because caused issues with orgmode
+"syntax enable
 
 "get rid of annoyances
 set noswapfile
 set nobackup
 set nowritebackup
-
 set ignorecase          " Make searching case insensitive
 set smartcase           " ... unless the query has capital letters.
 set gdefault            " Use 'g' flag by default with :s/foo/bar/.
@@ -21,10 +21,10 @@ nnoremap ; :
 vnoremap : ;
 vnoremap ; :
 
-let mapleader="\<SPACE>"
-
 " Use system clipboard for all yank/delete/put operations
 set clipboard+=unnamedplus
+
+let mapleader="\<SPACE>"
 
 "NERDTree
 "-------------------------
@@ -80,6 +80,10 @@ nnoremap <leader>t9 9gt<CR>
 nnoremap <leader>t0 10gt<CR>
 
 " :TODO: figure out a keybinding for fuzzy deleting buffers
+" :TODO: add toggleterm package and keybindings https://github.com/akinsho/toggleterm.nvim
+" :TODO: look into integrations with tmux https://github.com/aserowy/tmux.nvim
+" :TODO: add harpoon plugin and keybindings https://github.com/ThePrimeagen/harpoon/tree/harpoon2
+" :TODO: look into this plugin https://github.com/junegunn/fzf.vim
 
 " Control+W followed by W
 nnoremap <leader>o <C-w>w<CR>
@@ -94,14 +98,21 @@ nnoremap <leader>b :Telescope buffers<CR>
 nnoremap <leader>g :Neogit<CR>
 nnoremap <leader>G :LazyGit<CR>
 
+nnoremap <leader>ug :CodeCompanionChat<CR>
+
 nnoremap <leader>z :Telescope zoxide list<CR>
 
-nnoremap gb <C-w>w<CR>
+" Make terminal ESC work like you would expect it to
+tnoremap <Esc> <C-\><C-n>
 
 let g:airline_powerline_fonts = 1
 let g:airline_theme= 'dracula'
 
 set completeopt=menu,menuone,noselect
+
+" Use filetype-specific indent rules, then pin JS/TS to 4 spaces.
+filetype plugin indent on
+autocmd FileType typescript,typescriptreact,javascript,javascriptreact setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
 
 lua <<EOF
 
@@ -122,6 +133,8 @@ lua <<EOF
       mapping = {
           ["<C-d>"] = cmp.mapping.scroll_docs(-4),
           ["<C-f>"] = cmp.mapping.scroll_docs(4),
+          ['<C-k>'] = cmp.mapping.select_prev_item(select_opts),
+          ['<C-j>'] = cmp.mapping.select_next_item(select_opts),
           ['<Up>'] = cmp.mapping.select_prev_item(select_opts),
           ['<Down>'] = cmp.mapping.select_next_item(select_opts),
           ["<C-e>"] = cmp.mapping.close(),
@@ -151,11 +164,30 @@ lua <<EOF
       }
   }
 
+  -- Enable Tree-sitter highlighting and indentation for JavaScript,
+  -- TypeScript, and TSX. The grammars are provided by the Nix plugin
+  -- package above. nvim-treesitter's current API no longer provides
+  -- nvim-treesitter.configs.
+  require('nvim-treesitter').setup()
+  vim.api.nvim_create_autocmd('FileType', {
+    pattern = {
+      'javascript',
+      'javascriptreact',
+      'typescript',
+      'typescriptreact',
+    },
+    callback = function()
+      vim.treesitter.start()
+      vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+    end,
+  })
+
   -- Setup lspconfig.
   vim.lsp.enable('pylsp')
   vim.lsp.enable('ruff')
   vim.lsp.enable('ts_ls')
   vim.lsp.enable('hls')
+  vim.lsp.enable('org')
   vim.lsp.enable('csharp_ls')
 
   vim.api.nvim_create_autocmd('LspAttach', {
@@ -171,11 +203,21 @@ lua <<EOF
       vim.keymap.set('n', '<leader>lR', vim.lsp.buf.references, opts)
       vim.keymap.set('n', '<leader>ls', vim.lsp.buf.signature_help, opts)
       vim.keymap.set('n', '<leader>le', vim.diagnostic.open_float, opts)
-      vim.keymap.set('n', '<leader>ln', vim.diagnostic.goto_next, opts)
-      vim.keymap.set('n', '<leader>lp', vim.diagnostic.goto_prev, opts)
+      vim.keymap.set('n', '<leader>ln', function()
+        vim.diagnostic.jump({
+          count = 1,
+          on_jump = function() vim.diagnostic.open_float() end,
+        })
+      end, opts)
+      vim.keymap.set('n', '<leader>lp', function()
+        vim.diagnostic.jump({
+          count = -1,
+          on_jump = function() vim.diagnostic.open_float() end,
+        })
+      end, opts)
     end,
   })
-  
+
   -- Setup AI codecompanion
   require("codecompanion").setup({
     strategies = {
@@ -185,4 +227,3 @@ lua <<EOF
       },
     }
   })
-EOF

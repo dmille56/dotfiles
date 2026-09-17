@@ -16,6 +16,8 @@ call plug#begin('~/AppData/Local/nvim/plugged')
     Plug 'easymotion/vim-easymotion'
     Plug 'nvim-telescope/telescope.nvim'
     Plug 'jvgrootveld/telescope-zoxide'
+    " Keep this on the same API generation as the NixOS package.
+    Plug 'nvim-treesitter/nvim-treesitter', { 'branch': 'main' }
     Plug 'roman/golden-ratio'
     Plug 'kdheepak/lazygit.nvim'
     Plug 'nvim-orgmode/orgmode'
