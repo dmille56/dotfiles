@@ -81,7 +81,16 @@
         inherit system;
         config.allowUnfree = true;
       };
-      my-machine-id = "desktop"; # desktop, laptop
+      my-machine-id =
+        let
+          value = builtins.getEnv "MY_MACHINE_ID";
+        in
+          if value == "desktop" || value == "laptop"
+          then value
+          else builtins.throw ''
+            MY_MACHINE_ID must be set to desktop or laptop.
+            Example: MY_MACHINE_ID=desktop nixos-rebuild switch --impure
+          '';
       my-host-name =
         if my-machine-id == "laptop" then "${const.my-laptop-hostname}"
         else if my-machine-id == "desktop" then "${const.my-desktop-hostname}"
