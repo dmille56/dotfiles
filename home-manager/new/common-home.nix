@@ -170,7 +170,7 @@ with constants;
     opencode
     codex
     llm-agents.droid
-    gemini-cli
+    # gemini-cli is marked for removal in nixpkgs.
     # codex-acp
     claude-agent-acp
     # ollama
@@ -405,20 +405,20 @@ with constants;
   programs.ssh = {
     enableDefaultConfig = false;
     enable = lib.mkDefault true;
-    matchBlocks = {
+    settings = {
       # "*" = {
-      #   hostname = lib.mkDefault "73.140.10.210";
-      #   port = lib.mkDefault 50022;
-      #   user = lib.mkDefault my-username;
-      #   compression = lib.mkDefault true;
-      #   forwardX11 = lib.mkDefault true;
+      #   HostName = lib.mkDefault "73.140.10.210";
+      #   Port = lib.mkDefault 50022;
+      #   User = lib.mkDefault my-username;
+      #   Compression = lib.mkDefault true;
+      #   ForwardX11 = lib.mkDefault true;
       # };
       "${my-desktop-hostname}" = {
-        hostname = lib.mkDefault "73.140.10.210";
-        port = lib.mkDefault 50022;
-        user = lib.mkDefault my-username;
-        compression = lib.mkDefault true;
-        forwardX11 = lib.mkDefault true;
+        HostName = lib.mkDefault "73.140.10.210";
+        Port = lib.mkDefault 50022;
+        User = lib.mkDefault my-username;
+        Compression = lib.mkDefault true;
+        ForwardX11 = lib.mkDefault true;
       };
     };
   };
@@ -924,7 +924,7 @@ with constants;
 
   qt = {
     enable = true;
-    platformTheme.name = "gtk";
+    platformTheme.name = "gtk3";
   };
 
   # :NOTE: home file configuration starts here
