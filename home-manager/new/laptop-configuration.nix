@@ -17,6 +17,19 @@ in
   # for the dock's USB graphics adapter.
   services.xserver.videoDrivers = [ "modesetting" "displaylink" ];
 
+  # Configure the laptop touchpad through libinput.
+  services.xserver.libinput = {
+    enable = true;
+
+    touchpad = {
+      tapping = true;
+      naturalScrolling = true;
+      disableWhileTyping = true;
+      scrollMethod = "twofinger";
+      clickMethod = "clickfinger";
+    };
+  };
+
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
