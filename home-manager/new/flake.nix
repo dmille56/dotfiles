@@ -72,13 +72,13 @@
   outputs = inputs@{ nixpkgs, home-manager, sops-nix, nix-openclaw, aider-chat-full-revision, ollama-revision, kokoro-onnx-revision, drawiterm, llm-agents, opentmux, jobspy-plugin, blue-prince-parlor-solver, ... }:
     let
       const = import (builtins.toPath "/home/dono/dotfiles/home-manager/new/common-constants.nix");
-      system = "x86_64-linux";
+      hostSystem = "x86_64-linux";
       ollamaPkgs = import ollama-revision {
-        inherit system;
+        system = hostSystem;
         config.allowUnfree = true;
       };
       kokoroOnnxPkgs = import kokoro-onnx-revision {
-        inherit system;
+        system = hostSystem;
         config.allowUnfree = true;
       };
       my-machine-id =
