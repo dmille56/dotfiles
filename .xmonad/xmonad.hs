@@ -162,7 +162,7 @@ myStartupHook myConfigMachine = do
   spawnOnce "yad --notification --image='system-shutdown' --text='Power Menu' --command='rofi -show power-menu -modi power-menu:rofi-power-menu'"
   spawnOnce "redshift-gtk"
   spawn "xrdb ~/.Xresources"
-  greenclipDaemon <- spawnPipe "greenclip daemon"
+  spawnOnce "greenclip daemon"
   when (myConfigMachine == Desktop) $ spawn "xmodmap -e 'keycode 118 = Pause'"
   spawn "xmodmap -e 'keycode 127 = Insert'"
 
