@@ -53,6 +53,20 @@ with constants;
   xsession.enable = lib.mkDefault true;
   fonts.fontconfig.enable = lib.mkDefault true;
 
+  # XMonad starts this service explicitly; other desktop sessions leave it stopped.
+  systemd.user.services.greenclip = {
+    Unit = {
+      Description = "Greenclip clipboard manager";
+      After = ["graphical-session-pre.target"];
+      PartOf = ["graphical-session.target"];
+    };
+    Service = {
+      ExecStart = "${pkgs.haskellPackages.greenclip}/bin/greenclip daemon";
+      Restart = "on-failure";
+      RestartSec = 1;
+    };
+  };
+
   home.username = lib.mkDefault "${my-username}";
   home.homeDirectory = lib.mkDefault "${my-home-dir}";
   home.stateVersion = lib.mkDefault "23.11"; # To figure this out you can comment out the line and see what version it expected.
@@ -644,6 +658,21 @@ with constants;
       vnoremap : ;
       vnoremap ; :
 
+      " Let xclip keep ownership independently instead of tying it to
+      " Neovim's cached provider job.
+      let g:clipboard = {
+      \ 'name': 'xclip-persistent',
+      \ 'copy': {
+      \   '+': ['xclip', '-in', '-selection', 'clipboard'],
+      \   '*': ['xclip', '-in', '-selection', 'primary'],
+      \ },
+      \ 'paste': {
+      \   '+': ['xclip', '-out', '-selection', 'clipboard'],
+      \   '*': ['xclip', '-out', '-selection', 'primary'],
+      \ },
+      \ 'cache_enabled': 0,
+      \ }
+
       " Use system clipboard for all yank/delete/put operations
       set clipboard+=unnamedplus
 
@@ -1018,6 +1047,7 @@ with constants;
     bindings = [
     { key = "+", mods = "Control", action = "IncreaseFontSize" },
     { key = "-", mods = "Control", action = "DecreaseFontSize" },
+    { key = "Insert", mods = "Shift", action = "Paste" },
     ] 
   '';
 
@@ -1042,6 +1072,9 @@ with constants;
     map ctrl+equal change_font_size all +2.0
     map ctrl+plus change_font_size all +2.0
     map ctrl+minus change_font_size all -2.0
+
+    # Match Alacritty: Shift+Insert pastes CLIPBOARD, not PRIMARY.
+    map shift+insert paste_from_clipboard
 
     enable_audio_bell no
   '';
