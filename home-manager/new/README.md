@@ -1,8 +1,8 @@
 # Install notes
 1. copy flake.nix to /etc/nixos/flake.nix: `sudo cp flake.nix /etc/nixos/flake.nix`.
-2. change my-machine-id variable to the correct machine (desktop or laptop)
+2. Choose the machine id for the host (`desktop` or `laptop`)
 3. make sure dotfiles are cloned to /home/dono/dotfiles: `git clone https://github.com/dmille56/dotfiles`
-4. Switch to the new config: `sudo nixos-rebuild switch --impure`
+4. Switch to the new config, passing the machine id: `MY_MACHINE_ID=desktop sudo nixos-rebuild switch --impure` (use `laptop` for a laptop)
 
 # Non nix install:
 1. setup syncthing directories
@@ -16,9 +16,10 @@
     2. `pass init`
 
 # Update / Managing NixOS Config
-- Apply new/updated nixos config: `sudo nixos-rebuild switch --impure`
+- Apply new/updated nixos config: `MY_MACHINE_ID=desktop sudo nixos-rebuild switch --impure` (use `laptop` for a laptop)
 - How to update nix pkgs (NOTE still after run switch command to apply the update): `cd /etc/nixos && sudo nix flake update`
 - Garbage collect nix: `nix-collect-garbage -d`
+- Optimise nix: `nix store optimise`
 - Re run home-manager activation scripts: `sudo systemctl restart home-manager-dono.service`
 - How to test out a program without install (drops you in a shell with that program in it)... Replace hello with the actual pkg you want to use.
     - Classic way: `nix-shell -p hello`
