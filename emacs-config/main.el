@@ -90,6 +90,10 @@
 (load bootstrap-file nil 'nomessage))
 
 (straight-use-package 'org)
+;; Keep Transient and its dependencies in straight.  Recent MELPA updates made
+;; the package.el copy depend on llama, which can leave every Transient-based
+;; package (rg, Casual, and gptel) unavailable when that dependency is missing.
+(straight-use-package 'transient)
 (require 'transient)
 
 ;; How to check for system type:
@@ -683,7 +687,8 @@ _p_rev       _U_pper              _=_: upper/lower       _r_esolve
 ;;          reb-lisp-mode-map ("C-o" . casual-re-builder-tmenu))
 ;;   :after (re-builder))
 
-(use-package casual-suite)
+(use-package casual-suite
+  :straight t)
 
 (use-package undo-tree
   :ensure t
@@ -956,6 +961,7 @@ _p_rev       _U_pper              _=_: upper/lower       _r_esolve
   (evil-set-initial-state 'emms-playlist-mode 'emacs))
 
 (use-package rg
+  :straight t
   :functions rg-enable-default-bindings
   :config
   (rg-enable-default-bindings))
@@ -1148,6 +1154,7 @@ _p_rev       _U_pper              _=_: upper/lower       _r_esolve
   (insert (concat "\n* " (format-time-string "%Y-%m-%d"))))
 
 (use-package org-roam
+  :straight t
   :defines org-roam-capture-templates org-roam-node-display-template
   :functions (org-roam-node-create org-roam-capture- org-roam-db-autosync-mode)
   :defer
@@ -1821,6 +1828,14 @@ Make sure to run \='ollama serve\=' and have zephyr model."
 (defvar powershell-ts-mode-path "~/Desktop/prog/powershell-ts-mode/")
 (defvar ufo-catcher-path "~/Desktop/prog/ufo-catcher/")
 
+;; treesit-jump currently requires gptel while it is loaded.  Declare it before
+;; treesit-jump and let straight manage both packages and their dependencies.
+(use-package gptel
+  :straight t
+  :demand t
+  :init
+  (setq gptel-api-key (lambda () (auth-source-pass-get 'secret "OPENAI_API_KEY"))))
+
 (if (file-directory-p ufo-catcher-path)
     (use-package ufo-catcher :load-path ufo-catcher-path)
   (use-package ufo-catcher :straight (:host github :repo "dmille56/ufo-catcher")))
@@ -1998,11 +2013,6 @@ shell exits, the buffer is killed."
     (setq ee-terminal-command "alacritty"))
   )
 
-(use-package gptel
-  :defer
-  :init
-  (setq gptel-api-key (lambda () (auth-source-pass-get 'secret "OPENAI_API_KEY"))))
-
 ;; (use-package magit-gptcommit
 ;;   :straight t
 ;;   :after gptel magit
@@ -2031,7 +2041,8 @@ shell exits, the buffer is killed."
             (setq-local comint-scroll-show-maximum-output nil)
             (setq-local comint-move-point-for-output nil)))
 
-(use-package casual-avy)
+(use-package casual-avy
+  :straight t)
 
 (use-package imenu-list
   :bind

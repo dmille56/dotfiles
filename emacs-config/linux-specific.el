@@ -1,4 +1,4 @@
-;;; linux-specific --- linux specfic emacs config
+;;; linux-specific.el --- Linux-specific Emacs configuration -*- lexical-binding: t; -*-
 ;;; Commentary:
 ;;; Code:
 
