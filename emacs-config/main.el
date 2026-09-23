@@ -825,13 +825,16 @@ _p_rev       _U_pper              _=_: upper/lower       _r_esolve
 
 ;; install magit
 (use-package magit
+  :straight t
   :defines forge-add-default-bindings magit-pull-or-fetch
   :defer
   :init
   (setq magit-pull-or-fetch t)
   (setq forge-add-default-bindings t))
 
-(use-package forge :after magit)
+(use-package forge
+  :straight t
+  :after magit)
 
 (use-package git-link
   :defines git-link-open-in-browser
