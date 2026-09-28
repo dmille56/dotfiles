@@ -33,6 +33,16 @@ let
       export npm_config_prefix="${piNpmPrefix}"
       export npm_config_userconfig="${npmUserConfig}"
 
+      # @ifi/pi-shared-qna's createRequire fallback cannot load this ESM
+      # package in Pi's compiled Bun runtime. Use Pi's working static import.
+      pi_tui_loader="${piAgentNpmPrefix}/@ifi/pi-shared-qna/pi-tui-loader.ts"
+      if [ -f "$pi_tui_loader" ]; then
+        ${pkgs.perl}/bin/perl -0pi -e '
+          s|import \{ createRequire \} from "node:module";|import * as piTui from "\@mariozechner/pi-tui";|;
+          s|export function requirePiTuiModule\(options: PiTuiLoaderOptions = \{\}\): unknown \{.*?\n\}|export function requirePiTuiModule(options: PiTuiLoaderOptions = {}): unknown {\n\treturn piTui;\n}|s;
+        ' "$pi_tui_loader"
+      fi
+
       open_plan_extension="${piAgentNpmPrefix}/@open-plan-annotator/pi-extension"
       open_plan_shared="${piAgentNpmPrefix}/open-plan-annotator/shared"
       open_plan_typebox="${piAgentNpmPrefix}/typebox"
@@ -214,8 +224,8 @@ with constants;
   home.file.".pi/web-search.json".text = builtins.toJSON {
     provider = "exa";
     workflow = "none";
-    searchModel = "openai/gpt-5.6-luna";
-    summaryModel = "openai/gpt-5.6-luna";
+    searchModel = "openai/gpt-6-luna";
+    summaryModel = "openai/gpt-6-luna";
   };
 
   systemd.user.services.pi-install-packages = {

@@ -875,7 +875,7 @@ with constants;
           strategies = {
             chat = {
               adapter = "openai",
-              model = "gpt-5.6-luna"
+              model = "gpt-6-luna"
             },
           }
         })
@@ -1371,8 +1371,8 @@ with constants;
     GEMINI_API_KEY = lib.mkDefault "$(cat /run/secrets/GOOGLE_API_KEY)";
     ANTHROPIC_API_KEY = lib.mkDefault "$(cat /run/secrets/ANTHROPIC_API_KEY)";
     OPENROUTER_API_KEY = lib.mkDefault "$(cat /run/secrets/OPENROUTER_API_KEY)";
-    OPENAI_API_MODEL = lib.mkDefault "gpt-5.6-luna";
-    AIDER_MODEL = lib.mkDefault "gpt-5.6-luna";
+    OPENAI_API_MODEL = lib.mkDefault "gpt-6-luna";
+    AIDER_MODEL = lib.mkDefault "gpt-6-luna";
     AIDER_GIT_COMMIT_VERIFY = lib.mkDefault "true";
     OLLAMA_CONTEXT_LENGTH = lib.mkDefault "64000";
     RIPGREP_CONFIG_PATH = lib.mkDefault "${my-home-dir}/.ripgreprc";
