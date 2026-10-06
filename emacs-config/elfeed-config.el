@@ -59,6 +59,7 @@
 (setq-default elfeed-banned-keywords '("gaza" "israel" "hamas" "palestine"))
 
 (use-package elfeed
+  :straight t
   :init
   (evil-define-key 'normal elfeed-search-mode-map
     (kbd "g c") 'elfeed-browsecomments-wrapper
@@ -124,10 +125,11 @@
   ;; Add short tag to youtube shorts
   (add-hook 'elfeed-new-entry-hook #'elfeed-tag-yt-short))
 
-(use-package mpv)
+(use-package mpv
+  :straight t)
 
 (use-package elfeed-tube
-  :ensure t
+  :straight t
   :after elfeed mpv
   :demand t
   :config
@@ -141,7 +143,7 @@
          ([remap save-buffer] . elfeed-tube-save)))
 
 (use-package elfeed-tube-mpv
-  :ensure t
+  :straight t
   :after elfeed-tube
   :bind (:map elfeed-show-mode-map
               ("C-c C-f" . elfeed-tube-mpv-follow-mode)

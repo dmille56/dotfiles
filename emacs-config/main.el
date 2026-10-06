@@ -906,7 +906,7 @@ _p_rev       _U_pper              _=_: upper/lower       _r_esolve
 (set-face-attribute 'mouse nil :background (face-attribute 'default :background))
 
 ;; install nix-mode
-(use-package nix-mode :mode "\\.nix\\'" :defer)
+(use-package nix-mode :mode "\\.nix\\'" :defer :straight t)
 
 ;; for nix formatting
 (use-package format-all
@@ -1277,11 +1277,13 @@ _p_rev       _U_pper              _=_: upper/lower       _r_esolve
 
 (use-package read-aloud :defer)
 
-(use-package company)
+(use-package company
+  :straight t
+  :hook (after-init . global-company-mode))
 
 (use-package company-box
+  :straight t
   :hook (company-mode . company-box-mode))
-(add-hook 'after-init-hook 'global-company-mode)
 ;; use company-search with C-s
 
 (use-package page-break-lines) ;; needed for dashboard
@@ -1342,7 +1344,8 @@ _p_rev       _U_pper              _=_: upper/lower       _r_esolve
   (add-hook 'prog-mode-hook 'svg-tag-mode)
   (add-hook 'yaml-ts-mode-hook 'svg-tag-mode))
 
-(use-package hl-todo)
+(use-package hl-todo
+  :straight t)
 
 (use-package flycheck-hl-todo
   :functions flycheck-hl-todo-setup
@@ -1905,7 +1908,8 @@ Make sure to run \='ollama serve\=' and have zephyr model."
 
 (use-package leetcode
   :defines leetcode-prefer-language leetcode-prefer-tag-display
-  :defer
+  :commands (leetcode leetcode-daily leetcode-submit leetcode-try
+             leetcode-restore-layout leetcode-refresh)
   :config
   (setq leetcode-prefer-language "python3")
   (setq leetcode-prefer-tag-display 'nil)
