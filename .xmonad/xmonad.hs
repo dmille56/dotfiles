@@ -96,7 +96,7 @@ myScratchPads hasNixGL = [btm, term, fileManager, lazygit, music, volumeControl]
   where
     btm = NS "btm" spawn' find manage'
       where
-        spawn' = glWrapper hasNixGL "alacritty --class btm_term -e btm"
+        spawn' = glWrapper hasNixGL "alacritty -o window.opacity=1 --class btm_term -e btm"
         find = className =? "btm_term"
         manage' = customFloating $ rectCentered 0.9
     volumeControl = NS "volumeControl" spawn' find manage'
@@ -106,7 +106,7 @@ myScratchPads hasNixGL = [btm, term, fileManager, lazygit, music, volumeControl]
         manage' = customFloating $ rectCentered 0.9
     term = NS "term" spawn' find manage'
       where
-        spawn' = glWrapper hasNixGL "alacritty --class scratchpad_term"
+        spawn' = glWrapper hasNixGL "alacritty -o window.opacity=1 --class scratchpad_term"
         find = className =? "scratchpad_term"
         manage' = customFloating $ rectCentered 0.9
     fileManager = NS "fileManager" spawn' find manage'
@@ -116,12 +116,12 @@ myScratchPads hasNixGL = [btm, term, fileManager, lazygit, music, volumeControl]
         manage' = customFloating $ rectCentered 0.9
     lazygit = NS "lazygit" spawn' find manage'
       where
-        spawn' = glWrapper hasNixGL "alacritty --class lazygit_term -e lazygit"
+        spawn' = glWrapper hasNixGL "alacritty -o window.opacity=1 --class lazygit_term -e lazygit"
         find = className =? "lazygit_term"
         manage' = customFloating $ rectCentered 0.95
     music = NS "music" spawn' find manage'
       where
-        spawn' = glWrapper hasNixGL "alacritty --class spotify_term -e spotify_player"
+        spawn' = glWrapper hasNixGL "alacritty -o window.opacity=1 --class spotify_term -e spotify_player"
         find = className =? "spotify_term"
         manage' = customFloating $ rectCentered 0.9
 

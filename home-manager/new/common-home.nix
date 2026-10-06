@@ -1042,7 +1042,7 @@ with constants;
     style = "Regular"
 
     [window]
-    opacity = 0.8
+    opacity = 0.9
 
     [keyboard]
     bindings = [
@@ -1067,7 +1067,7 @@ with constants;
     font_size 13.0
 
     # Window appearance
-    background_opacity 0.8
+    background_opacity 0.9
 
     # Ctrl +/- to resize font
     map ctrl+equal change_font_size all +2.0
