@@ -84,6 +84,7 @@ with constants;
   resumeQna.enable = true;
 
   home.packages = with pkgs; [
+    picom
     #terminal
     nano
     micro
