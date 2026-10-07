@@ -244,6 +244,7 @@ main = do
                                    ((0, xK_p), notifySpawn "pavucontrol"),
                                    ((0, xK_m), notifySpawn "gnome-system-monitor"),
                                    ((0, xK_r), notifySpawn $ glWrapper hasNixGL "alacritty -e ranger"),
+                                   ((0, xK_y), notifySpawn $ glWrapper hasNixGL "alacritty -e yazi"),
                                    ((0, xK_t), notifySpawn "thunar"),
                                    ((0, xK_d), notifySpawn $ glWrapper hasNixGL "alacritty -e dropbox"),
                                    ((0, xK_x), notifySpawn $ glWrapper hasNixGL "alacritty"),
