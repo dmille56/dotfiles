@@ -341,6 +341,8 @@ with constants;
     asciinema-agg # :NOTE: added
   ];
 
+  # :NOTE: programs config starts here
+
   programs.yazi = {
     enable = true;
     enableZshIntegration = true;
@@ -359,8 +361,6 @@ with constants;
     shellWrapperName = "y";
     theme.flavor.dark = "dracula";
   };
-
-  # :NOTE: programs config starts here
 
   programs.fzf = {
     enable = lib.mkDefault true;
