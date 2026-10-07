@@ -2,6 +2,7 @@
   pkgs,
   config,
   lib,
+  yaziFlavors ? null,
   kokoroOnnxPkgs ? pkgs,
   ...
 }:
@@ -146,7 +147,6 @@ with constants;
     powershell
     tmux
     pkgsWithRangerHighlightFix.ranger
-    yazi
     fzf
     ripgrep
 
@@ -340,6 +340,25 @@ with constants;
     asciinema # :NOTE: added
     asciinema-agg # :NOTE: added
   ];
+
+  programs.yazi = {
+    enable = true;
+    enableZshIntegration = true;
+
+    keymap.mgr.prepend_keymap = [
+      { on = "q"; run = "close"; desc = "Close the current tab or quit"; }
+      { on = [ "t" "n" ]; run = "tab_create --current"; desc = "Create a new tab in CWD"; }
+      { on = [ "g" "t" ]; run = "tab_switch 1 --relative"; desc = "Switch to next tab"; }
+      { on = [ "g" "T" ]; run = "tab_switch -1 --relative"; desc = "Switch to previous tab"; }
+      { on = [ "g" "R" ]; run = "plugin trash"; desc = "Go to trash bin"; }
+    ];
+
+    flavors = lib.optionalAttrs (yaziFlavors != null) {
+      dracula = yaziFlavors + "/dracula.yazi";
+    };
+    shellWrapperName = "y";
+    theme.flavor.dark = "dracula";
+  };
 
   # :NOTE: programs config starts here
 
