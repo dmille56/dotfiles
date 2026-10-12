@@ -171,6 +171,8 @@
                 installPhase = ''
                   mkdir -p $out/share/plymouth/themes
                   cp -r $src/dracula $out/share/plymouth/themes/dracula
+                  substituteInPlace $out/share/plymouth/themes/dracula/dracula.plymouth \
+                    --replace-fail /usr/share/plymouth/themes/dracula $out/share/plymouth/themes/dracula
                 '';
               };
             in
