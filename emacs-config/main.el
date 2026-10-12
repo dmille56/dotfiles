@@ -96,6 +96,11 @@
 (straight-use-package 'transient)
 (require 'transient)
 
+;; Cursor effects: welding sparks, a comet trail, and a landing-line pulse.
+(straight-use-package
+ '(forge-cursor :type git :host github :repo "barrulus/forge-cursor"))
+(require 'forge-cursor)
+
 ;; How to check for system type:
 ;; (if (eq system-type 'gnu/linux)
 ;; (if (eq system-type 'windows-nt)
