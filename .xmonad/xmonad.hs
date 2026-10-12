@@ -157,6 +157,7 @@ audioRaiseVolumeCommand = "amixer -D pulse sset Master 5%+; notify-send -i audio
 
 myStartupHook :: MyConfigMachine -> X ()
 myStartupHook myConfigMachine = do
+  spawnOnce "xscreensaver -no-splash"
   spawnOnce $ case myConfigMachine of
     Desktop -> "picom --config ~/.config/picom/picom.conf --backend glx"
     Laptop -> "picom --config ~/.config/picom/picom.conf --backend xrender"
@@ -196,7 +197,7 @@ main = do
             focusedBorderColor = (_myTheme_focusedBorderColor myTheme),
             workspaces = ["1:web", "2:vid", "3:game", "4:mus", "5", "6", "7", "8:term", "9:dev"]
           }
-          `additionalKeys` [ ((myModMask .|. shiftMask, xK_z), spawn "xscreensaver-command -lock; xset dpms force off"),
+          `additionalKeys` [ ((myModMask .|. shiftMask, xK_z), spawn "xscreensaver-command -lock && xset dpms force off"),
                              ((myModMask, xK_p), spawn "rofi -show run"),
                              ((myModMask, xK_i), spawn "rofi -show window"),
                              ((myModMask, xK_o), spawn "play-yt-script"),

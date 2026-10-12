@@ -102,6 +102,10 @@ with constants;
   };
   services.displayManager.defaultSession = lib.mkDefault "none+xmonad";
 
+  # xscreensaver is installed through Home Manager, so explicitly provide
+  # its PAM service for password authentication on newer nixpkgs.
+  security.pam.services.xscreensaver.enable = true;
+
   # Configure keymap in X11
   services.xserver.xkb = {
     layout = lib.mkDefault "us";
