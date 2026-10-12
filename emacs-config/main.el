@@ -2026,10 +2026,12 @@ shell exits, the buffer is killed."
   :straight (:host github :repo "eval-exec/eee.el" :files ("*.el" "*.sh"))
   :config
   ;; Should have wezterm or alacritty installed, more terminal application is supporting...
-  (if my/has-nixgl
-      (setq ee-terminal-command "nixGL alacritty --class ee_term")
-    (setq ee-terminal-command "alacritty"))
-  )
+  ;; EEE starts ee-terminal-command as the executable and passes options separately.
+  (let* ((use-nixgl my/has-nixgl)
+         (command (if use-nixgl "nixGL" "alacritty")))
+    (setq ee-terminal-command command)
+    (setf (alist-get command ee-terminal-options nil nil #'equal)
+          (if use-nixgl "alacritty --class ee_term" "--class ee_term"))))
 
 ;; (use-package magit-gptcommit
 ;;   :straight t
