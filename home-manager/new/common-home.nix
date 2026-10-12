@@ -85,7 +85,7 @@ with constants;
   resumeQna.enable = true;
 
   home.packages = with pkgs; [
-    picom
+    picom-pijulius
     #terminal
     nano
     micro
@@ -1119,6 +1119,7 @@ with constants;
 
   home.file.".vimrc".source = lib.mkDefault "${my-dotfile-dir}/vim/vim/vimrc";
   home.file.".Xresources".source = lib.mkDefault "${my-dotfile-dir}/Xresources";
+  home.file.".config/picom/picom.conf".source = lib.mkDefault "${my-dotfile-dir}/picom.conf";
   home.file.".xmobarrc".source = lib.mkDefault "${my-dotfile-dir}/xmobarrc-laptop";
   home.file.".xmonad/xmonad.hs".source = lib.mkDefault "${my-dotfile-dir}/.xmonad/xmonad.hs";
   home.file.".xmonad/lib/MyTheme.hs".source = lib.mkDefault "${my-dotfile-dir}/.xmonad/MyTheme.hs";
