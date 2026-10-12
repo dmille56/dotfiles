@@ -495,6 +495,8 @@ _p_rev       _U_pper              _=_: upper/lower       _r_esolve
    "m" 'my/transient-evil-macros
    "w" 'my/transient-org-roam
    "W" 'unpackaged/smerge-hydra/body
+   "y" 'ee-yazi-project
+   "Y" 'ee-yazi
 
    ;; window management
    "o" 'other-window
@@ -1382,9 +1384,15 @@ _p_rev       _U_pper              _=_: upper/lower       _r_esolve
 (use-package pcsv :defer)
 
 (use-package chatgpt-shell
+  :straight t
   :defines chatgpt-shell-model-version chatgpt-shell-openrouter-key
+  :commands (chatgpt-shell
+             chatgpt-shell-send-and-review-region
+             chatgpt-shell-refactor-code
+             chatgpt-shell-describe-code
+             chatgpt-shell-write-git-commit
+             chatgpt-shell-ollama-load-models)
   :defer
-  :ensure t
   :init
   (setq chatgpt-shell-openrouter-key (getenv "OPENROUTER_API_KEY"))
   :config
@@ -1627,7 +1635,9 @@ Make sure to run \='ollama serve\=' and have zephyr model."
     (kbd "C-l") 'eshell-go-up-one-dir))
 
 (use-package eshell-syntax-highlighting
+  :straight t
   :functions eshell-syntax-highlighting-global-mode
+  :commands eshell-syntax-highlighting-global-mode
   :after eshell
   :config
   ;; Enable in all Eshell buffers.
@@ -1907,6 +1917,7 @@ Make sure to run \='ollama serve\=' and have zephyr model."
   (end-of-line))
 
 (use-package leetcode
+  :straight t
   :defines leetcode-prefer-language leetcode-prefer-tag-display
   :commands (leetcode leetcode-daily leetcode-submit leetcode-try
              leetcode-restore-layout leetcode-refresh)
