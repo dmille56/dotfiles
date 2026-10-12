@@ -157,7 +157,6 @@ audioRaiseVolumeCommand = "amixer -D pulse sset Master 5%+; notify-send -i audio
 
 myStartupHook :: MyConfigMachine -> X ()
 myStartupHook myConfigMachine = do
-  spawnOnce "xscreensaver -no-splash"
   spawnOnce $ case myConfigMachine of
     Desktop -> "picom --config ~/.config/picom/picom.conf --backend glx"
     Laptop -> "picom --config ~/.config/picom/picom.conf --backend xrender"

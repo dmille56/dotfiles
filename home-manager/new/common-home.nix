@@ -54,10 +54,13 @@ with constants;
   xsession.enable = lib.mkDefault true;
   fonts.fontconfig.enable = lib.mkDefault true;
 
-  services.xscreensaver.settings = {
-    mode = "one";
-    # GLMatrix's index in the XScreenSaver program list provided by nixpkgs.
-    selected = 142;
+  services.xscreensaver = {
+    enable = true;
+    settings = {
+      mode = "one";
+      # GLMatrix's index in the XScreenSaver program list provided by nixpkgs.
+      selected = 142;
+    };
   };
 
   # XMonad starts this service explicitly; other desktop sessions leave it stopped.
@@ -1150,7 +1153,8 @@ with constants;
   '';
 
   home.file.".vimrc".source = lib.mkDefault "${my-dotfile-dir}/vim/vim/vimrc";
-  home.file.".Xresources".source = lib.mkDefault "${my-dotfile-dir}/Xresources";
+  # Merge the repo Xresources with module-generated resources (including XScreenSaver).
+  xresources.extraConfig = lib.mkDefault (builtins.readFile "${my-dotfile-dir}/Xresources");
   home.file.".config/picom/picom.conf".source = lib.mkDefault "${my-dotfile-dir}/picom.conf";
   home.file.".xmobarrc".source = lib.mkDefault "${my-dotfile-dir}/xmobarrc-laptop";
   home.file.".xmonad/xmonad.hs".source = lib.mkDefault "${my-dotfile-dir}/.xmonad/xmonad.hs";
