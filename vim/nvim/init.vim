@@ -20,6 +20,7 @@ call plug#begin('~/AppData/Local/nvim/plugged')
     Plug 'nvim-treesitter/nvim-treesitter', { 'branch': 'main' }
     Plug 'roman/golden-ratio'
     Plug 'kdheepak/lazygit.nvim'
+    Plug 'sphamba/smear-cursor.nvim'
     Plug 'nvim-orgmode/orgmode'
     
     "Neogit + dependencies

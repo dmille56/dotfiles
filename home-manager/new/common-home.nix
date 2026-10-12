@@ -609,6 +609,7 @@ with constants;
       neogit
       golden-ratio
       lazygit-nvim
+      smear-cursor-nvim
 
       # orgmode plugins
       (nvim-treesitter.withPlugins (p: [
@@ -787,6 +788,11 @@ with constants;
       autocmd FileType typescript,typescriptreact,javascript,javascriptreact setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
 
       lua <<EOF
+
+      -- Use Neovide's native cursor animation when running inside Neovide.
+      if not vim.g.neovide then
+        require('smear_cursor').setup()
+      end
 
         -- Setup neogit
         local neogit = require'neogit'

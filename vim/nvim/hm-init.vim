@@ -116,6 +116,11 @@ autocmd FileType typescript,typescriptreact,javascript,javascriptreact setlocal 
 
 lua <<EOF
 
+  -- Use Neovide's native cursor animation when running inside Neovide.
+  if not vim.g.neovide then
+    require('smear_cursor').setup()
+  end
+
   -- Setup neogit
   local neogit = require'neogit'
   neogit.setup()
