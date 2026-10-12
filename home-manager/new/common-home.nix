@@ -54,6 +54,12 @@ with constants;
   xsession.enable = lib.mkDefault true;
   fonts.fontconfig.enable = lib.mkDefault true;
 
+  services.xscreensaver.settings = {
+    mode = "one";
+    # GLMatrix's index in the XScreenSaver program list provided by nixpkgs.
+    selected = 142;
+  };
+
   # XMonad starts this service explicitly; other desktop sessions leave it stopped.
   systemd.user.services.greenclip = {
     Unit = {
