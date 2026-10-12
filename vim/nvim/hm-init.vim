@@ -120,6 +120,16 @@ lua <<EOF
   if not vim.g.neovide then
     require('smear_cursor').setup()
   end
+  require('neoscroll').setup({
+    mappings = {
+      '<C-u>', '<C-d>', '<C-b>', '<C-f>', '<C-y>', '<C-e>',
+      'zt', 'zz', 'zb',
+    },
+  })
+  local neoscroll = require('neoscroll')
+  vim.keymap.set({'n', 'v', 'x'}, '<PageUp>', function() neoscroll.ctrl_b({ duration = 200 }) end)
+  vim.keymap.set({'n', 'v', 'x'}, '<PageDown>', function() neoscroll.ctrl_f({ duration = 200 }) end)
+  vim.keymap.set({'n', 'v'}, '<leader>y', function() require('yazi').yazi() end, { desc = 'Open Yazi at the current file' })
 
   -- Setup neogit
   local neogit = require'neogit'

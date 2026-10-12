@@ -21,6 +21,8 @@ call plug#begin('~/AppData/Local/nvim/plugged')
     Plug 'roman/golden-ratio'
     Plug 'kdheepak/lazygit.nvim'
     Plug 'sphamba/smear-cursor.nvim'
+    Plug 'karb94/neoscroll.nvim'
+    Plug 'mikavilpas/yazi.nvim'
     Plug 'nvim-orgmode/orgmode'
     
     "Neogit + dependencies
