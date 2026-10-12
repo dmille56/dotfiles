@@ -566,6 +566,7 @@
         "opentmux": "opentmux",
         "resume-qna": "resume-qna",
         "sops-nix": "sops-nix",
+        "tmux-animated": "tmux-animated",
         "yazi-flavors": "yazi-flavors"
       }
     },
@@ -646,6 +647,23 @@
       "original": {
         "owner": "nix-systems",
         "repo": "default",
+        "type": "github"
+      }
+    },
+    "tmux-animated": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1781164456,
+        "narHash": "sha256-mXzMEp3Ld9mZ+5VD5sQXfbmedX3b7fknsIUWD782RJk=",
+        "owner": "jonaburg",
+        "repo": "tmux-animated",
+        "rev": "fc4b1e20d226aec4a40564711e16743f566c2f72",
+        "type": "github"
+      },
+      "original": {
+        "owner": "jonaburg",
+        "ref": "animations",
+        "repo": "tmux-animated",
         "type": "github"
       }
     },

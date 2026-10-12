@@ -19,6 +19,11 @@
       url = "github:nixos/nixpkgs/nixpkgs-unstable";
     };
 
+    tmux-animated = {
+      url = "github:jonaburg/tmux-animated/animations";
+      flake = false;
+    };
+
     aider-chat-full-revision.url = "github:NixOS/nixpkgs/2b69405f19c7004b832a7410c8aefa9d859feea3";
     
     # :NOTE: we're pinning ollama because I'm getting tired of updating everytime i update nixpkgs lol
@@ -112,6 +117,16 @@
       ollama-overlay = final: prev: {
         ollama-cuda = ollamaPkgs.ollama-cuda;
       };
+
+      tmux-animated-overlay = final: prev: {
+        tmux = prev.tmux.overrideAttrs (old: {
+          pname = "tmux-animated";
+          version = "3.6b";
+          src = inputs.tmux-animated;
+          patches = [ ];
+          nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ final.autoreconfHook ];
+        });
+      };
       
       openclaw-gateway-fixed-overlay = final: prev: {
         openclaw-gateway = final.runCommand "openclaw-gateway-fixed" {
@@ -148,6 +163,7 @@
               drawiterm.overlays.default
               gogcli-overlay
               ollama-overlay
+              tmux-animated-overlay
               opentmux.overlays.default
               llm-agents.overlays.shared-nixpkgs
               jobspy-plugin.overlays.default

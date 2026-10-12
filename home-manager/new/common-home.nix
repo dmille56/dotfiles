@@ -483,6 +483,10 @@ with constants;
     );
 
     extraConfig = lib.mkDefault ''
+      # Check the running server's options; both executables report "tmux".
+      if-shell 'tmux -S "#{socket_path}" show-options -g animation-enable >/dev/null 2>&1' \
+        'set -g animation-duration 150; set -g animation-pane-duration 150; set -g animation-easing smoothdamp'
+
       set -g @urlviewkey 'A'
       set -g @fuzzback-bind S
 
