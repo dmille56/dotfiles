@@ -1082,6 +1082,9 @@ with constants;
     [window]
     opacity = 0.9
 
+    [colors]
+    transparent_background_colors = true
+
     [keyboard]
     bindings = [
     { key = "+", mods = "Control", action = "IncreaseFontSize" },
