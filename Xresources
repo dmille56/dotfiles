@@ -30,8 +30,7 @@ xterm*utf8: 2
 *.color15:    #E6E6E6
 
 ! Dracula XScreenSaver unlock dialog
-xscreensaver*dialogTheme: dracula
-xscreensaver*passwd.uname: False
+XScreenSaver*passwd.uname: False
 
 *dracula.Dialog.foreground: #F8F8F2
 *dracula.Dialog.background: #282A36
