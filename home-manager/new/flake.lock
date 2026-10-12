@@ -96,6 +96,22 @@
         "type": "github"
       }
     },
+    "dracula-plymouth": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1610597442,
+        "narHash": "sha256-7YwkBzkAND9lfH2ewuwna1zUkQStBBx4JHGw3/+svhA=",
+        "owner": "dracula",
+        "repo": "plymouth",
+        "rev": "37aa09b27ecee4a825b43d2c1d20b502e8f19c96",
+        "type": "github"
+      },
+      "original": {
+        "owner": "dracula",
+        "repo": "plymouth",
+        "type": "github"
+      }
+    },
     "drawiterm": {
       "inputs": {
         "flake-parts": "flake-parts",
@@ -554,6 +570,7 @@
       "inputs": {
         "aider-chat-full-revision": "aider-chat-full-revision",
         "blue-prince-parlor-solver": "blue-prince-parlor-solver",
+        "dracula-plymouth": "dracula-plymouth",
         "drawiterm": "drawiterm",
         "home-manager": "home-manager",
         "jobspy-plugin": "jobspy-plugin",

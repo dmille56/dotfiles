@@ -24,6 +24,11 @@
       flake = false;
     };
 
+    dracula-plymouth = {
+      url = "github:dracula/plymouth";
+      flake = false;
+    };
+
     aider-chat-full-revision.url = "github:NixOS/nixpkgs/2b69405f19c7004b832a7410c8aefa9d859feea3";
     
     # :NOTE: we're pinning ollama because I'm getting tired of updating everytime i update nixpkgs lol
@@ -155,6 +160,37 @@
     {
       nixosConfigurations.${my-host-name} = nixpkgs.lib.nixosSystem {
         modules = [
+          ({ pkgs, ... }:
+            let
+              draculaPlymouth = pkgs.stdenvNoCC.mkDerivation {
+                pname = "dracula-plymouth-theme";
+                version = "1.0";
+                src = inputs.dracula-plymouth;
+                dontBuild = true;
+
+                installPhase = ''
+                  mkdir -p $out/share/plymouth/themes
+                  cp -r $src/dracula $out/share/plymouth/themes/dracula
+                '';
+              };
+            in
+            {
+              boot.plymouth = {
+                enable = true;
+                theme = "dracula";
+                themePackages = [ draculaPlymouth ];
+              };
+
+              boot.consoleLogLevel = 3;
+              boot.initrd.verbose = false;
+              boot.kernelParams = [
+                "quiet"
+                "splash"
+                "rd.udev.log_level=3"
+                "rd.systemd.show_status=auto"
+              ];
+            })
+
           { 
             nixpkgs.overlays = [ 
               aider-overlay

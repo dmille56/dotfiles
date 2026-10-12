@@ -29,6 +29,32 @@ xterm*utf8: 2
 *.color7:     #BFBFBF
 *.color15:    #E6E6E6
 
+! Dracula XScreenSaver unlock dialog
+xscreensaver*dialogTheme: dracula
+xscreensaver*passwd.uname: False
+
+*dracula.Dialog.foreground: #F8F8F2
+*dracula.Dialog.background: #282A36
+*dracula.Dialog.text.foreground: #F8F8F2
+*dracula.Dialog.text.background: #44475A
+*dracula.Dialog.error.foreground: #FF5555
+
+*dracula.Dialog.button.foreground: #F8F8F2
+*dracula.Dialog.button.background: #44475A
+*dracula.Dialog.logo.background: #282A36
+
+*dracula.Dialog.borderColor: #6272A4
+*dracula.Dialog.borderWidth: 1
+*dracula.Dialog.topShadowColor: #282A36
+*dracula.Dialog.bottomShadowColor: #282A36
+
+*dracula.Dialog.thermometer.foreground: #BD93F9
+*dracula.Dialog.thermometer.background: #44475A
+
+*Dialog.headingFont: sans-serif bold 16
+*Dialog.bodyFont: sans-serif 14
+*Dialog.labelFont: sans-serif bold 14
+
 !BLK Cursor
 ! #define _color0        #000d18
 ! #define _color8        #000d18
