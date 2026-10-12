@@ -2022,10 +2022,36 @@ shell exits, the buffer is killed."
    (t (run-in-vterm "lazygit"))
   ))
 
+(defun my/ee-start-vterm (name command callback)
+  "Run EEE COMMAND in a new vterm and call CALLBACK when it exits."
+  (require 'vterm)
+  (let ((vterm-shell (concat "bash -c " (shell-quote-argument command)))
+        (vterm-kill-buffer-on-exit t))
+    (with-current-buffer (vterm (generate-new-buffer-name (format "*%s*" name)))
+      (setq-local vterm-kill-buffer-on-exit t)
+      (let* ((process vterm--process)
+             (sentinel (process-sentinel process)))
+        (set-process-sentinel
+         process
+         (lambda (proc event)
+           (unwind-protect
+               (when (memq (process-status proc) '(exit signal))
+                 (funcall callback proc))
+             (when sentinel (funcall sentinel proc event)))))
+        process))))
+
+(defun my/ee-start-terminal (name command callback)
+  "Use an external terminal in graphical frames, otherwise use vterm."
+  (if (and (display-graphic-p)
+           (executable-find "alacritty")
+           (executable-find ee-terminal-command))
+      (ee-start-external-terminal name command callback)
+    (my/ee-start-vterm name command callback)))
+
 (use-package eee
   :straight (:host github :repo "eval-exec/eee.el" :files ("*.el" "*.sh"))
   :config
-  ;; Should have wezterm or alacritty installed, more terminal application is supporting...
+  (setq ee-start-terminal-function #'my/ee-start-terminal)
   ;; EEE starts ee-terminal-command as the executable and passes options separately.
   (let* ((use-nixgl my/has-nixgl)
          (command (if use-nixgl "nixGL" "alacritty")))
