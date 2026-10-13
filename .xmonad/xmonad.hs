@@ -161,7 +161,10 @@ myStartupHook myConfigMachine = do
     Desktop -> "picom --config ~/.config/picom/picom.conf --backend glx"
     Laptop -> "picom --config ~/.config/picom/picom.conf --backend xrender"
   spawnOnce "xfsettingsd"
-  spawnOnce "trayer --edge bottom --align right --widthtype request --expand true --SetDockType true --SetPartialStrut true --transparent true --alpha 0 --tint 0x282A36 --expand true --heighttype pixel --height 24"
+  when (myConfigMachine == Desktop) $
+    spawnOnce "trayer --edge bottom --align right --widthtype request --expand true --SetDockType true --SetPartialStrut true --transparent true --alpha 0 --tint 0x282A36 --expand true --heighttype pixel --height 24"
+  when (myConfigMachine == Laptop) $
+    spawnOnce "polybar main"
   spawnOnce "yad --notification --image='applications-menu' --text='Applications' --command='jgmenu_run' --no-middle"
   spawnOnce "yad --notification --image='system-shutdown' --text='Power Menu' --command='rofi -show power-menu -modi power-menu:rofi-power-menu'"
   spawnOnce "redshift-gtk"
@@ -171,25 +174,29 @@ myStartupHook myConfigMachine = do
   spawn "xmodmap -e 'keycode 127 = Insert'"
 
 main = do
-  xmproc <- spawnPipe "xmobar"
   -- spawn "redshift -l 47.608013:-122.335167 -t 6500:3500" -- causes issues when starting it this way for some reason... :TODO: figure out why
   -- emacsDaemon <- spawnPipe "emacs --daemon" -- maybe re-enable this at some point... :TODO: figure out why svg-tag-mode causes issues when started as a daemon
   hasNixGL <- isJust <$> findExecutable "nixGL"
   myConfigMachine <- getConfigMachine
+  xmproc <- case myConfigMachine of
+    Desktop -> Just <$> spawnPipe "xmobar"
+    Laptop -> pure Nothing
   let baseConfig =
         def
           { manageHook = myManageHook hasNixGL,
             layoutHook = myLayoutHook,
             startupHook = myStartupHook myConfigMachine,
-            logHook =
-              dynamicLogWithPP
-                xmobarPP
-                  { ppOutput = hPutStrLn xmproc,
-                    ppTitle = xmobarColor (_myTheme_ppTitleColor myTheme) "" . shorten 50,
-                    ppCurrent = xmobarColor (_myTheme_ppCurrentColor myTheme) "",
-                    ppLayout = xmobarColor (_myTheme_ppLayoutColor myTheme) "",
-                    ppSep = " | "
-                  },
+            logHook = case xmproc of
+              Just handle ->
+                dynamicLogWithPP
+                  xmobarPP
+                    { ppOutput = hPutStrLn handle,
+                      ppTitle = xmobarColor (_myTheme_ppTitleColor myTheme) "" . shorten 50,
+                      ppCurrent = xmobarColor (_myTheme_ppCurrentColor myTheme) "",
+                      ppLayout = xmobarColor (_myTheme_ppLayoutColor myTheme) "",
+                      ppSep = " | "
+                    }
+              Nothing -> pure (),
             handleEventHook = handleEventHook def <+> myPropertyChangeHook hasNixGL,
             modMask = myModMask,
             borderWidth = 2,

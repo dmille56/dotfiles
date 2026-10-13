@@ -1220,7 +1220,7 @@ with constants;
     font-1 = DejaVuSansM Nerd Font Mono:size=16;2
     modules-left = xworkspaces
     modules-center = xwindow
-    modules-right = ${lib.optionalString polybarHasBattery "battery "}cpu memory swap date
+    modules-right = ${lib.optionalString polybarHasBattery "battery "}cpu memory swap date tray
     override-redirect = false
 
     [module/xworkspaces]
@@ -1290,6 +1290,11 @@ with constants;
     time-alt = %H:%M
     label = %date% %time%
     label-foreground = ''${colors.pink}
+
+    [module/tray]
+    type = internal/tray
+    format = <tray>
+    tray-spacing = 8pt
   '' + lib.optionalString polybarHasBattery ''
 
     [module/battery]
