@@ -1203,7 +1203,7 @@ with constants;
 
     [bar/main]
     width = 100%
-    height = 32
+    height = 36
     bottom = true
     offset-y = 0
     fixed-center = true
@@ -1217,12 +1217,10 @@ with constants;
     separator = " | "
     separator-foreground = ''${colors.muted}
     font-0 = DejaVu Sans Mono:size=13;2
-    font-1 = DejaVuSansM Nerd Font Mono:size=13;2
+    font-1 = DejaVuSansM Nerd Font Mono:size=16;2
     modules-left = xworkspaces
     modules-center = xwindow
     modules-right = ${lib.optionalString polybarHasBattery "battery "}cpu memory swap date
-    tray-position = none
-    wm-restack = xmonad
     override-redirect = false
 
     [module/xworkspaces]
