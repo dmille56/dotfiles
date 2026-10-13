@@ -1186,6 +1186,8 @@ with constants;
     padding-left = 1
     padding-right = 1
     module-margin = 1
+    separator = " | "
+    separator-foreground = ''${colors.muted}
     font-0 = DejaVu Sans Mono:size=13;2
     font-1 = DejaVuSansM Nerd Font Mono:size=13;2
     modules-left = xworkspaces
@@ -1234,19 +1236,19 @@ with constants;
     [module/cpu]
     type = internal/cpu
     interval = 2
-    label =  CPU %percentage%%
+    label =  %percentage%%
     label-foreground = ''${colors.purple}
 
     [module/memory]
     type = internal/memory
     interval = 5
-    label =  RAM %percentage_used%%
+    label =  %percentage_used%%
     label-foreground = ''${colors.cyan}
 
     [module/swap]
     type = internal/memory
     interval = 5
-    label =  SWAP %percentage_swap_used%%
+    label =  %percentage_swap_used%%
     label-foreground = ''${colors.green}
 
     [module/date]
