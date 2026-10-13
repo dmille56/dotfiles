@@ -15,7 +15,7 @@ import XMonad
 import XMonad.Actions.Search
 import XMonad.Actions.Submap
 import XMonad.Hooks.DynamicLog
-import XMonad.Hooks.EwmhDesktops (ewmh, ewmhFullscreen)
+import XMonad.Hooks.EwmhDesktops (addEwmhWorkspaceRename, disableEwmhManageDesktopViewport, ewmh, ewmhFullscreen)
 import XMonad.Hooks.ManageDocks (avoidStruts, docks, manageDocks)
 import XMonad.Hooks.ManageHelpers
 import XMonad.Layout.Accordion
@@ -258,7 +258,9 @@ main = do
   xmonad $
     docks $
       ewmhFullscreen $
-        ewmh baseConfig
+        disableEwmhManageDesktopViewport $
+          addEwmhWorkspaceRename (pure (\_ workspace -> W.tag workspace)) $
+            ewmh baseConfig
 
 notifySpawn s = do
   spawn ("notify-send -t 3000 'Launching " ++ s ++ "'")

@@ -312,6 +312,7 @@ with constants;
     xscreensaver
     feh
     xmobar
+    polybar
 
     lite-xl
     gnome-system-monitor
@@ -1160,6 +1161,102 @@ with constants;
   xresources.extraConfig = lib.mkDefault (builtins.readFile "${my-dotfile-dir}/Xresources");
   home.file.".config/picom/picom.conf".source = lib.mkDefault "${my-dotfile-dir}/picom.conf";
   home.file.".xmobarrc".source = lib.mkDefault "${my-dotfile-dir}/xmobarrc-laptop";
+  home.file.".config/polybar/config.ini".text = lib.mkDefault ''
+    [colors]
+    background = #282A36
+    background-alt = #44475A
+    foreground = #F8F8F2
+    muted = #384261
+    purple = #BD93F9
+    cyan = #8BE9FD
+    green = #50FA7B
+    pink = #FF79C6
+    yellow = #F1FA8C
+
+    [bar/main]
+    width = 100%
+    height = 28
+    bottom = true
+    offset-y = 0
+    fixed-center = true
+    background = ''${colors.background}
+    foreground = ''${colors.foreground}
+    line-size = 2
+    border-size = 0
+    padding-left = 1
+    padding-right = 1
+    module-margin = 1
+    font-0 = DejaVu Sans Mono:size=13;2
+    font-1 = DejaVuSansM Nerd Font Mono:size=13;2
+    modules-left = xworkspaces
+    modules-center = xwindow
+    modules-right = cpu memory swap date
+    tray-position = none
+    wm-restack = xmonad
+    override-redirect = false
+
+    [module/xworkspaces]
+    type = internal/xworkspaces
+    pin-workspaces = false
+    group-by-monitor = false
+    enable-click = true
+    enable-scroll = true
+    icon-0 = Workspace 1;1:web
+    icon-1 = Workspace 2;2:vid
+    icon-2 = Workspace 3;3:game
+    icon-3 = Workspace 4;4:mus
+    icon-4 = 5;5
+    icon-5 = 6;6
+    icon-6 = 7;7
+    icon-7 = 8:term;8:term
+    icon-8 = 9:dev;9:dev
+    icon-9 = NSP;NSP
+    label-active = %icon%
+    label-active-foreground = ''${colors.foreground}
+    label-active-background = ''${colors.purple}
+    label-active-padding = 1
+    label-occupied = %icon%
+    label-occupied-foreground = ''${colors.cyan}
+    label-occupied-padding = 1
+    label-urgent = %icon%
+    label-urgent-foreground = ''${colors.background}
+    label-urgent-background = ''${colors.pink}
+    label-urgent-padding = 1
+    label-empty = %icon%
+    label-empty-foreground = ''${colors.muted}
+    label-empty-padding = 1
+
+    [module/xwindow]
+    type = internal/xwindow
+    label = %title:0:70:…%
+    label-foreground = ''${colors.cyan}
+
+    [module/cpu]
+    type = internal/cpu
+    interval = 2
+    label =  CPU %percentage%%
+    label-foreground = ''${colors.purple}
+
+    [module/memory]
+    type = internal/memory
+    interval = 5
+    label =  RAM %percentage_used%%
+    label-foreground = ''${colors.cyan}
+
+    [module/swap]
+    type = internal/memory
+    interval = 5
+    label =  SWAP %percentage_swap_used%%
+    label-foreground = ''${colors.green}
+
+    [module/date]
+    type = internal/date
+    interval = 30
+    date = %a %b %d %Y
+    time = %H:%M
+    label = %date% %time%
+    label-foreground = ''${colors.pink}
+  '';
   home.file.".xmonad/xmonad.hs".source = lib.mkDefault "${my-dotfile-dir}/.xmonad/xmonad.hs";
   home.file.".xmonad/lib/MyTheme.hs".source = lib.mkDefault "${my-dotfile-dir}/.xmonad/MyTheme.hs";
 
