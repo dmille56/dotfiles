@@ -1189,6 +1189,10 @@ with constants;
     csv_cmd = apps
   '';
 
+  home.file.".config/jgmenu/append.csv".text = lib.mkDefault ''
+    Run rofi,rofi -show run,utilities-terminal
+  '';
+
   home.file.".config/polybar/config.ini".text = lib.mkDefault (''
     [colors]
     background = #282A36

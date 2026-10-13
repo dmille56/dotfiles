@@ -155,16 +155,15 @@ audioLowerVolumeCommand = "amixer -D pulse sset Master 5%-; notify-send -i audio
 
 audioRaiseVolumeCommand = "amixer -D pulse sset Master 5%+; notify-send -i audio-volume-medium -t 1000 'Volume: '$(amixer -D pulse sget Master | grep 'Left:' | awk -F'[][]' '{ print $2 } ')"
 
-myStartupHook :: MyConfigMachine -> X ()
-myStartupHook myConfigMachine = do
+myStartupHook :: MyConfigMachine -> MyConfigBar -> X ()
+myStartupHook myConfigMachine myConfigBar = do
   spawnOnce $ case myConfigMachine of
     Desktop -> "picom --config ~/.config/picom/picom.conf --backend glx"
     Laptop -> "picom --config ~/.config/picom/picom.conf --backend xrender"
   spawnOnce "xfsettingsd"
-  when (myConfigMachine == Desktop) $
-    spawnOnce "trayer --edge bottom --align right --widthtype request --expand true --SetDockType true --SetPartialStrut true --transparent true --alpha 0 --tint 0x282A36 --expand true --heighttype pixel --height 24"
-  when (myConfigMachine == Laptop) $
-    spawnOnce "polybar main"
+  case myConfigBar of
+    XMobar -> spawnOnce "trayer --edge bottom --align right --widthtype request --expand true --SetDockType true --SetPartialStrut true --transparent true --alpha 0 --tint 0x282A36 --expand true --heighttype pixel --height 24"
+    Polybar -> spawnOnce "polybar main"
   spawnOnce "yad --notification --image='applications-menu' --text='Applications' --command='jgmenu_run' --no-middle"
   spawnOnce "yad --notification --image='system-shutdown' --text='Power Menu' --command='rofi -show power-menu -modi power-menu:rofi-power-menu'"
   spawnOnce "redshift-gtk"
@@ -178,14 +177,15 @@ main = do
   -- emacsDaemon <- spawnPipe "emacs --daemon" -- maybe re-enable this at some point... :TODO: figure out why svg-tag-mode causes issues when started as a daemon
   hasNixGL <- isJust <$> findExecutable "nixGL"
   myConfigMachine <- getConfigMachine
-  xmproc <- case myConfigMachine of
-    Desktop -> Just <$> spawnPipe "xmobar"
-    Laptop -> pure Nothing
+  let myConfigBar = Polybar -- :NOTE: allows us to switch between different bar setups
+  xmproc <- case myConfigBar of
+    XMobar -> Just <$> spawnPipe "xmobar"
+    _ -> pure Nothing
   let baseConfig =
         def
           { manageHook = myManageHook hasNixGL,
             layoutHook = myLayoutHook,
-            startupHook = myStartupHook myConfigMachine,
+            startupHook = myStartupHook myConfigMachine myConfigBar,
             logHook = case xmproc of
               Just handle ->
                 dynamicLogWithPP
@@ -301,3 +301,6 @@ getConfigMachine = do
       -- config = mbString >>= readMaybe
       config = mbString >>= readConfigMachineFromStr
   return $ fromMaybe Desktop config
+
+data MyConfigBar = XMobar | Polybar
+  deriving (Show, Read, Eq, Enum, Bounded)
