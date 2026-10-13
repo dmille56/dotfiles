@@ -8,6 +8,11 @@
 }:
   let
   constants = import ./common-constants.nix;
+  polybarHasBattery = (config.home.sessionVariables.MY_MACHINE_ID or "") == "laptop";
+  polybarBattery = pkgs.writeShellApplication {
+    name = "polybar-battery";
+    text = builtins.readFile ../../nix/polybar-battery.sh;
+  };
   xmonadHomeDir = "${config.home.homeDirectory}/.xmonad";
   xmonadCompiledBin = "${xmonadHomeDir}/xmonad-x86_64-linux";
   xmonadBuiltFromMarker = "${xmonadHomeDir}/.xmonad-built-from";
@@ -293,6 +298,7 @@ with constants;
     rofi-bluetooth
     rofi-power-menu
     yad # :NOTE: to make sys tray program for rofi-power-menu
+    jgmenu
     wmctrl # :NOTE: to make rofi-games work with steam properly
 
     xdotool
@@ -1161,12 +1167,34 @@ with constants;
   xresources.extraConfig = lib.mkDefault (builtins.readFile "${my-dotfile-dir}/Xresources");
   home.file.".config/picom/picom.conf".source = lib.mkDefault "${my-dotfile-dir}/picom.conf";
   home.file.".xmobarrc".source = lib.mkDefault "${my-dotfile-dir}/xmobarrc-laptop";
-  home.file.".config/polybar/config.ini".text = lib.mkDefault ''
+  home.file.".config/jgmenu/jgmenurc".text = lib.mkDefault ''
+    # Dracula palette
+    font = Sans 10
+    icon_size = 16
+    menu_width = 260
+    menu_padding = 8
+    position_mode = pointer
+    item_height = 30
+    item_padding = 10
+    arrow_width = 12
+    separator_height = 2
+    color_menu_bg = #282a36 100
+    color_menu_border = #6272a4 100
+    color_norm_bg = #282a36 100
+    color_norm_fg = #f8f8f2 100
+    color_sel_bg = #44475a 100
+    color_sel_fg = #50fa7b 100
+    color_sep_fg = #6272a4 100
+    color_scroll_ind = #bd93f9 100
+    csv_cmd = apps
+  '';
+
+  home.file.".config/polybar/config.ini".text = lib.mkDefault (''
     [colors]
     background = #282A36
     background-alt = #44475A
     foreground = #F8F8F2
-    muted = #384261
+    muted = #6272A4
     purple = #BD93F9
     cyan = #8BE9FD
     green = #50FA7B
@@ -1175,7 +1203,7 @@ with constants;
 
     [bar/main]
     width = 100%
-    height = 28
+    height = 32
     bottom = true
     offset-y = 0
     fixed-center = true
@@ -1183,8 +1211,8 @@ with constants;
     foreground = ''${colors.foreground}
     line-size = 2
     border-size = 0
-    padding-left = 1
-    padding-right = 1
+    padding-left = 2
+    padding-right = 2
     module-margin = 1
     separator = " | "
     separator-foreground = ''${colors.muted}
@@ -1192,7 +1220,7 @@ with constants;
     font-1 = DejaVuSansM Nerd Font Mono:size=13;2
     modules-left = xworkspaces
     modules-center = xwindow
-    modules-right = cpu memory swap date
+    modules-right = ${lib.optionalString polybarHasBattery "battery "}cpu memory swap date
     tray-position = none
     wm-restack = xmonad
     override-redirect = false
@@ -1213,8 +1241,12 @@ with constants;
     icon-7 = 8:term;8:term
     icon-8 = 9:dev;9:dev
     icon-9 = NSP;NSP
+    icon-10 = 1:web;1:web
+    icon-11 = 2:vid;2:vid
+    icon-12 = 3:game;3:game
+    icon-13 = 4:mus;4:mus
     label-active = %icon%
-    label-active-foreground = ''${colors.foreground}
+    label-active-foreground = ''${colors.background}
     label-active-background = ''${colors.purple}
     label-active-padding = 1
     label-occupied = %icon%
@@ -1230,35 +1262,44 @@ with constants;
 
     [module/xwindow]
     type = internal/xwindow
-    label = %title:0:70:…%
-    label-foreground = ''${colors.cyan}
+    label = %title:0:45:…%
+    label-foreground = ''${colors.foreground}
 
     [module/cpu]
     type = internal/cpu
     interval = 2
-    label =  %percentage%%
+    label =  %percentage:3%%
     label-foreground = ''${colors.purple}
 
     [module/memory]
     type = internal/memory
     interval = 5
-    label =  %percentage_used%%
+    label =  %percentage_used:3%%
     label-foreground = ''${colors.cyan}
 
     [module/swap]
     type = internal/memory
     interval = 5
-    label =  %percentage_swap_used%%
+    label =  %percentage_swap_used:3%%
     label-foreground = ''${colors.green}
 
     [module/date]
     type = internal/date
     interval = 30
-    date = %a %b %d %Y
+    date = %a %b %d
     time = %H:%M
+    date-alt = %a %b %d %Y
+    time-alt = %H:%M
     label = %date% %time%
     label-foreground = ''${colors.pink}
-  '';
+  '' + lib.optionalString polybarHasBattery ''
+
+    [module/battery]
+    type = custom/script
+    exec = ${polybarBattery}/bin/polybar-battery
+    interval = 5
+    label = %output%
+  '');
   home.file.".xmonad/xmonad.hs".source = lib.mkDefault "${my-dotfile-dir}/.xmonad/xmonad.hs";
   home.file.".xmonad/lib/MyTheme.hs".source = lib.mkDefault "${my-dotfile-dir}/.xmonad/MyTheme.hs";
 

@@ -162,6 +162,7 @@ myStartupHook myConfigMachine = do
     Laptop -> "picom --config ~/.config/picom/picom.conf --backend xrender"
   spawnOnce "xfsettingsd"
   spawnOnce "trayer --edge bottom --align right --widthtype request --expand true --SetDockType true --SetPartialStrut true --transparent true --alpha 0 --tint 0x282A36 --expand true --heighttype pixel --height 24"
+  spawnOnce "yad --notification --image='applications-menu' --text='Applications' --command='jgmenu_run' --no-middle"
   spawnOnce "yad --notification --image='system-shutdown' --text='Power Menu' --command='rofi -show power-menu -modi power-menu:rofi-power-menu'"
   spawnOnce "redshift-gtk"
   spawn "xrdb ~/.Xresources"
