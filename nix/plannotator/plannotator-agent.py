@@ -262,7 +262,10 @@ def popup_worker(root):
         if feedback == "No annotations.":
             feedback = ""
     completed = root / "completed.json"
-    completed.write_text(json.dumps({"feedback": feedback}))
+    returned_feedback = feedback
+    if request.get("review") is not None and not feedback:
+        returned_feedback = "No changes requested. Tuicr returned no review comments."
+    completed.write_text(json.dumps({"feedback": returned_feedback}))
     if request.get("review") is not None and feedback:
         # Preserve the exported feedback before modifying the persisted session.
         # A plain quit exports nothing and must leave its draft comments intact.

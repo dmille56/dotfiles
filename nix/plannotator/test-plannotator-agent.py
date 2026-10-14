@@ -254,11 +254,16 @@ class LauncherTests(unittest.TestCase):
     def test_review_worker_keeps_comments_without_export(self):
         request = {"target": str(self.root), "review": ["-w"], "environment": {}}
         (self.root / "request.json").write_text(json.dumps(request))
-        with patch.object(agent, "run", return_value=subprocess.CompletedProcess(
-                [], 0, stdout="", stderr="tuicr-session: owner/repo@main/worktree\n")) as run:
-            self.assertEqual(agent.popup_worker(self.root), 0)
-        self.assertEqual(run.call_count, 1)
-        self.assertEqual(json.loads((self.root / "completed.json").read_text()), {"feedback": ""})
+        for stdout in ("", " \n\t"):
+            with self.subTest(stdout=stdout), patch.object(
+                    agent, "run", return_value=subprocess.CompletedProcess(
+                        [], 0, stdout=stdout,
+                        stderr="tuicr-session: owner/repo@main/worktree\n")) as run:
+                self.assertEqual(agent.popup_worker(self.root), 0)
+            self.assertEqual(run.call_count, 1)
+            self.assertEqual(json.loads((self.root / "completed.json").read_text()), {
+                "feedback": "No changes requested. Tuicr returned no review comments.",
+            })
 
     def test_review_worker_preserves_feedback_when_cleanup_fails(self):
         request = {"target": str(self.root), "review": ["-w"], "environment": {}}
