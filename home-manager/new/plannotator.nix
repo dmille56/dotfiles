@@ -66,7 +66,8 @@ let
     Return to the agent's window to review; the launcher does not switch windows.
     Keep the command running while queued. Other visible requests can proceed.
     In the TUI, leave annotations and quit with `q`; feedback is exported when the
-    popup closes. Wait for the command to finish and relay its feedback to the user.
+    popup closes. Determine what artifact was reviewed and follow the matching
+    loop below. Never stop after repeating or summarizing annotations.
   '';
   skills = {
     tuicr-review = pkgs.writeText "tuicr-review-SKILL.md" ''
@@ -83,7 +84,10 @@ let
       review that request. This command always opens tuicr in the requesting
       agent pane's tmux popup, regardless of the Plannotator browser/TUI setting.
       Keep it running until the popup closes, then use its returned review text
-      to report findings and recommended fixes to the user. If no attached tmux
+      to inspect and fix the relevant code findings. Then rerun this review on
+      the updated working tree (or PR) and address any new actionable findings;
+      repeat until the review has no actionable findings. Briefly report what
+      changed and any findings left unresolved. If no attached tmux
       client is available, report that the review could not start.
       A tmux socket permission error means the execution environment blocked
       access; it does not prove that no tmux client is attached. Follow the
@@ -102,7 +106,10 @@ let
       Pass a pull request or merge request URL as an argument when requested.
       In TUI mode, local changes and GitHub/GitLab PRs open in tuicr inside
       a tmux popup. Use `c` to comment, then `q` to finish; the review text is
-      returned to the agent. Outside tmux, reviews use browser Plannotator.
+      returned to the agent. Apply actionable review comments to the code and
+      rerun this review on the updated working tree (or PR). Address any new
+      actionable findings and repeat until none remain; do not merely repeat or
+      summarize the comments. Outside tmux, reviews use browser Plannotator.
 
       ${guidance}
     '';
@@ -125,6 +132,14 @@ let
       ---
 
       Run `${launcher}/bin/plannotator-agent last` to review the latest Codex response.
+      Treat the response as a plan when it proposes steps or an approach to carry
+      out. Revise that plan to incorporate the annotations, present the revised
+      plan to the user, then run this command again on the revised plan. Repeat
+      until the plan is approved or no actionable feedback remains. Do not begin
+      implementation while the artifact is still a plan. For feedback on a
+      completed artifact, apply the requested changes and review the updated
+      artifact again; repeat until no actionable feedback remains. If the
+      artifact type is unclear, infer it from the surrounding task and context.
 
       ${guidance}
     '';
