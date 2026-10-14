@@ -93,7 +93,7 @@ class LauncherTests(unittest.TestCase):
         target.write_text("# Plan")
         self.assertEqual(agent.supported_target(["annotate", str(target)]), target)
         self.assertEqual(agent.supported_target(["annotate", str(self.root)]), self.root)
-        for args in (["review"], ["review", "https://example/pr/1"],
+        for args in (["review", "https://example/pr/1"],
                      ["annotate", "https://example/plan.md"],
                      ["annotate", str(target), "--render-html"], ["annotate", "missing.md"]):
             self.assertIsNone(agent.supported_target(args))
@@ -103,14 +103,34 @@ class LauncherTests(unittest.TestCase):
                 self.assertEqual(agent.launch(args), 12)
                 browser.assert_called_once_with(args, None)
 
+    def test_review_routes_to_tuicr_in_tui_mode(self):
+        self.set_mode("tui")
+        for args, expected in ((["review"], ["-w"]),
+                               (["review", "https://github.com/org/repo/pull/4"],
+                                ["pr", "https://github.com/org/repo/pull/4"]),
+                               (["review", "https://gitlab.com/org/repo/-/merge_requests/4"],
+                                ["pr", "https://gitlab.com/org/repo/-/merge_requests/4"])):
+            with self.subTest(args=args), \
+                    patch.object(agent, "tmux_context", return_value=context()), \
+                    patch.object(agent, "popup", return_value="Review feedback") as popup, \
+                    patch.object(agent, "browser") as browser, \
+                    contextlib.redirect_stdout(io.StringIO()) as output:
+                self.assertEqual(agent.launch(args), 0)
+                self.assertEqual(output.getvalue(), "Review feedback\n")
+                self.assertEqual(popup.call_args.kwargs["review"], expected)
+                self.assertEqual(popup.call_args.args[2], Path.cwd())
+                browser.assert_not_called()
+
     def test_browser_default_and_outside_tmux(self):
         for use_tui in (False, True):
             if use_tui:
                 self.set_mode("tui")
-            with patch.object(agent, "tmux_context", return_value=None), \
-                    patch.object(agent, "browser", return_value=0) as browser:
-                self.assertEqual(agent.launch(["last"]), 0)
-                browser.assert_called_once_with(["last"], None)
+            for args in (["last"], ["review"]):
+                with self.subTest(use_tui=use_tui, args=args), \
+                        patch.object(agent, "tmux_context", return_value=None), \
+                        patch.object(agent, "browser", return_value=0) as browser:
+                    self.assertEqual(agent.launch(args), 0)
+                    browser.assert_called_once_with(args, None)
 
     def test_hook_approval_feedback_and_failure_preserve_input(self):
         self.set_mode("tui")
@@ -192,6 +212,17 @@ class LauncherTests(unittest.TestCase):
             with self.assertRaises(subprocess.CalledProcessError):
                 agent.popup_worker(self.root)
         self.assertFalse((self.root / "completed.json").exists())
+
+    def test_review_worker_returns_tuicr_stdout(self):
+        request = {"target": str(self.root), "review": ["-w"], "environment": {}}
+        (self.root / "request.json").write_text(json.dumps(request))
+        with patch.object(agent, "run", return_value=subprocess.CompletedProcess(
+                [], 0, stdout="# Code Review\n\nFix this.\n")) as run:
+            self.assertEqual(agent.popup_worker(self.root), 0)
+        self.assertEqual(run.call_args.args[0],
+                         [agent.TUICR, "--stdout", "--no-update-check", "-w"])
+        self.assertEqual(json.loads((self.root / "completed.json").read_text()),
+                         {"feedback": "# Code Review\n\nFix this."})
 
     def test_popup_quotes_paths_and_requires_completion_marker(self):
         import shlex

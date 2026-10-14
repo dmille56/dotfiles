@@ -12,8 +12,8 @@ let
     [ "@CODEX_SESSION@" ] [ "${codexSession}" ]
     (builtins.readFile ../../nix/plannotator/plannotator-plan.ts));
   launcherSource = pkgs.writeText "plannotator-agent.py" (lib.replaceStrings
-    [ "@BROWSER@" "@TUI@" "@TMUX@" "@BUN@" "@RESOLVER@" "@SETTING@" ]
-    [ "${browser}/bin/plannotator" "${tui}/bin/plannotator-tui"
+    [ "@BROWSER@" "@TUI@" "@TUICR@" "@TMUX@" "@BUN@" "@RESOLVER@" "@SETTING@" ]
+    [ "${browser}/bin/plannotator" "${tui}/bin/plannotator-tui" "${pkgs.llm-agents.tuicr}/bin/tuicr"
       "${pkgs.tmux}/bin/tmux" "${pkgs.bun}/bin/bun" "${resolver}"
       "${config.home.homeDirectory}/.config/plannotator/use-browser" ]
     (builtins.readFile ../../nix/plannotator/plannotator-agent.py));
@@ -79,7 +79,9 @@ let
 
       Run `${launcher}/bin/plannotator-agent review` to review uncommitted changes.
       Pass a pull request or merge request URL as an argument when requested.
-      Git and PR reviews use browser Plannotator.
+      In TUI mode, local changes and GitHub/GitLab PRs open in tuicr inside
+      a tmux popup. Use `c` to comment, then `q` to finish; the review text is
+      returned to the agent. Outside tmux, reviews use browser Plannotator.
 
       ${guidance}
     '';

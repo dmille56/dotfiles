@@ -16,6 +16,7 @@ from contextlib import contextmanager
 
 BROWSER = "@BROWSER@"
 TUI = "@TUI@"
+TUICR = "@TUICR@"
 TMUX = "@TMUX@"
 BUN = "@BUN@"
 RESOLVER = "@RESOLVER@"
@@ -238,24 +239,28 @@ def popup_worker(root):
     for name in list(env):
         if name.startswith("HERDR_"):
             del env[name]
-    env["PLANNOTATOR_DATA_DIR"] = str(root / "data")
-    run([TUI, request["target"]], env=env)
-    feedback = run([TUI, "--export", request["target"]], env=env,
-                   capture_output=True, text=True).stdout.strip()
-    if feedback == "No annotations.":
-        feedback = ""
+    if request.get("review") is not None:
+        feedback = run([TUICR, "--stdout", "--no-update-check", *request["review"]],
+                       env=env, capture_output=True, text=True).stdout.strip()
+    else:
+        env["PLANNOTATOR_DATA_DIR"] = str(root / "data")
+        run([TUI, request["target"]], env=env)
+        feedback = run([TUI, "--export", request["target"]], env=env,
+                       capture_output=True, text=True).stdout.strip()
+        if feedback == "No annotations.":
+            feedback = ""
     (root / "completed.json").write_text(json.dumps({"feedback": feedback}))
     return 0
 
 
-def popup(context, root, target):
+def popup(context, root, target, review=None):
     command, client, pane = context["command"], context["client"], context["pane"]
     environment = {name: os.environ.get(name) for name in (
         "HOME", "PATH", "XDG_CONFIG_HOME", "CODEX_HOME", "CODEX_THREAD_ID",
         "PLANNOTATOR_TUI_CONFIG", "PLANNOTATOR_TUI_THEME",
     )}
     (root / "request.json").write_text(json.dumps({
-        "target": str(target), "environment": environment,
+        "target": str(target), "review": review, "environment": environment,
     }))
     worker = shlex.join([sys.executable, str(Path(__file__).resolve()),
                         "--popup-worker", str(root)])
@@ -278,7 +283,7 @@ def popup(context, root, target):
                     continue
                 width, height = geometry
                 # tmux expands title formats; filenames must remain literal text.
-                title = f"Plannotator {pane}: {target.name}".replace("#", "##")
+                title = f"{'tuicr' if review is not None else 'Plannotator'} {pane}: {target.name}".replace("#", "##")
                 process = subprocess.Popen(command + [
                     "display-popup", "-E", "-c", client, "-t", pane,
                     "-T", title,
@@ -327,8 +332,16 @@ def launch(args):
     context = None if browser_mode() else tmux_context()
     if context is None:
         return browser(args, event)
+    review = None
+    if args == ["review"]:
+        review = ["-w"]
+    elif len(args) == 2 and args[0] == "review" and args[1].startswith((
+            "https://github.com/", "https://gitlab.com/")):
+        review = ["pr", args[1]]
     target = supported_target(args)
-    if args and args != ["last"] and target is None:
+    if review is not None:
+        target = Path.cwd()
+    elif args and args != ["last"] and target is None:
         return browser(args, event)
     try:
         with tempfile.TemporaryDirectory(prefix="plannotator-review-") as directory:
@@ -347,7 +360,10 @@ def launch(args):
                     raise ValueError("could not resolve the current Codex response")
                 target = root / "last-response.md"
                 target.write_text(reply)
-            feedback = popup(context, root, target)
+            if review is None:
+                feedback = popup(context, root, target)
+            else:
+                feedback = popup(context, root, target, review=review)
             if event is not None:
                 print(json.dumps({"decision": "block", "reason": feedback} if feedback else {}))
             elif feedback:
