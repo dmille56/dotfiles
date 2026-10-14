@@ -101,8 +101,13 @@ def tmux_context():
         name = max(candidates)[3]
         return dict(command=command, client=name, client_pid=clients[name]["pid"],
                     pane=pane, session="$" + context[2])
-    except (OSError, ValueError, subprocess.CalledProcessError):
-        return None
+    except (OSError, ValueError, subprocess.CalledProcessError) as error:
+        detail = (error.stderr or "").strip() if isinstance(error, subprocess.CalledProcessError) else str(error)
+        raise OSError(
+            f"Could not inspect tmux socket {context[0]}: {detail or error}. "
+            "When launched by a coding agent, run the launcher outside the sandbox "
+            "(exec_command: sandbox_permissions=\"require_escalated\")."
+        ) from error
 
 
 def visible(pane, client):
@@ -329,7 +334,11 @@ def browser(args, event):
 
 def launch(args, force_tui=False):
     event = sys.stdin.buffer.read() if not args else None
-    context = tmux_context() if force_tui or not browser_mode() else None
+    try:
+        context = tmux_context() if force_tui or not browser_mode() else None
+    except OSError as error:
+        print(error, file=sys.stderr)
+        return 1
     if context is None:
         if force_tui:
             print("tuicr-review requires an attached tmux client", file=sys.stderr)

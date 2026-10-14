@@ -78,12 +78,19 @@ let
       ---
 
       Run `${launcher}/bin/plannotator-agent --tuicr-review` to review the current
-      working tree. Pass a GitHub or GitLab pull request URL as an argument to
+      working tree. On the first invocation, use `exec_command` with
+      `sandbox_permissions: "require_escalated"` and a justification explaining
+      that tuicr needs access to the existing tmux socket. Use this execution
+      mode on every invocation, even if no Plannotator review has run yet.
+      Pass a GitHub or GitLab pull request URL as an argument to
       review that request. This command always opens tuicr in the requesting
       agent pane's tmux popup, regardless of the Plannotator browser/TUI setting.
       Keep it running until the popup closes, then use its returned review text
       to report findings and recommended fixes to the user. If no attached tmux
       client is available, report that the review could not start.
+      A tmux socket permission error means the execution environment blocked
+      access; it does not mean the client is missing. Request the required
+      outside-sandbox execution rather than asking the user to launch Plannotator first.
 
       ${guidance}
     '';

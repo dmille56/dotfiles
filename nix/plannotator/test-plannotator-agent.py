@@ -79,9 +79,26 @@ class LauncherTests(unittest.TestCase):
             self.assertIsNone(agent.tmux_context())
         with patch.dict(os.environ, {"TMUX": "/tmp/socket,123,4", "TMUX_PANE": "%7"}, clear=True):
             with patch.object(agent, "run", side_effect=OSError("gone")):
-                self.assertIsNone(agent.tmux_context())
+                with self.assertRaisesRegex(OSError, "Could not inspect tmux socket.*gone"):
+                    agent.tmux_context()
             with patch.object(agent, "tmux_snapshot", return_value=({}, snapshot()[1])):
                 self.assertIsNone(agent.tmux_context())
+
+    def test_tmux_permission_error_is_reported_without_browser_fallback(self):
+        error = subprocess.CalledProcessError(
+            1, ["tmux", "list-clients"], stderr="error connecting to /tmp/socket (Operation not permitted)\n")
+        for force_tui in (False, True):
+            self.set_mode("tui")
+            output = io.StringIO()
+            with patch.dict(os.environ, {"TMUX": "/tmp/socket,123,4", "TMUX_PANE": "%7"}, clear=True), \
+                    patch.object(agent, "run", side_effect=error), \
+                    patch.object(agent, "browser") as browser, \
+                    contextlib.redirect_stderr(output):
+                self.assertEqual(agent.launch(["review"], force_tui=force_tui), 1)
+            self.assertIn("Operation not permitted", output.getvalue())
+            self.assertIn("require_escalated", output.getvalue())
+            self.assertNotIn("requires an attached tmux client", output.getvalue())
+            browser.assert_not_called()
 
     def test_hidden_window_still_gets_a_client(self):
         with patch.dict(os.environ, {"TMUX": "/tmp/socket,123,4", "TMUX_PANE": "%7"}, clear=True), \
