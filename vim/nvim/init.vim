@@ -7,7 +7,8 @@ call plug#begin('~/AppData/Local/nvim/plugged')
 
     Plug 'LnL7/vim-nix'
     Plug 'liuchengxu/vim-which-key'
-    Plug 'Mofiqul/dracula.nvim'
+    Plug 'direnv/direnv.vim'
+    Plug 'dracula/vim'
     Plug 'preservim/nerdtree'
     Plug 'kien/ctrlp.vim'
     Plug 'vim-airline/vim-airline'
@@ -22,8 +23,11 @@ call plug#begin('~/AppData/Local/nvim/plugged')
     Plug 'kdheepak/lazygit.nvim'
     Plug 'sphamba/smear-cursor.nvim'
     Plug 'karb94/neoscroll.nvim'
+    Plug 'nvim-mini/mini.nvim'
     Plug 'mikavilpas/yazi.nvim'
     Plug 'nvim-orgmode/orgmode'
+    Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && npm install' }
+    Plug 'ThePrimeagen/vim-be-good'
     
     "Neogit + dependencies
     Plug 'nvim-lua/popup.nvim'
@@ -40,7 +44,7 @@ call plug#begin('~/AppData/Local/nvim/plugged')
     Plug 'hrsh7th/vim-vsnip'
 
     "AI Codecompanion + dependencies
-    " :NOTE: The plugin requires the markdown and markdown_inline Tree-sitter parsers to be installed with :TSInstall markdown markdown_inline
+    " Install matching parsers for the shared config with :TSInstall markdown markdown_inline javascript typescript tsx org
     Plug 'nvim-lua/plenary.nvim'
     Plug 'olimorris/codecompanion'
 

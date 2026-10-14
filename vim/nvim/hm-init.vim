@@ -24,6 +24,23 @@ vnoremap ; :
 " Use system clipboard for all yank/delete/put operations
 set clipboard+=unnamedplus
 
+" Keep X11 clipboard ownership in xclip on Linux; other platforms use Neovim's
+" built-in clipboard provider.
+if executable('xclip')
+  let g:clipboard = {
+  \ 'name': 'xclip-persistent',
+  \ 'copy': {
+  \   '+': ['xclip', '-in', '-selection', 'clipboard'],
+  \   '*': ['xclip', '-in', '-selection', 'primary'],
+  \ },
+  \ 'paste': {
+  \   '+': ['xclip', '-out', '-selection', 'clipboard'],
+  \   '*': ['xclip', '-out', '-selection', 'primary'],
+  \ },
+  \ 'cache_enabled': 0,
+  \ }
+endif
+
 let mapleader="\<SPACE>"
 
 "NERDTree
@@ -110,14 +127,17 @@ let g:airline_theme= 'dracula'
 
 set completeopt=menu,menuone,noselect
 
-" Use filetype-specific indent rules, then pin JS/TS to 4 spaces.
+" Use filetype-specific indent rules, then pin JS/TS to 2 spaces.
 filetype plugin indent on
 autocmd FileType typescript,typescriptreact,javascript,javascriptreact setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
 
 lua <<EOF
 
   -- Use Neovide's native cursor animation when running inside Neovide.
-  if not vim.g.neovide then
+  if vim.g.neovide then
+    vim.g.neovide_opacity = 0.85
+    vim.g.neovide_normal_opacity = 0.85
+  else
     require('smear_cursor').setup()
   end
   require('neoscroll').setup({
@@ -129,6 +149,14 @@ lua <<EOF
   local neoscroll = require('neoscroll')
   vim.keymap.set({'n', 'v', 'x'}, '<PageUp>', function() neoscroll.ctrl_b({ duration = 200 }) end)
   vim.keymap.set({'n', 'v', 'x'}, '<PageDown>', function() neoscroll.ctrl_f({ duration = 200 }) end)
+  if not vim.g.neovide then
+    require('mini.animate').setup({
+      -- Smear Cursor owns cursor motion outside Neovide.
+      cursor = { enable = false },
+      -- Neoscroll already handles smooth scrolling and the PageUp/PageDown mappings.
+      scroll = { enable = false },
+    })
+  end
   vim.keymap.set({'n', 'v'}, '<leader>y', function() require('yazi').yazi() end, { desc = 'Open Yazi at the current file' })
 
   -- Setup neogit
@@ -180,9 +208,8 @@ lua <<EOF
   }
 
   -- Enable Tree-sitter highlighting and indentation for JavaScript,
-  -- TypeScript, and TSX. The grammars are provided by the Nix plugin
-  -- package above. nvim-treesitter's current API no longer provides
-  -- nvim-treesitter.configs.
+  -- TypeScript, and TSX. Install their parsers with :TSInstall when the
+  -- environment does not provide them. This uses the current nvim-treesitter API.
   require('nvim-treesitter').setup()
   vim.api.nvim_create_autocmd('FileType', {
     pattern = {
@@ -238,7 +265,7 @@ lua <<EOF
     strategies = {
       chat = {
         adapter = "openai",
-        model = "gpt-5.6-luna"
+        model = "gpt-6-luna"
       },
     }
   })
