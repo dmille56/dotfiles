@@ -9,11 +9,26 @@ from pathlib import Path
 import subprocess
 import tempfile
 import unittest
-from unittest.mock import patch
+from unittest.mock import Mock, patch
 
 spec = importlib.util.spec_from_file_location("agent", Path(__file__).with_name("plannotator-agent.py"))
 agent = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(agent)
+
+
+def context(pane="%7", client="agent-client", client_pid=123):
+    return dict(command=["tmux", "-S", "/tmp/socket"], client=client,
+                client_pid=client_pid, pane=pane, session="$4")
+
+
+def snapshot(window="@12", width=80, height=25):
+    clients = {"agent-client": dict(session="$4", window=window, activity=100,
+                                    pid=123, width=160, height=50)}
+    panes = {"%7": dict(window="@12", left=0, top=0, width=width, height=height,
+                         zoomed=False, active=True, dead=False),
+             "%8": dict(window="@13", left=0, top=0, width=width, height=height,
+                         zoomed=False, active=True, dead=False)}
+    return clients, panes
 
 
 class LauncherTests(unittest.TestCase):
@@ -50,25 +65,28 @@ class LauncherTests(unittest.TestCase):
     def test_client_selection_respects_server_window_and_session(self):
         def fake_run(command, **kwargs):
             self.assertEqual(command[:3], [agent.TMUX, "-S", "/tmp/my,socket"])
-            output = ("@12\n" if "display-message" in command else
-                      "other-window\t$4\t@99\t999\n"
-                      "linked-window\t$5\t@12\t999\n"
-                      "agent-client\t$4\t@12\t100\n")
+            output = ("%7\t@12\t0\t0\t80\t25\t0\t1\t0\n" if "list-panes" in command else
+                      "other-window\t$4\t@99\t999\t124\t160\t51\t1\n"
+                      "linked-window\t$5\t@12\t999\t125\t160\t51\t1\n"
+                      "agent-client\t$4\t@12\t100\t123\t160\t51\t1\n")
             return subprocess.CompletedProcess(command, 0, stdout=output)
         with patch.dict(os.environ, {"TMUX": "/tmp/my,socket,123,4", "TMUX_PANE": "%7"}, clear=True), \
                 patch.object(agent, "run", side_effect=fake_run):
-            self.assertEqual(agent.tmux_context()[1], "agent-client")
+            self.assertEqual(agent.tmux_context()["client"], "agent-client")
 
-    def test_no_tmux_stale_socket_and_no_visible_client(self):
+    def test_no_tmux_stale_socket_and_no_attached_client(self):
         with patch.dict(os.environ, {}, clear=True):
             self.assertIsNone(agent.tmux_context())
         with patch.dict(os.environ, {"TMUX": "/tmp/socket,123,4", "TMUX_PANE": "%7"}, clear=True):
             with patch.object(agent, "run", side_effect=OSError("gone")):
                 self.assertIsNone(agent.tmux_context())
-            with patch.object(agent, "run", side_effect=[
-                    subprocess.CompletedProcess([], 0, stdout="@2\n"),
-                    subprocess.CompletedProcess([], 0, stdout="client\t$4\t@9\t1\n")]):
+            with patch.object(agent, "tmux_snapshot", return_value=({}, snapshot()[1])):
                 self.assertIsNone(agent.tmux_context())
+
+    def test_hidden_window_still_gets_a_client(self):
+        with patch.dict(os.environ, {"TMUX": "/tmp/socket,123,4", "TMUX_PANE": "%7"}, clear=True), \
+                patch.object(agent, "tmux_snapshot", return_value=snapshot(window="@99")):
+            self.assertEqual(agent.tmux_context()["client"], "agent-client")
 
     def test_supported_targets_and_browser_fallbacks(self):
         target = self.root / "quoted ' $(touch nope).md"
@@ -177,13 +195,121 @@ class LauncherTests(unittest.TestCase):
 
     def test_popup_quotes_paths_and_requires_completion_marker(self):
         import shlex
-        def fake_run(command, **kwargs):
+        def fake_process(command, **kwargs):
             self.assertEqual(command[command.index("-c") + 1], "agent-client")
+            self.assertEqual(command[command.index("-t") + 1], "%7")
+            self.assertEqual(command[command.index("-w") + 1], "80")
+            self.assertEqual(command[command.index("-h") + 1], "25")
+            self.assertEqual(command[command.index("-x") + 1], "P")
+            self.assertEqual(command[command.index("-y") + 1], "P")
+            self.assertIn("##(touch unexpected)", command[command.index("-T") + 1])
             self.assertEqual(shlex.split(command[-1])[-1], str(self.root))
-            return subprocess.CompletedProcess([], 0)
-        with patch.object(agent, "run", side_effect=fake_run):
+            return Mock(returncode=0, communicate=Mock(return_value=("", "")), poll=Mock(return_value=0))
+        with patch.object(agent, "tmux_snapshot", return_value=snapshot()), \
+                patch.object(agent.tempfile, "gettempdir", return_value=str(self.root)), \
+                patch.object(agent.subprocess, "Popen", side_effect=fake_process):
             with self.assertRaises(FileNotFoundError):
-                agent.popup((["tmux", "-S", "sock"], "agent-client"), self.root, self.root / "a 'b.md")
+                agent.popup(context(), self.root, self.root / "a '#(touch unexpected)'.md")
+
+    def test_popup_rechecks_size_and_cleans_claim(self):
+        (self.root / "completed.json").write_text(json.dumps({"feedback": "Feedback"}))
+        process = Mock(returncode=0, communicate=Mock(return_value=("", "")), poll=Mock(return_value=0))
+        with patch.object(agent, "tmux_snapshot", side_effect=[snapshot(width=40), snapshot(width=90)]), \
+                patch.object(agent.tempfile, "gettempdir", return_value=str(self.root)), \
+                patch.object(agent.subprocess, "Popen", return_value=process) as popen:
+            self.assertEqual(agent.popup(context(), self.root, self.root / "doc.md"), "Feedback")
+            argv = popen.call_args.args[0]
+            self.assertEqual(argv[argv.index("-w") + 1], "90")
+            queue = agent.ReviewQueue(context())
+            self.assertEqual(json.loads(queue.state.read_text())["entries"], [])
+
+    def test_cancel_waiting_request_removes_it_without_opening(self):
+        with patch.object(agent, "tmux_snapshot", return_value=snapshot(window="@99")), \
+                patch.object(agent.tempfile, "gettempdir", return_value=str(self.root)), \
+                patch.object(agent.time, "sleep", side_effect=KeyboardInterrupt), \
+                patch.object(agent.subprocess, "Popen") as popen:
+            with self.assertRaises(KeyboardInterrupt):
+                agent.popup(context(), self.root, self.root / "doc.md")
+            popen.assert_not_called()
+            queue = agent.ReviewQueue(context())
+            self.assertEqual(json.loads(queue.state.read_text())["entries"], [])
+
+
+class QueueTests(unittest.TestCase):
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory()
+        self.root = Path(self.temp.name)
+        self.directory = patch.object(agent.tempfile, "gettempdir", return_value=str(self.root))
+        self.directory.start()
+        self.addCleanup(self.directory.stop)
+        self.addCleanup(self.temp.cleanup)
+
+    def test_visible_fifo_hidden_requests_do_not_block_and_active_is_exclusive(self):
+        queue = agent.ReviewQueue(context())
+        hidden = agent.ReviewQueue(context(pane="%8"))
+        older = hidden.register(self.root / "hidden")
+        first = queue.register(self.root / "first")
+        second = queue.register(self.root / "second")
+        self.assertFalse(hidden.claim(older, snapshot()))
+        self.assertFalse(queue.claim(second, snapshot()))
+        self.assertTrue(queue.claim(first, snapshot()))
+        self.assertFalse(queue.claim(second, snapshot()))
+        queue.release(first, remove=True)
+        self.assertTrue(queue.claim(second, snapshot()))
+        queue.release(second, remove=True)
+        self.assertTrue(hidden.claim(older, snapshot(window="@13")))
+
+    def test_zoom_hides_non_active_panes(self):
+        queue = agent.ReviewQueue(context())
+        token = queue.register(self.root)
+        clients, panes = snapshot()
+        panes["%7"].update(zoomed=True, active=False)
+        self.assertFalse(queue.claim(token, (clients, panes)))
+        self.assertIsNone(agent.review_geometry(context(), (clients, panes)))
+        panes["%7"]["active"] = True
+        self.assertTrue(queue.claim(token, (clients, panes)))
+
+    def test_separate_clients_claim_concurrently(self):
+        first_queue = agent.ReviewQueue(context())
+        second_queue = agent.ReviewQueue(context(client="second", client_pid=456))
+        clients, panes = snapshot()
+        clients["second"] = {**clients["agent-client"], "pid": 456}
+        first = first_queue.register(self.root / "first")
+        second = second_queue.register(self.root / "second")
+        self.assertTrue(first_queue.claim(first, (clients, panes)))
+        self.assertTrue(second_queue.claim(second, (clients, panes)))
+
+    def test_stale_entries_are_removed_but_orphan_active_worker_is_reserved(self):
+        queue = agent.ReviewQueue(context())
+        stale = queue.register(self.root / "stale")
+        active = queue.register(self.root / "active")
+        token = queue.register(self.root / "waiting")
+        with queue.locked() as state:
+            for entry in state["entries"]:
+                if entry["token"] in (stale, active):
+                    entry["owner"] = {"pid": -1, "start": "not-alive"}
+                if entry["token"] == active:
+                    entry["active"] = True
+        with patch.object(agent, "worker_alive", side_effect=lambda root: str(root).endswith("active")):
+            self.assertFalse(queue.claim(token, snapshot()))
+            entries = json.loads(queue.state.read_text())["entries"]
+            self.assertNotIn(stale, [entry["token"] for entry in entries])
+            self.assertIn(active, [entry["token"] for entry in entries])
+        self.assertTrue(queue.claim(token, snapshot()))
+
+    def test_disconnected_replaced_dead_or_tiny_targets(self):
+        for edit in (
+            lambda clients, panes: clients.clear(),
+            lambda clients, panes: clients["agent-client"].update(pid=999),
+            lambda clients, panes: panes.clear(),
+            lambda clients, panes: panes["%7"].update(dead=True),
+            lambda clients, panes: panes["%7"].update(width=2),
+            lambda clients, panes: panes["%7"].update(width=200),
+        ):
+            clients, panes = snapshot()
+            edit(clients, panes)
+            with self.assertRaises(OSError):
+                agent.review_geometry(context(), (clients, panes))
 
 
 @unittest.skipUnless(os.environ.get("BUN") and os.environ.get("RESOLVER"), "set BUN and RESOLVER for upstream fixtures")

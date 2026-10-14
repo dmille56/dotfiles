@@ -62,6 +62,10 @@ let
     Switching mode writes a global user setting outside the project; run the mode
     command outside the sandbox too. Both mode commands are covered by the allow rules.
     Outside tmux and for unsupported requests, it uses browser Plannotator.
+    TUI popups cover the requesting agent's pane and queue one at a time per tmux
+    client. Hidden panes wait until visible, including panes hidden by zoom.
+    Return to the agent's window to review; the launcher does not switch windows.
+    Keep the command running while queued. Other visible requests can proceed.
     In the TUI, leave annotations and quit with `q`; feedback is exported when the
     popup closes. Wait for the command to finish and relay its feedback to the user.
   '';
