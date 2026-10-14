@@ -27,24 +27,40 @@ let
     name = "plannotator-mode";
     text = ''exec ${launcher}/bin/plannotator-agent --mode "$@"'';
   };
+  rules = pkgs.writeText "plannotator.rules" ''
+    prefix_rule(
+      pattern = ["${launcher}/bin/plannotator-agent"],
+      decision = "allow",
+    )
+    prefix_rule(
+      pattern = ["${mode}/bin/plannotator-mode"],
+      decision = "allow",
+    )
+  '';
   guidance = ''
-    Run the review command with the coding agent's approved execution outside its
-    sandbox. Plannotator writes review state under the user's home directory and
+    Home Manager installs Codex allow rules for the launcher and mode commands in
+    `~/.codex/rules/plannotator.rules`. Run the command directly and let the executor
+    apply those rules; do not ask a separate permission question in chat.
+    With Codex's `exec_command`, set `sandbox_permissions` to `require_escalated`
+    and provide a short `justification` explaining that Plannotator needs home
+    writes and tmux or localhost socket access. This selects execution outside the
+    sandbox; the installed allow rule authorizes it without a new approval prompt.
+    If the executor still asks for approval, check that the rules file is a regular
+    file rather than a symlink and restart Codex after Home Manager activation.
+    Other coding agents should use their equivalent approved execution mechanism.
+    If execution is denied, report that the review could not start; do not retry
+    inside the same sandbox or use sudo.
+
+    Plannotator writes review state under the user's home directory and
     needs either access to the existing tmux socket or permission to listen on a
     localhost port for the browser UI. A normal sandboxed invocation can fail with
     EROFS for history writes or EPERM for sockets.
-    With Codex's `exec_command`, set `sandbox_permissions` to `require_escalated`
-    and provide a short `justification` explaining those requirements. When
-    supported, scope a reusable `prefix_rule` to
-    `["${launcher}/bin/plannotator-agent"]`. Other coding agents should use their
-    equivalent execution approval mechanism. If approval is denied, report that
-    the review could not start; do not retry inside the same sandbox. Do not use sudo.
 
     The launcher reads the global user setting on each invocation. `plannotator-mode tui`
     selects tmux popup reviews; `plannotator-mode browser` selects browser reviews;
     `plannotator-mode status` shows the setting. The default is browser.
-    Switching mode writes a global user setting outside the project; use the
-    same execution approval mechanism for `plannotator-mode tui` or `browser`.
+    Switching mode writes a global user setting outside the project; run the mode
+    command outside the sandbox too. Both mode commands are covered by the allow rules.
     Outside tmux and for unsupported requests, it uses browser Plannotator.
     In the TUI, leave annotations and quit with `q`; feedback is exported when the
     popup closes. Wait for the command to finish and relay its feedback to the user.
@@ -88,6 +104,14 @@ let
 in
 {
   home.packages = [ browser tui launcher mode ];
+
+  # Codex's startup discovery ignores symlinked .rules files. Let Home Manager
+  # remove the old managed symlink, then install a regular file with current paths.
+  # Keep default.rules mutable for approvals added by Codex itself.
+  home.activation.installPlannotatorRules = lib.hm.dag.entryAfter [ "linkGeneration" ] ''
+    run ${pkgs.coreutils}/bin/mkdir -p "${config.home.homeDirectory}/.codex/rules"
+    run ${pkgs.coreutils}/bin/install -m 0644 "${rules}" "${config.home.homeDirectory}/.codex/rules/plannotator.rules"
+  '';
 
   home.file.".codex/hooks.json".text = builtins.toJSON {
     hooks.Stop = [{
