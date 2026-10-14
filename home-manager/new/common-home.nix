@@ -49,60 +49,7 @@
 in
 with constants;
 {
-  imports = [ ./pi-coding-agent.nix ];
-
-  # Keep Codex's config.toml mutable so Codex can manage trust decisions.
-  # Plannotator's hook and skills remain declaratively managed here.
-  home.file.".codex/hooks.json".text = builtins.toJSON {
-    hooks.Stop = [
-      {
-        hooks = [
-          {
-            type = "command";
-            command = "${pkgs.llm-agents.plannotator}/bin/plannotator";
-            timeout = 345600;
-          }
-        ];
-      }
-    ];
-  };
-
-  # Codex skips symlinked SKILL.md files. Install regular manifests after
-  # Home Manager removes any symlinks managed by previous generations.
-  home.activation.installPlannotatorSkills =
-    let
-      skills = {
-        plannotator-review = pkgs.writeText "plannotator-review-SKILL.md" ''
-          ---
-          name: plannotator-review
-          description: Review local changes or a GitHub/GitLab pull request with Plannotator. Use when asked to visually inspect or annotate code changes.
-          ---
-
-          Run `${pkgs.llm-agents.plannotator}/bin/plannotator review` to review uncommitted changes. Pass a pull request or merge request URL as an argument when requested. Return the submitted annotations and feedback to the user.
-        '';
-        plannotator-annotate = pkgs.writeText "plannotator-annotate-SKILL.md" ''
-          ---
-          name: plannotator-annotate
-          description: Visually annotate a Markdown file, folder, URL, or HTML artifact with Plannotator.
-          ---
-
-          Run `${pkgs.llm-agents.plannotator}/bin/plannotator annotate` followed by the requested file, folder, or URL. For rendered HTML, add `--render-html`.
-        '';
-        plannotator-last = pkgs.writeText "plannotator-last-SKILL.md" ''
-          ---
-          name: plannotator-last
-          description: Open the most recent Codex response in Plannotator for visual annotation and feedback.
-          ---
-
-          Run `${pkgs.llm-agents.plannotator}/bin/plannotator last` and relay the submitted feedback to the user.
-        '';
-      };
-    in
-    lib.hm.dag.entryAfter [ "linkGeneration" ] (lib.concatStringsSep "\n"
-      (lib.mapAttrsToList (name: source: ''
-        run ${pkgs.coreutils}/bin/mkdir -p "${config.home.homeDirectory}/.agents/skills/${name}"
-        run ${pkgs.coreutils}/bin/install -m 0644 "${source}" "${config.home.homeDirectory}/.agents/skills/${name}/SKILL.md"
-      '') skills));
+  imports = [ ./pi-coding-agent.nix ./plannotator.nix ];
 
   # :NOTE: misc settings
 
@@ -255,7 +202,6 @@ with constants;
     opencode
     codex
     llm-agents.droid
-    llm-agents.plannotator
     # gemini-cli is marked for removal in nixpkgs.
     # codex-acp
     claude-agent-acp
