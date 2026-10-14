@@ -40,16 +40,17 @@ let
   guidance = ''
     Home Manager installs Codex allow rules for the launcher and mode commands in
     `~/.codex/rules/plannotator.rules`. Run the command directly and let the executor
-    apply those rules; do not ask a separate permission question in chat.
-    With Codex's `exec_command`, set `sandbox_permissions` to `require_escalated`
-    and provide a short `justification` explaining that Plannotator needs home
-    writes and tmux or localhost socket access. This selects execution outside the
-    sandbox; the installed allow rule authorizes it without a new approval prompt.
-    If the executor still asks for approval, check that the rules file is a regular
-    file rather than a symlink and restart Codex after Home Manager activation.
+    apply those rules. With Codex's `exec_command`, request `require_escalated` and
+    give a short justification explaining that Plannotator needs home writes and
+    tmux or localhost socket access. The allow rule authorizes the command, but it
+    does not grant permission to run outside the sandbox; the executor may still
+    require approval or deny escalation based on its environment policy. If it
+    asks for approval, check that the rules file is regular rather than a symlink
+    and restart Codex after Home Manager activation. If escalation is denied, stop
+    and report that the review could not start. Resume only after the environment
+    allows the required outside-sandbox execution.
     Other coding agents should use their equivalent approved execution mechanism.
-    If execution is denied, report that the review could not start; do not retry
-    inside the same sandbox or use sudo.
+    Do not retry inside the same sandbox or use sudo.
 
     Plannotator writes review state under the user's home directory and
     needs either access to the existing tmux socket or permission to listen on a
