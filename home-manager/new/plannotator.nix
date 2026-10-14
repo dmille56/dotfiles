@@ -71,6 +71,22 @@ let
     popup closes. Wait for the command to finish and relay its feedback to the user.
   '';
   skills = {
+    tuicr-review = pkgs.writeText "tuicr-review-SKILL.md" ''
+      ---
+      name: tuicr-review
+      description: Review the current working tree or a GitHub/GitLab pull request with tuicr in a tmux popup. Use when asked for a code review.
+      ---
+
+      Run `${launcher}/bin/plannotator-agent --tuicr-review` to review the current
+      working tree. Pass a GitHub or GitLab pull request URL as an argument to
+      review that request. This command always opens tuicr in the requesting
+      agent pane's tmux popup, regardless of the Plannotator browser/TUI setting.
+      Keep it running until the popup closes, then use its returned review text
+      to report findings and recommended fixes to the user. If no attached tmux
+      client is available, report that the review could not start.
+
+      ${guidance}
+    '';
     plannotator-review = pkgs.writeText "plannotator-review-SKILL.md" ''
       ---
       name: plannotator-review

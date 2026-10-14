@@ -327,10 +327,13 @@ def browser(args, event):
     return subprocess.run([BROWSER, *args], input=event).returncode
 
 
-def launch(args):
+def launch(args, force_tui=False):
     event = sys.stdin.buffer.read() if not args else None
-    context = None if browser_mode() else tmux_context()
+    context = tmux_context() if force_tui or not browser_mode() else None
     if context is None:
+        if force_tui:
+            print("tuicr-review requires an attached tmux client", file=sys.stderr)
+            return 1
         return browser(args, event)
     review = None
     if args == ["review"]:
@@ -377,6 +380,8 @@ def launch(args):
 def main(args):
     if args[:1] == ["--mode"]:
         return mode(args[1:])
+    if args[:1] == ["--tuicr-review"]:
+        return launch(["review", *args[1:]], force_tui=True)
     if args[:1] == ["--popup-worker"]:
         return popup_worker(args[1])
     return launch(args)
