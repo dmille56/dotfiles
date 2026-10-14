@@ -18,6 +18,7 @@
 # Update / Managing NixOS Config
 - Apply new/updated nixos config: `MY_MACHINE_ID=desktop sudo nixos-rebuild switch --impure` (use `laptop` for a laptop)
 - How to update nix pkgs (NOTE still after run switch command to apply the update): `cd /etc/nixos && sudo nix flake update`
+- Remove old nix generations (run before garbage collect) from nixos-rebuild: `sudo nix-env --profile /nix/var/nix/profiles/system --delete-generations old`
 - Garbage collect nix: `nix-collect-garbage -d`... Need to use sudo for system wide cleanup.
 - Optimise nix: `nix store optimise`... Need to use sudo for system wide cleanup.
 - Re run home-manager activation scripts: `sudo systemctl restart home-manager-dono.service`
