@@ -160,6 +160,8 @@ with constants;
       todo = "allow";
     };
     bash = {
+      "*/bin/plannotator-agent --tuicr-review*" = "allow";
+      "*/bin/plannotator-agent annotate *" = "allow";
       "git *" = "ask";
       "git status" = "allow";
       "git diff" = "allow";
@@ -194,6 +196,10 @@ with constants;
       jobspy = "allow";
       caveman = "allow";
       ask-user = "allow";
+      "plannotator-annotate" = "allow";
+      "plannotator-last" = "allow";
+      "plannotator-review" = "allow";
+      "tuicr-review" = "allow";
     };
     special = {
       external_directory = "ask";

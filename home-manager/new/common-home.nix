@@ -1347,6 +1347,12 @@ with constants;
     plugin = [
       "open-plan-annotator@latest"
     ];
+    permission.skill = {
+      "plannotator-annotate" = "allow";
+      "plannotator-last" = "allow";
+      "plannotator-review" = "allow";
+      "tuicr-review" = "allow";
+    };
     tools = {
       websearch = true;
       codesearch = true;

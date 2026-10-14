@@ -38,24 +38,22 @@ let
     )
   '';
   guidance = ''
-    Home Manager installs Codex allow rules for the launcher and mode commands in
-    `~/.codex/rules/plannotator.rules`. Run the command directly and let the executor
-    apply those rules. With Codex's `exec_command`, request `require_escalated` and
-    give a short justification explaining that Plannotator needs home writes and
-    tmux or localhost socket access. The allow rule authorizes the command, but it
-    does not grant permission to run outside the sandbox; the executor may still
-    require approval or deny escalation based on its environment policy. If it
-    asks for approval, check that the rules file is regular rather than a symlink
-    and restart Codex after Home Manager activation. If escalation is denied, stop
-    and report that the review could not start. Resume only after the environment
-    allows the required outside-sandbox execution.
-    Other coding agents should use their equivalent approved execution mechanism.
-    Do not retry inside the same sandbox or use sudo.
+    These skills are shared by Codex, OpenCode, and Pi. Run the launcher with the
+    current agent's shell tool (`exec_command` in Codex, `bash` in OpenCode or Pi).
+    In Codex, request `require_escalated` and explain that the launcher needs home
+    writes and tmux or localhost socket access. The Home Manager allow rule permits
+    the command but does not itself grant access outside the sandbox. In OpenCode
+    and Pi, use their normal command approval flow; if their execution environment
+    blocks home writes, tmux sockets, or localhost sockets, report the specific
+    denial and stop. An approval prompt does not by itself remove a sandbox
+    restriction. Never retry the same blocked command in the same sandbox or use
+    sudo. If Codex does not recognize its allow rules after activation, confirm
+    `~/.codex/rules/plannotator.rules` is a regular file and restart Codex.
 
-    Plannotator writes review state under the user's home directory and
-    needs either access to the existing tmux socket or permission to listen on a
-    localhost port for the browser UI. A normal sandboxed invocation can fail with
-    EROFS for history writes or EPERM for sockets.
+    Plannotator writes review state under the user's home directory. Browser mode
+    needs permission to listen on a localhost port; TUI and tuicr reviews need
+    access to the existing tmux socket. Sandboxed execution can fail with EROFS
+    for history writes or EPERM for sockets.
 
     The launcher reads the global user setting on each invocation. `plannotator-mode tui`
     selects tmux popup reviews; `plannotator-mode browser` selects browser reviews;
@@ -78,10 +76,9 @@ let
       ---
 
       Run `${launcher}/bin/plannotator-agent --tuicr-review` to review the current
-      working tree. On the first invocation, use `exec_command` with
-      `sandbox_permissions: "require_escalated"` and a justification explaining
-      that tuicr needs access to the existing tmux socket. Use this execution
-      mode on every invocation, even if no Plannotator review has run yet.
+      working tree. Use the current agent's shell tool and approval mechanism as
+      described below. This mode requires an attached tmux client and access to
+      its socket on every invocation.
       Pass a GitHub or GitLab pull request URL as an argument to
       review that request. This command always opens tuicr in the requesting
       agent pane's tmux popup, regardless of the Plannotator browser/TUI setting.
@@ -89,8 +86,9 @@ let
       to report findings and recommended fixes to the user. If no attached tmux
       client is available, report that the review could not start.
       A tmux socket permission error means the execution environment blocked
-      access; it does not mean the client is missing. Request the required
-      outside-sandbox execution rather than asking the user to launch Plannotator first.
+      access; it does not prove that no tmux client is attached. Follow the
+      environment-specific access guidance below; do not ask the user to start a
+      second review manually.
 
       ${guidance}
     '';

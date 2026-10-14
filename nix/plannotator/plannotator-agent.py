@@ -105,8 +105,8 @@ def tmux_context():
         detail = (error.stderr or "").strip() if isinstance(error, subprocess.CalledProcessError) else str(error)
         raise OSError(
             f"Could not inspect tmux socket {context[0]}: {detail or error}. "
-            "When launched by a coding agent, run the launcher outside the sandbox "
-            "(exec_command: sandbox_permissions=\"require_escalated\")."
+            "When launched by a coding agent, use that agent's approved execution "
+            "mechanism with access to the existing tmux socket."
         ) from error
 
 
