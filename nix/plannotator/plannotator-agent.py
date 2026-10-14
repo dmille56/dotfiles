@@ -244,9 +244,16 @@ def popup_worker(root):
     for name in list(env):
         if name.startswith("HERDR_"):
             del env[name]
+    session = None
     if request.get("review") is not None:
-        feedback = run([TUICR, "--stdout", "--no-update-check", *request["review"]],
-                       env=env, capture_output=True, text=True).stdout.strip()
+        result = run([TUICR, "--stdout", "--no-update-check", *request["review"]],
+                     env=env, capture_output=True, text=True)
+        feedback = result.stdout.strip()
+        sessions = [line.removeprefix("tuicr-session: ").strip()
+                    for line in (result.stderr or "").splitlines()
+                    if line.startswith("tuicr-session: ")]
+        if len(sessions) == 1:
+            session = sessions[0]
     else:
         env["PLANNOTATOR_DATA_DIR"] = str(root / "data")
         run([TUI, request["target"]], env=env)
@@ -254,7 +261,21 @@ def popup_worker(root):
                        capture_output=True, text=True).stdout.strip()
         if feedback == "No annotations.":
             feedback = ""
-    (root / "completed.json").write_text(json.dumps({"feedback": feedback}))
+    completed = root / "completed.json"
+    completed.write_text(json.dumps({"feedback": feedback}))
+    if request.get("review") is not None and feedback:
+        # Preserve the exported feedback before modifying the persisted session.
+        # A plain quit exports nothing and must leave its draft comments intact.
+        try:
+            if not session:
+                raise ValueError("tuicr did not announce a unique review session")
+            run([TUICR, "review", "clearc", "--session", session],
+                env=env, capture_output=True, text=True)
+        except (OSError, ValueError, subprocess.CalledProcessError) as error:
+            completed.write_text(json.dumps({
+                "feedback": feedback,
+                "warning": f"Review feedback was preserved, but comments could not be cleared: {error}",
+            }))
     return 0
 
 
@@ -305,7 +326,10 @@ def popup(context, root, target, review=None):
                 if process.returncode:
                     raise OSError(error.strip() or f"popup exited with status {process.returncode}")
                 # A dismissed popup can return success without completing the worker.
-                return json.loads((root / "completed.json").read_text())["feedback"]
+                result = json.loads((root / "completed.json").read_text())
+                if result.get("warning"):
+                    print(result["warning"], file=sys.stderr)
+                return result["feedback"]
             if not announced:
                 print(f"Plannotator review queued for pane {pane}; it will open when its window is visible "
                       "and this client's current review has finished.", file=sys.stderr)

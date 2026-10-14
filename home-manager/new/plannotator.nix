@@ -65,8 +65,11 @@ let
     client. Hidden panes wait until visible, including panes hidden by zoom.
     Return to the agent's window to review; the launcher does not switch windows.
     Keep the command running while queued. Other visible requests can proceed.
-    In the TUI, leave annotations and quit with `q`; feedback is exported when the
-    popup closes. Determine what artifact was reviewed and follow the matching
+    In the Plannotator TUI, leave annotations and quit with `q`. In tuicr code
+    reviews, use `:wq` or `ZZ` and accept the export prompt to return feedback;
+    bare `q` does not quit, and `:q` alone does not export comments. After feedback
+    is captured, the launcher clears that session's comments, keeping review marks.
+    Feedback is returned when the popup closes. Determine what artifact was reviewed and follow the matching
     loop below. Never stop after repeating or summarizing annotations.
   '';
   skills = {

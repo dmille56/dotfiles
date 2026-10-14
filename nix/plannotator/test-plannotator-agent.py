@@ -233,13 +233,44 @@ class LauncherTests(unittest.TestCase):
     def test_review_worker_returns_tuicr_stdout(self):
         request = {"target": str(self.root), "review": ["-w"], "environment": {}}
         (self.root / "request.json").write_text(json.dumps(request))
-        with patch.object(agent, "run", return_value=subprocess.CompletedProcess(
-                [], 0, stdout="# Code Review\n\nFix this.\n")) as run:
+        calls = []
+        def fake_run(command, **kwargs):
+            calls.append(command)
+            if command[1:3] == ["review", "clearc"]:
+                self.assertEqual(json.loads((self.root / "completed.json").read_text()),
+                                 {"feedback": "# Code Review\n\nFix this."})
+            return subprocess.CompletedProcess(
+                [], 0, stdout="# Code Review\n\nFix this.\n",
+                stderr="tuicr-session: owner/repo@main/worktree\n")
+        with patch.object(agent, "run", side_effect=fake_run):
             self.assertEqual(agent.popup_worker(self.root), 0)
-        self.assertEqual(run.call_args.args[0],
-                         [agent.TUICR, "--stdout", "--no-update-check", "-w"])
+        self.assertEqual(calls, [
+            [agent.TUICR, "--stdout", "--no-update-check", "-w"],
+            [agent.TUICR, "review", "clearc", "--session", "owner/repo@main/worktree"],
+        ])
         self.assertEqual(json.loads((self.root / "completed.json").read_text()),
                          {"feedback": "# Code Review\n\nFix this."})
+
+    def test_review_worker_keeps_comments_without_export(self):
+        request = {"target": str(self.root), "review": ["-w"], "environment": {}}
+        (self.root / "request.json").write_text(json.dumps(request))
+        with patch.object(agent, "run", return_value=subprocess.CompletedProcess(
+                [], 0, stdout="", stderr="tuicr-session: owner/repo@main/worktree\n")) as run:
+            self.assertEqual(agent.popup_worker(self.root), 0)
+        self.assertEqual(run.call_count, 1)
+        self.assertEqual(json.loads((self.root / "completed.json").read_text()), {"feedback": ""})
+
+    def test_review_worker_preserves_feedback_when_cleanup_fails(self):
+        request = {"target": str(self.root), "review": ["-w"], "environment": {}}
+        (self.root / "request.json").write_text(json.dumps(request))
+        for stderr in ("", "tuicr-session: owner/repo@main/worktree\n"):
+            with self.subTest(stderr=stderr), patch.object(agent, "run", side_effect=[
+                    subprocess.CompletedProcess([], 0, stdout="Fix this.", stderr=stderr),
+                    subprocess.CalledProcessError(1, ["clearc"])]):
+                self.assertEqual(agent.popup_worker(self.root), 0)
+            result = json.loads((self.root / "completed.json").read_text())
+            self.assertEqual(result["feedback"], "Fix this.")
+            self.assertIn("comments could not be cleared", result["warning"])
 
     def test_popup_quotes_paths_and_requires_completion_marker(self):
         import shlex
