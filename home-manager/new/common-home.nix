@@ -51,6 +51,49 @@ with constants;
 {
   imports = [ ./pi-coding-agent.nix ];
 
+  # Keep Codex's config.toml mutable so Codex can manage trust decisions.
+  # Plannotator's hook and skills remain declaratively managed here.
+  home.file.".codex/hooks.json".text = builtins.toJSON {
+    hooks.Stop = [
+      {
+        hooks = [
+          {
+            type = "command";
+            command = "${pkgs.llm-agents.plannotator}/bin/plannotator";
+            timeout = 345600;
+          }
+        ];
+      }
+    ];
+  };
+
+  home.file.".codex/skills/plannotator-review/SKILL.md".text = ''
+    ---
+    name: plannotator-review
+    description: Review local changes or a GitHub/GitLab pull request with Plannotator. Use when asked to visually inspect or annotate code changes.
+    ---
+
+    Run `${pkgs.llm-agents.plannotator}/bin/plannotator review` to review uncommitted changes. Pass a pull request or merge request URL as an argument when requested. Return the submitted annotations and feedback to the user.
+  '';
+
+  home.file.".codex/skills/plannotator-annotate/SKILL.md".text = ''
+    ---
+    name: plannotator-annotate
+    description: Visually annotate a Markdown file, folder, URL, or HTML artifact with Plannotator.
+    ---
+
+    Run `${pkgs.llm-agents.plannotator}/bin/plannotator annotate` followed by the requested file, folder, or URL. For rendered HTML, add `--render-html`.
+  '';
+
+  home.file.".codex/skills/plannotator-last/SKILL.md".text = ''
+    ---
+    name: plannotator-last
+    description: Open the most recent Codex response in Plannotator for visual annotation and feedback.
+    ---
+
+    Run `${pkgs.llm-agents.plannotator}/bin/plannotator last` and relay the submitted feedback to the user.
+  '';
+
   # :NOTE: misc settings
 
   programs.home-manager.enable = true; # obviously we need to enable home-manager
@@ -202,6 +245,7 @@ with constants;
     opencode
     codex
     llm-agents.droid
+    llm-agents.plannotator
     # gemini-cli is marked for removal in nixpkgs.
     # codex-acp
     claude-agent-acp

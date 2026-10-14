@@ -99,7 +99,7 @@ with constants;
     piInstallPackages
   ];
 
-  programs.npm.enable = true;
+  # programs.npm.enable = true;
   home.sessionPath = [ "${piNpmPrefix}/bin" ];
   home.sessionVariables = {
     npm_config_prefix = lib.mkDefault piNpmPrefix;
