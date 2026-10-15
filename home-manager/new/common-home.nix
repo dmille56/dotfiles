@@ -208,6 +208,10 @@ with constants;
     claude-agent-acp
     # ollama
 
+    # :NOTE: AI controllable browsers... experimenting with these currently
+    llm-agents.terminal-browser
+    llm-agents.vessel-browser
+
     llm-agents.rtk
     llm-agents.tuicr
     opentmux # :NOTE: for opencode
