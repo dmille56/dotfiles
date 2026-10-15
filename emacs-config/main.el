@@ -541,7 +541,14 @@ _p_rev       _U_pper              _=_: upper/lower       _r_esolve
   (evil-leader/set-key-for-mode 'org-mode "r" 'my/transient-org-mode)
   (evil-leader/set-key-for-mode 'python-mode "r" 'my/transient-python-mode)
   (evil-leader/set-key-for-mode 'python-ts-mode "r" 'my/transient-python-mode)
-  (global-evil-leader-mode))
+  ;; Evil survives major-mode changes, but evil-leader-mode does not.
+  (defun my/evil-leader-refresh-for-major-mode ()
+    "Refresh mode-specific leader bindings when Evil is already active."
+    (when (bound-and-true-p evil-local-mode)
+      (evil-leader-mode 1)))
+  (add-hook 'after-change-major-mode-hook
+            #'my/evil-leader-refresh-for-major-mode t)
+  (global-evil-leader-mode 1))
 
 (defun run-lsp-command-map ()
   "Show lsp-command-map."
