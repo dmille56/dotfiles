@@ -16,6 +16,15 @@
     1. Generate GPG key: `gpg --full-generate-key`
     2. `pass init`
 
+# Update Emacs packages
+
+1. Commit the working config and `emacs-config/straight-versions.el`.
+2. Run `M-x straight-pull-package-and-deps` for one package, or `M-x straight-pull-all` for everything.
+3. Restart Emacs and check your usual workflows.
+4. If working, run `C-u M-x straight-freeze-versions RET`, then review and commit the lockfile and config changes.
+
+To roll back: restore the previous lockfile from Git, run `M-x straight-thaw-versions`, and restart Emacs. Nix-supplied packages update through Nix.
+
 # Update / Managing NixOS Config
 - Apply new/updated nixos config: `MY_MACHINE_ID=desktop sudo nixos-rebuild switch --impure` (use `laptop` for a laptop)
 - How to update nix pkgs (NOTE still after run switch command to apply the update): `cd /etc/nixos && sudo nix flake update`
