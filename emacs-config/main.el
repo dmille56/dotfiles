@@ -7,7 +7,50 @@
 
 (setq gc-cons-threshold 100000000)
 (setq load-prefer-newer nil)
+
+;; Package activation is disabled before init by early-init.el.
+;; Keep the lockfile in dotfiles so package revisions can be committed.
+(defvar my/emacs-config-directory
+  (file-name-directory (or load-file-name buffer-file-name)))
+(setq package-enable-at-startup nil
+      use-package-always-ensure nil
+      straight-use-package-by-default t
+      straight-profiles
+      `((nil . ,(expand-file-name "straight-versions.el"
+                                  my/emacs-config-directory))))
+
+;; install straight.el
+(defvar bootstrap-version)
+(let ((bootstrap-file
+       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+      (bootstrap-version 6))
+  (unless (file-exists-p bootstrap-file)
+    (with-current-buffer
+        (url-retrieve-synchronously
+         "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
+         'silent 'inhibit-cookies)
+      (goto-char (point-max))
+      (eval-print-last-sexp)))
+(load bootstrap-file nil 'nomessage))
+
+;; Use Nix's copies even when another straight package depends on them.
+(when (eq system-type 'gnu/linux)
+  (dolist (package '(vterm w3m jinx))
+    (add-to-list 'straight-built-in-pseudo-packages package)))
+
+(straight-use-package 'use-package)
+(require 'use-package)
+(straight-use-package 'compat)
 (require 'compat)
+
+;; Run esup to benchmark startup code.
+(use-package esup :defer)
+
+(use-package no-littering
+  :functions no-littering-theme-backups
+  :config
+  (no-littering-theme-backups))
+
 (eval-and-compile
   (require 'cl-lib))
 
@@ -43,59 +86,8 @@
 ;; enable reloading buffers on file changes
 (global-auto-revert-mode t)
 
-;; If you don't have MELPA in your package archives:
-(require 'package)
-(add-to-list
- 'package-archives
- '("melpa" . "https://melpa.org/packages/") t)
-(package-initialize)
-(unless package-archive-contents (package-refresh-contents))
-
-;; install use-package
-(unless (package-installed-p 'use-package)
-  (package-install 'use-package))
-(require 'use-package)
-(setq use-package-always-ensure t)
-;; (setq package-install-upgrade-built-in t)
-
-;; run esup to benchmark startup code
-(use-package esup :defer)
-
-(use-package no-littering
-  :functions no-littering-theme-backups
-  :config
-  (no-littering-theme-backups))
-
-(use-package auto-package-update
-  :defines (auto-package-update-delete-old-versions auto-package-update-hide-results)
-  :functions (auto-package-update-maybe)
-  :config
-  (setq auto-package-update-delete-old-versions t)
-  (setq auto-package-update-hide-results t)
-  (add-hook 'emacs-startup-hook
-            (lambda ()
-              (run-with-idle-timer 60 nil #'auto-package-update-maybe))))
-
-;; Run manually only if you don't want the post-startup idle timer.
-
-;; install straight.el
-(defvar bootstrap-version)
-(let ((bootstrap-file
-       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
-      (bootstrap-version 6))
-  (unless (file-exists-p bootstrap-file)
-    (with-current-buffer
-        (url-retrieve-synchronously
-         "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
-         'silent 'inhibit-cookies)
-      (goto-char (point-max))
-      (eval-print-last-sexp)))
-(load bootstrap-file nil 'nomessage))
-
 (straight-use-package 'org)
-;; Keep Transient and its dependencies in straight.  Recent MELPA updates made
-;; the package.el copy depend on llama, which can leave every Transient-based
-;; package (rg, Casual, and gptel) unavailable when that dependency is missing.
+;; Load the external Transient before its consumers (Magit, rg, Casual, gptel).
 (straight-use-package 'transient)
 (require 'transient)
 
@@ -125,6 +117,7 @@
 (use-package hydra)
 
 (use-package smerge-mode
+  :straight nil
   :config
   (defhydra unpackaged/smerge-hydra
     (:color pink :hint nil :post (smerge-auto-leave))
@@ -574,7 +567,6 @@ _p_rev       _U_pper              _=_: upper/lower       _r_esolve
 (use-package evil-collection
   :functions (evil-collection-init)
   :after evil
-  :ensure t
   :config
   (evil-collection-init))
 
@@ -599,7 +591,6 @@ _p_rev       _U_pper              _=_: upper/lower       _r_esolve
 (use-package evil-surround
   :functions global-evil-surround-mode
   :after evil
-  :ensure t
   :config
   (global-evil-surround-mode 1))
 
@@ -661,12 +652,12 @@ _p_rev       _U_pper              _=_: upper/lower       _r_esolve
   (switch-to-buffer "*scratch*"))
 
 (use-package ready-player
-  :ensure t
   :config
   (evil-set-initial-state 'ready-player-major-mode 'emacs)
   (ready-player-mode +1))
 
 (use-package re-builder
+  :straight nil
   :defer t)
 
 ;; :TODO: remove these (they're in casual-suite now) and add bindings to casual-suite
@@ -701,7 +692,6 @@ _p_rev       _U_pper              _=_: upper/lower       _r_esolve
   :straight t)
 
 (use-package undo-tree
-  :ensure t
   :after evil
   :diminish
   :config
@@ -729,7 +719,6 @@ _p_rev       _U_pper              _=_: upper/lower       _r_esolve
 
 ;; Install Dante
 (use-package dante
-  :ensure t
   :after haskell-mode
   :commands 'dante-mode
   :defines (dante-mode-map)
@@ -751,7 +740,6 @@ _p_rev       _U_pper              _=_: upper/lower       _r_esolve
 ;; add attrap - for Dante mode
 (use-package attrap
   :after dante
-  :ensure t
   :bind (("C-x /" . attrap-attrap)))
 
 (use-package reformatter :after ormolu) ;; needed for ormolu
@@ -787,7 +775,6 @@ _p_rev       _U_pper              _=_: upper/lower       _r_esolve
 (use-package lsp-haskell
  :defines lsp-haskell-process-path-hie
  :defer
- :ensure t
  :config
  (setq lsp-haskell-process-path-hie "haskell-language-server-wrapper")
  ;; Comment/uncomment this line to see interactions between lsp client/server.
@@ -822,6 +809,7 @@ _p_rev       _U_pper              _=_: upper/lower       _r_esolve
 (add-to-list 'auto-mode-alist '("\\.*axaml\\'" . xml-mode))
 
 (use-package which-key
+  :straight nil
   :functions (which-key-show-keymap which-key-mode)
   :config
   (which-key-mode))
@@ -857,7 +845,6 @@ _p_rev       _U_pper              _=_: upper/lower       _r_esolve
 (setq auth-sources '("~/.authinfo.gpg"))
 
 (use-package blamer
-  :ensure t
   :bind (("s-i" . blamer-show-commit-info)
          ("C-c i" . blamer-show-posframe-commit-info))
   :defer 20
@@ -875,7 +862,6 @@ _p_rev       _U_pper              _=_: upper/lower       _r_esolve
 (use-package markdown-mode
   :defines markdown-command
   :defer
-  :ensure t
   :commands (markdown-mode gfm-mode)
   :mode (("README\\.md\\'" . gfm-mode)
          ("\\.md\\'" . gfm-mode)
@@ -933,7 +919,6 @@ _p_rev       _U_pper              _=_: upper/lower       _r_esolve
 ;;(use-package yaml-pro :defer)
 
 (use-package outline-yaml
-  :ensure t
   :straight (outline-yaml
              :type git
              :host github
@@ -986,7 +971,8 @@ _p_rev       _U_pper              _=_: upper/lower       _r_esolve
 (use-package powershell :defer)
 (use-package koopa-mode :defer)
 
-(use-package erc :defer)
+(use-package erc
+  :straight nil :defer)
 
 (use-package md4rd
   :defines (md4rd-mode-map md4rd-subs-active)
@@ -1056,7 +1042,6 @@ _p_rev       _U_pper              _=_: upper/lower       _r_esolve
 
 (use-package evil-org
   :functions (evil-org-agenda-set-keys evil-org-set-key-theme)
-  :ensure t
   :after org
   :config
   (add-hook 'org-mode-hook 'evil-org-mode)
@@ -1210,6 +1195,9 @@ _p_rev       _U_pper              _=_: upper/lower       _r_esolve
 ;;   (all-the-icons-completion-mode))
 
 (use-package ranger
+  ;; Ranger's optional Hydra macros are compiled without a declared Hydra
+  ;; dependency. Load source to avoid void-variable errors in that bytecode.
+  :straight (ranger :build (:not compile))
   :defines ranger-mode-map ranger-cleanup-on-disable ranger-cleanup-eagerly
   :defer
   :bind
@@ -1252,18 +1240,15 @@ _p_rev       _U_pper              _=_: upper/lower       _r_esolve
 ;;   (helm-projectile-on))
 
 (use-package cheat-sh
-  :ensure t
   :bind (("C-c ?" . cheat-sh)))
 
 (use-package rainbow-delimiters
-  :ensure t
   :hook (prog-mode . rainbow-delimiters-mode))
 
 (use-package restart-emacs :defer)
 
 (use-package avy
   :defines avy-background
-  :ensure t
   :init
   (setq avy-background t) ;; set background to black and grey when using avy
   (global-set-key (kbd "C-:") 'avy-goto-line)
@@ -1301,7 +1286,6 @@ _p_rev       _U_pper              _=_: upper/lower       _r_esolve
 (use-package dashboard
   :defines dashboard-projects-backend dashboard-center-content dashboard-items
   :functions dashboard-setup-startup-hook
-  :ensure t
   :config
   (dashboard-setup-startup-hook)
   (setq initial-buffer-choice (lambda () (get-buffer-create "*dashboard*")))
@@ -1359,7 +1343,6 @@ _p_rev       _U_pper              _=_: upper/lower       _r_esolve
 
 (use-package flycheck-hl-todo
   :functions flycheck-hl-todo-setup
-  :ensure t
   :defer 5 ; Need to be initialized after the rest of checkers
   :config
   (flycheck-hl-todo-setup))
@@ -1453,7 +1436,6 @@ _p_rev       _U_pper              _=_: upper/lower       _r_esolve
 
 (use-package org-ai
   :straight (:type git :host github :repo "rksm/org-ai" :local-repo "org-ai" :files ("*.el" "README.md" "snippets"))
-  :ensure t
   :commands (org-ai-mode
              org-ai-global-mode)
   :init
@@ -1512,11 +1494,11 @@ Make sure to run \='ollama serve\=' and have zephyr model."
     (message ollama-cmd)
     (if diff (insert (shell-command-to-string ollama-cmd)))))
 
-(use-package editorconfig) ;; dependency for copilot
+(use-package editorconfig
+  :straight nil) ;; dependency for copilot
 
 (use-package copilot
   :straight (:host github :repo "zerolfx/copilot.el" :files ("dist" "*.el"))
-  :ensure t
   :bind (("C-M-\\" . copilot-accept-completion)))
 
 (use-package copilot-chat
@@ -1562,7 +1544,7 @@ Make sure to run \='ollama serve\=' and have zephyr model."
 
 (use-package vertico-directory
   :after vertico
-  :ensure nil
+  :straight nil
   ;; More convenient directory navigation commands
   :bind (:map vertico-map
               ("C-l" . vertico-directory-up)
@@ -1573,6 +1555,7 @@ Make sure to run \='ollama serve\=' and have zephyr model."
   :hook (rfn-eshadow-update-overlay . vertico-directory-tidy))
 
 (use-package savehist
+  :straight nil
   :config
   (savehist-mode))
 
@@ -1583,7 +1566,6 @@ Make sure to run \='ollama serve\=' and have zephyr model."
   (marginalia-mode))
 
 (use-package embark
-  :ensure t
   :bind
   (("C-." . embark-act)
    ("C-;" . embark-dwim)
@@ -1597,7 +1579,6 @@ Make sure to run \='ollama serve\=' and have zephyr model."
                  (window-parameters (mode-line-format . none)))))
 
 (use-package embark-consult
-  :ensure t ; only need to install it, embark loads it after consult if found
   :hook
   (embark-collect-mode . consult-preview-at-point-mode))
 
@@ -1722,7 +1703,6 @@ Make sure to run \='ollama serve\=' and have zephyr model."
 ;;   (setq typescript-ts-mode-indent-offset 4))
 
 (use-package jtsx
-  :ensure t
   :mode (("\\.jsx?\\'" . jtsx-jsx-mode)
          ("\\.tsx\\'" . jtsx-tsx-mode)
          ("\\.ts\\'" . jtsx-typescript-mode))
@@ -1785,7 +1765,6 @@ Make sure to run \='ollama serve\=' and have zephyr model."
 
 (use-package flycheck-eglot
   :functions global-flycheck-eglot-mode
-  :ensure t
   :after (flycheck eglot)
   :config
   (global-flycheck-eglot-mode 1))
@@ -1830,7 +1809,6 @@ Make sure to run \='ollama serve\=' and have zephyr model."
 
 (use-package smartparens
   :defer
-  :ensure smartparens  ;; install the package
   :hook (prog-mode text-mode markdown-mode) ;; add `smartparens-mode` to these hooks
   :config
   ;; load default config
@@ -1865,11 +1843,12 @@ Make sure to run \='ollama serve\=' and have zephyr model."
   (setq gptel-api-key (lambda () (auth-source-pass-get 'secret "OPENAI_API_KEY"))))
 
 (if (file-directory-p ufo-catcher-path)
-    (use-package ufo-catcher :load-path ufo-catcher-path)
+    (use-package ufo-catcher :straight nil :load-path ufo-catcher-path)
   (use-package ufo-catcher :straight (:host github :repo "dmille56/ufo-catcher")))
 
 (if (file-directory-p treesit-jump-path)
     (use-package treesit-jump
+      :straight nil
       :after treesit
       :load-path treesit-jump-path)
   (use-package treesit-jump
@@ -1882,7 +1861,7 @@ Make sure to run \='ollama serve\=' and have zephyr model."
 ;; (add-to-list 'treesit-jump-queries-extra-alist (cons 'python-ts-mode '("(return_statement (_)) @return")))
 
 (if (file-directory-p powershell-ts-mode-path)
-    (use-package powershell-ts-mode :load-path powershell-ts-mode-path)
+    (use-package powershell-ts-mode :straight nil :load-path powershell-ts-mode-path)
   (use-package powershell-ts-mode :straight (:host github :repo "dmille56/powershell-ts-mode")))
 
 (setq-default powershell-ts-enable-imenu-top-level-vars nil)
@@ -1953,6 +1932,7 @@ Make sure to run \='ollama serve\=' and have zephyr model."
 ;; URL: https://github.com/emacs-eaf/emacs-application-framework
 ;; have to install with git and then run M-x eaf-install-and-update
 (use-package eaf
+  :straight nil
   :if (file-directory-p eaf-install-path)
   :load-path eaf-install-path
   :custom

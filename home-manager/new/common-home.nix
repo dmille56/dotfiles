@@ -795,6 +795,10 @@ with constants;
 
   # :NOTE: home file configuration starts here
 
+  # Disable package.el activation before ~/.emacs loads the straight config.
+  home.file.".emacs.d/early-init.el".source =
+    lib.mkDefault ../../emacs-config/early-init.el;
+
   home.file.".local/bin/sh-mute" = {
     text = ''
       #!/usr/bin/env bash

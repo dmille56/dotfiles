@@ -2,8 +2,9 @@
 ;;; Commentary:
 ;;; Code:
 
-(use-package w3m :defer)
-(use-package vterm :defer)
+;; Supplied by the Nix Emacs wrapper in common-home.nix.
+(use-package w3m :straight nil :defer)
+(use-package vterm :straight nil :defer)
 
 ;; :TODO: figure out how to get jinx working with nix
 ;; (use-package jinx
