@@ -15,6 +15,8 @@
 (setq package-enable-at-startup nil
       use-package-always-ensure nil
       straight-use-package-by-default t
+      ;; Set before bootstrap so recipe repositories are shallow too.
+      straight-vc-git-default-clone-depth 1
       straight-profiles
       `((nil . ,(expand-file-name "straight-versions.el"
                                   my/emacs-config-directory))))
@@ -86,7 +88,9 @@
 ;; enable reloading buffers on file changes
 (global-auto-revert-mode t)
 
-(straight-use-package 'org)
+;; Org's build uses release tags to generate its version information.
+;; Preserve the default recipe's build steps while keeping full history.
+(straight-use-package '(org :depth full))
 ;; Load the external Transient before its consumers (Magit, rg, Casual, gptel).
 (straight-use-package 'transient)
 (require 'transient)
