@@ -103,7 +103,7 @@ nnoremap <leader>t0 10gt<CR>
 " :TODO: look into this plugin https://github.com/junegunn/fzf.vim
 
 " Control+W followed by W
-nnoremap <leader>o <C-w>w<CR>
+nnoremap <leader>o <C-w>w
 nnoremap <leader>2 <C-w>s<CR>
 nnoremap <leader>3 <C-w>v<CR>
 
@@ -165,6 +165,8 @@ lua <<EOF
   
   -- Setup orgmode
   require('orgmode').setup({
+    -- Keep <leader>o unambiguous so switching splits does not wait for timeoutlen.
+    mappings = { prefix = '<Leader>O' },
     org_agenda_files = {'~/Dropbox/org/*', '~/my-orgs/**/*'},
     org_default_notes_file = '~/Dropbox/org/refile.org',
   })
