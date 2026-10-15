@@ -246,8 +246,18 @@ def popup_worker(root):
             del env[name]
     session = None
     if request.get("review") is not None:
-        result = run([TUICR, "--stdout", "--no-update-check", *request["review"]],
-                     env=env, capture_output=True, text=True)
+        try:
+            result = run([TUICR, "--stdout", "--no-update-check", *request["review"]],
+                         env=env, capture_output=True, text=True)
+        except subprocess.CalledProcessError as error:
+            output = "\n".join(part for part in (error.stdout, error.stderr) if part)
+            if "No changes to review" not in output:
+                raise
+            (root / "completed.json").write_text(json.dumps({
+                "feedback": "",
+                "warning": "No changes to review. Tuicr found no uncommitted changes; Plannotator was not opened.",
+            }))
+            return 0
         feedback = result.stdout.strip()
         sessions = [line.removeprefix("tuicr-session: ").strip()
                     for line in (result.stderr or "").splitlines()
