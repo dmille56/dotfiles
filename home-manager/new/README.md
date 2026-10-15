@@ -11,6 +11,7 @@
 3. setup vscode extensions
     - python, vscode neovim, direnv, dracula theme, grafana alloy, haskell, nix, c#
 4. install .emacs file `cp ~/dotfiles/emacs-config/default.emacs ~/.emacs`. Home Manager installs `~/.emacs.d/early-init.el`; on machines without Home Manager, copy `~/dotfiles/emacs-config/early-init.el` there before launching Emacs. See [package management](../../emacs-config/AI/PACKAGE-MANAGEMENT.md).
+    - After starting Emacs, manually run `M-x treesit-auto-install-all RET` to install the Tree-sitter grammars.
 5. Initial pass password store
     1. Generate GPG key: `gpg --full-generate-key`
     2. `pass init`

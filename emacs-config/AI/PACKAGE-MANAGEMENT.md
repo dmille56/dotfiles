@@ -21,4 +21,6 @@ Existing repositories need an explicit thaw to restore locked revisions. The loc
 
 Home Manager installs [early-init.el](../early-init.el) as `~/.emacs.d/early-init.el` to disable package.el activation. Copy it manually on machines without Home Manager. Install it before launching Emacs; the first startup downloads/builds missing packages.
 
+After startup, manually run `M-x treesit-auto-install-all RET` to install the Tree-sitter grammars. Installing the Emacs packages does not automatically install all grammars.
+
 See [PACKAGE-CATALOG.md](PACKAGE-CATALOG.md) for installation exceptions.
