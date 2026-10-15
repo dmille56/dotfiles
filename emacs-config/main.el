@@ -21,6 +21,9 @@
 (if (require 'scroll-bar nil 'noerror) (scroll-bar-mode -1))
 (menu-bar-mode -1)
 
+(when (fboundp 'pixel-scroll-precision-mode)
+  (pixel-scroll-precision-mode 1))
+
 (delete-selection-mode 1)
 (electric-indent-mode -1)
 ;; (electric-pair-mode 1)
@@ -1688,6 +1691,10 @@ Make sure to run \='ollama serve\=' and have zephyr model."
   :init
   (evil-set-initial-state 'pacmacs-mode 'emacs)
   )
+
+;; Emacs 31's globalized minor mode machinery expects this buffer-local flag.
+;; Define it before enabling emojify to support older package definitions.
+(defvar-local emojify-mode--set-explicitly nil)
 
 (use-package emojify
   :hook (after-init . global-emojify-mode))
