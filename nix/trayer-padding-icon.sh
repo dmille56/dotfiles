@@ -1,5 +1,5 @@
 #!/bin/sh
-# Detects the width of running trayer-srg window (xprop name 'panel')
+# Detects the width of the Stalonetray window
 # and creates an XPM icon of that width, 1px height, and transparent.
 # Outputs an <icon>-tag for use in xmobar to display the generated
 # XPM icon. 
@@ -18,8 +18,8 @@ cat << EOF > "$2"
 /* XPM *
 static char * trayer_pad_xpm[] = {
 /* This XPM icon is used for padding in xmobar to */
-/* leave room for trayer-srg. It is dynamically   */
-/* updated by by trayer-pad-icon.sh which is run  */
+/* leave room for Stalonetray. It is dynamically   */
+/* updated by trayer-padding-icon.sh which is run */
 /* by xmobar.                                     */
 /* Created: ${timestamp} */
 /* <w/cols>  <h/rows>  <colors>  <chars per pixel> */
@@ -32,16 +32,17 @@ static char * trayer_pad_xpm[] = {
 EOF
 }
 
-# Width of the trayer window
-width=$(xprop -name panel | grep 'program specified minimum size' | cut -d ' ' -f 5)
+# Width of the Stalonetray window. Use a one-pixel spacer until the tray appears.
+width=$(xwininfo -name stalonetray 2>/dev/null | awk '/Width:/ { print $2; exit }')
+width=${width:-1}
 
 # Icon file name
-iconfile="/tmp/trayer-padding-${width}px.xpm"
+iconfile="/tmp/stalonetray-padding-${width}px.xpm"
 
 # If the desired icon does not exist create it
-if [ ! -f $iconfile ]
+if [ ! -f "$iconfile" ]
 then
-    create_xpm_icon $width $iconfile
+    create_xpm_icon "$width" "$iconfile"
 fi
 
 # Output the icon tag for xmobar

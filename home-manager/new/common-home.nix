@@ -101,6 +101,7 @@ with constants;
   # :NOTE: packages config
   # :NOTE: Lists automatically merge, so this all gets added to home.nix's packages
   resumeQna.enable = true;
+  jobApply.enable = true;
 
   home.packages = with pkgs; [
     picom-pijulius
@@ -296,7 +297,6 @@ with constants;
     cheese
     pavucontrol
     pasystray
-    trayer
     playerctl
 
     # rofi
@@ -324,6 +324,8 @@ with constants;
     feh
     xmobar
     polybar
+    stalonetray
+    xorg.xwininfo
 
     lite-xl
     gnome-system-monitor
@@ -1109,6 +1111,13 @@ with constants;
       websearch = true;
       codesearch = true;
     };
+    mcp.vessel = {
+      type = "remote";
+      url = "http://127.0.0.1:3100/mcp";
+      enabled = true;
+      oauth = false;
+      headers.Authorization = "Bearer {env:VESSEL_MCP_TOKEN}";
+    };
   };
 
   programs.bluePrinceParlorSolverSkill = {
@@ -1352,6 +1361,7 @@ with constants;
     VISUAL = lib.mkDefault "neovide";
     NIXPKGS_ALLOW_UNFREE = lib.mkDefault "1";
     MY_MACHINE_ID = lib.mkDefault "none";
+    MY_CONFIG_BAR = lib.mkDefault "polybar";
   };
 
 }

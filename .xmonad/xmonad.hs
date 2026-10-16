@@ -162,7 +162,7 @@ myStartupHook myConfigMachine myConfigBar = do
     Laptop -> "picom --config ~/.config/picom/picom.conf --backend xrender"
   spawnOnce "xfsettingsd"
   case myConfigBar of
-    XMobar -> spawnOnce "trayer --edge bottom --align right --widthtype request --expand true --SetDockType true --SetPartialStrut true --transparent true --alpha 0 --tint 0x282A36 --expand true --heighttype pixel --height 24"
+    XMobar -> spawnOnce "stalonetray --geometry 1x1-0-0 --grow-gravity SE --icon-gravity SE --icon-size 16 --slot-size 24 --sticky --window-type dock --window-layer top --window-strut none --transparent --tint-color '#282A36'"
     Polybar -> spawnOnce "polybar main"
   spawn "xrdb ~/.Xresources"
   spawnOnce "systemctl --user start greenclip.service"
@@ -178,7 +178,7 @@ main = do
   -- emacsDaemon <- spawnPipe "emacs --daemon" -- maybe re-enable this at some point... :TODO: figure out why svg-tag-mode causes issues when started as a daemon
   hasNixGL <- isJust <$> findExecutable "nixGL"
   myConfigMachine <- getConfigMachine
-  let myConfigBar = Polybar -- :NOTE: allows us to switch between different bar setups
+  myConfigBar <- getConfigBar
   xmproc <- case myConfigBar of
     XMobar -> Just <$> spawnPipe "xmobar"
     _ -> pure Nothing
@@ -303,6 +303,13 @@ getConfigMachine = do
       -- config = mbString >>= readMaybe
       config = mbString >>= readConfigMachineFromStr
   return $ fromMaybe Desktop config
+
+getConfigBar :: IO MyConfigBar
+getConfigBar = do
+  mbString <- lookupEnv "MY_CONFIG_BAR"
+  pure $ case fmap (map toLower) mbString of
+    Just "xmobar" -> XMobar
+    _ -> Polybar
 
 data MyConfigBar = XMobar | Polybar
   deriving (Show, Read, Eq, Enum, Bounded)

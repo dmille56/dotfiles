@@ -77,6 +77,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    job-apply-skill = {
+      url = "github:dmille56/job-apply-skill";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     blue-prince-parlor-solver = {
       url = "github:dmille56/blueprince-parlor-solver";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -232,6 +237,7 @@
               sops-nix.homeManagerModules.sops
               nix-openclaw.homeManagerModules.openclaw
               inputs.resume-qna.homeManagerModules.resume-qna
+              inputs.job-apply-skill.homeManagerModules.job-apply
               blue-prince-parlor-solver.homeManagerModules.default
             ];
 
