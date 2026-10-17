@@ -363,6 +363,7 @@ with constants;
     # darktable
     scrcpy
     android-tools
+    (callPackage ../../nix/scrcpy-mcp.nix {})
     redshift
     xmodmap
 
