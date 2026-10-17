@@ -213,6 +213,7 @@ with constants;
     claude-code
     opencode
     codex
+    bubblewrap
     llm-agents.droid
     # gemini-cli is marked for removal in nixpkgs.
     # codex-acp
