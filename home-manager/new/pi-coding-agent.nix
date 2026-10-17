@@ -158,6 +158,11 @@ with constants;
       ask_user = "allow";
       ask_user_question = "allow";
       todo = "allow";
+      # mcp__playwright__browser_navigate = "allow";
+      mcp__playwright__browser_snapshot = "allow";
+      mcp__playwright__browser_find = "allow";
+      mcp__playwright__browser_wait_for = "allow";
+      mcp__playwright__browser_take_screenshot = "allow";
     };
     bash = {
       "*/bin/plannotator-agent --tuicr-review*" = "allow";
@@ -200,10 +205,15 @@ with constants;
       "plannotator-last" = "allow";
       "plannotator-review" = "allow";
       "tuicr-review" = "allow";
+      "resume-qna" = "allow";
+      "job-apply" = "allow";
     };
     special = {
       external_directory = "ask";
       "external_directory:${constants.my-home-dir}/.agents/skills/*" = "allow";
+      "external_directory:${constants.my-home-dir}/Downloads/SDR/current-resume/*" = "allow";
+      "external_directory:${constants.my-home-dir}/.config/job-apply/*" = "allow";
+      "external_directory:${constants.my-home-dir}/.local/state/job-apply/*" = "allow";
     };
   };
 

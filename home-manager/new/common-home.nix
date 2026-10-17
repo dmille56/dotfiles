@@ -36,6 +36,7 @@
     name = "chromium-playwright";
     text = ''
       exec ${pkgs.chromium}/bin/chromium \
+        --class=Chromium-Playwright \
         --remote-debugging-port=9222 \
         --user-data-dir="${config.home.homeDirectory}/.local/share/chromium-playwright" \
         "$@"
@@ -338,7 +339,7 @@ with constants;
     xmobar
     polybar
     stalonetray
-    xorg.xwininfo
+    xwininfo
 
     lite-xl
     gnome-system-monitor
@@ -1145,7 +1146,7 @@ with constants;
   home.file.".pi/agent/mcp.json".text = builtins.toJSON {
     mcpServers.playwright = {
       command = "${pkgs.playwright-mcp}/bin/playwright-mcp";
-      args = [ ];
+      args = [ "--cdp-endpoint" "http://127.0.0.1:9222" ];
       description = "Browser automation with Playwright";
     };
   };
