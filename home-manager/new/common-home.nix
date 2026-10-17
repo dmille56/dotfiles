@@ -32,6 +32,15 @@
       exec ${pkgs.gitu}/bin/gitu "$@"
     '';
   };
+  chromiumPlaywright = pkgs.writeShellApplication {
+    name = "chromium-playwright";
+    text = ''
+      exec ${pkgs.chromium}/bin/chromium \
+        --remote-debugging-port=9222 \
+        --user-data-dir="${config.home.homeDirectory}/.local/share/chromium-playwright" \
+        "$@"
+    '';
+  };
   kokoroModels = import ../../nix/kokoro-tts.nix { pkgs = kokoroOnnxPkgs; exposeModels = true; };
   pkgsWithRangerHighlightFix = pkgs.extend (final: prev: {
     # highlight's shellscript patch is already applied upstream in current nixpkgs.
@@ -104,6 +113,7 @@ with constants;
   jobApply.enable = true;
 
   home.packages = with pkgs; [
+    chromiumPlaywright
     picom-pijulius
     #terminal
     nano
@@ -212,6 +222,7 @@ with constants;
     # :NOTE: AI controllable browsers... experimenting with these currently
     llm-agents.terminal-browser
     llm-agents.vessel-browser
+    playwright-mcp
 
     llm-agents.rtk
     llm-agents.tuicr
@@ -1111,12 +1122,27 @@ with constants;
       websearch = true;
       codesearch = true;
     };
-    mcp.vessel = {
-      type = "remote";
-      url = "http://127.0.0.1:3100/mcp";
-      enabled = true;
-      oauth = false;
-      headers.Authorization = "Bearer {env:VESSEL_MCP_TOKEN}";
+    mcp.servers = {
+      vessel = {
+        type = "remote";
+        url = "http://127.0.0.1:3100/mcp";
+        enabled = true;
+        oauth = false;
+        headers.Authorization = "Bearer {env:VESSEL_MCP_TOKEN}";
+      };
+      playwright = {
+        type = "local";
+        command = [ "${pkgs.playwright-mcp}/bin/playwright-mcp" ];
+        args = [ "--cdp-endpoint" "http://127.0.0.1:9222" ];
+      };
+    };
+  };
+
+  home.file.".pi/agent/mcp.json".text = builtins.toJSON {
+    mcpServers.playwright = {
+      command = "${pkgs.playwright-mcp}/bin/playwright-mcp";
+      args = [ ];
+      description = "Browser automation with Playwright";
     };
   };
 
