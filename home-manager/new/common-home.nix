@@ -126,6 +126,7 @@ with constants;
     curl
     git
     git-credential-oauth
+    gogcli
     gcc # provides cc for treesit grammar compilation
     ((emacsPackagesFor emacs-gtk).emacsWithPackages (epkgs: [
       epkgs.vterm
