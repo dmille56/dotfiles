@@ -360,6 +360,7 @@ with constants;
     blueman
     # darktable
     scrcpy
+    android-tools
     redshift
     xmodmap
 
