@@ -1144,18 +1144,29 @@ with constants;
           "--output-max-size" "157286400"
         ];
       };
+      android = {
+        type = "local";
+        command = [ "${pkgs.callPackage ../../nix/scrcpy-mcp.nix {}}/bin/scrcpy-mcp" ];
+        enabled = true;
+      };
     };
   };
 
   home.file.".pi/agent/mcp.json".text = builtins.toJSON {
-    mcpServers.playwright = {
-      command = "${pkgs.playwright-mcp}/bin/playwright-mcp";
-      args = [
-        "--cdp-endpoint" "http://127.0.0.1:9222"
-        "--output-dir" "/tmp/playwright-mcp"
-        "--output-max-size" "157286400"
-      ];
-      description = "Browser automation with Playwright";
+    mcpServers = {
+      playwright = {
+        command = "${pkgs.playwright-mcp}/bin/playwright-mcp";
+        args = [
+          "--cdp-endpoint" "http://127.0.0.1:9222"
+          "--output-dir" "/tmp/playwright-mcp"
+          "--output-max-size" "157286400"
+        ];
+        description = "Browser automation with Playwright";
+      };
+      android = {
+        command = "${pkgs.callPackage ../../nix/scrcpy-mcp.nix {}}/bin/scrcpy-mcp";
+        description = "Android device control via ADB and scrcpy";
+      };
     };
   };
 
