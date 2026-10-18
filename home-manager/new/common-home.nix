@@ -1138,7 +1138,11 @@ with constants;
       playwright = {
         type = "local";
         command = [ "${pkgs.playwright-mcp}/bin/playwright-mcp" ];
-        args = [ "--cdp-endpoint" "http://127.0.0.1:9222" ];
+        args = [
+          "--cdp-endpoint" "http://127.0.0.1:9222"
+          "--output-dir" "/tmp/playwright-mcp"
+          "--output-max-size" "52428800"
+        ];
       };
     };
   };
@@ -1146,7 +1150,11 @@ with constants;
   home.file.".pi/agent/mcp.json".text = builtins.toJSON {
     mcpServers.playwright = {
       command = "${pkgs.playwright-mcp}/bin/playwright-mcp";
-      args = [ "--cdp-endpoint" "http://127.0.0.1:9222" ];
+      args = [
+        "--cdp-endpoint" "http://127.0.0.1:9222"
+        "--output-dir" "/tmp/playwright-mcp"
+        "--output-max-size" "52428800"
+      ];
       description = "Browser automation with Playwright";
     };
   };

@@ -2,3 +2,4 @@
 .google_gemini_key
 .aider*
 /.agent-shell/
+/.playwright-mcp/
