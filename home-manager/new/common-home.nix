@@ -1141,7 +1141,7 @@ with constants;
         args = [
           "--cdp-endpoint" "http://127.0.0.1:9222"
           "--output-dir" "/tmp/playwright-mcp"
-          "--output-max-size" "52428800"
+          "--output-max-size" "157286400"
         ];
       };
     };
@@ -1153,7 +1153,7 @@ with constants;
       args = [
         "--cdp-endpoint" "http://127.0.0.1:9222"
         "--output-dir" "/tmp/playwright-mcp"
-        "--output-max-size" "52428800"
+        "--output-max-size" "157286400"
       ];
       description = "Browser automation with Playwright";
     };
