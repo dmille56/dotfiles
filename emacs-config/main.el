@@ -1813,7 +1813,7 @@ Make sure to run \='ollama serve\=' and have zephyr model."
          ("C-~" . popterm-toggle-cd)
          ("C-c t f" . popterm-find))
   :config
-  (setq popterm-backend (if (eq system-type 'windows-nt) 'eshell 'vterm)
+  (setq popterm-backend (if (eq system-type 'windows-nt) 'eshell 'vterm) ;; maybe switch to using ghostel for windows in the future
         popterm-display-method 'posframe
         popterm-posframe-width-ratio 0.95
         popterm-posframe-height-ratio 0.95
