@@ -1608,10 +1608,44 @@ Make sure to run \='ollama serve\=' and have zephyr model."
   (defvar transient-map)
   (define-key transient-map (kbd "<f8>") 'transient-quit-all)
   (define-key transient-map (kbd "<escape>") 'transient-quit-all))
- 
-;; enable tab-bar-mode
-(tab-bar-mode)
-(setq tab-bar-tab-hints t)
+
+;; :NOTE: tab-bar styling to follow 
+;; Match the Dracula workspace labels in home-manager/new/common-home.nix.
+(setq tab-bar-new-button-show nil
+      tab-bar-close-button-show nil
+      tab-bar-tab-hints t
+      tab-bar-show 1
+      tab-bar-separator " "
+      tab-bar-tab-name-format-function #'my/tab-bar-name-format
+      tab-bar-format '(tab-bar-format-tabs))
+
+(defun my/tab-bar-name-format (tab index)
+  "Format TAB with its INDEX and Polybar-style horizontal padding."
+  (propertize
+   (concat " "
+           (when tab-bar-tab-hints (format "%d:" index))
+           (alist-get 'name tab)
+           " ")
+   'face (if (eq (car tab) 'current-tab)
+             'tab-bar-tab
+           'tab-bar-tab-inactive)))
+
+(defun my/style-tab-bar (&rest _)
+  "Use the same Dracula colors as Polybar's workspace module."
+  (custom-set-faces
+   '(tab-bar ((t (:inherit default :background "#282A36"
+                  :foreground "#F8F8F2" :box nil :underline nil))))
+   '(tab-bar-tab ((t (:inherit default :background "#BD93F9"
+                      :foreground "#282A36" :weight normal :box nil
+                      :underline nil))))
+   '(tab-bar-tab-inactive
+     ((t (:inherit default :background "#282A36"
+           :foreground "#8BE9FD" :weight normal :box nil :underline nil))))))
+
+(advice-add 'load-theme :after #'my/style-tab-bar)
+(my/style-tab-bar)
+
+(tab-bar-mode 1)
 
 ;; To repress eshell functions/varabiles not being found errors
 (declare-function eshell/cd "esh-cmd")
