@@ -1134,13 +1134,6 @@ with constants;
         enabled = true;
         oauth = false;
       };
-      vessel = {
-        type = "remote";
-        url = "http://127.0.0.1:3100/mcp";
-        enabled = true;
-        oauth = false;
-        headers.Authorization = "Bearer {env:VESSEL_MCP_TOKEN}";
-      };
       playwright = {
         type = "local";
         command = [ "${pkgs.playwright-mcp}/bin/playwright-mcp" ];
@@ -1178,11 +1171,6 @@ with constants;
       };
     };
   };
-
-  home.file.".codex/config.toml".text = ''
-    [mcp_servers.self-driving-resume]
-    url = "http://localhost:8000/mcp"
-  '';
 
   programs.bluePrinceParlorSolverSkill = {
     enable = true;
