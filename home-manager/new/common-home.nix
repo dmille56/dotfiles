@@ -1128,6 +1128,12 @@ with constants;
       codesearch = true;
     };
     mcp.servers = {
+      self-driving-resume = {
+        type = "remote";
+        url = "http://localhost:8000/mcp";
+        enabled = true;
+        oauth = false;
+      };
       vessel = {
         type = "remote";
         url = "http://127.0.0.1:3100/mcp";
@@ -1154,6 +1160,9 @@ with constants;
 
   home.file.".pi/agent/mcp.json".text = builtins.toJSON {
     mcpServers = {
+      self-driving-resume = {
+        url = "http://localhost:8000/mcp";
+      };
       playwright = {
         command = "${pkgs.playwright-mcp}/bin/playwright-mcp";
         args = [
@@ -1169,6 +1178,11 @@ with constants;
       };
     };
   };
+
+  home.file.".codex/config.toml".text = ''
+    [mcp_servers.self-driving-resume]
+    url = "http://localhost:8000/mcp"
+  '';
 
   programs.bluePrinceParlorSolverSkill = {
     enable = true;
