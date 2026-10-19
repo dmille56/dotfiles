@@ -125,6 +125,26 @@ tnoremap <Esc> <C-\><C-n>
 let g:airline_powerline_fonts = 1
 let g:airline_theme= 'dracula'
 
+" :NOTE: add styling for the tab bars
+" Keep airline on the statusline and use native tab pages in the tabline.
+let g:airline#extensions#tabline#enabled = 0
+set showtabline=2
+set guioptions-=e
+
+function! MyDraculaTabColors() abort
+  highlight TabLineFill guifg=#F8F8F2 guibg=#282A36 gui=NONE ctermfg=15 ctermbg=235 cterm=NONE
+  highlight TabLineSel guifg=#282A36 guibg=#BD93F9 gui=NONE ctermfg=235 ctermbg=141 cterm=NONE
+  highlight TabLine guifg=#8BE9FD guibg=#282A36 gui=NONE ctermfg=117 ctermbg=235 cterm=NONE
+endfunction
+
+augroup MyDraculaTabs
+  autocmd!
+  autocmd ColorScheme * call MyDraculaTabColors()
+augroup END
+call MyDraculaTabColors()
+" Use Neovim's native labels, including directory context and modified markers.
+set tabline=
+
 set completeopt=menu,menuone,noselect
 
 " Use filetype-specific indent rules, then pin JS/TS to 2 spaces.
