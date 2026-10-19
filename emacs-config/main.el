@@ -518,9 +518,12 @@ _p_rev       _U_pper              _=_: upper/lower       _r_esolve
    "h" 'harpoon-toggle-quick-menu
    "H a" 'harpoon-quick-menu-hydra
    "H <return>" 'harpoon-add-file
-   
+ 
    ;; aider
    "s" 'aider-transient-menu
+
+   ;; terminal
+   "\\" 'popterm-toggle
 
    ;; u submenu
    "u" 'my/transient-leader-misc
@@ -1803,6 +1806,18 @@ Make sure to run \='ollama serve\=' and have zephyr model."
                            (:exclude ".dir-locals.el" "*-tests.el"))))
 
 (evil-set-initial-state 'eat-mode 'emacs)
+
+(use-package popterm
+  :straight (:type git :host github :repo "ChetanKoneru/popterm.el")
+  :bind (("C-`" . popterm-toggle)
+         ("C-~" . popterm-toggle-cd)
+         ("C-c t f" . popterm-find))
+  :config
+  (setq popterm-backend 'vterm
+        popterm-display-method 'posframe
+        popterm-scope 'project
+        popterm-auto-cd t)
+  (popterm-global-mode 1))
 
 (use-package perspective
   :functions persp-mode
