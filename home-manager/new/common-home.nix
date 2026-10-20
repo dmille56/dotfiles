@@ -126,6 +126,7 @@ with constants;
     # pacvim
     curl
     git
+    sshfs
     git-credential-oauth
     gogcli
     gcc # provides cc for treesit grammar compilation
