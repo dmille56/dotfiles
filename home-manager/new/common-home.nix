@@ -1197,6 +1197,11 @@ with constants;
       playwright = {
         type = "local";
         command = [ "${pkgs.playwright-mcp}/bin/playwright-mcp" ];
+        # Prevent the Nix wrapper from forcing a temporary context over CDP.
+        environment = {
+          PLAYWRIGHT_MCP_USER_DATA_DIR = "${config.home.homeDirectory}/.local/share/chromium-playwright";
+          PLAYWRIGHT_MCP_ISOLATED = "false";
+        };
         args = [
           "--cdp-endpoint" "http://127.0.0.1:9222"
           "--output-dir" "/tmp/playwright-mcp"
@@ -1218,6 +1223,11 @@ with constants;
       };
       playwright = {
         command = "${pkgs.playwright-mcp}/bin/playwright-mcp";
+        # Prevent the Nix wrapper from forcing a temporary context over CDP.
+        env = {
+          PLAYWRIGHT_MCP_USER_DATA_DIR = "${config.home.homeDirectory}/.local/share/chromium-playwright";
+          PLAYWRIGHT_MCP_ISOLATED = "false";
+        };
         args = [
           "--cdp-endpoint" "http://127.0.0.1:9222"
           "--output-dir" "/tmp/playwright-mcp"
