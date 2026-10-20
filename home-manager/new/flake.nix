@@ -47,6 +47,11 @@
       flake = false;
     };
 
+    tmux-fzf-links = {
+      url = "github:alberti42/tmux-fzf-links";
+      flake = false;
+    };
+
     sops-nix = {
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -227,8 +232,10 @@
           {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
+            home-manager.backupFileExtension = "backup";
             home-manager.extraSpecialArgs = {
               yaziFlavors = inputs.yazi-flavors;
+              tmuxFzfLinks = inputs.tmux-fzf-links;
             };
 
             home-manager.users.dono = import (builtins.toPath "${const.my-dotfile-nix-dir}/${my-machine-id}-home.nix");

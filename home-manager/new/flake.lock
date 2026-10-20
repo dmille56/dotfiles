@@ -282,6 +282,26 @@
         "type": "github"
       }
     },
+    "job-apply-skill": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1792405962,
+        "narHash": "sha256-6EnIMgjT6TWjy3RM/+lsWhCo8XE7QkkJGGGGbPMxI0I=",
+        "owner": "dmille56",
+        "repo": "job-apply-skill",
+        "rev": "fa5f89930e38c0d38b34f9776ba393651feab9f5",
+        "type": "github"
+      },
+      "original": {
+        "owner": "dmille56",
+        "repo": "job-apply-skill",
+        "type": "github"
+      }
+    },
     "jobspy-plugin": {
       "inputs": {
         "flake-utils": "flake-utils",
@@ -573,6 +593,7 @@
         "dracula-plymouth": "dracula-plymouth",
         "drawiterm": "drawiterm",
         "home-manager": "home-manager",
+        "job-apply-skill": "job-apply-skill",
         "jobspy-plugin": "jobspy-plugin",
         "kokoro-onnx-revision": "kokoro-onnx-revision",
         "llm-agents": "llm-agents",
@@ -584,6 +605,7 @@
         "resume-qna": "resume-qna",
         "sops-nix": "sops-nix",
         "tmux-animated": "tmux-animated",
+        "tmux-fzf-links": "tmux-fzf-links",
         "yazi-flavors": "yazi-flavors"
       }
     },
@@ -681,6 +703,22 @@
         "owner": "jonaburg",
         "ref": "animations",
         "repo": "tmux-animated",
+        "type": "github"
+      }
+    },
+    "tmux-fzf-links": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1789741919,
+        "narHash": "sha256-h4dVtdcy88RqvoO0D6u9OicOJdF5aYrVinQoylRPt5U=",
+        "owner": "alberti42",
+        "repo": "tmux-fzf-links",
+        "rev": "2073c217b2144557d47ba5f30630fb3d8f92a748",
+        "type": "github"
+      },
+      "original": {
+        "owner": "alberti42",
+        "repo": "tmux-fzf-links",
         "type": "github"
       }
     },

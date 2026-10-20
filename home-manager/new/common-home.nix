@@ -3,6 +3,7 @@
   config,
   lib,
   yaziFlavors ? null,
+  tmuxFzfLinks ? null,
   kokoroOnnxPkgs ? pkgs,
   ...
 }:
@@ -180,6 +181,7 @@ with constants;
     tmux
     pkgsWithRangerHighlightFix.ranger
     fzf
+    python3
     ripgrep
 
     # haskell
@@ -405,6 +407,49 @@ with constants;
     theme.flavor.dark = "dracula";
   };
 
+  xdg.desktopEntries.yazi = {
+    name = "Yazi";
+    exec = "${pkgs.alacritty}/bin/alacritty -e ${pkgs.yazi}/bin/yazi %f";
+    terminal = false;
+    type = "Application";
+    mimeType = [ "inode/directory" ];
+  };
+
+  xdg.mimeApps = {
+    enable = true;
+    defaultApplications = {
+      "inode/directory" = [ "yazi.desktop" ];
+      "x-scheme-handler/http" = [ "firefox.desktop" ];
+      "x-scheme-handler/https" = [ "firefox.desktop" ];
+      "x-scheme-handler/chrome" = [ "firefox.desktop" ];
+      "text/html" = [ "firefox.desktop" ];
+      "application/x-extension-htm" = [ "firefox.desktop" ];
+      "application/x-extension-html" = [ "firefox.desktop" ];
+      "application/x-extension-shtml" = [ "firefox.desktop" ];
+      "application/xhtml+xml" = [ "firefox.desktop" ];
+      "application/x-extension-xhtml" = [ "firefox.desktop" ];
+      "application/x-extension-xht" = [ "firefox.desktop" ];
+      "x-scheme-handler/postman" = [ "Postman.desktop" ];
+      "x-scheme-handler/claude-cli" = [ "claude-code-url-handler.desktop" ];
+      "x-scheme-handler/freetube" = [ "freetube.desktop" ];
+    };
+    associations.added = {
+      "x-scheme-handler/http" = [ "firefox.desktop" ];
+      "x-scheme-handler/https" = [ "firefox.desktop" ];
+      "x-scheme-handler/chrome" = [ "firefox.desktop" ];
+      "text/html" = [ "firefox.desktop" ];
+      "application/x-extension-htm" = [ "firefox.desktop" ];
+      "application/x-extension-html" = [ "firefox.desktop" ];
+      "application/x-extension-shtml" = [ "firefox.desktop" ];
+      "application/xhtml+xml" = [ "firefox.desktop" ];
+      "application/x-extension-xhtml" = [ "firefox.desktop" ];
+      "application/x-extension-xht" = [ "firefox.desktop" ];
+      "video/x-matroska" = [ "mpv.desktop" ];
+      "text/plain" = [ "neovide.desktop" ];
+      "application/pdf" = [ "firefox.desktop" ];
+    };
+  };
+
   programs.fzf = {
     enable = lib.mkDefault true;
     enableZshIntegration = lib.mkDefault true;
@@ -510,7 +555,6 @@ with constants;
         yank
         tmux-fzf
         jump
-        urlview
         sidebar
         fuzzback
         tmux-toggle-popup
@@ -526,11 +570,25 @@ with constants;
     );
 
     extraConfig = lib.mkDefault ''
+      # Plugin options must be set before their scripts are sourced: both
+      # tmux-urlview and tmux-fzf-links read these values while installing
+      # their key bindings.
+      set -g @urlview-key 'U'
+      set-option -g @fzf-links-key a
+      set-option -g @fzf-links-editor-open-cmd "tmux new-window -n 'nvim' ${pkgs.neovim}/bin/nvim +%line '%file'"
+      set-option -g @fzf-links-python "${pkgs.python3}/bin/python3"
+
+      # Home Manager loads plugins before extraConfig. Source urlview here,
+      # after @urlview-key is set, because the plugin reads that option only
+      # once when it installs its binding.
+      run-shell '${pkgs.tmuxPlugins.urlview}/share/tmux-plugins/urlview/urlview.tmux'
+
+      ${lib.optionalString (tmuxFzfLinks != null) "run-shell '${tmuxFzfLinks}/fzf-links.tmux'"}
+
       # Check the running server's options; both executables report "tmux".
       if-shell 'tmux -S "#{socket_path}" show-options -g animation-enable >/dev/null 2>&1' \
         'set -g animation-duration 150; set -g animation-pane-duration 150; set -g animation-easing smoothdamp'
 
-      set -g @urlviewkey 'A'
       set -g @fuzzback-bind S
 
       set -g extended-keys on
@@ -539,6 +597,7 @@ with constants;
       unbind C-b
       set-option -g prefix C-a
       bind-key C-a send-prefix
+      bind-key -T prefix A send-prefix
 
       #map F5 to cycle to next window
       bind -n F5 next-window
