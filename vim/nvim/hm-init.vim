@@ -250,6 +250,7 @@ lua <<EOF
   vim.lsp.enable('pylsp')
   vim.lsp.enable('ruff')
   vim.lsp.enable('ts_ls')
+  vim.lsp.enable('lua_ls')
   vim.lsp.enable('hls')
   vim.lsp.enable('org')
   vim.lsp.enable('csharp_ls')

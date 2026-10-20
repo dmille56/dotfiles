@@ -144,6 +144,7 @@ with constants;
     # python313Packages.ruff
     yaml-language-server
     typescript-language-server
+    lua-language-server
 
     # fonts
     emacs-all-the-icons-fonts
@@ -730,6 +731,8 @@ with constants;
         p.javascript
         p.typescript
         p.tsx
+        p.lua
+        p.luadoc
       ]))
       (pkgs.runCommand "tree-sitter-org-plugin"
         {
