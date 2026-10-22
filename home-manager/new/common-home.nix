@@ -625,10 +625,10 @@ with constants;
       bind-key -T prefix t display-popup -E -T "Clock" -w 80% -h 60% -d "#{pane_current_path}" -- 'clock-rs'
 
       unbind-key -T prefix g
-      bind-key -T prefix g display-popup -E -T "Gitu" -w 90% -h 90% -d "#{pane_current_path}" -- 'gitu'
+      bind-key -T prefix g display-popup -E -T "Gitu" -w 90% -h 90% -d "#{pane_current_path}" -- 'direnv exec . gitu || gitu'
 
       unbind-key -T prefix G
-      bind-key -T prefix G display-popup -E -T "Lazygit" -w 90% -h 90% -d "#{pane_current_path}" -- 'lazygit'
+      bind-key -T prefix G display-popup -E -T "Lazygit" -w 90% -h 90% -d "#{pane_current_path}" -- 'direnv exec . lazygit || lazygit'
 
       unbind-key -T prefix \\
       bind-key -T prefix \\ run "#{@popup-toggle} -Ed'##{pane_current_path}' -w85% -h85%"
