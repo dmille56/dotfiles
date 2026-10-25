@@ -287,7 +287,7 @@ with constants;
     libvterm
     libtool
 
-    awscli
+    awscli2
 
     (haskellPackages.greenclip)
     bluez
