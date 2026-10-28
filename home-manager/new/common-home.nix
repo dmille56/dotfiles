@@ -14,6 +14,13 @@
     name = "polybar-battery";
     text = builtins.readFile ../../nix/polybar-battery.sh;
   };
+  tmuxDisplayEnv = pkgs.writeShellApplication {
+    name = "tmux-display-env";
+    runtimeInputs = [ pkgs.python3 pkgs.tmux ];
+    text = ''
+      exec python3 ${../../nix/tmux-display-env.py} "$@"
+    '';
+  };
   xmonadHomeDir = "${config.home.homeDirectory}/.xmonad";
   xmonadCompiledBin = "${xmonadHomeDir}/xmonad-x86_64-linux";
   xmonadBuiltFromMarker = "${xmonadHomeDir}/.xmonad-built-from";
@@ -68,6 +75,9 @@ with constants;
 
   # :NOTE: lib.mkDefault makes it so the setting can be overrun in home.nix
   xsession.enable = lib.mkDefault true;
+  xsession.initExtra = ''
+    ${tmuxDisplayEnv}/bin/tmux-display-env save-local
+  '';
   fonts.fontconfig.enable = lib.mkDefault true;
 
   services.xscreensaver.enable = true;
@@ -115,6 +125,7 @@ with constants;
   jobApply.enable = true;
 
   home.packages = with pkgs; [
+    tmuxDisplayEnv
     chromiumPlaywright
     picom-pijulius
     #terminal
@@ -571,6 +582,18 @@ with constants;
     );
 
     extraConfig = lib.mkDefault ''
+      # Each session follows its newest client; after the last client leaves,
+      # restore the local graphical login's display. Run asynchronously so the
+      # helper can query this server, including when a client changes sessions.
+      set-hook -g client-attached[90] 'run-shell -b "${tmuxDisplayEnv}/bin/tmux-display-env --socket #{q:socket_path} sync"'
+      set-hook -g client-detached[90] 'run-shell -b "${tmuxDisplayEnv}/bin/tmux-display-env --socket #{q:socket_path} sync"'
+      set-hook -g client-session-changed[90] 'run-shell -b "${tmuxDisplayEnv}/bin/tmux-display-env --socket #{q:socket_path} sync"'
+      run-shell -b '${tmuxDisplayEnv}/bin/tmux-display-env --socket #{q:socket_path} sync'
+
+      # A binding identifies the actual client even with multiple viewers;
+      # a command typed into a shared pane cannot identify its input source.
+      bind-key X run-shell '${tmuxDisplayEnv}/bin/tmux-display-env --socket #{q:socket_path} here #{q:session_id} --client-pid #{client_pid}'
+
       # Plugin options must be set before their scripts are sourced: both
       # tmux-urlview and tmux-fzf-links read these values while installing
       # their key bindings.
@@ -653,6 +676,24 @@ with constants;
 
     initContent = ''
       if [ -e ~/.nix-profile/etc/profile.d/nix.sh ]; then . ~/.nix-profile/etc/profile.d/nix.sh; fi
+
+      # Record the local desktop when opening a terminal, including before the
+      # first graphical login after installing this configuration.
+      if [[ -z "$TMUX" && -z "$SSH_CONNECTION" && "$DISPLAY" == :* ]]; then
+        ${tmuxDisplayEnv}/bin/tmux-display-env save-local
+      fi
+
+      # A child process cannot change its parent shell's environment. Refresh
+      # only display variables before commands in existing panes, leaving TERM
+      # and unrelated shell exports alone.
+      tmux-refresh-env() {
+        [[ -n "$TMUX" ]] || return 0
+        local display_env
+        display_env="$(${tmuxDisplayEnv}/bin/tmux-display-env shell)" || return
+        eval "$display_env"
+      }
+      autoload -Uz add-zsh-hook
+      add-zsh-hook preexec tmux-refresh-env
 
       # pi-emote (tmux passthrough) uses `tmux show-environment TERM_PROGRAM` to detect
       # the *outer* terminal. Many terminal emulators leave TERM_PROGRAM unset.
