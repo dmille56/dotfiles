@@ -1240,17 +1240,17 @@ with constants;
       };
       playwright = {
         type = "local";
-        command = [ "${pkgs.playwright-mcp}/bin/playwright-mcp" ];
+        command = [
+          "${pkgs.playwright-mcp}/bin/playwright-mcp"
+          "--cdp-endpoint" "http://127.0.0.1:9222"
+          "--output-dir" "/tmp/playwright-mcp"
+          "--output-max-size" "157286400"
+        ];
         # Prevent the Nix wrapper from forcing a temporary context over CDP.
         environment = {
           PLAYWRIGHT_MCP_USER_DATA_DIR = "${config.home.homeDirectory}/.local/share/chromium-playwright";
           PLAYWRIGHT_MCP_ISOLATED = "false";
         };
-        args = [
-          "--cdp-endpoint" "http://127.0.0.1:9222"
-          "--output-dir" "/tmp/playwright-mcp"
-          "--output-max-size" "157286400"
-        ];
       };
       android = {
         type = "local";
