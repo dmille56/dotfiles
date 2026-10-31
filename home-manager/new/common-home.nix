@@ -65,6 +65,14 @@
         uri = "http://localhost:8000/mcp/";
         timeout = 300;
       };
+      android = {
+        name = "android";
+        display_name = "Android";
+        enabled = true;
+        type = "stdio";
+        cmd = "${pkgs.callPackage ../../nix/scrcpy-mcp.nix {}}/bin/scrcpy-mcp";
+        timeout = 300;
+      };
     };
   });
   # GHC (with xmonad + contrib) used to compile the xmonad config; keeps the
@@ -273,9 +281,10 @@ with constants;
     claude-code
     opencode
     llm-agents.goose-cli
+    llm-agents.cline
+    llm-agents.herdr
     codex
     bubblewrap
-    llm-agents.droid
     # gemini-cli is marked for removal in nixpkgs.
     # codex-acp
     claude-agent-acp
@@ -1303,6 +1312,35 @@ with constants;
         type = "local";
         command = [ "${pkgs.callPackage ../../nix/scrcpy-mcp.nix {}}/bin/scrcpy-mcp" ];
         enabled = true;
+      };
+    };
+  };
+
+  # Cline CLI MCP configuration. Keep these server definitions aligned with
+  # OpenCode and Pi; Cline's VS Code extension can import them through its UI.
+  home.file.".cline/data/settings/cline_mcp_settings.json".text = builtins.toJSON {
+    mcpServers = {
+      self-driving-resume = {
+        url = "http://localhost:8000/mcp";
+        type = "streamableHttp";
+        disabled = false;
+      };
+      playwright = {
+        command = "${pkgs.playwright-mcp}/bin/playwright-mcp";
+        args = [
+          "--cdp-endpoint" "http://127.0.0.1:9222"
+          "--output-dir" "/tmp/playwright-mcp"
+          "--output-max-size" "157286400"
+        ];
+        env = {
+          PLAYWRIGHT_MCP_USER_DATA_DIR = "${config.home.homeDirectory}/.local/share/chromium-playwright";
+          PLAYWRIGHT_MCP_ISOLATED = "false";
+        };
+        disabled = false;
+      };
+      android = {
+        command = "${pkgs.callPackage ../../nix/scrcpy-mcp.nix {}}/bin/scrcpy-mcp";
+        disabled = false;
       };
     };
   };
