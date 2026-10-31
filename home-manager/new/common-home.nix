@@ -619,6 +619,9 @@ with constants;
       set -g extended-keys on
       set -g extended-keys-format csi-u
 
+      # Forward Ctrl-Tab to Neovim for cycling tabs.
+      bind-key -n C-Tab send-keys C-Tab
+
       unbind C-b
       set-option -g prefix C-a
       bind-key C-a send-prefix

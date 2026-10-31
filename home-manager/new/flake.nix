@@ -14,6 +14,13 @@
 {
   description = "NixOS Flake";
 
+  nixConfig = {
+    extra-substituters = [ "https://cache.numtide.com" ];
+    extra-trusted-public-keys = [
+      "niks3.numtide.com-1:DTx8wZduET09hRmMtKdQDxNNthLQETkc/yaX7M4qK0g="
+    ];
+  };
+
   inputs = {
     nixpkgs = {
       url = "github:nixos/nixpkgs/nixpkgs-unstable";
@@ -98,6 +105,10 @@
     let
       const = import (builtins.toPath "/home/dono/dotfiles/home-manager/new/common-constants.nix");
       hostSystem = "x86_64-linux";
+      llm-agents-cache-overlay = final: _prev: {
+        # Use llm-agents.nix's pinned package set so Numtide's cache hashes match.
+        llm-agents = llm-agents.packages.${final.stdenv.hostPlatform.system};
+      };
       ollamaPkgs = import ollama-revision {
         system = hostSystem;
         config.allowUnfree = true;
@@ -212,7 +223,7 @@
               ollama-overlay
               tmux-animated-overlay
               opentmux.overlays.default
-              llm-agents.overlays.shared-nixpkgs
+              llm-agents-cache-overlay
               jobspy-plugin.overlays.default
             ]; 
           }
