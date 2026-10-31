@@ -283,6 +283,7 @@ with constants;
     llm-agents.goose-cli
     llm-agents.cline
     llm-agents.herdr
+    llm-agents.collie
     codex
     bubblewrap
     # gemini-cli is marked for removal in nixpkgs.
