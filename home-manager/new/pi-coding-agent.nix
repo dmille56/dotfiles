@@ -164,6 +164,12 @@ with constants;
       mcp__playwright__browser_wait_for = "allow";
       mcp__playwright__browser_take_screenshot = "allow";
     };
+    mcp = {
+      # Permit tool discovery and calls only for these configured MCP servers.
+      mcp_list = "allow";
+      "playwright:*" = "allow";
+      "self-driving-resume:*" = "allow";
+    };
     bash = {
       "*/bin/plannotator-agent --tuicr-review*" = "allow";
       "*/bin/plannotator-agent annotate *" = "allow";
