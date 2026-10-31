@@ -24,6 +24,49 @@
   xmonadHomeDir = "${config.home.homeDirectory}/.xmonad";
   xmonadCompiledBin = "${xmonadHomeDir}/xmonad-x86_64-linux";
   xmonadBuiltFromMarker = "${xmonadHomeDir}/.xmonad-built-from";
+  gooseConfig = pkgs.writeText "goose-config.yaml" (builtins.toJSON {
+    active_provider = "openrouter";
+    providers.openrouter = {
+      enabled = true;
+      model = "~deepseek/deepseek-flash-latest";
+      configured = true;
+    };
+    GOOSE_MODE = "auto";
+    extensions = {
+      developer = {
+        name = "developer";
+        enabled = true;
+        bundled = true;
+        type = "builtin";
+        timeout = 300;
+      };
+      playwright = {
+        name = "playwright";
+        display_name = "Playwright";
+        enabled = true;
+        type = "stdio";
+        cmd = "${pkgs.playwright-mcp}/bin/playwright-mcp";
+        args = [
+          "--cdp-endpoint" "http://127.0.0.1:9222"
+          "--output-dir" "/tmp/playwright-mcp"
+          "--output-max-size" "157286400"
+        ];
+        envs = {
+          PLAYWRIGHT_MCP_USER_DATA_DIR = "${config.home.homeDirectory}/.local/share/chromium-playwright";
+          PLAYWRIGHT_MCP_ISOLATED = "false";
+        };
+        timeout = 300;
+      };
+      self-driving-resume = {
+        name = "self-driving-resume";
+        display_name = "Self Driving Resume";
+        enabled = true;
+        type = "streamable_http";
+        uri = "http://localhost:8000/mcp/";
+        timeout = 300;
+      };
+    };
+  });
   # GHC (with xmonad + contrib) used to compile the xmonad config; keeps the
   # compiled binary in sync with the HM-managed sources (mtime hints alone are
   # unreliable across symlink swaps, which caused hangs on login).
@@ -1266,49 +1309,19 @@ with constants;
 
   # Goose CLI shares the global Agent Skills directory at ~/.agents/skills.
   # Keep its MCP endpoints aligned with the OpenCode and Pi configurations.
-  home.file.".config/goose/config.yaml".text = builtins.toJSON {
-    active_provider = "openrouter";
-    providers.openrouter = {
-      enabled = true;
-      model = "~deepseek/deepseek-flash-latest";
-      configured = true;
-    };
-    GOOSE_MODE = "auto";
-    extensions = {
-      developer = {
-        name = "developer";
-        enabled = true;
-        bundled = true;
-        type = "builtin";
-        timeout = 300;
-      };
-      playwright = {
-        name = "playwright";
-        display_name = "Playwright";
-        enabled = true;
-        type = "stdio";
-        cmd = "${pkgs.playwright-mcp}/bin/playwright-mcp";
-        args = [
-          "--cdp-endpoint" "http://127.0.0.1:9222"
-          "--output-dir" "/tmp/playwright-mcp"
-          "--output-max-size" "157286400"
-        ];
-        envs = {
-          PLAYWRIGHT_MCP_USER_DATA_DIR = "${config.home.homeDirectory}/.local/share/chromium-playwright";
-          PLAYWRIGHT_MCP_ISOLATED = "false";
-        };
-        timeout = 300;
-      };
-      self-driving-resume = {
-        name = "self-driving-resume";
-        display_name = "Self Driving Resume";
-        enabled = true;
-        type = "streamable_http";
-        uri = "http://localhost:8000/mcp";
-        timeout = 300;
-      };
-    };
-  };
+  # Goose currently errors while reading a Home Manager managed symlink here,
+  # so materialize the generated config as a regular file during activation.
+  home.file.".config/goose/config.yaml".enable = false;
+  home.activation.removeGooseConfigLink = lib.hm.dag.entryBefore [ "checkLinkTargets" ] ''
+    goose_config="${config.home.homeDirectory}/.config/goose/config.yaml"
+    if [ -L "$goose_config" ]; then
+      rm "$goose_config"
+    fi
+  '';
+  home.activation.installGooseConfig = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    goose_config="${config.home.homeDirectory}/.config/goose/config.yaml"
+    install -D -m 0644 "${gooseConfig}" "$goose_config"
+  '';
 
   home.file.".pi/agent/mcp.json".text = builtins.toJSON {
     mcpServers = {
@@ -1561,6 +1574,7 @@ with constants;
     GEMINI_API_KEY = lib.mkDefault "$(cat /run/secrets/GOOGLE_API_KEY)";
     ANTHROPIC_API_KEY = lib.mkDefault "$(cat /run/secrets/ANTHROPIC_API_KEY)";
     OPENROUTER_API_KEY = lib.mkDefault "$(cat /run/secrets/OPENROUTER_API_KEY)";
+    GOOSE_CLI_SHOW_COST = lib.mkDefault "true";
     OPENAI_API_MODEL = lib.mkDefault "gpt-6-luna";
     AIDER_MODEL = lib.mkDefault "gpt-6-luna";
     AIDER_GIT_COMMIT_VERIFY = lib.mkDefault "true";
