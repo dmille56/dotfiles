@@ -229,6 +229,7 @@ with constants;
     aider-chat-full
     claude-code
     opencode
+    llm-agents.goose-cli
     codex
     bubblewrap
     llm-agents.droid
@@ -1256,6 +1257,52 @@ with constants;
         type = "local";
         command = [ "${pkgs.callPackage ../../nix/scrcpy-mcp.nix {}}/bin/scrcpy-mcp" ];
         enabled = true;
+      };
+    };
+  };
+
+  # Goose CLI shares the global Agent Skills directory at ~/.agents/skills.
+  # Keep its MCP endpoints aligned with the OpenCode and Pi configurations.
+  home.file.".config/goose/config.yaml".text = builtins.toJSON {
+    active_provider = "openrouter";
+    providers.openrouter = {
+      enabled = true;
+      model = "~deepseek/deepseek-flash-latest";
+      configured = true;
+    };
+    GOOSE_MODE = "auto";
+    extensions = {
+      developer = {
+        name = "developer";
+        enabled = true;
+        bundled = true;
+        type = "builtin";
+        timeout = 300;
+      };
+      playwright = {
+        name = "playwright";
+        display_name = "Playwright";
+        enabled = true;
+        type = "stdio";
+        cmd = "${pkgs.playwright-mcp}/bin/playwright-mcp";
+        args = [
+          "--cdp-endpoint" "http://127.0.0.1:9222"
+          "--output-dir" "/tmp/playwright-mcp"
+          "--output-max-size" "157286400"
+        ];
+        envs = {
+          PLAYWRIGHT_MCP_USER_DATA_DIR = "${config.home.homeDirectory}/.local/share/chromium-playwright";
+          PLAYWRIGHT_MCP_ISOLATED = "false";
+        };
+        timeout = 300;
+      };
+      self-driving-resume = {
+        name = "self-driving-resume";
+        display_name = "Self Driving Resume";
+        enabled = true;
+        type = "streamable_http";
+        uri = "http://localhost:8000/mcp";
+        timeout = 300;
       };
     };
   };
