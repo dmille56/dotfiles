@@ -227,6 +227,47 @@ with constants;
     debug = true;
     yoloMode = false;
   };
+  home.file.".pi/agent/extensions/pi-yolo-toggle/index.ts".text = ''
+    type PermissionSystemApi = {
+      toggleYoloMode(options?: { persist?: boolean; source?: string }): {
+        yoloMode: boolean;
+        error?: string;
+      };
+    };
+
+    type PermissionSystemGlobal = typeof globalThis & {
+      __piPermissionSystem?: PermissionSystemApi;
+    };
+
+    export default function (pi: any) {
+      pi.registerShortcut("ctrl+alt+y", {
+        description: "Toggle YOLO mode for this session",
+        handler: (ctx: any) => {
+          const api = (globalThis as PermissionSystemGlobal).__piPermissionSystem;
+
+          if (!api) {
+            ctx.ui.notify("pi-permission-system is not available", "error");
+            return;
+          }
+
+          const result = api.toggleYoloMode({
+            persist: false,
+            source: "yolo-toggle-shortcut",
+          });
+
+          if (result.error) {
+            ctx.ui.notify(result.error, "error");
+            return;
+          }
+
+          ctx.ui.notify(
+            `YOLO mode ''${result.yoloMode ? "enabled" : "disabled"} for this session`,
+            "info",
+          );
+        },
+      });
+    }
+  '';
   home.file.".pi/agent/extensions/pi-emote/emotes/cyber-greymane".source =
     "${testPiEmotesRepo}/emotes/cyber-greymane";
   home.file.".pi/agent/extensions/pi-emote/config.json".text = builtins.toJSON {
