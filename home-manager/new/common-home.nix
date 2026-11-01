@@ -282,6 +282,7 @@ with constants;
     opencode
     llm-agents.goose-cli
     llm-agents.cline
+    llm-agents.hermes-agent
     llm-agents.herdr
     llm-agents.collie
     codex
@@ -1072,6 +1073,10 @@ with constants;
     # Match Alacritty: Shift+Insert pastes CLIPBOARD, not PRIMARY.
     map shift+insert paste_from_clipboard
 
+    # Leave Ctrl+Tab for Herdr; use Kitty's Ctrl+Shift+Right shortcut for tabs.
+    map ctrl+tab
+    map ctrl+shift+right next_tab
+
     enable_audio_bell no
   '';
 
@@ -1315,6 +1320,10 @@ with constants;
         enabled = true;
       };
     };
+  };
+
+  home.file.".config/herdr/config.toml" = {
+    source = ./herdr-config.toml;
   };
 
   # Cline CLI MCP configuration. Keep these server definitions aligned with

@@ -1,0 +1,33 @@
+onboarding = false
+
+[keys]
+prefix = "ctrl+space"
+next_workspace = "ctrl+tab"
+cycle_pane_next = "f6"
+next_tab = "ctrl+n"
+
+[[keys.command]]
+key = "prefix+g"
+type = "popup"
+command = "direnv exec . gitu || gitu"
+description = "open Gitu"
+width = "90%"
+height = "90%"
+
+[[keys.command]]
+key = "prefix+shift+g"
+type = "popup"
+command = "direnv exec . lazygit || lazygit"
+description = "open Lazygit"
+width = "90%"
+height = "90%"
+
+[theme]
+name = "dracula"
+auto_switch = false
+
+[ui]
+status_indicators = "symbols"
+
+[ui.toast]
+delivery = "herdr"
