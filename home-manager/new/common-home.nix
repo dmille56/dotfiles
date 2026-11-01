@@ -680,6 +680,7 @@ with constants;
       set-option -g prefix C-a
       bind-key C-a send-prefix
       bind-key -T prefix A send-prefix
+      bind-key r source-file ~/.config/tmux/tmux.conf \; display-message "tmux config reloaded"
 
       #map F5 to cycle to next window
       bind -n F5 next-window

@@ -1,7 +1,7 @@
 onboarding = false
 
 [keys]
-prefix = "ctrl+space"
+prefix = ["ctrl+space", "ctrl+a"]
 next_workspace = "ctrl+tab"
 cycle_pane_next = "f6"
 next_tab = "ctrl+n"
