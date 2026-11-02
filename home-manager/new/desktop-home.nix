@@ -149,6 +149,9 @@ in with constants;
     # OPENCLAW_CONTAINER = "openclaw";
     # OPENCLAW_NIX_MODE = "1";
     MY_MACHINE_ID = "desktop";
+    PLANNOTATOR_ALLOWED_HOSTS = "castle.tailb6562d.ts.net";
+    PLANNOTATOR_REMOTE = "1";
+    PLANNOTATOR_PORT = "19432";
   };
 
 }
