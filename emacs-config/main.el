@@ -1668,6 +1668,8 @@ Make sure to run \='ollama serve\=' and have zephyr model."
     (kbd "C-r") 'consult-history
     (kbd "C-l") 'eshell-go-up-one-dir)
   (evil-define-key 'insert eshell-mode-map
+    (kbd "RET") 'eshell-send-input
+    (kbd "<return>") 'eshell-send-input
     (kbd "C-r") 'consult-history
     (kbd "C-l") 'eshell-go-up-one-dir))
 
