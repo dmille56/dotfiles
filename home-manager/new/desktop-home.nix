@@ -1,6 +1,7 @@
 { pkgs, config, lib, ...}: 
 let
   constants = import ./common-constants.nix; 
+  plannotatorTailscale = import ../../nix/plannotator/tailscale-settings.nix;
   /* openclawNoTools = (pkgs.openclawPackages.withTools {
     excludeToolNames = [ "ffmpeg" "git" "ripgrep" ];
   }).openclaw; */
@@ -29,8 +30,9 @@ in with constants;
     nvtopPackages.nvidia
   ];
 
+  programs.plannotator-agent.tailscale.enable = true;
   programs.zsh.shellAliases.plannotator-serve =
-    "sudo tailscale serve --https=8443 --bg 19432";
+    "sudo tailscale serve --https=${toString plannotatorTailscale.httpsPort} --bg ${toString plannotatorTailscale.localPort}";
   
   /*
   # :NOTE: open claw setup
@@ -152,9 +154,9 @@ in with constants;
     # OPENCLAW_CONTAINER = "openclaw";
     # OPENCLAW_NIX_MODE = "1";
     MY_MACHINE_ID = "desktop";
-    PLANNOTATOR_ALLOWED_HOSTS = "castle.tailb6562d.ts.net";
+    PLANNOTATOR_ALLOWED_HOSTS = plannotatorTailscale.hostname;
     PLANNOTATOR_REMOTE = "1";
-    PLANNOTATOR_PORT = "19432";
+    PLANNOTATOR_PORT = toString plannotatorTailscale.localPort;
   };
 
 }

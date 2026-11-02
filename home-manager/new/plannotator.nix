@@ -1,6 +1,16 @@
 { pkgs, config, lib, ... }:
 let
   browser = pkgs.llm-agents.plannotator;
+  tailscale = import ../../nix/plannotator/tailscale-settings.nix;
+  remoteEnabled = config.programs.plannotator-agent.tailscale.enable;
+  browserUrl = "https://${tailscale.hostname}:${toString tailscale.httpsPort}";
+  browserOpenerSource = pkgs.writeText "plannotator-browser-open.py"
+    (builtins.readFile ../../nix/plannotator/plannotator-browser-open.py);
+  browserOpener = pkgs.writeShellApplication {
+    name = "plannotator-browser-open";
+    runtimeInputs = [ pkgs.xdg-utils ];
+    text = ''exec ${pkgs.python3}/bin/python3 ${browserOpenerSource} ${lib.escapeShellArg browserUrl} "$@"'';
+  };
   tui = pkgs.callPackage ../../nix/plannotator/plannotator-tui.nix {};
   # Tested against the currently installed browser release. Fetch the standalone
   # parser rather than duplicating its current-turn and resubmission logic.
@@ -12,10 +22,14 @@ let
     [ "@CODEX_SESSION@" ] [ "${codexSession}" ]
     (builtins.readFile ../../nix/plannotator/plannotator-plan.ts));
   launcherSource = pkgs.writeText "plannotator-agent.py" (lib.replaceStrings
-    [ "@BROWSER@" "@TUI@" "@TUICR@" "@TMUX@" "@BUN@" "@RESOLVER@" "@SETTING@" ]
+    [ "@BROWSER@" "@TUI@" "@TUICR@" "@TMUX@" "@BUN@" "@RESOLVER@" "@SETTING@"
+      "@BROWSER_PORT@" "@BROWSER_URL@" "@BROWSER_OPENER@" ]
     [ "${browser}/bin/plannotator" "${tui}/bin/plannotator-tui" "${pkgs.llm-agents.tuicr}/bin/tuicr"
       "${pkgs.tmux}/bin/tmux" "${pkgs.bun}/bin/bun" "${resolver}"
-      "${config.home.homeDirectory}/.config/plannotator/use-browser" ]
+      "${config.home.homeDirectory}/.config/plannotator/use-browser"
+      (if remoteEnabled then toString tailscale.localPort else "")
+      (if remoteEnabled then browserUrl else "")
+      (if remoteEnabled then "${browserOpener}/bin/plannotator-browser-open" else "") ]
     (builtins.readFile ../../nix/plannotator/plannotator-agent.py));
   launcher = pkgs.writeShellApplication {
     name = "plannotator-agent";
@@ -61,6 +75,13 @@ let
     Switching mode writes a global user setting outside the project; run the mode
     command outside the sandbox too. Both mode commands are covered by the allow rules.
     Outside tmux and for unsupported requests, it uses browser Plannotator.
+    ${lib.optionalString remoteEnabled ''
+    Browser reviews print a Tailscale HTTPS link and open it on castle when a
+    desktop display is available. Browser reviews queue one at a time for this
+    user, all using ${browserUrl}. Keep the command running while queued.
+    Run `tailscale serve status` to inspect the existing mapping. This applies to
+    `plannotator-agent`; bare `plannotator` retains its upstream URL behavior.
+    ''}
     TUI popups cover the requesting agent's pane and queue one at a time per tmux
     client. Hidden panes wait until visible, including panes hidden by zoom.
     Return to the agent's window to review; the launcher does not switch windows.
@@ -149,31 +170,36 @@ let
   };
 in
 {
-  home.packages = [ browser tui launcher mode ];
+  options.programs.plannotator-agent.tailscale.enable = lib.mkEnableOption
+    "queued Plannotator browser reviews at one Tailscale HTTPS URL on the desktop";
 
-  # Codex's startup discovery ignores symlinked .rules files. Let Home Manager
-  # remove the old managed symlink, then install a regular file with current paths.
-  # Keep default.rules mutable for approvals added by Codex itself.
-  home.activation.installPlannotatorRules = lib.hm.dag.entryAfter [ "linkGeneration" ] ''
-    run ${pkgs.coreutils}/bin/mkdir -p "${config.home.homeDirectory}/.codex/rules"
-    run ${pkgs.coreutils}/bin/install -m 0644 "${rules}" "${config.home.homeDirectory}/.codex/rules/plannotator.rules"
-  '';
+  config = {
+    home.packages = [ browser tui launcher mode ];
 
-  home.file.".codex/hooks.json".text = builtins.toJSON {
-    hooks.Stop = [{
-      hooks = [{
-        type = "command";
-        command = "${launcher}/bin/plannotator-agent";
-        timeout = 345600;
+    # Codex's startup discovery ignores symlinked .rules files. Let Home Manager
+    # remove the old managed symlink, then install a regular file with current paths.
+    # Keep default.rules mutable for approvals added by Codex itself.
+    home.activation.installPlannotatorRules = lib.hm.dag.entryAfter [ "linkGeneration" ] ''
+      run ${pkgs.coreutils}/bin/mkdir -p "${config.home.homeDirectory}/.codex/rules"
+      run ${pkgs.coreutils}/bin/install -m 0644 "${rules}" "${config.home.homeDirectory}/.codex/rules/plannotator.rules"
+    '';
+
+    home.file.".codex/hooks.json".text = builtins.toJSON {
+      hooks.Stop = [{
+        hooks = [{
+          type = "command";
+          command = "${launcher}/bin/plannotator-agent";
+          timeout = 345600;
+        }];
       }];
-    }];
-  };
+    };
 
-  # Codex skips symlinked SKILL.md files. Retain regular manifests and the
-  # activation ordering used by previous generations.
-  home.activation.installPlannotatorSkills = lib.hm.dag.entryAfter [ "linkGeneration" ]
-    (lib.concatStringsSep "\n" (lib.mapAttrsToList (name: source: ''
-      run ${pkgs.coreutils}/bin/mkdir -p "${config.home.homeDirectory}/.agents/skills/${name}"
-      run ${pkgs.coreutils}/bin/install -m 0644 "${source}" "${config.home.homeDirectory}/.agents/skills/${name}/SKILL.md"
-    '') skills));
+    # Codex skips symlinked SKILL.md files. Retain regular manifests and the
+    # activation ordering used by previous generations.
+    home.activation.installPlannotatorSkills = lib.hm.dag.entryAfter [ "linkGeneration" ]
+      (lib.concatStringsSep "\n" (lib.mapAttrsToList (name: source: ''
+        run ${pkgs.coreutils}/bin/mkdir -p "${config.home.homeDirectory}/.agents/skills/${name}"
+        run ${pkgs.coreutils}/bin/install -m 0644 "${source}" "${config.home.homeDirectory}/.agents/skills/${name}/SKILL.md"
+      '') skills));
+  };
 }

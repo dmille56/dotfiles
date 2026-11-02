@@ -21,6 +21,9 @@ TMUX = "@TMUX@"
 BUN = "@BUN@"
 RESOLVER = "@RESOLVER@"
 SETTING = Path("@SETTING@")
+BROWSER_PORT = "@BROWSER_PORT@"
+BROWSER_URL = "@BROWSER_URL@"
+BROWSER_OPENER = "@BROWSER_OPENER@"
 
 
 def browser_mode():
@@ -363,10 +366,68 @@ def popup(context, root, target, review=None):
         queue.release(token, remove=True)
 
 
+@contextmanager
+def browser_lock():
+    if not BROWSER_PORT.isdigit():
+        yield None
+        return
+    # A stable, per-user lock works across agents, panes, and repositories.
+    # Do not unlink it: waiters must continue locking the same inode.
+    directory = SETTING.parent
+    directory.mkdir(mode=0o700, parents=True, exist_ok=True)
+    with (directory / "browser.lock").open("a") as lock:
+        try:
+            fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        except BlockingIOError:
+            print("Plannotator browser review queued; waiting for the current review to finish.",
+                  file=sys.stderr, flush=True)
+            fcntl.flock(lock, fcntl.LOCK_EX)
+        yield lock.fileno()
+
+
 def browser(args, event):
-    if event is None:
+    if event is None and not BROWSER_PORT.isdigit():
         os.execv(BROWSER, [BROWSER, *args])
-    return subprocess.run([BROWSER, *args], input=event).returncode
+    if event is not None and BROWSER_PORT.isdigit():
+        # Reuse the upstream Stop resolver before waiting for another review.
+        # stop_hook_active may still carry a revised plan, so it is not an
+        # unconditional skip. The browser receives the original event below.
+        try:
+            plan = run([BUN, RESOLVER], input=event, capture_output=True).stdout.strip()
+        except (OSError, subprocess.CalledProcessError) as error:
+            detail = error.stderr.decode(errors="replace").strip() if getattr(error, "stderr", None) else str(error)
+            print(f"Could not resolve Plannotator Stop hook: {detail}", file=sys.stderr)
+            return 1
+        if not plan:
+            return 0
+    with browser_lock() as lock_fd:
+        options = {"stdin": subprocess.PIPE} if event is not None else {}
+        if lock_fd is not None:
+            env = {**os.environ, "PLANNOTATOR_PORT": BROWSER_PORT, "PLANNOTATOR_REMOTE": "1"}
+            disabled = {"none", "false", "0", "off", "no", "true", "1", ":"}
+            if env.get("PLANNOTATOR_BROWSER", "").strip().lower() not in disabled:
+                env["PLANNOTATOR_BROWSER"] = BROWSER_OPENER
+            print(f"Plannotator review starting at {BROWSER_URL} (available when ready).",
+                  file=sys.stderr, flush=True)
+            # The server keeps the lock if the launcher is forcibly killed.
+            options.update(env=env, pass_fds=(lock_fd,))
+        return run_browser(args, event, options)
+
+
+def run_browser(args, event, options):
+    process = subprocess.Popen([BROWSER, *args], **options)
+    try:
+        process.communicate(event)
+    except BaseException:
+        # Allow the server to stop and release its inherited queue lock.
+        process.terminate()
+        try:
+            process.communicate(timeout=6)
+        except subprocess.TimeoutExpired:
+            process.kill()
+            process.communicate()
+        raise
+    return process.returncode
 
 
 def launch(args, force_tui=False):

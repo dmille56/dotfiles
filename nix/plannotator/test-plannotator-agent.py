@@ -96,7 +96,7 @@ class LauncherTests(unittest.TestCase):
                     contextlib.redirect_stderr(output):
                 self.assertEqual(agent.launch(["review"], force_tui=force_tui), 1)
             self.assertIn("Operation not permitted", output.getvalue())
-            self.assertIn("require_escalated", output.getvalue())
+            self.assertIn("approved execution mechanism", output.getvalue())
             self.assertNotIn("requires an attached tmux client", output.getvalue())
             browser.assert_not_called()
 
@@ -185,6 +185,24 @@ class LauncherTests(unittest.TestCase):
                 patch.object(agent, "popup") as popup:
             self.assertEqual(agent.launch([]), 0)
             popup.assert_not_called()
+
+    def test_hook_browser_preserves_input_and_status(self):
+        process = Mock(returncode=7)
+        event = b'{"hook_event_name":"Stop"}'
+        with patch.object(agent.subprocess, "Popen", return_value=process) as popen:
+            self.assertEqual(agent.browser([], event), 7)
+        popen.assert_called_once_with([agent.BROWSER], stdin=subprocess.PIPE)
+        process.communicate.assert_called_once_with(event)
+
+    def test_hook_browser_cancellation_allows_server_cleanup(self):
+        process = Mock()
+        process.communicate.side_effect = [KeyboardInterrupt, (None, None)]
+        with patch.object(agent.subprocess, "Popen", return_value=process):
+            with self.assertRaises(KeyboardInterrupt):
+                agent.browser([], b"{}")
+        process.terminate.assert_called_once_with()
+        process.kill.assert_not_called()
+        self.assertEqual(process.communicate.call_args.kwargs, {"timeout": 6})
 
     def test_last_is_resolved_before_popup_and_failure_falls_back(self):
         self.set_mode("tui")
