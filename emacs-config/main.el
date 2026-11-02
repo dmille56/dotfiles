@@ -1839,6 +1839,17 @@ Make sure to run \='ollama serve\=' and have zephyr model."
                            ("integration" "integration/*")
                            (:exclude ".dir-locals.el" "*-tests.el"))))
 
+(use-package terminal-colors
+  :straight (:type git :host github :repo "jamescherti/terminal-colors.el")
+  :config
+  (setq terminal-colors-default-theme "terminator-gruvbox-dark")
+  (with-eval-after-load 'vterm
+    (terminal-colors-vterm-mode 1))
+  (with-eval-after-load 'eat
+    (terminal-colors-eat-mode 1))
+  (with-eval-after-load 'term
+    (terminal-colors-term-mode 1)))
+
 (evil-set-initial-state 'eat-mode 'emacs)
 
 (use-package popterm
