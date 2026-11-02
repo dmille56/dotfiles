@@ -30,4 +30,4 @@ auto_switch = false
 status_indicators = "symbols"
 
 [ui.toast]
-delivery = "herdr"
+delivery = "system"
