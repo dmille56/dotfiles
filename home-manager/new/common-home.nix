@@ -670,8 +670,12 @@ with constants;
 
       set -g @fuzzback-bind S
 
-      set -g extended-keys on
-      set -g extended-keys-format csi-u
+      # Preserve modifiers such as Ctrl-Tab even when the application does not
+      # request extended keys. With "on", tmux can reduce Ctrl-Tab to plain Tab.
+      set -s extended-keys always
+      set -s extended-keys-format csi-u
+      # Kitty needs extended input enabled on the terminal side as well.
+      set -as terminal-features ',xterm-kitty:extkeys'
 
       # Forward Ctrl-Tab to Neovim for cycling tabs.
       bind-key -n C-Tab send-keys C-Tab
@@ -685,8 +689,8 @@ with constants;
       #map F5 to cycle to next window
       bind -n F5 next-window
 
-      #map F6 to cycle to next pane
-      bind -n F6 select-pane -t :.+
+      # Let herdr handle F6 in its pane; elsewhere use it to cycle panes.
+      bind -n F6 if-shell -F '#{==:#{pane_current_command},herdr}' 'send-keys F6' 'select-pane -t :.+'
 
       set -g mouse on
 
@@ -1046,6 +1050,9 @@ with constants;
     { key = "+", mods = "Control", action = "IncreaseFontSize" },
     { key = "-", mods = "Control", action = "DecreaseFontSize" },
     { key = "Insert", mods = "Shift", action = "Paste" },
+    # Preserve Ctrl-Tab modifiers through tmux, matching Kitty's bindings.
+    { key = "Tab", mods = "Control", chars = "\u001b[9;5u" },
+    { key = "Tab", mods = "Control|Shift", chars = "\u001b[9;6u" },
     ] 
   '';
 
@@ -1074,8 +1081,9 @@ with constants;
     # Match Alacritty: Shift+Insert pastes CLIPBOARD, not PRIMARY.
     map shift+insert paste_from_clipboard
 
-    # Leave Ctrl+Tab for Herdr; use Kitty's Ctrl+Shift+Right shortcut for tabs.
-    map ctrl+tab
+    # Send distinct tab keys even when tmux does not negotiate Kitty's protocol.
+    map ctrl+tab send_text all \x1b[9;5u
+    map ctrl+shift+tab send_text all \x1b[9;6u
     map ctrl+shift+right next_tab
 
     enable_audio_bell no

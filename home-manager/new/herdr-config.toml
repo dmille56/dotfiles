@@ -5,6 +5,8 @@ prefix = ["ctrl+space", "ctrl+a"]
 next_workspace = "ctrl+tab"
 cycle_pane_next = "f6"
 next_tab = "ctrl+n"
+split_vertical = "prefix+%"
+split_horizontal = 'prefix+"'
 
 [[keys.command]]
 key = "prefix+g"
