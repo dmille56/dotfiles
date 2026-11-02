@@ -1840,9 +1840,10 @@ Make sure to run \='ollama serve\=' and have zephyr model."
                            (:exclude ".dir-locals.el" "*-tests.el"))))
 
 (use-package terminal-colors
-  :straight (:type git :host github :repo "jamescherti/terminal-colors.el")
+  :straight (:type git :host github :repo "dmille56/terminal-colors.el"
+                   :branch "feature/dracula")
   :config
-  (setq terminal-colors-default-theme "terminator-gruvbox-dark")
+  (setq terminal-colors-default-theme "dracula")
   (with-eval-after-load 'vterm
     (terminal-colors-vterm-mode 1))
   (with-eval-after-load 'eat
