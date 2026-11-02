@@ -594,7 +594,13 @@ with constants;
   programs.ssh = {
     enableDefaultConfig = false;
     enable = lib.mkDefault true;
+    extraConfig = ''
+      Match exec "test -f ~/.ssh/config.local"
+        Include ~/.ssh/config.local
+      Match all
+    '';
     settings = {
+      "*" = { };
       # "*" = {
       #   HostName = lib.mkDefault "73.140.10.210";
       #   Port = lib.mkDefault 50022;
