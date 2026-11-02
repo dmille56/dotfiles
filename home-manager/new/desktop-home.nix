@@ -28,6 +28,9 @@ in with constants;
     
     nvtopPackages.nvidia
   ];
+
+  programs.zsh.shellAliases.plannotator-serve =
+    "sudo tailscale serve --https=8443 --bg 19432";
   
   /*
   # :NOTE: open claw setup
