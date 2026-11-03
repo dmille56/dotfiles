@@ -413,6 +413,7 @@ with constants;
 
     lite-xl
     gnome-system-monitor
+    seahorse
     pkgs.meld
     thunar
     pcmanfm
