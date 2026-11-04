@@ -282,7 +282,6 @@ with constants;
     opencode
     llm-agents.goose-cli
     llm-agents.cline
-    llm-agents.hermes-agent
     llm-agents.herdr
     llm-agents.collie
     codex
@@ -294,7 +293,6 @@ with constants;
 
     # :NOTE: AI controllable browsers... experimenting with these currently
     llm-agents.terminal-browser
-    llm-agents.vessel-browser
     playwright-mcp
 
     llm-agents.rtk
@@ -448,6 +446,7 @@ with constants;
     postman # :NOTE: added
     jq # :NOTE: added
     libreoffice # :NOTE: added
+    visidata # :NOTE: added
     drawiterm # :NOTE: added
     alsa-utils # :NOTE: added
     asciinema # :NOTE: added
