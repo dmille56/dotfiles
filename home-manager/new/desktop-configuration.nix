@@ -10,6 +10,19 @@ in
       ./common-configuration.nix
     ];
 
+  # nixpkgs' opencode 2.2.5 node_modules hash no longer matches the
+  # dependency archive. This package names its fixed-output derivation
+  # `node_modules` (rather than using buildNpmPackage's `npmDeps`).
+  nixpkgs.overlays = [
+    (final: prev: {
+      opencode = prev.opencode.overrideAttrs (old: {
+        node_modules = old.node_modules.overrideAttrs (_: {
+          outputHash = "sha256-prx9dX7kUvs/E3zopkaPk5LXh3xJAy5sZeum/W8L7cA=";
+        });
+      });
+    })
+  ];
+
   networking.hostName = "${constants.my-desktop-hostname}"; # Define your hostname.
 
   environment.systemPackages = with pkgs; [
