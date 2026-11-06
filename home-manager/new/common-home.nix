@@ -367,6 +367,7 @@ with constants;
     xterm
     # termonad # :TODO: figure out why this broke
     alacritty
+    wezterm
     kitty
     neovide
 
@@ -1060,6 +1061,32 @@ with constants;
     { key = "Tab", mods = "Control", chars = "\u001b[9;5u" },
     { key = "Tab", mods = "Control|Shift", chars = "\u001b[9;6u" },
     ] 
+  '';
+
+  home.file.".config/wezterm/wezterm.lua".text = lib.mkDefault ''
+    local wezterm = require 'wezterm'
+    wezterm.log_info('Loaded my WezTerm config')
+    local config = wezterm.config_builder()
+
+    -- Match the Alacritty setup: Dracula colors, DejaVu Nerd Font, and 85% opacity.
+    config.color_scheme = 'Dracula'
+    config.font = wezterm.font_with_fallback({ 'DejaVuSansM Nerd Font Mono' })
+    config.font_size = 13.0
+    config.window_background_opacity = 0.85
+    config.enable_tab_bar = false
+
+    -- Render on the CPU, so WezTerm does not require GPU rendering.
+    config.front_end = 'Software'
+
+    config.keys = {
+      { key = '+', mods = 'CTRL', action = wezterm.action.IncreaseFontSize },
+      { key = '-', mods = 'CTRL', action = wezterm.action.DecreaseFontSize },
+      { key = 'Insert', mods = 'SHIFT', action = wezterm.action.PasteFrom 'Clipboard' },
+      { key = 'Tab', mods = 'CTRL', action = wezterm.action.SendString '\x1b[9;5u' },
+      { key = 'Tab', mods = 'CTRL|SHIFT', action = wezterm.action.SendString '\x1b[9;6u' },
+    }
+
+    return config
   '';
 
   home.file.".config/kitty/kitty.conf".text = lib.mkDefault ''
