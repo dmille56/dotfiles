@@ -24,6 +24,7 @@ in with constants;
     obs-studio
 
     ollama-cuda
+    (llama-cpp.override { cudaSupport = true; })
     # openclawNoTools
     # openclaw-gateway
     

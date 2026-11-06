@@ -2,6 +2,11 @@
 
 let
   constants = import ./common-constants.nix; 
+  # Keep Neovide on the 0.16.2 package from a known-good Nixpkgs revision
+  # while nixpkgs-unstable's 0.17.1 source is missing Cargo.lock.
+  neovidePkgs = import (builtins.fetchTarball {
+    url = "https://github.com/NixOS/nixpkgs/archive/55ba7f49ef2962b42cbd126522b7df5f95037679.tar.gz";
+  }) { system = "x86_64-linux"; };
 in
 {
   imports =
@@ -15,6 +20,7 @@ in
   # `node_modules` (rather than using buildNpmPackage's `npmDeps`).
   nixpkgs.overlays = [
     (final: prev: {
+      neovide = neovidePkgs.neovide;
       opencode = prev.opencode.overrideAttrs (old: {
         node_modules = old.node_modules.overrideAttrs (_: {
           outputHash = "sha256-prx9dX7kUvs/E3zopkaPk5LXh3xJAy5sZeum/W8L7cA=";
