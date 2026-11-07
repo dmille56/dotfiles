@@ -101,6 +101,27 @@
         "$@"
     '';
   };
+  playwrightCliConfig = builtins.toJSON {
+    browser.cdpEndpoint = "http://127.0.0.1:9222";
+    saveSession = true;
+    sharedBrowserContext = true;
+  };
+  playwrightCliInstall = pkgs.writeShellApplication {
+    name = "playwright-cli-install";
+    runtimeInputs = [ pkgs.nodejs ];
+    text = ''
+      set -eu
+      npm_prefix="${config.home.homeDirectory}/.local/share/npm-global"
+      cli_package="$npm_prefix/lib/node_modules/@playwright/cli"
+      cli_bin="$npm_prefix/bin/playwright-cli"
+
+      if [ ! -d "$cli_package" ]; then
+        npm install --global --prefix "$npm_prefix" @playwright/cli@latest
+      fi
+
+      "$cli_bin" install --skills=agents -g
+    '';
+  };
   kokoroModels = import ../../nix/kokoro-tts.nix { pkgs = kokoroOnnxPkgs; exposeModels = true; };
   pkgsWithRangerHighlightFix = pkgs.extend (final: prev: {
     # highlight's shellscript patch is already applied upstream in current nixpkgs.
@@ -178,6 +199,7 @@ with constants;
   home.packages = with pkgs; [
     tmuxDisplayEnv
     chromiumPlaywright
+    playwrightCliInstall
     picom-pijulius
     #terminal
     nano
@@ -453,6 +475,14 @@ with constants;
     asciinema # :NOTE: added
     asciinema-agg # :NOTE: added
   ];
+
+  # Point Playwright CLI at the same long-running Chromium instance/profile
+  # used by Playwright MCP. The CLI reads this global config automatically.
+  home.file.".playwright/cli.config.json".text = playwrightCliConfig;
+
+  home.activation.installPlaywrightCli = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    ${playwrightCliInstall}/bin/playwright-cli-install
+  '';
 
   # :NOTE: programs config starts here
 

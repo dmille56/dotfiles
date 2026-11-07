@@ -29,9 +29,30 @@ let
 
   piWrapped = pkgs.writeShellApplication {
     name = "pi";
+    runtimeInputs = [ pkgs.jq ];
     text = ''
       export npm_config_prefix="${piNpmPrefix}"
       export npm_config_userconfig="${npmUserConfig}"
+
+      # Keep auto-compaction comfortably ahead of the 32k Ternary Bonsai
+      # context limit while preserving the rest of Pi's user settings.
+      pi_settings="${config.home.homeDirectory}/.pi/agent/settings.json"
+      mkdir -p "$(dirname "$pi_settings")"
+      if [ ! -f "$pi_settings" ]; then
+        printf '{}\n' > "$pi_settings"
+      fi
+      pi_settings_tmp="$(mktemp "''${pi_settings}.XXXXXX")"
+      if jq '.compaction = ((.compaction // {}) + {
+        enabled: true,
+        reserveTokens: 10000,
+        keepRecentTokens: 10000
+      })' "$pi_settings" > "$pi_settings_tmp"; then
+        mv "$pi_settings_tmp" "$pi_settings"
+      else
+        rm -f "$pi_settings_tmp"
+        echo "pi: unable to configure automatic compaction in $pi_settings" >&2
+        exit 1
+      fi
 
       # @ifi/pi-shared-qna's createRequire fallback cannot load this ESM
       # package in Pi's compiled Bun runtime. Use Pi's working static import.
