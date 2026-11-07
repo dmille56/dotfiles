@@ -101,6 +101,85 @@
         "$@"
     '';
   };
+  chromiumPlaywrightXvfbSession = pkgs.writeShellApplication {
+    name = "chromium-playwright-xvfb-session";
+    runtimeInputs = [ pkgs.coreutils pkgs.openbox pkgs.xdpyinfo pkgs.xvfb pkgs.x11vnc ];
+    text = ''
+      display=":99"
+      Xvfb "$display" -screen 0 1920x1080x24 -nolisten tcp &
+      xvfb_pid=$!
+      vnc_pid=""
+      wm_pid=""
+
+      cleanup() {
+        if [ -n "$wm_pid" ]; then
+          kill "$wm_pid" 2>/dev/null || true
+          wait "$wm_pid" 2>/dev/null || true
+        fi
+        if [ -n "$vnc_pid" ]; then
+          kill "$vnc_pid" 2>/dev/null || true
+          wait "$vnc_pid" 2>/dev/null || true
+        fi
+        kill "$xvfb_pid" 2>/dev/null || true
+        wait "$xvfb_pid" 2>/dev/null || true
+      }
+      trap cleanup EXIT
+
+      ready=false
+      for _ in $(seq 1 50); do
+        if xdpyinfo -display "$display" >/dev/null 2>&1; then
+          ready=true
+          break
+        fi
+        if ! kill -0 "$xvfb_pid" 2>/dev/null; then
+          echo "Xvfb failed to start on $display" >&2
+          exit 1
+        fi
+        sleep 0.1
+      done
+      if [ "$ready" != true ]; then
+        echo "Timed out waiting for Xvfb on $display" >&2
+        exit 1
+      fi
+
+      DISPLAY="$display" openbox &
+      wm_pid=$!
+      x11vnc -display "$display" -localhost -nopw -forever -shared -rfbport 5901 &
+      vnc_pid=$!
+      sleep 0.5
+      if ! kill -0 "$vnc_pid" 2>/dev/null; then
+        echo "x11vnc failed to start; check whether port 5901 is already in use" >&2
+        exit 1
+      fi
+
+      echo "Playwright Chromium is visible via: chromium-playwright-xvfb-view" >&2
+      DISPLAY="$display" ${pkgs.chromium}/bin/chromium \
+        --class=Chromium-Playwright \
+        --remote-debugging-port=9222 \
+        --user-data-dir="${config.home.homeDirectory}/.local/share/chromium-playwright" \
+        "$@"
+    '';
+  };
+  chromiumPlaywrightXvfbStart = pkgs.writeShellApplication {
+    name = "chromium-playwright-xvfb";
+    runtimeInputs = [ pkgs.systemd ];
+    text = ''
+      exec systemctl --user start chromium-playwright-xvfb.service
+    '';
+  };
+  chromiumPlaywrightXvfbStop = pkgs.writeShellApplication {
+    name = "chromium-playwright-xvfb-stop";
+    runtimeInputs = [ pkgs.systemd ];
+    text = ''
+      exec systemctl --user stop chromium-playwright-xvfb.service
+    '';
+  };
+  chromiumPlaywrightXvfbView = pkgs.writeShellApplication {
+    name = "chromium-playwright-xvfb-view";
+    text = ''
+      exec ${pkgs.tigervnc}/bin/vncviewer 127.0.0.1::5901 "$@"
+    '';
+  };
   playwrightCliConfig = builtins.toJSON {
     browser.cdpEndpoint = "http://127.0.0.1:9222";
     saveSession = true;
@@ -179,6 +258,17 @@ with constants;
     };
   };
 
+  systemd.user.services.chromium-playwright-xvfb = {
+    Unit = {
+      Description = "Visible Playwright Chromium on a virtual display";
+      PartOf = [ "graphical-session.target" ];
+    };
+    Service = {
+      ExecStart = "${chromiumPlaywrightXvfbSession}/bin/chromium-playwright-xvfb-session";
+      Restart = "on-failure";
+    };
+  };
+
   home.username = lib.mkDefault "${my-username}";
   home.homeDirectory = lib.mkDefault "${my-home-dir}";
   home.stateVersion = lib.mkDefault "23.11"; # To figure this out you can comment out the line and see what version it expected.
@@ -199,6 +289,9 @@ with constants;
   home.packages = with pkgs; [
     tmuxDisplayEnv
     chromiumPlaywright
+    chromiumPlaywrightXvfbStart
+    chromiumPlaywrightXvfbStop
+    chromiumPlaywrightXvfbView
     playwrightCliInstall
     picom-pijulius
     #terminal
