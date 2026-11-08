@@ -12,6 +12,7 @@ let
 
   piPackages = [
     "npm:@mariozechner/pi-tui"
+    "npm:@sting8k/pi-vcc"
     "npm:@ifi/pi-plan"
     "npm:@open-plan-annotator/pi-extension"
     "npm:pi-permission-system"
@@ -34,8 +35,8 @@ let
       export npm_config_prefix="${piNpmPrefix}"
       export npm_config_userconfig="${npmUserConfig}"
 
-      # Keep auto-compaction comfortably ahead of the 32k Ternary Bonsai
-      # context limit while preserving the rest of Pi's user settings.
+      # Cover the largest configured output limit (5,120 tokens) with a small
+      # margin, while keeping the compaction tail modest for the 32k models.
       pi_settings="${config.home.homeDirectory}/.pi/agent/settings.json"
       mkdir -p "$(dirname "$pi_settings")"
       if [ ! -f "$pi_settings" ]; then
@@ -44,8 +45,8 @@ let
       pi_settings_tmp="$(mktemp "''${pi_settings}.XXXXXX")"
       if jq '.compaction = ((.compaction // {}) + {
         enabled: true,
-        reserveTokens: 10000,
-        keepRecentTokens: 10000
+        reserveTokens: 6000,
+        keepRecentTokens: 6000
       })' "$pi_settings" > "$pi_settings_tmp"; then
         mv "$pi_settings_tmp" "$pi_settings"
       else
