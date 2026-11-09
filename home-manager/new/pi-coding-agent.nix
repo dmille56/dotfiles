@@ -36,18 +36,17 @@ let
       export npm_config_userconfig="${npmUserConfig}"
 
       # Cover the largest configured output limit (5,120 tokens) with a small
-      # margin, while keeping the compaction tail modest for the 32k models.
+      # margin while using Pi's default recent-context setting.
       pi_settings="${config.home.homeDirectory}/.pi/agent/settings.json"
       mkdir -p "$(dirname "$pi_settings")"
       if [ ! -f "$pi_settings" ]; then
         printf '{}\n' > "$pi_settings"
       fi
       pi_settings_tmp="$(mktemp "''${pi_settings}.XXXXXX")"
-      if jq '.compaction = ((.compaction // {}) + {
+      if jq '(.compaction = ((.compaction // {}) + {
         enabled: true,
-        reserveTokens: 6000,
-        keepRecentTokens: 6000
-      })' "$pi_settings" > "$pi_settings_tmp"; then
+        reserveTokens: 6000
+      })) | del(.compaction.keepRecentTokens)' "$pi_settings" > "$pi_settings_tmp"; then
         mv "$pi_settings_tmp" "$pi_settings"
       else
         rm -f "$pi_settings_tmp"
