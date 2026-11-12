@@ -1433,15 +1433,24 @@ with constants;
   home.file.".ghci".source = lib.mkDefault "${my-dotfile-dir}/.ghci";
   home.file.".ripgreprc".source = lib.mkDefault "${my-dotfile-dir}/.ripgreprc";
   home.file.".visidatarc".text = ''
-    def syscopy_row_no_header(sheet):
-        values = [c.getFullDisplayValue(sheet.cursorRow) for c in sheet.visibleCols]
-        sheet.syscopyValue('\\t'.join(values))
+    def syscopy_rows_no_header(sheet, rows):
+        lines = []
+        for row in rows:
+            values = [c.getFullDisplayValue(row) for c in sheet.visibleCols]
+            lines.append('\t'.join(values))
+        sheet.syscopyValue('\n'.join(lines))
 
     Sheet.addCommand(
         'Alt+y',
         'syscopy-row-no-header',
-        'syscopy_row_no_header(sheet)',
+        'syscopy_rows_no_header(sheet, [sheet.cursorRow])',
         'copy current row values without column headers',
+    )
+    Sheet.addCommand(
+        'gAlt+y',
+        'syscopy-selected-rows-no-header',
+        'syscopy_rows_no_header(sheet, sheet.selectedRows)',
+        'copy selected row values without column headers',
     )
   '';
   home.file.".config/mpv/mpv.conf".source = lib.mkDefault "${my-dotfile-dir}/mpv.conf";
