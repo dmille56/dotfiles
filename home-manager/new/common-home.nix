@@ -1432,6 +1432,18 @@ with constants;
 
   home.file.".ghci".source = lib.mkDefault "${my-dotfile-dir}/.ghci";
   home.file.".ripgreprc".source = lib.mkDefault "${my-dotfile-dir}/.ripgreprc";
+  home.file.".visidatarc".text = ''
+    def syscopy_row_no_header(sheet):
+        values = [c.getFullDisplayValue(sheet.cursorRow) for c in sheet.visibleCols]
+        sheet.syscopyValue('\\t'.join(values))
+
+    Sheet.addCommand(
+        'Alt+y',
+        'syscopy-row-no-header',
+        'syscopy_row_no_header(sheet)',
+        'copy current row values without column headers',
+    )
+  '';
   home.file.".config/mpv/mpv.conf".source = lib.mkDefault "${my-dotfile-dir}/mpv.conf";
   home.file.".config/ytfzf/conf.sh".source = lib.mkDefault "${my-dotfile-dir}/ytfzf-conf.sh";
   home.file.".config/termonad/termonad.hs".source =
