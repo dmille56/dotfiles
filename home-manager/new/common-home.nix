@@ -407,7 +407,7 @@ with constants;
     # ollama
 
     # :NOTE: AI controllable browsers... experimenting with these currently
-    llm-agents.terminal-browser
+    # llm-agents.terminal-browser
     playwright-mcp
 
     llm-agents.rtk
