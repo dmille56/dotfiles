@@ -218,8 +218,9 @@ main = do
                              ((myModMask .|. shiftMask, xK_g), windowPrompt myXPConfig Bring allWindows),
                              ((myModMask, xK_c), spawn "rofi -modi 'clipboard:greenclip print' -show clipboard -run-command '{cmd}'"),
                              ((myModMask, xK_y), spawn "ytfzf -D"),
-                             -- ((myModMask, xK_r), spawn "xrandr --output DP-4 --auto --right-of DP-0"), -- Set Monitors to Extend Mode (instead of mirror mode)
+                             ((myModMask .|. shiftMask, xK_y), spawn ("notify-send -t 3000 ' MyConfigMachine: " ++ (show myConfigMachine) ++ "'")),
                              ((myModMask, xK_r), spawn "xmodmap -e 'keycode 127 = Insert'"), -- Remaps 'Pause Break' key to Insert key
+                             ((myModMask .|. shiftMask, xK_r), spawn "xrandr --output DP-4 --auto --right-of DP-0"), -- Set Monitors to Extend Mode (instead of mirror mode)
                              ((myModMask .|. shiftMask, xK_r), spawn ("notify-send -t 3000 ' MyConfigMachine: " ++ (show myConfigMachine) ++ "'")),
                              ((myModMask, xK_backslash), openScratchPad hasNixGL "term"),
                              ((myModMask .|. shiftMask, xK_backslash), openScratchPad hasNixGL "lazygit"),
