@@ -147,7 +147,7 @@
       tmux-animated-overlay = final: prev: {
         tmux = prev.tmux.overrideAttrs (old: {
           pname = "tmux-animated";
-          version = "3.6b";
+          version = "3.8";
           src = inputs.tmux-animated;
           patches = [ ];
           nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ final.autoreconfHook ];
