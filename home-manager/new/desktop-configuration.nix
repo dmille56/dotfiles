@@ -107,8 +107,8 @@ in
 	  # accessible via `nvidia-settings`.
     nvidiaSettings = true;
 
-    # Optionally, you may need to select the appropriate driver version for your specific GPU.
-    package = config.boot.kernelPackages.nvidiaPackages.stable;
+    # Use 615.78.08 from the current lock to avoid the 620.73.04 display timeout regression.
+    package = config.boot.kernelPackages.nvidiaPackages.new_feature;
   };
   
   # :NOTE: workaround — nixos-rebuild switch doesn't re-run home-manager-dono.service
